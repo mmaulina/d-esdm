@@ -1,38 +1,34 @@
 <?php
-// session_start();
-// include '../koneksi.php'; // Pastikan koneksi ke database sudah benar
+session_start();
+include '../koneksi.php';
 
-// $error = '';
+$error = '';
 
-// if ($_SERVER["REQUEST_METHOD"] == "POST") {
-//     $username = trim($_POST['username']);
-//     $password = trim($_POST['password']);
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $username = trim($_POST['username']);
+    $password = trim($_POST['password']);
 
-//     // Cek apakah input tidak kosong
-//     if (!empty($username) && !empty($password)) {
-//         $sql = "SELECT * FROM users WHERE username = ? OR email = ?";
-//         $stmt = $conn->prepare($sql);
-//         $stmt->bind_param("ss", $username, $username);
-//         $stmt->execute();
-//         $result = $stmt->get_result();
-//         $user = $result->fetch_assoc();
+    if (!empty($username) && !empty($password)) {
+        $sql = "SELECT * FROM users WHERE username = ? OR email = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ss", $username, $username);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
 
-//         if ($user && password_verify($password, $user['password'])) {
-//             // Simpan data user ke session
-//             $_SESSION['user_id'] = $user['id'];
-//             $_SESSION['username'] = $user['username'];
-//             $_SESSION['role'] = $user['role'];
+        if ($user && $password === $user['password']) { // Perbandingan langsung tanpa hashing
+            $_SESSION['user_id'] = $user['id_user'];
+            $_SESSION['username'] = $user['username'];
 
-//             // Redirect ke halaman utama setelah login
-//             header("Location: dashboard.php");
-//             exit();
-//         } else {
-//             $error = "Username atau password salah!";
-//         }
-//     } else {
-//         $error = "Harap isi username/email dan password!";
-//     }
-// }
+            header("Location: ../index.php");
+            exit();
+        } else {
+            $error = "Username atau password salah!";
+        }
+    } else {
+        $error = "Harap isi username/email dan password!";
+    }
+}
 ?>
 
 <!DOCTYPE html>

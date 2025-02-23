@@ -1,17 +1,16 @@
 <?php
 include '../koneksi.php';
-// session_start();
-// include '../koneksi.php';
+session_start();
 
-// // Pastikan user sudah login
-// if (!isset($_SESSION['user_id'])) {
-//     header("Location: login/login.php");
-//     exit();
-// }
+// Pastikan user sudah login
+if (!isset($_SESSION['user_id'])) {
+    header("Location: ../login/login.php");
+    exit();
+}
 
-// $user_id = $_SESSION['user_id']; // Ambil ID pengguna dari sesi
-// $sql = "SELECT * FROM profil WHERE user_id = '$user_id'"; // Filter berdasarkan user_id
-// $result = $conn->query($sql);
+$user_id = $_SESSION['user_id']; // Ambil ID pengguna dari sesi
+$sql = "SELECT * FROM profil WHERE id_user = '$user_id'"; // Filter berdasarkan user_id
+$result = $conn->query($sql);
 ?>
 
 <!DOCTYPE html>
@@ -23,7 +22,7 @@ include '../koneksi.php';
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <!-- <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
             <a class="navbar-brand" href="#">Dinas ESDM</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
@@ -31,14 +30,14 @@ include '../koneksi.php';
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ml-auto">
-                    <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
                     <li class="nav-item"><a class="nav-link" href="profil_perusahaan.php">Profile</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">Settings</a></li>
                     <li class="nav-item"><a class="nav-link text-white" href="login/login.php">Logout</a></li>
                 </ul>
             </div>
         </div>
-    </nav>
+    </nav> -->
     <div class="container mt-5">
         <h2>Profil Perusahaan</h2>
         <table class="table table-bordered">

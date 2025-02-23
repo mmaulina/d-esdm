@@ -1,3 +1,12 @@
+<?php
+session_start();
+
+// Pastikan user sudah login
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login/login.php");
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="id">
 
@@ -17,7 +26,7 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
                     <li class="nav-item"><a class="nav-link" href="perusahaan/tampil.php">Profile</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">Settings</a></li>
                     <li class="nav-item"><a class="nav-link text-white" href="login/login.php">Logout</a></li>
