@@ -4,9 +4,9 @@ $username = "root";
 $password = "";
 $database = "d-esdm";
 
-$koneksi =  new mysqli($host, $username, $password, $database);
+$conn =  new mysqli($host, $username, $password, $database);
 
-if ($koneksi ->connect_error) {
+if ($conn ->connect_error) {
     die("Koneksi gagal: " . $koneksi ->connect_error);
 }
 ?>

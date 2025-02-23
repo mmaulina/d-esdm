@@ -18,7 +18,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="perusahaan/profil_perusahaan.php">Profile</a></li>
+                    <li class="nav-item"><a class="nav-link" href="perusahaan/tampil.php">Profile</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">Settings</a></li>
                     <li class="nav-item"><a class="nav-link text-white" href="login/login.php">Logout</a></li>
                 </ul>
