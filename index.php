@@ -1,40 +1,32 @@
 <?php
-session_start();
+    session_start();
+    if(!isset($_SESSION['id_user'])){ //cek session id apakah belum di set
+        header('location:login/login.php'); //kalau belum, halaman diarahkan ke login_view.php
+    }
+    include "koneksi.php"; //memanggil file koneksi
+    include "template/sidebar.php"; //memanggil file sidebar
+    include "template/header.php"; //memanggil file header
+    $page = $_GET['page']; //mengambil nilai dari url pada variabel page
+    switch($page){
+        // kategori_prestasi
+        case "kategori_read": include "kategori/view_data.php"; break;
+        case "kategori_add": include "kategori/kategori_add.php"; break;
+        case "kategori_edit": include "kategori/kategori_edit.php"; break;
+        case "kategori_delete": include "kategori/kategori_delete.php"; break;
+        // peringkat
+        case "peringkat_read": include "peringkat/view_data.php"; break;
+        case "peringkat_add": include "peringkat/peringkat_add.php"; break;
+        case "peringkat_edit": include "peringkat/peringkat_edit.php"; break;
+        case "peringkat_delete": include "peringkat/peringkat_delete.php"; break;
+        // pengguna
+        case "pengguna_add": include "pengguna/pengguna_add.php"; break;
+        case "pengguna_read": include "pengguna/view_data.php"; break;
+        case "verifikasi_akun": include "pengguna/proses_verifikasi.php"; break;
+        // prestasi
+        case "prestasi_read": include "prestasi/prestasi_read.php"; break;
+        case "prestasi_add": include "prestasi/prestasi_add.php"; break;
+        case "verifikasi_prestasi": include "prestasi/proses_verifikasi.php"; break;
 
-// Pastikan user sudah login
-if (!isset($_SESSION['user_id'])) {
-    header("Location: login/login.php");
-    exit();
-}
+    }
+    include "template/footer.php";
 ?>
-<!DOCTYPE html>
-<html lang="id">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-
-<body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container">
-            <a class="navbar-brand" href="#">Dinas Energi dan Sumber Daya Mineral</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="perusahaan/tampil.php">Profile</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Settings</a></li>
-                    <li class="nav-item"><a class="nav-link text-white" href="login/login.php">Logout</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-
-</html>
