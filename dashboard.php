@@ -1,12 +1,3 @@
-<?php
-session_start();
-
-// Pastikan user sudah login
-if (!isset($_SESSION['user_id'])) {
-    header("Location: login/login.php");
-    exit();
-}
-?>
 <!DOCTYPE html>
 <html lang="id">
 

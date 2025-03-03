@@ -1,6 +1,7 @@
 <?php
+// localhost/simtawa-app
     session_start();
-    if(!isset($_SESSION['id_user'])){ //cek session id apakah belum di set
+    if(!isset($_SESSION['user_id'])){ //cek session id apakah belum di set
         header('location:login/login.php'); //kalau belum, halaman diarahkan ke login_view.php
     }
     include "koneksi.php"; //memanggil file koneksi
