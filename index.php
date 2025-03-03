@@ -5,8 +5,8 @@
         header('location:login/login.php'); //kalau belum, halaman diarahkan ke login_view.php
     }
     include "koneksi.php"; //memanggil file koneksi
-    include "template/sidebar.php"; //memanggil file sidebar
     include "template/header.php"; //memanggil file header
+    include "template/sidebar.php"; //memanggil file sidebar
     $page =isset($_GET['page']) ? $_GET['page'] : 'dashboard'; //mengambil nilai dari url pada variabel page
     switch($page){
         // kategori_prestasi
