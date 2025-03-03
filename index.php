@@ -7,7 +7,7 @@
     include "koneksi.php"; //memanggil file koneksi
     include "template/sidebar.php"; //memanggil file sidebar
     include "template/header.php"; //memanggil file header
-    $page = $_GET['page']; //mengambil nilai dari url pada variabel page
+    $page =isset($_GET['page']) ? $_GET['page'] : 'dashboard'; //mengambil nilai dari url pada variabel page
     switch($page){
         // kategori_prestasi
         case "kategori_read": include "kategori/view_data.php"; break;
