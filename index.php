@@ -28,6 +28,8 @@
         case "prestasi_add": include "prestasi/prestasi_add.php"; break;
         case "verifikasi_prestasi": include "prestasi/proses_verifikasi.php"; break;
 
+        default: include "dashboard.php"; break;
+
     }
     include "template/footer.php";
 ?>
