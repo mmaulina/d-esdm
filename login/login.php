@@ -17,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $user = $result->fetch_assoc();
 
         if ($user && $password === $user['password']) { // Perbandingan langsung tanpa hashing
-            $_SESSION['user_id'] = $user['id_user'];
+            $_SESSION['id_user'] = $user['id_user'];
             $_SESSION['username'] = $user['username'];
 
             header("Location: ../index.php");
