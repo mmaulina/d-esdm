@@ -6,40 +6,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>D-ESDM</title>
     <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" defer></script>
 </head>
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container">
+        <div class="container-fluid"> <!-- Ubah ke container-fluid agar responsif -->
             <a class="navbar-brand" href="#">Dinas Energi dan Sumber Daya Mineral</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            
+            <!-- Tombol Toggle untuk Mobile -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
+            <!-- Menu Navbar -->
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item dropdown">
-                        <a class="nav-link" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 16px;">
-                            <i class="ti ti-user-circle" style="font-size: 24px;"></i> &nbsp; <?php echo $_SESSION['nama']; ?>
+                        <a class="nav-link dropdown-toggle" href="#" id="drop2" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="ti ti-user-circle" style="font-size: 24px;"></i> &nbsp; <?php echo $_SESSION['username']; ?>
                         </a>
-                        <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
-                            <div class="message-body">
-                                <a href="?page=pengguna_edit&id_user=<?php echo $_SESSION['id_user']; ?>" class="d-flex align-items-center gap-2 dropdown-item">
-                                    <i class="ti ti-user fs-6"></i>
-                                    <p class="mb-0 fs-3">Profil Saya</p>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="drop2">
+                            <li>
+                                <a href="?page=pengguna_edit&id_user=<?php echo $_SESSION['id_user']; ?>" class="dropdown-item">
+                                    <i class="ti ti-user fs-6"></i> Profil Saya
                                 </a>
-                                <a href="?page=password_edit&id_user=<?php echo $_SESSION['id_user']; ?>" class="d-flex align-items-center gap-2 dropdown-item">
-                                    <i class="ti ti-user fs-6"></i>
-                                    <p class="mb-0 fs-3">Ganti Password</p>
+                            </li>
+                            <li>
+                                <a href="?page=password_edit&id_user=<?php echo $_SESSION['id_user']; ?>" class="dropdown-item">
+                                    <i class="ti ti-key fs-6"></i> Ganti Password
                                 </a>
-                                <!-- <a href="?page=anggota_edit" class="d-flex align-items-center gap-2 dropdown-item">
-                                    <i class="ti ti-address-book fs-6"></i>
-                                    <p class="mb-0 fs-3">Informasi Pribadi</p>
-                                </a> -->
-                                <a href="login/logout.php" onclick="return confirm('Anda yakin ingin logout?')" class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
-                            </div>
-                        </div>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li>
+                                <a href="login/logout.php" onclick="return confirm('Anda yakin ingin logout?')" class="dropdown-item text-danger">
+                                    Logout
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
+</body>
+
+</html>
