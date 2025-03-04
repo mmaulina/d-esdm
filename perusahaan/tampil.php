@@ -1,16 +1,24 @@
 <?php
-include '../koneksi.php';
-session_start();
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+include "koneksi.php"; 
 
-// Pastikan user sudah login
-if (!isset($_SESSION['user_id'])) {
-    header("Location: ../login/login.php");
+// Pastikan pengguna sudah login
+if (!isset($_SESSION['id_user'])) {
+    echo "<script>alert('Anda harus login terlebih dahulu!'); window.location.href='login/login.php';</script>";
     exit();
 }
 
-$user_id = $_SESSION['user_id']; // Ambil ID pengguna dari sesi
-$sql = "SELECT * FROM profil WHERE id_user = '$user_id'"; // Filter berdasarkan user_id
-$result = $conn->query($sql);
+$id_user = $_SESSION['id_user'];
+
+// Ambil data profil perusahaan dari database
+$sql = "SELECT * FROM profil WHERE id_user = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $id_user);
+$stmt->execute();
+$result = $stmt->get_result();
+$profil = $result->fetch_assoc();
 ?>
 
 <!DOCTYPE html>
@@ -18,69 +26,49 @@ $result = $conn->query($sql);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profil Perusahaan</title>
+    <title>Info Profil Perusahaan</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-    <!-- <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container">
-            <a class="navbar-brand" href="#">Dinas ESDM</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="profil_perusahaan.php">Profile</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Settings</a></li>
-                    <li class="nav-item"><a class="nav-link text-white" href="login/login.php">Logout</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav> -->
     <div class="container mt-5">
-        <h2>Profil Perusahaan</h2>
-        <table class="table table-bordered">
-            <thead>
+        <h2>Informasi Profil Perusahaan</h2>
+        
+        <?php if ($profil): ?>
+            <table class="table table-bordered">
                 <tr>
-                    <th>No</th>
                     <th>Nama Perusahaan</th>
-                    <th>Kabupaten</th>
-                    <th>Alamat</th>
-                    <th>Tenaga Teknis</th>
-                    <th>Kontak Person</th>
-                    <th>Nama Direktur</th>
-                    <th>Kontak Direktur</th>
-                    <th>Aksi</th>
+                    <td><?php echo htmlspecialchars($profil['nama_perusahaan']); ?></td>
                 </tr>
-            </thead>
-            <tbody>
-                <?php
-                $sql = "SELECT * FROM profil";
-                $result = $conn->query($sql);
-                $no = 1;
-                while ($row = $result->fetch_assoc()) {
-                    echo "<tr>";
-                    echo "<td>" . $no++ . "</td>";
-                    echo "<td>" . $row['nama_perusahaan'] . "</td>";
-                    echo "<td>" . $row['kabupaten'] . "</td>";
-                    echo "<td>" . $row['alamat'] . "</td>";
-                    echo "<td>" . $row['tenaga_teknis'] . "</td>";
-                    echo "<td>" . $row['kontak_person'] . "</td>";
-                    echo "<td>" . $row['nama_direktur'] . "</td>";
-                    echo "<td>" . $row['kontak_direktur'] . "</td>";
-                    echo "<td>
-                            <a href='edit_profil.php?id=" . $row['id'] . "' class='btn btn-warning btn-sm'>Edit</a>
-                            <form method='POST' style='display:inline;' onsubmit='return confirm(\"Apakah Anda yakin ingin menghapus?\")'>
-                                <input type='hidden' name='hapus_id' value='" . $row['id'] . "'>
-                                <button type='submit' class='btn btn-danger btn-sm'>Hapus</button>
-                            </form>
-                          </td>";
-                    echo "</tr>";
-                }
-                ?>
-            </tbody>
-        </table>
+                <tr>
+                    <th>Kabupaten</th>
+                    <td><?php echo htmlspecialchars($profil['kabupaten']); ?></td>
+                </tr>
+                <tr>
+                    <th>Alamat</th>
+                    <td><?php echo htmlspecialchars($profil['alamat']); ?></td>
+                </tr>
+                <tr>
+                    <th>Tenaga Teknis</th>
+                    <td><?php echo htmlspecialchars($profil['tenaga_teknis']); ?></td>
+                </tr>
+                <tr>
+                    <th>Kontak Person</th>
+                    <td><?php echo htmlspecialchars($profil['kontak_person']); ?></td>
+                </tr>
+                <tr>
+                    <th>Nama Direktur</th>
+                    <td><?php echo htmlspecialchars($profil['nama_direktur']); ?></td>
+                </tr>
+                <tr>
+                    <th>Kontak Direktur</th>
+                    <td><?php echo htmlspecialchars($profil['kontak_direktur']); ?></td>
+                </tr>
+            </table>
+            <a href="update_profil.php" class="btn btn-warning">Update Profil</a>
+        <?php else: ?>
+            <p>Profil perusahaan belum diisi.</p>
+            <a href="?page=tambah_profil" class="btn btn-primary">Isi Profil</a>
+        <?php endif; ?>
     </div>
 </body>
 </html>

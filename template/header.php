@@ -28,7 +28,7 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="drop2">
                             <li>
-                                <a href="?page=pengguna_edit&id_user=<?php echo $_SESSION['id_user']; ?>" class="dropdown-item">
+                                <a href="?page=profil_perusahaan&id_user=<?php echo $_SESSION['id_user']; ?>" class="dropdown-item">
                                     <i class="ti ti-user fs-6"></i> Profil Saya
                                 </a>
                             </li>
