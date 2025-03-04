@@ -12,26 +12,53 @@ if (!isset($_SESSION['id_user'])) {
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $id_user = $_SESSION['id_user'];
-    $nama_perusahaan = $_POST['nama_perusahaan'];
-    $kabupaten = $_POST['kabupaten'];
-    $alamat = $_POST['alamat'];
-    $tenaga_teknis = $_POST['tenaga_teknis'];
-    $kontak_person = $_POST['kontak_person'];
-    $nama_direktur = $_POST['nama_direktur'];
-    $kontak_direktur = $_POST['kontak_direktur'];
 
+    // Fungsi untuk sanitasi input
+    function sanitize_input($data) {
+        return htmlspecialchars(trim($data), ENT_QUOTES, 'UTF-8');
+    }
+
+    $nama_perusahaan = sanitize_input($_POST['nama_perusahaan']);
+    $kabupaten = sanitize_input($_POST['kabupaten']);
+    $alamat = sanitize_input($_POST['alamat']);
+    $tenaga_teknis = sanitize_input($_POST['tenaga_teknis']);
+    $kontak_person = sanitize_input($_POST['kontak_person']);
+    $nama_direktur = sanitize_input($_POST['nama_direktur']);
+    $kontak_direktur = sanitize_input($_POST['kontak_direktur']);
+
+    // Validasi nomor telepon hanya angka
+    if (!preg_match('/^[0-9]+$/', $kontak_person) || !preg_match('/^[0-9]+$/', $kontak_direktur)) {
+        echo "<script>alert('Kontak hanya boleh berisi angka!');</script>";
+        exit();
+    }
+
+    // Validasi Kabupaten hanya dari daftar yang diperbolehkan
+    $valid_kabupaten = [
+        "Balangan", "Banjar", "Barito Kuala", "Hulu Sungai Selatan",
+        "Hulu Sungai Tengah", "Hulu Sungai Utara", "Kotabaru", "Tabalong",
+        "Tanah Bumbu", "Tanah Laut", "Tapin", "Kota Banjarmasin", "Kota Banjarbaru"
+    ];
+    if (!in_array($kabupaten, $valid_kabupaten)) {
+        echo "<script>alert('Kabupaten tidak valid!');</script>";
+        exit();
+    }
+
+    // Query menggunakan prepared statement
     $sql = "INSERT INTO profil (id_user, nama_perusahaan, kabupaten, alamat, tenaga_teknis, kontak_person, nama_direktur, kontak_direktur) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("isssssss", $id_user, $nama_perusahaan, $kabupaten, $alamat, $tenaga_teknis, $kontak_person, $nama_direktur, $kontak_direktur);
     
     if ($stmt->execute()) {
-        echo "<script>alert('Profil berhasil ditambahkan!'); window.location.href='tampil.php';</script>";
+        echo "<script>alert('Profil berhasil ditambahkan!'); window.location.href='?page=profil_perusahaan';</script>";
     } else {
         echo "<script>alert('Gagal menambahkan profil. Silakan coba lagi.');</script>";
     }
 }
 ?>
+
+
+
 
 <!DOCTYPE html>
 <html lang="id">
@@ -49,53 +76,59 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <h2>Tambah Profil Perusahaan</h2>
 
         <form method="POST">
-            <div class="form-group">
-                <label>Nama Perusahaan</label>
-                <input type="text" class="form-control" name="nama_perusahaan" required>
-            </div>
-            <div class="form-group">
-                <label>Kabupaten/Kota</label>
-                <select class="form-control" name="kabupaten" required>
-                    <option value="">-- Pilih Kabupaten/Kota --</option>
-                    <option value="Balangan">Balangan</option>
-                    <option value="Banjar">Banjar</option>
-                    <option value="Barito Kuala">Barito Kuala</option>
-                    <option value="Hulu Sungai Selatan">Hulu Sungai Selatan</option>
-                    <option value="Hulu Sungai Tengah">Hulu Sungai Tengah</option>
-                    <option value="Hulu Sungai Utara">Hulu Sungai Utara</option>
-                    <option value="Kotabaru">Kotabaru</option>
-                    <option value="Tabalong">Tabalong</option>
-                    <option value="Tanah Bumbu">Tanah Bumbu</option>
-                    <option value="Tanah Laut">Tanah Laut</option>
-                    <option value="Tapin">Tapin</option>
-                    <option value="Kota Banjarmasin">Banjarmasin (Kota)</option>
-                    <option value="Kota Banjarbaru">Banjarbaru (Kota)</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Alamat</label>
-                <textarea class="form-control" name="alamat" required></textarea>
-            </div>
-            <div class="form-group">
-                <label>Tenaga Teknis</label>
-                <input type="text" class="form-control" name="tenaga_teknis" required>
-            </div>
-            <div class="form-group">
-                <label>Kontak Person</label>
-                <input type="text" class="form-control" name="kontak_person" required>
-            </div>
-            <div class="form-group">
-                <label>Nama Direktur</label>
-                <input type="text" class="form-control" name="nama_direktur" required>
-            </div>
-            <div class="form-group">
-                <label>Kontak Direktur</label>
-                <input type="text" class="form-control" name="kontak_direktur" required>
-            </div>
-            <button type="submit" class="btn btn-success">Simpan</button>
-            <a href="tampil.php" class="btn btn-secondary">Batal</a>
-        </form>
+    <div class="form-group">
+        <label>Nama Perusahaan</label>
+        <input type="text" class="form-control" name="nama_perusahaan" required maxlength="100">
     </div>
+    
+    <div class="form-group">
+        <label>Kabupaten/Kota</label>
+        <select class="form-control" name="kabupaten" required>
+            <option value="">-- Pilih Kabupaten/Kota --</option>
+            <option value="Balangan">Balangan</option>
+            <option value="Banjar">Banjar</option>
+            <option value="Barito Kuala">Barito Kuala</option>
+            <option value="Hulu Sungai Selatan">Hulu Sungai Selatan</option>
+            <option value="Hulu Sungai Tengah">Hulu Sungai Tengah</option>
+            <option value="Hulu Sungai Utara">Hulu Sungai Utara</option>
+            <option value="Kotabaru">Kotabaru</option>
+            <option value="Tabalong">Tabalong</option>
+            <option value="Tanah Bumbu">Tanah Bumbu</option>
+            <option value="Tanah Laut">Tanah Laut</option>
+            <option value="Tapin">Tapin</option>
+            <option value="Kota Banjarmasin">Banjarmasin (Kota)</option>
+            <option value="Kota Banjarbaru">Banjarbaru (Kota)</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Alamat</label>
+        <textarea class="form-control" name="alamat" required maxlength="255"></textarea>
+    </div>
+    
+    <div class="form-group">
+        <label>Tenaga Teknis</label>
+        <input type="text" class="form-control" name="tenaga_teknis" required maxlength="100">
+    </div>
+    
+    <div class="form-group">
+        <label>Kontak Person</label>
+        <input type="text" class="form-control" name="kontak_person" required maxlength="15" pattern="[0-9]+">
+    </div>
+    
+    <div class="form-group">
+        <label>Nama Direktur</label>
+        <input type="text" class="form-control" name="nama_direktur" required maxlength="100">
+    </div>
+    
+    <div class="form-group">
+        <label>Kontak Direktur</label>
+        <input type="text" class="form-control" name="kontak_direktur" required maxlength="15" pattern="[0-9]+">
+    </div>
+    
+    <button type="submit" class="btn btn-success">Simpan</button>
+    <a href="?page=profil_perusahaan" class="btn btn-secondary">Batal</a>
+</form>
 
 </body>
 </html>
