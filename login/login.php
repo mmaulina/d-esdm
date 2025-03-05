@@ -62,7 +62,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </form>
 
         <div class="text-center mt-3">
-            <a href="#">Belum punya akun?</a>
+            <a href="daftar.php">Belum punya akun?</a>
         </div>
     </div>
 
