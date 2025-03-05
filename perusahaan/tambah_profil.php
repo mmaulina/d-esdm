@@ -14,29 +14,42 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $id_user = $_SESSION['id_user'];
 
     // Fungsi untuk sanitasi input
-    function sanitize_input($data) {
+    function sanitize_input($data)
+    {
         return htmlspecialchars(trim($data), ENT_QUOTES, 'UTF-8');
     }
 
     $nama_perusahaan = sanitize_input($_POST['nama_perusahaan']);
     $kabupaten = sanitize_input($_POST['kabupaten']);
     $alamat = sanitize_input($_POST['alamat']);
-    $tenaga_teknis = sanitize_input($_POST['tenaga_teknis']);
-    $kontak_person = sanitize_input($_POST['kontak_person']);
-    $nama_direktur = sanitize_input($_POST['nama_direktur']);
-    $kontak_direktur = sanitize_input($_POST['kontak_direktur']);
+    $jenis_usaha = sanitize_input($_POST['jenis_usaha']);
+    $no_telp_kantor = sanitize_input($_POST['no_telp_kantor']);
+    $tenaga_teknik = sanitize_input($_POST['tenaga_teknik']);
+    $nama = sanitize_input($_POST['nama']);
+    $no_hp = sanitize_input($_POST['no_hp']);
+    $email = sanitize_input($_POST['email']);
 
     // Validasi nomor telepon hanya angka
-    if (!preg_match('/^[0-9]+$/', $kontak_person) || !preg_match('/^[0-9]+$/', $kontak_direktur)) {
+    if (!preg_match('/^[0-9]+$/', $no_telp_kantor) || !preg_match('/^[0-9]+$/', $no_hp)) {
         echo "<script>alert('Kontak hanya boleh berisi angka!');</script>";
         exit();
     }
 
     // Validasi Kabupaten hanya dari daftar yang diperbolehkan
     $valid_kabupaten = [
-        "Balangan", "Banjar", "Barito Kuala", "Hulu Sungai Selatan",
-        "Hulu Sungai Tengah", "Hulu Sungai Utara", "Kotabaru", "Tabalong",
-        "Tanah Bumbu", "Tanah Laut", "Tapin", "Kota Banjarmasin", "Kota Banjarbaru"
+        "Balangan",
+        "Banjar",
+        "Barito Kuala",
+        "Hulu Sungai Selatan",
+        "Hulu Sungai Tengah",
+        "Hulu Sungai Utara",
+        "Kotabaru",
+        "Tabalong",
+        "Tanah Bumbu",
+        "Tanah Laut",
+        "Tapin",
+        "Kota Banjarmasin",
+        "Kota Banjarbaru"
     ];
     if (!in_array($kabupaten, $valid_kabupaten)) {
         echo "<script>alert('Kabupaten tidak valid!');</script>";
@@ -44,11 +57,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Query menggunakan prepared statement
-    $sql = "INSERT INTO profil (id_user, nama_perusahaan, kabupaten, alamat, tenaga_teknis, kontak_person, nama_direktur, kontak_direktur) 
+    $sql = "INSERT INTO profil (id_user, nama_perusahaan, kabupaten, alamat, jenis_usaha, no_telp_kantor, tenaga_teknik, nama, no_hp, email) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("isssssss", $id_user, $nama_perusahaan, $kabupaten, $alamat, $tenaga_teknis, $kontak_person, $nama_direktur, $kontak_direktur);
-    
+    $stmt->bind_param("isssssss", $id_user, $nama_perusahaan, $kabupaten, $alamat, $jenis_usaha, $no_telp_kantor, $tenaga_teknik, $nama, $no_hp, $email);
+
     if ($stmt->execute()) {
         echo "<script>alert('Profil berhasil ditambahkan!'); window.location.href='?page=profil_perusahaan';</script>";
     } else {
@@ -57,78 +70,76 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 
+<!-- TAMBAH PROFIL PERUSAHAAN -->
+<div class="container mt-4">
+    <h2>Tambah Profil Perusahaan</h2>
 
+    <form method="POST">
+        <div class="form-group">
+            <label>Nama Perusahaan</label>
+            <input type="text" class="form-control" name="nama_perusahaan" required maxlength="100">
+        </div>
 
+        <div class="form-group">
+            <label>Kabupaten/Kota</label>
+            <select class="form-control" name="kabupaten" required>
+                <option value="">-- Pilih Kabupaten/Kota --</option>
+                <option value="Balangan">Balangan</option>
+                <option value="Banjar">Banjar</option>
+                <option value="Barito Kuala">Barito Kuala</option>
+                <option value="Hulu Sungai Selatan">Hulu Sungai Selatan</option>
+                <option value="Hulu Sungai Tengah">Hulu Sungai Tengah</option>
+                <option value="Hulu Sungai Utara">Hulu Sungai Utara</option>
+                <option value="Kotabaru">Kotabaru</option>
+                <option value="Tabalong">Tabalong</option>
+                <option value="Tanah Bumbu">Tanah Bumbu</option>
+                <option value="Tanah Laut">Tanah Laut</option>
+                <option value="Tapin">Tapin</option>
+                <option value="Kota Banjarmasin">Banjarmasin (Kota)</option>
+                <option value="Kota Banjarbaru">Banjarbaru (Kota)</option>
+            </select>
+        </div>
 
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tambah Profil Perusahaan</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</head>
-<body>
+        <div class="form-group">
+            <label>Alamat</label>
+            <textarea class="form-control" name="alamat" required maxlength="200"></textarea>
+        </div>
 
-    <div class="container mt-4">
-        <h2>Tambah Profil Perusahaan</h2>
+        <div class="form-group">
+            <label>Jenis Usaha</label>
+            <input type="text" class="form-control" name="jenis_usaha" required maxlength="100">
+        </div>
 
-        <form method="POST">
-    <div class="form-group">
-        <label>Nama Perusahaan</label>
-        <input type="text" class="form-control" name="nama_perusahaan" required maxlength="100">
-    </div>
-    
-    <div class="form-group">
-        <label>Kabupaten/Kota</label>
-        <select class="form-control" name="kabupaten" required>
-            <option value="">-- Pilih Kabupaten/Kota --</option>
-            <option value="Balangan">Balangan</option>
-            <option value="Banjar">Banjar</option>
-            <option value="Barito Kuala">Barito Kuala</option>
-            <option value="Hulu Sungai Selatan">Hulu Sungai Selatan</option>
-            <option value="Hulu Sungai Tengah">Hulu Sungai Tengah</option>
-            <option value="Hulu Sungai Utara">Hulu Sungai Utara</option>
-            <option value="Kotabaru">Kotabaru</option>
-            <option value="Tabalong">Tabalong</option>
-            <option value="Tanah Bumbu">Tanah Bumbu</option>
-            <option value="Tanah Laut">Tanah Laut</option>
-            <option value="Tapin">Tapin</option>
-            <option value="Kota Banjarmasin">Banjarmasin (Kota)</option>
-            <option value="Kota Banjarbaru">Banjarbaru (Kota)</option>
-        </select>
-    </div>
+        <div class="form-group">
+            <label>Nomor Telepon Kantor</label>
+            <input type="number" class="form-control" name="kontak_person" required maxlength="15" pattern="[0-9]+">
+        </div>
 
-    <div class="form-group">
-        <label>Alamat</label>
-        <textarea class="form-control" name="alamat" required maxlength="255"></textarea>
-    </div>
-    
-    <div class="form-group">
-        <label>Tenaga Teknis</label>
-        <input type="text" class="form-control" name="tenaga_teknis" required maxlength="100">
-    </div>
-    
-    <div class="form-group">
-        <label>Kontak Person</label>
-        <input type="text" class="form-control" name="kontak_person" required maxlength="15" pattern="[0-9]+">
-    </div>
-    
-    <div class="form-group">
-        <label>Nama Direktur</label>
-        <input type="text" class="form-control" name="nama_direktur" required maxlength="100">
-    </div>
-    
-    <div class="form-group">
-        <label>Kontak Direktur</label>
-        <input type="text" class="form-control" name="kontak_direktur" required maxlength="15" pattern="[0-9]+">
-    </div>
-    
-    <button type="submit" class="btn btn-success">Simpan</button>
-    <a href="?page=profil_perusahaan" class="btn btn-secondary">Batal</a>
-</form>
+        <div class="form-group">
+            <label>Tenaga Teknik</label>
+            <input type="text" class="form-control" name="tenaga_teknik" required maxlength="100">
+        </div>
 
-</body>
-</html>
+        <div class="card-header mt-3">
+            <h6>Kontak Person</h6>
+        </div>
+
+        <div class="form-group">
+            <label>Nama</label>
+            <input type="text" class="form-control" name="nama" required maxlength="100">
+        </div>
+
+        <div class="form-group">
+            <label>Nomor HP</label>
+            <input type="number" class="form-control" name="no_hp" required maxlength="15" pattern="[0-9]+">
+        </div>
+
+        <div class="form-group">
+            <label>Email</label>
+            <input type="text" class="form-control" name="email" required maxlength="100">
+        </div>
+
+        <button type="submit" class="btn btn-success">Simpan</button>
+        <a href="?page=profil_perusahaan" class="btn btn-secondary">Batal</a>
+    </form>
+</div>
