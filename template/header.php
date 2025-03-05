@@ -1,19 +1,24 @@
 <!doctype html>
-<html lang="en">
+<html lang="id">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>D-ESDM</title>
+
+    <!-- Bootstrap CSS -->
     <link href="assets/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" defer></script>
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container-fluid"> <!-- Ubah ke container-fluid agar responsif -->
-            <a class="navbar-brand" href="#">Dinas Energi dan Sumber Daya Mineral</a>
-            
+<nav class="navbar navbar-expand-lg navbar-dark px-3" style="background-color: #008B47;">
+        <div class="container-fluid">
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                <img src="assets/img/kalsel.png" alt="Logo Kalsel" class="me-2">
+                <strong>Dinas Energi dan Sumber Daya Mineral</strong>
+            </a>
+
             <!-- Tombol Toggle untuk Mobile -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -23,8 +28,8 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="drop2" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="ti ti-user-circle" style="font-size: 24px;"></i> &nbsp; <?php echo $_SESSION['username']; ?>
+                        <a class="nav-link dropdown-toggle" href="#" id="drop2" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            &nbsp; <?php echo $_SESSION['username']; ?>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="drop2">
                             <li>
@@ -51,6 +56,3 @@
             </div>
         </div>
     </nav>
-</body>
-
-</html>
