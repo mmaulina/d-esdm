@@ -1,0 +1,35 @@
+html, body {
+    height: 100vh; /* Maksimal setinggi layar */
+}
+
+/* Mengatur ukuran logo agar pas di header */
+.navbar-brand img {
+    height: 50px;
+    width: auto;
+}
+
+.sidebar {
+    background-color: #F7F6BB ;
+}
+.sidebar .nav-link {
+    background-color: #FCDC2A ;
+    color: #000 !important;  /* Agar teks terlihat */
+    padding: 10px;
+    border-radius: 5px; /* Opsional: Membuat sudut membulat */
+    margin-bottom: 5px; /* Opsional: Jarak antar menu */
+    display: block;
+}
+
+.sidebar .nav-link:hover {
+    background-color: #FFE066; 
+}
+
+.sidebar .nav-link.active {
+    background-color: #008B47 !important;
+    color: #fff !important; /* Warna teks agar lebih kontras */
+    font-weight: bold; /* Membuat teks lebih tebal */
+    border-radius: 5px; /* Membuat sudut lebih halus */
+}
+
+
+
