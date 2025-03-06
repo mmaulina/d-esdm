@@ -63,9 +63,38 @@ $profil = $result->fetch_assoc();
                 <td><?php echo htmlspecialchars($profil['email']); ?></td>
             </tr>
         </table>
-        <a href="update_profil.php" class="btn btn-warning">Update Profil</a>
+        <a href="?page=update_profil&id_user=<?php echo $_SESSION['id_user']; ?>" class="btn btn-warning">Update Profil</a>
+        <a href="?page=delete_profil&id_user=<?= $_SESSION['id_user']; ?>" 
+            onclick="return confirmHapus(event)" 
+            class="btn btn-danger">
+            Hapus Profil
+            </a>
     <?php else: ?>
         <p>Profil perusahaan belum diisi.</p>
         <a href="?page=tambah_profil&id_user=<?php echo $_SESSION['id_user']; ?>" class="btn btn-primary">Isi Profil</a>
     <?php endif; ?>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+function confirmHapus(event) {
+    event.preventDefault(); // Mencegah link langsung terbuka
+    
+    Swal.fire({
+        title: "Apakah Anda yakin?",
+        text: "Profil Anda akan dihapus secara permanen!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Ya, hapus!",
+        cancelButtonText: "Batal"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = event.target.href; // Melanjutkan ke halaman hapus_profil.php jika dikonfirmasi
+        }
+    });
+
+    return false; // Menghentikan eksekusi default onclick
+}
+</script>

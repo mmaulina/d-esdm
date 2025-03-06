@@ -36,6 +36,8 @@ include "template/header.php";
             switch ($page) {
                 case "profil_perusahaan": include "perusahaan/tampil.php"; break;
                 case "tambah_profil": include "perusahaan/tambah_profil.php"; break;
+                case "update_profil": include "perusahaan/update_profil.php"; break;
+                case "delete_profil": include "perusahaan/delete_profil.php"; break;
                 
                 default: include "dashboard.php"; break;
             }
