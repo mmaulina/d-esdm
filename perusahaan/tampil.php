@@ -66,6 +66,6 @@ $profil = $result->fetch_assoc();
         <a href="update_profil.php" class="btn btn-warning">Update Profil</a>
     <?php else: ?>
         <p>Profil perusahaan belum diisi.</p>
-        <a href="?page=tambah_profil" class="btn btn-primary">Isi Profil</a>
+        <a href="?page=tambah_profil&id_user=<?php echo $_SESSION['id_user']; ?>" class="btn btn-primary">Isi Profil</a>
     <?php endif; ?>
 </div>

@@ -6,7 +6,23 @@ if (!isset($_SESSION['id_user'])) {
 include "koneksi.php"; 
 include "template/header.php"; 
 ?>
+<style>
+    .row {
+    display: flex; /* Menggunakan Flexbox untuk baris */
+}
 
+.sidebar {
+    position: sticky; /* Membuat sidebar tetap di posisi saat scroll */
+    top: 0; /* Menjaga sidebar tetap di atas saat scroll */
+    height: 100vh; /* Mengatur tinggi sidebar sesuai dengan tinggi viewport */
+    overflow-y: auto; /* Menambahkan scroll jika konten lebih tinggi dari viewport */
+}
+
+.main-content {
+    flex: 1; /* Membuat konten utama mengambil sisa ruang */
+    padding: 20px; /* Menambahkan padding untuk konten */
+}
+</style>
 <div class="container-fluid">
     <div class="row"> <!-- Mulai baris untuk sidebar dan konten -->
         
@@ -14,7 +30,7 @@ include "template/header.php";
         <?php include "template/sidebar.php"; ?>
 
         <!-- Konten utama -->
-        <div class="col-md-9 col-lg-10 p-4"> <!-- Lebar konten agar sejajar dengan sidebar -->
+        <div class="col-md-9 col-lg-10 main-content"> <!-- Lebar konten agar sejajar dengan sidebar -->
             <?php
             $page = isset($_GET['page']) ? $_GET['page'] : 'dashboard';
             switch ($page) {

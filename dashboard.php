@@ -18,134 +18,59 @@ if ($result->num_rows > 0) {
     $total_perusahaan = $row['total_perusahaan'];
 }
 
-// Query untuk menghitung jumlah perusahaan di Kota Banjarbaru
-$sql_banjarbaru = "SELECT COUNT(*) AS total_banjarbaru FROM profil WHERE kabupaten = 'Kota Banjarbaru'";
-$result_banjarbaru = $conn->query($sql_banjarbaru);
+// Query untuk menghitung jumlah perusahaan di kota dan kabupaten lainnya
+$kota_kabupaten = [
+    'Kota Banjarbaru',
+    'Kota Banjarmasin',
+    'Balangan',
+    'Banjar',
+    'Barito Kuala',
+    'Hulu Sungai Selatan',
+    'Hulu Sungai Tengah',
+    'Hulu Sungai Utara',
+    'Kotabaru',
+    'Tabalong',
+    'Tanah Bumbu',
+    'Tanah Laut',
+    'Tapin'
+];
 
-$total_banjarbaru = 0; // Inisialisasi variabel
+$jumlah_per_kota = [];
+foreach ($kota_kabupaten as $kota) {
+    $sql_kota = "SELECT COUNT(*) AS total FROM profil WHERE kabupaten = '$kota'";
+    $result_kota = $conn->query($sql_kota);
+    $jumlah_per_kota[$kota] = 0; // Inisialisasi variabel
 
-if ($result_banjarbaru->num_rows > 0) {
-    // Ambil data dari hasil query
-    $row_banjarbaru = $result_banjarbaru->fetch_assoc();
-    $total_banjarbaru = $row_banjarbaru['total_banjarbaru'];
+    if ($result_kota->num_rows > 0) {
+        $row_kota = $result_kota->fetch_assoc();
+        $jumlah_per_kota[$kota] = $row_kota['total'];
+    }
 }
 
 // Tutup koneksi
 $conn->close();
 ?>
 <main>
-    <div class="col-md-6">
-        <div class="card text-black mb-3" style="background-color: #FCDC2A;">
-            <div class="card-body">
-                <h5 class="card-title">Total Perusahaan</h5>
-                <p class="card-text"><?php echo $total_perusahaan; ?></p>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-6">
-        <div class="card text-black mb-3" style="background-color: #6BB64A;">
-            <div class="card-body">
-                <h5 class="card-title">Kota Banjarbaru</h5>
-                <p class="card-text"><?php echo $total_banjarbaru; ?></p>
-            </div>
-        </div>
-    </div>
+    <div class="container">
+        <div class="row">
             <div class="col-md-6">
-                <div class="card text-black mb-3" style="background-color: #6BB64A;">
+                <div class="card text-black mb-3" style="background-color: #FCDC2A;">
                     <div class="card-body">
-                        <h5 class="card-title">Kota Banjarmasin</h5>
-                        <p class="card-text">10</p>
+                        <h5 class="card-title">Total Perusahaan</h5>
+                        <p class="card-text"><?php echo $total_perusahaan; ?></p>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
-                <div class="card text-black mb-3" style="background-color: #6BB64A;">
-                    <div class="card-body">
-                        <h5 class="card-title">Balangan</h5>
-                        <p class="card-text">10</p>
+            <?php foreach ($jumlah_per_kota as $kota => $jumlah): ?>
+                <div class="col-md-6">
+                    <div class="card text-black mb-3" style="background-color: #6BB64A;">
+                        <div class="card-body">
+                            <h5 class="card-title"><?php echo $kota; ?></h5>
+                            <p class="card-text"><?php echo $jumlah; ?></p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card text-black mb-3" style="background-color: #6BB64A;">
-                    <div class="card-body">
-                        <h5 class="card-title">Banjar</h5>
-                        <p class="card-text">10</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card text-black mb-3" style="background-color: #6BB64A;">
-                    <div class="card-body">
-                        <h5 class="card-title">Barito Kuala</h5>
-                        <p class="card-text">10</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card text-black mb-3" style="background-color: #6BB64A;">
-                    <div class="card-body">
-                        <h5 class="card-title">Hulu Sungai Selatan</h5>
-                        <p class="card-text">10</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card text-black mb-3" style="background-color: #6BB64A;">
-                    <div class="card-body">
-                        <h5 class="card-title">Hulu Sungai Tengah</h5>
-                        <p class="card-text">10</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card text-black mb-3" style="background-color: #6BB64A;">
-                    <div class="card-body">
-                        <h5 class="card-title">Hulus Sungai Utara</h5>
-                        <p class="card-text">10</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card text-black mb-3" style="background-color: #6BB64A;">
-                    <div class="card-body">
-                        <h5 class="card-title">Kotabaru</h5>
-                        <p class="card-text">10</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card text-black mb-3" style="background-color: #6BB64A;">
-                    <div class="card-body">
-                        <h5 class="card-title">Tabalong</h5>
-                        <p class="card-text">10</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card text-black mb-3" style="background-color: #6BB64A;">
-                    <div class="card-body">
-                        <h5 class="card-title">Tanah Bumbu</h5>
-                        <p class="card-text">10</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card text-black mb-3" style="background-color: #6BB64A;">
-                    <div class="card-body">
-                        <h5 class="card-title">Tanah Laut</h5>
-                        <p class="card-text">10</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card text-black mb-3" style="background-color: #6BB64A;">
-                    <div class="card-body">
-                        <h5 class="card-title">Tapin</h5>
-                        <p class="card-text">10</p>
-                    </div>
-                </div>
-            </div>
+            <?php endforeach; ?>
         </div>
     </div>
 </main>

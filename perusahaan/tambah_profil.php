@@ -14,8 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $id_user = $_SESSION['id_user'];
 
     // Fungsi untuk sanitasi input
-    function sanitize_input($data)
-    {
+    function sanitize_input($data) {
         return htmlspecialchars(trim($data), ENT_QUOTES, 'UTF-8');
     }
 
@@ -29,9 +28,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $no_hp = sanitize_input($_POST['no_hp']);
     $email = sanitize_input($_POST['email']);
 
-    // Validasi nomor telepon hanya angka
-    if (!preg_match('/^[0-9]+$/', $no_telp_kantor) || !preg_match('/^[0-9]+$/', $no_hp)) {
-        echo "<script>alert('Kontak hanya boleh berisi angka!');</script>";
+    // Validasi nomor telepon hanya angka dan tanda +
+    if (!preg_match('/^[0-9\+]+$/', $no_telp_kantor) || !preg_match('/^[0-9\+]+$/', $no_hp)) {
+        echo "<script>alert('Kontak hanya boleh berisi angka dan tanda +!');</script>";
         exit();
     }
 
@@ -58,16 +57,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Query menggunakan prepared statement
     $sql = "INSERT INTO profil (id_user, nama_perusahaan, kabupaten, alamat, jenis_usaha, no_telp_kantor, tenaga_teknik, nama, no_hp, email) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("isssssss", $id_user, $nama_perusahaan, $kabupaten, $alamat, $jenis_usaha, $no_telp_kantor, $tenaga_teknik, $nama, $no_hp, $email);
+    
+    // Periksa apakah statement berhasil disiapkan
+    if ($stmt === false) {
+        die("Error preparing statement: " . $conn->error);
+    }
 
+    // Bind parameter (semua string)
+    $stmt->bind_param("issssissis", $id_user, $nama_perusahaan, $kabupaten, $alamat, $jenis_usaha, $no_telp_kantor, $tenaga_teknik, $nama, $no_hp, $email);
+
+    // Eksekusi statement
     if ($stmt->execute()) {
         echo "<script>alert('Profil berhasil ditambahkan!'); window.location.href='?page=profil_perusahaan';</script>";
     } else {
         echo "<script>alert('Gagal menambahkan profil. Silakan coba lagi.');</script>";
     }
+
+    // Tutup statement
+    $stmt->close();
 }
+
+// Tutup koneksi
+$conn->close();
 ?>
 
 <!-- TAMBAH PROFIL PERUSAHAAN -->
@@ -112,7 +125,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <div class="form-group">
             <label>Nomor Telepon Kantor</label>
-            <input type="number" class="form-control" name="kontak_person" required maxlength="15" pattern="[0-9]+">
+            <input type="text" class="form-control" name="no_telp_kantor" required maxlength="15" pattern="[0-9]+">
         </div>
 
         <div class="form-group">
@@ -131,7 +144,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <div class="form-group">
             <label>Nomor HP</label>
-            <input type="number" class="form-control" name="no_hp" required maxlength="15" pattern="[0-9]+">
+            <input type="text" class="form-control" name="no_hp" required maxlength="15" pattern="[0-9]+">
         </div>
 
         <div class="form-group">
