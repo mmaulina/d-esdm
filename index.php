@@ -34,11 +34,17 @@ include "template/header.php";
             <?php
             $page = isset($_GET['page']) ? $_GET['page'] : 'dashboard';
             switch ($page) {
+                // perusahaan
                 case "profil_perusahaan": include "perusahaan/tampil.php"; break;
+                case "profil_admin": include "perusahaan/tampil_admin.php"; break;
                 case "tambah_profil": include "perusahaan/tambah_profil.php"; break;
                 case "update_profil": include "perusahaan/update_profil.php"; break;
                 case "delete_profil": include "perusahaan/delete_profil.php"; break;
-                
+
+                // data pembangkit dan data teknis pembangkit
+                case "pembangkit_admin": include "pembangkit/tampil_admin.php"; break;
+
+                // default saat login berhasil
                 default: include "dashboard.php"; break;
             }
             ?>
