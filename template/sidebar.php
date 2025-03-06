@@ -14,7 +14,7 @@ $currentPage = $_GET['page'] ?? 'dashboard'; // Ambil halaman dari URL
             <a class="nav-link <?= ($currentPage == 'settings') ? 'active' : ''; ?>" href="?page=settings">Settings</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link text-danger" href="logout.php">Logout</a>
+            <a class="nav-link text-danger" href="login/logout.php">Logout</a>
         </li>
     </ul>
 </aside>
