@@ -52,6 +52,14 @@ $conn->close();
 ?>
 <main>
     <div class="container">
+        <!-- Tambahan Welcome Text -->
+        <div class="row">
+            <div class="col-12">
+                <h2 class="text-center mt-4">Welcome to Dashboard</h2>
+                <hr>
+            </div>
+        </div>
+
         <div class="row">
             <div class="col-md-6">
                 <div class="card text-black mb-3" style="background-color: #FCDC2A;">
@@ -61,16 +69,6 @@ $conn->close();
                     </div>
                 </div>
             </div>
-            <?php foreach ($jumlah_per_kota as $kota => $jumlah): ?>
-                <div class="col-md-6">
-                    <div class="card text-black mb-3" style="background-color: #6BB64A;">
-                        <div class="card-body">
-                            <h5 class="card-title"><?php echo $kota; ?></h5>
-                            <p class="card-text"><?php echo $jumlah; ?></p>
-                        </div>
-                    </div>
-                </div>
-            <?php endforeach; ?>
         </div>
     </div>
 </main>
