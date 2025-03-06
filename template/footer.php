@@ -1,5 +1,5 @@
-<footer class="bg-dark text-white text-center py-3 mt-4">
-    <p>&copy; <?php echo date("Y"); ?> DINAS ESDM KALIMANTAN SELATAN. All rights reserved.</p>
+<footer class="bg-dark text-white text-center py-1">
+    <p class="mt-3">&copy; <?php echo date("Y"); ?> DINAS ESDM KALIMANTAN SELATAN. All rights reserved.</p>
 </footer>
 
 <!-- Bootstrap JS (Pastikan sudah terpasang di proyek Anda) -->
