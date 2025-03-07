@@ -43,6 +43,8 @@ include "template/header.php";
 
                 // data pembangkit dan data teknis pembangkit
                 case "pembangkit_admin": include "pembangkit/tampil_admin.php"; break;
+                case "pembangkit": include "pembangkit/tampil.php"; break;
+                case "pembangkit_tambah": include "pembangkit/tambah.php"; break;
 
                 // default saat login berhasil
                 default: include "dashboard.php"; break;

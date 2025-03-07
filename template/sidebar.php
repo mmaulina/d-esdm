@@ -14,6 +14,9 @@ $currentPage = $_GET['page'] ?? 'dashboard'; // Ambil halaman dari URL
             <a class="nav-link <?= ($currentPage == 'profil_admin') ? 'active' : ''; ?>" href="?page=profil_admin">Profile Perusahaan (A)</a>
         </li>
         <li class="nav-item">
+            <a class="nav-link <?= ($currentPage == 'pembangkit') ? 'active' : ''; ?>" href="?page=pembangkit">Isi Pembangkit</a>
+        </li>
+        <li class="nav-item">
             <a class="nav-link <?= ($currentPage == 'pembangkit_admin') ? 'active' : ''; ?>" href="?page=pembangkit_admin">Data Pembangkit (A)</a>
         </li>
         <li class="nav-item">

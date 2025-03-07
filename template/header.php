@@ -43,6 +43,11 @@
                                 </a>
                             </li>
                             <li>
+                                <a href="?page=tampil_admin&id_user=<?php echo $_SESSION['id_user']; ?>" class="dropdown-item">
+                                    <i class="ti ti-key fs-6"></i> Data Admin
+                                </a>
+                            </li>
+                            <li>
                                 <hr class="dropdown-divider">
                             </li>
                             <li>
