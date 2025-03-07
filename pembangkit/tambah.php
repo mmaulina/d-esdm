@@ -13,28 +13,35 @@ if (!isset($_SESSION['id_user'])) {
 $id_user = $_SESSION['id_user']; // Ambil id_user dari sesi
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $alamat = $_POST['alamat'];
-    $longitude = $_POST['longitude'];
-    $latitude = $_POST['latitude'];
-    $jenis_pembangkit = $_POST['jenis_pembangkit'];
-    $fungsi = $_POST['fungsi'];
-    $kapasitas_terpasang = $_POST['kapasitas_terpasang'];
-    $daya_mampu_netto = $_POST['daya_mampu_netto'];
-    $jumlah_unit = $_POST['jumlah_unit'];
-    $no_unit = $_POST['no_unit'];
-    $tahun_operasi = $_POST['tahun_operasi'];
-    $status_operasi = $_POST['status_operasi'];
-    $bahan_bakar_jenis = $_POST['bahan_bakar_jenis'];
-    $bahan_bakar_satuan = $_POST['bahan_bakar_satuan'];
+    // Sanitasi input
+    $nama_perusahaan = mysqli_real_escape_string($conn, trim($_POST['nama_perusahaan']));
+    $alamat = mysqli_real_escape_string($conn, trim($_POST['alamat']));
+    $longitude = mysqli_real_escape_string($conn, trim($_POST['longitude']));
+    $latitude = mysqli_real_escape_string($conn, trim($_POST['latitude']));
+    $jenis_pembangkit = mysqli_real_escape_string($conn, trim($_POST['jenis_pembangkit']));
+    $fungsi = mysqli_real_escape_string($conn, trim($_POST['fungsi']));
+    $kapasitas_terpasang = mysqli_real_escape_string($conn, trim($_POST['kapasitas_terpasang']));
+    $daya_mampu_netto = mysqli_real_escape_string($conn, trim($_POST['daya_mampu_netto']));
+    $jumlah_unit = intval($_POST['jumlah_unit']);
+    $no_unit = mysqli_real_escape_string($conn, trim($_POST['no_unit']));
+    $tahun_operasi = intval($_POST['tahun_operasi']);
+    $status_operasi = mysqli_real_escape_string($conn, trim($_POST['status_operasi']));
+    $bahan_bakar_jenis = mysqli_real_escape_string($conn, trim($_POST['bahan_bakar_jenis']));
+    $bahan_bakar_satuan = mysqli_real_escape_string($conn, trim($_POST['bahan_bakar_satuan']));
 
-    $query = "INSERT INTO pembangkit (id_user, alamat, longitude, latitude, jenis_pembangkit, fungsi, kapasitas_terpasang, daya_mampu_netto, jumlah_unit, no_unit, tahun_operasi, status_operasi, bahan_bakar_jenis, bahan_bakar_satuan) 
-              VALUES ('$id_user', '$alamat', '$longitude', '$latitude', '$jenis_pembangkit', '$fungsi', '$kapasitas_terpasang', '$daya_mampu_netto', '$jumlah_unit', '$no_unit', '$tahun_operasi', '$status_operasi', '$bahan_bakar_jenis', '$bahan_bakar_satuan')";
-
-    if (mysqli_query($conn, $query)) {
-        echo "<script>alert('Data berhasil ditambahkan!'); window.location.href='index.php';</script>";
+    // Query dengan prepared statement
+    $query = "INSERT INTO pembangkit (id_user, nama_perusahaan, alamat, longitude, latitude, jenis_pembangkit, fungsi, kapasitas_terpasang, daya_mampu_netto, jumlah_unit, no_unit, tahun_operasi, status_operasi, bahan_bakar_jenis, bahan_bakar_satuan) 
+              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
+    
+    $stmt = mysqli_prepare($conn, $query);
+    mysqli_stmt_bind_param($stmt, "issssssssssisss", $id_user, $nama_perusahaan, $alamat, $longitude, $latitude, $jenis_pembangkit, $fungsi, $kapasitas_terpasang, $daya_mampu_netto, $jumlah_unit, $no_unit, $tahun_operasi, $status_operasi, $bahan_bakar_jenis, $bahan_bakar_satuan);
+    
+    if (mysqli_stmt_execute($stmt)) {
+        echo "<script>alert('Data berhasil ditambahkan!'); window.location.href='?page=pembangkit';</script>";
     } else {
         echo "<script>alert('Gagal menambahkan data!');</script>";
     }
+    mysqli_stmt_close($stmt);
 }
 ?>
 
@@ -42,6 +49,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <h3 class="text-center">Tambah Data Pembangkit</h3>
     <hr>
     <form method="POST">
+    <div class="mb-3">
+            <label class="form-label">Nama Perusahaan</label>
+            <input type="text" name="nama_perusahaan" class="form-control" required>
+        </div>
         <div class="mb-3">
             <label class="form-label">Alamat</label>
             <input type="text" name="alamat" class="form-control" required>
@@ -66,11 +77,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
         <div class="mb-3">
             <label class="form-label">Kapasitas Terpasang (kW)</label>
-            <input type="number" name="kapasitas_terpasang" class="form-control" required>
+            <input type="text" name="kapasitas_terpasang" class="form-control" required>
         </div>
         <div class="mb-3">
             <label class="form-label">Daya Mampu Netto (kW)</label>
-            <input type="number" name="daya_mampu_netto" class="form-control" required>
+            <input type="text" name="daya_mampu_netto" class="form-control"  required>
         </div>
         <div class="mb-3">
             <label class="form-label">Jumlah Unit</label>

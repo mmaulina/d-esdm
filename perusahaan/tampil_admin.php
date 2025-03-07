@@ -2,7 +2,7 @@
     <h3 class="text-center mb-3">Data Profil Perusahaan</h3>
     <hr>
     <div class="table-responsive" style="max-height: 500px; overflow-x: auto; overflow-y: auto;">
-        <table class="table table-bordered">
+        <table class="table table-bordered" style="min-width: 1200px; white-space: nowrap;">
             <thead class="table-dark text-center align-middle">
                 <tr>
                     <th rowspan="2">No.</th>
@@ -24,16 +24,15 @@
 
             <tbody>
                 <?php
-                // Query mengambil data dari tabel profil dan mengurutkan berdasarkan ID
+                include 'koneksi.php';
                 $query = "SELECT * FROM profil ORDER BY id_profil ASC";
                 $result = mysqli_query($conn, $query);
 
-                // Cek apakah ada data
                 if (mysqli_num_rows($result) > 0) {
-                    $no = 1; // Inisialisasi nomor
+                    $no = 1;
                     while ($row = mysqli_fetch_assoc($result)) {
                         echo "<tr>";
-                        echo "<td>" . $no . "</td>"; // Menampilkan nomor urut
+                        echo "<td>" . $no . "</td>";
                         echo "<td>" . htmlspecialchars($row['nama_perusahaan']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['kabupaten']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['alamat']) . "</td>";
@@ -48,7 +47,7 @@
                                 <a href='hapus.php?id=" . $row['id_profil'] . "' class='btn btn-sm btn-danger' onclick='return confirm(\"Hapus data ini?\")'>Hapus</a>
                               </td>";
                         echo "</tr>";
-                        $no++; // Menambah nomor urut
+                        $no++;
                     }
                 } else {
                     echo "<tr><td colspan='11' class='text-center'>Data tidak ditemukan</td></tr>";
