@@ -1,3 +1,25 @@
+<?php
+include '../koneksi.php'; // Pastikan file koneksi ke database sudah ada
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $username = htmlspecialchars($_POST['username']);
+    $email = htmlspecialchars($_POST['email']);
+    $password = htmlspecialchars($_POST['password'], );
+    $role = "umum"; // Otomatis diisi "umum"
+    $status = "diajukan"; // Otomatis diisi "diajukan"
+
+    $sql = "INSERT INTO users (username, email, password, role, status) VALUES (?, ?, ?, ?, ?)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("sssss", $username, $email, $password, $role, $status);
+
+    if ($stmt->execute()) {
+        echo "<script>alert('Data berhasil ditambahkan!'); window.location='login.php';</script>";
+    } else {
+        echo "<script>alert('Gagal menambahkan data!');</script>";
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="id">
 
@@ -13,20 +35,20 @@
     <div class="card shadow p-4" style="width: 350px;">
         <h3 class="text-center">Daftar</h3>
         <hr>
-        <form>
+        <form method="post">
             <div class="mb-3">
                 <label for="username" class="form-label">Username</label>
-                <input type="username" class="form-control" id="username" placeholder="Masukkan username" required>
+                <input name="username" type="username" class="form-control" id="username" placeholder="Masukkan username" required>
             </div>
             <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control" id="email" placeholder="Masukkan email" required>
+                <input name="email" type="email" class="form-control" id="email" placeholder="Masukkan email" required>
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
-                <input type="password" class="form-control" id="password" placeholder="Masukkan password" required>
+                <input name="password" type="password" class="form-control" id="password" placeholder="Masukkan password" required>
             </div>
-            <button type="submit" class="btn btn-primary w-100">Login</button>
+            <button type="submit" class="btn btn-primary w-100">Daftar</button>
         </form>
         <div class="text-center mt-3">
             <a href="login.php">Sudah punya akun?</a>

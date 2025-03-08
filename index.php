@@ -48,6 +48,9 @@ include "template/header.php";
                 
                 // pengguna
                 case "pengguna": include "pengguna/tampil.php"; break;
+                case "pengguna_tambah_admin": include "pengguna/tambah_admin.php"; break;
+                case "pengguna_edit_admin": include "pengguna/edit_admin.php"; break;
+                case "pengguna_hapus_admin": include "pengguna/hapus_admin.php"; break;
 
 
                 // default saat login berhasil

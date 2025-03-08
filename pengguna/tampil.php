@@ -4,6 +4,9 @@
     <div class="card shadow">
         <div class="card-body">
             <table class="table table-striped table-bordered">
+                <div class="mb-3">
+                    <a href="?page=pengguna_tambah_admin" class="btn btn-info" >Tambah Data</a>
+            </div>
                 <thead class="table-dark text-white">
                     <tr>
                         <th>No.</th>
@@ -29,8 +32,8 @@
                                     <td>" . htmlspecialchars($row['role']) . "</td>
                                     <td>" . htmlspecialchars($row['status']) . "</td>
                                     <td>
-                                        <a href='edit_user.php?id=" . htmlspecialchars($row['id_user']) . "' class='btn btn-warning btn-sm'>Edit</a>
-                                        <a href='hapus_user.php?id=" . htmlspecialchars($row['id_user']) . "' class='btn btn-danger btn-sm' onclick='return confirm(\"Yakin ingin menghapus?\")'>Hapus</a>
+                                        <a href='?page=pengguna_edit_admin&id_user=" . htmlspecialchars($row['id_user']) . "' class='btn btn-warning btn-sm'>Edit</a>
+                                        <a href='?page=pengguna_hapus_admin&id_user=" . htmlspecialchars($row['id_user']) . "' class='btn btn-danger btn-sm' onclick='return confirm(\"Yakin ingin menghapus?\")'>Hapus</a>
                                     </td>
                                   </tr>";
                             $no++; // Menambah nomor setiap iterasi
