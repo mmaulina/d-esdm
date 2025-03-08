@@ -23,7 +23,8 @@ $stmt->close();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Fungsi untuk sanitasi input
-    function sanitize_input($data) {
+    function sanitize_input($data)
+    {
         return htmlspecialchars(trim($data), ENT_QUOTES, 'UTF-8');
     }
 
@@ -45,7 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $sql = "UPDATE profil SET nama_perusahaan=?, kabupaten=?, alamat=?, jenis_usaha=?, no_telp_kantor=?, tenaga_teknik=?, nama=?, no_hp=?, email=? WHERE id_user=?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("ssssissisi", $nama_perusahaan, $kabupaten, $alamat, $jenis_usaha, $no_telp_kantor, $tenaga_teknik, $nama, $no_hp, $email, $id_user);
-        
+
         if ($stmt->execute()) {
             echo "<script>alert('Profil berhasil diperbarui!'); window.location.href='?page=profil_perusahaan';</script>";
         } else {
@@ -59,73 +60,78 @@ $conn->close();
 
 <!-- UPDATE PROFIL PERUSAHAAN -->
 <div class="container mt-4">
-    <h2>Update Profil Perusahaan</h2>
-    <form method="POST">
-        <div class="form-group">
-            <label>Nama Perusahaan</label>
-            <input type="text" class="form-control" name="nama_perusahaan" required value="<?php echo $profil['nama_perusahaan']; ?>">
-        </div>
+    <h3 class="text-center mb-3">Update Profil Perusahaan</h3>
+    <hr>
+    <div class="card shadow">
+        <div class="card-body">
+            <form method="POST">
+                <div class="form-group mb-2">
+                    <label>Nama Perusahaan</label>
+                    <input type="text" class="form-control" name="nama_perusahaan" required value="<?php echo $profil['nama_perusahaan']; ?>">
+                </div>
 
-        <div class="form-group">
-            <label>Kabupaten/Kota</label>
-            <select class="form-control" name="kabupaten" required>
-                <option value="<?php echo $profil['kabupaten']; ?>" selected><?php echo $profil['kabupaten']; ?></option>
-                <option value="Balangan">Balangan</option>
-                <option value="Banjar">Banjar</option>
-                <option value="Barito Kuala">Barito Kuala</option>
-                <option value="Hulu Sungai Selatan">Hulu Sungai Selatan</option>
-                <option value="Hulu Sungai Tengah">Hulu Sungai Tengah</option>
-                <option value="Hulu Sungai Utara">Hulu Sungai Utara</option>
-                <option value="Kotabaru">Kotabaru</option>
-                <option value="Tabalong">Tabalong</option>
-                <option value="Tanah Bumbu">Tanah Bumbu</option>
-                <option value="Tanah Laut">Tanah Laut</option>
-                <option value="Tapin">Tapin</option>
-                <option value="Kota Banjarmasin">Banjarmasin (Kota)</option>
-                <option value="Kota Banjarbaru">Banjarbaru (Kota)</option>
-            </select>
-        </div>
+                <div class="form-group mb-2">
+                    <label>Kabupaten/Kota</label>
+                    <select class="form-control" name="kabupaten" required>
+                        <option value="<?php echo $profil['kabupaten']; ?>" selected><?php echo $profil['kabupaten']; ?></option>
+                        <option value="Balangan">Balangan</option>
+                        <option value="Banjar">Banjar</option>
+                        <option value="Barito Kuala">Barito Kuala</option>
+                        <option value="Hulu Sungai Selatan">Hulu Sungai Selatan</option>
+                        <option value="Hulu Sungai Tengah">Hulu Sungai Tengah</option>
+                        <option value="Hulu Sungai Utara">Hulu Sungai Utara</option>
+                        <option value="Kotabaru">Kotabaru</option>
+                        <option value="Tabalong">Tabalong</option>
+                        <option value="Tanah Bumbu">Tanah Bumbu</option>
+                        <option value="Tanah Laut">Tanah Laut</option>
+                        <option value="Tapin">Tapin</option>
+                        <option value="Kota Banjarmasin">Banjarmasin (Kota)</option>
+                        <option value="Kota Banjarbaru">Banjarbaru (Kota)</option>
+                    </select>
+                </div>
 
-        <div class="form-group">
-            <label>Alamat</label>
-            <textarea class="form-control" name="alamat" required><?php echo $profil['alamat']; ?></textarea>
-        </div>
+                <div class="form-group mb-2">
+                    <label>Alamat</label>
+                    <textarea class="form-control" name="alamat" required><?php echo $profil['alamat']; ?></textarea>
+                </div>
 
-        <div class="form-group">
-            <label>Jenis Usaha</label>
-            <input type="text" class="form-control" name="jenis_usaha" required value="<?php echo $profil['jenis_usaha']; ?>">
-        </div>
+                <div class="form-group mb-2">
+                    <label>Jenis Usaha</label>
+                    <input type="text" class="form-control" name="jenis_usaha" required value="<?php echo $profil['jenis_usaha']; ?>">
+                </div>
 
-        <div class="form-group">
-            <label>Nomor Telepon Kantor</label>
-            <input type="text" class="form-control" name="no_telp_kantor" required value="<?php echo $profil['no_telp_kantor']; ?>">
-        </div>
+                <div class="form-group mb-2">
+                    <label>Nomor Telepon Kantor</label>
+                    <input type="text" class="form-control" name="no_telp_kantor" required value="<?php echo $profil['no_telp_kantor']; ?>">
+                </div>
 
-        <div class="form-group">
-            <label>Tenaga Teknik</label>
-            <input type="text" class="form-control" name="tenaga_teknik" required value="<?php echo $profil['tenaga_teknik']; ?>">
-        </div>
+                <div class="form-group mb-2">
+                    <label>Tenaga Teknik</label>
+                    <input type="text" class="form-control" name="tenaga_teknik" required value="<?php echo $profil['tenaga_teknik']; ?>">
+                </div>
 
-        <div class="card-header mt-3">
-            <h6>Kontak Person</h6>
-        </div>
+                <div class="card-header mt-4">
+                    <h6>Kontak Person</h6>
+                </div>
+                <div class="form-group mt-2 mb-2">
+                    <label>Nama</label>
+                    <input type="text" class="form-control" name="nama" required value="<?php echo $profil['nama']; ?>">
+                </div>
 
-        <div class="form-group">
-            <label>Nama</label>
-            <input type="text" class="form-control" name="nama" required value="<?php echo $profil['nama']; ?>">
-        </div>
+                <div class="form-group mb-2">
+                    <label>Nomor HP</label>
+                    <input type="text" class="form-control" name="no_hp" required value="<?php echo $profil['no_hp']; ?>">
+                </div>
 
-        <div class="form-group">
-            <label>Nomor HP</label>
-            <input type="text" class="form-control" name="no_hp" required value="<?php echo $profil['no_hp']; ?>">
-        </div>
+                <div class="form-group mb-2">
+                    <label>Email</label>
+                    <input type="email" class="form-control" name="email" required value="<?php echo $profil['email']; ?>">
+                </div>
 
-        <div class="form-group">
-            <label>Email</label>
-            <input type="email" class="form-control" name="email" required value="<?php echo $profil['email']; ?>">
-        </div>
 
-        <button type="submit" class="btn btn-primary">Update</button>
-        <a href="?page=profil_perusahaan" class="btn btn-secondary">Batal</a>
-    </form>
+                <button type="submit" class="btn btn-primary mt-2">Update</button>
+                <a href="?page=profil_perusahaan" class="btn btn-secondary mt-2">Batal</a>
+            </form>
+        </div>
+    </div>
 </div>
