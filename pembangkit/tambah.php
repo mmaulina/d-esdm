@@ -32,10 +32,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Query dengan prepared statement
     $query = "INSERT INTO pembangkit (id_user, nama_perusahaan, alamat, longitude, latitude, jenis_pembangkit, fungsi, kapasitas_terpasang, daya_mampu_netto, jumlah_unit, no_unit, tahun_operasi, status_operasi, bahan_bakar_jenis, bahan_bakar_satuan) 
               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
-    
+
     $stmt = mysqli_prepare($conn, $query);
     mysqli_stmt_bind_param($stmt, "issssssssssisss", $id_user, $nama_perusahaan, $alamat, $longitude, $latitude, $jenis_pembangkit, $fungsi, $kapasitas_terpasang, $daya_mampu_netto, $jumlah_unit, $no_unit, $tahun_operasi, $status_operasi, $bahan_bakar_jenis, $bahan_bakar_satuan);
-    
+
     if (mysqli_stmt_execute($stmt)) {
         echo "<script>alert('Data berhasil ditambahkan!'); window.location.href='?page=pembangkit';</script>";
     } else {
@@ -48,68 +48,72 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <div class="container mt-4">
     <h3 class="text-center">Tambah Data Pembangkit</h3>
     <hr>
-    <form method="POST">
-    <div class="mb-3">
-            <label class="form-label">Nama Perusahaan</label>
-            <input type="text" name="nama_perusahaan" class="form-control" required>
+    <div class="card shadow">
+        <div class="card-body">
+            <form method="POST">
+                <div class="mb-3">
+                    <label class="form-label">Nama Perusahaan</label>
+                    <input type="text" name="nama_perusahaan" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Alamat</label>
+                    <input type="text" name="alamat" class="form-control" required>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="form-label">Longitude</label>
+                        <input type="text" name="longitude" class="form-control" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Latitude</label>
+                        <input type="text" name="latitude" class="form-control" required>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Jenis Pembangkit</label>
+                    <input type="text" name="jenis_pembangkit" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Fungsi</label>
+                    <input type="text" name="fungsi" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Kapasitas Terpasang (kW)</label>
+                    <input type="text" name="kapasitas_terpasang" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Daya Mampu Netto (kW)</label>
+                    <input type="text" name="daya_mampu_netto" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Jumlah Unit</label>
+                    <input type="number" name="jumlah_unit" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">No. Unit</label>
+                    <input type="text" name="no_unit" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Tahun Operasi</label>
+                    <input type="number" name="tahun_operasi" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Status Operasi</label>
+                    <input type="text" name="status_operasi" class="form-control" required>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="form-label">Jenis Bahan Bakar</label>
+                        <input type="text" name="bahan_bakar_jenis" class="form-control" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Satuan Bahan Bakar</label>
+                        <input type="text" name="bahan_bakar_satuan" class="form-control" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary mt-3">Simpan</button>
+                <a href="?page=pembangkit" class="btn btn-secondary mt-3">Batal</a>
+            </form>
         </div>
-        <div class="mb-3">
-            <label class="form-label">Alamat</label>
-            <input type="text" name="alamat" class="form-control" required>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <label class="form-label">Longitude</label>
-                <input type="text" name="longitude" class="form-control" required>
-            </div>
-            <div class="col-md-6">
-                <label class="form-label">Latitude</label>
-                <input type="text" name="latitude" class="form-control" required>
-            </div>
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Jenis Pembangkit</label>
-            <input type="text" name="jenis_pembangkit" class="form-control" required>
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Fungsi</label>
-            <input type="text" name="fungsi" class="form-control" required>
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Kapasitas Terpasang (kW)</label>
-            <input type="text" name="kapasitas_terpasang" class="form-control" required>
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Daya Mampu Netto (kW)</label>
-            <input type="text" name="daya_mampu_netto" class="form-control"  required>
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Jumlah Unit</label>
-            <input type="number" name="jumlah_unit" class="form-control" required>
-        </div>
-        <div class="mb-3">
-            <label class="form-label">No. Unit</label>
-            <input type="text" name="no_unit" class="form-control" required>
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Tahun Operasi</label>
-            <input type="number" name="tahun_operasi" class="form-control" required>
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Status Operasi</label>
-            <input type="text" name="status_operasi" class="form-control" required>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <label class="form-label">Jenis Bahan Bakar</label>
-                <input type="text" name="bahan_bakar_jenis" class="form-control" required>
-            </div>
-            <div class="col-md-6">
-                <label class="form-label">Satuan Bahan Bakar</label>
-                <input type="text" name="bahan_bakar_satuan" class="form-control" required>
-            </div>
-        </div>
-        <button type="submit" class="btn btn-primary mt-3">Simpan</button>
-        <a href="?page=pembangkit" class="btn btn-secondary mt-3">Batal</a>
-    </form>
+    </div>
 </div>
