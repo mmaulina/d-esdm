@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.1.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 05 Mar 2025 pada 10.23
--- Versi server: 10.4.28-MariaDB
--- Versi PHP: 8.0.28
+-- Generation Time: Mar 08, 2025 at 03:37 AM
+-- Server version: 10.4.18-MariaDB
+-- PHP Version: 7.4.16
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,7 +24,32 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `profil`
+-- Table structure for table `pembangkit`
+--
+
+CREATE TABLE `pembangkit` (
+  `id` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL,
+  `nama_perusahaan` varchar(225) NOT NULL,
+  `alamat` varchar(225) NOT NULL,
+  `longitude` varchar(225) NOT NULL,
+  `latitude` varchar(225) NOT NULL,
+  `jenis_pembangkit` varchar(100) NOT NULL,
+  `fungsi` varchar(100) NOT NULL,
+  `kapasitas_terpasang` varchar(100) NOT NULL,
+  `daya_mampu_netto` varchar(100) NOT NULL,
+  `jumlah_unit` int(100) NOT NULL,
+  `no_unit` varchar(100) NOT NULL,
+  `tahun_operasi` int(11) NOT NULL,
+  `status_operasi` varchar(100) NOT NULL,
+  `bahan_bakar_jenis` varchar(100) NOT NULL,
+  `bahan_bakar_satuan` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `profil`
 --
 
 CREATE TABLE `profil` (
@@ -39,12 +64,19 @@ CREATE TABLE `profil` (
   `nama` varchar(100) NOT NULL,
   `no_hp` varchar(15) NOT NULL,
   `email` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `profil`
+--
+
+INSERT INTO `profil` (`id_profil`, `id_user`, `nama_perusahaan`, `kabupaten`, `alamat`, `jenis_usaha`, `no_telp_kantor`, `tenaga_teknik`, `nama`, `no_hp`, `email`) VALUES
+(6, 1, 'irwan group', 'Tanah Bumbu', 'asam-asam', 'Tambang', '88247342027', 'irwan', 'MUHAMMAD IRWAN FIRDAUS', '88247342027', 'irwan@gmail.com');
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `users`
+-- Table structure for table `users`
 --
 
 CREATE TABLE `users` (
@@ -53,10 +85,10 @@ CREATE TABLE `users` (
   `email` varchar(50) NOT NULL,
   `password` varchar(255) NOT NULL,
   `status` enum('admin','umum') NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data untuk tabel `users`
+-- Dumping data for table `users`
 --
 
 INSERT INTO `users` (`id_user`, `username`, `email`, `password`, `status`) VALUES
@@ -67,29 +99,41 @@ INSERT INTO `users` (`id_user`, `username`, `email`, `password`, `status`) VALUE
 --
 
 --
--- Indeks untuk tabel `profil`
+-- Indexes for table `pembangkit`
+--
+ALTER TABLE `pembangkit`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `profil`
 --
 ALTER TABLE `profil`
   ADD PRIMARY KEY (`id_profil`);
 
 --
--- Indeks untuk tabel `users`
+-- Indexes for table `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id_user`);
 
 --
--- AUTO_INCREMENT untuk tabel yang dibuang
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT untuk tabel `profil`
+-- AUTO_INCREMENT for table `pembangkit`
+--
+ALTER TABLE `pembangkit`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `profil`
 --
 ALTER TABLE `profil`
-  MODIFY `id_profil` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_profil` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- AUTO_INCREMENT untuk tabel `users`
+-- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
   MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
