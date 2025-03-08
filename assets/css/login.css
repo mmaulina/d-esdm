@@ -1,0 +1,24 @@
+body {
+    background: linear-gradient(to bottom left, #D4E8A3 , #74B785);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn-primary {
+    background-color: #008B47;
+    border: none;
+}
+.btn-primary:hover {
+    background-color: #006B37;
+}
+
+a {
+    color: #008B47; /* Warna hijau sesuai tombol */
+    text-decoration: none; /* Menghilangkan garis bawah */
+}
+
+a:hover {
+    color: #006F38; /* Warna lebih gelap saat hover */
+}
