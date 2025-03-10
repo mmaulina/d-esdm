@@ -86,7 +86,7 @@ $conn->close();
 
 <!-- TAMBAH PROFIL PERUSAHAAN -->
 <div class="container mt-4">
-    <h3>Tambah Profil Perusahaan</h3>
+    <h3 class="text-center">Tambah Profil Perusahaan</h3>
     <hr>
     <div class="card shadow">
         <div class="card-body">
@@ -155,8 +155,10 @@ $conn->close();
                     <input type="text" class="form-control" name="email" required maxlength="100">
                 </div>
 
-                <button type="submit" class="btn btn-success mt-2">Simpan</button>
-                <a href="?page=profil_perusahaan" class="btn btn-secondary mt-2">Batal</a>
+                <div class="mt-3">
+                    <button type="submit" class="btn btn-success">Simpan</button>
+                    <a href="?page=profil_perusahaan" class="btn btn-secondary">Batal</a>
+                </div>
             </form>
         </div>
     </div>

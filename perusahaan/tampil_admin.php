@@ -45,8 +45,9 @@
                                 echo "<td>" . htmlspecialchars($row['no_hp']) . "</td>";
                                 echo "<td>" . htmlspecialchars($row['email']) . "</td>";
                                 echo "<td>
-                                <a href='edit.php?id=" . $row['id_profil'] . "' class='btn btn-sm btn-primary'>Edit</a>
-                                <a href='hapus.php?id=" . $row['id_profil'] . "' class='btn btn-sm btn-danger' onclick='return confirm(\"Hapus data ini?\")'>Hapus</a>
+                                
+                                <a href='?page=update_profil&id_profil=" . htmlspecialchars($row['id_profil']) . "' class='btn btn-warning btn-sm'>Edit</a>
+                                <a href='?page=delete_profil&id_profil=" . htmlspecialchars($row['id_profil']) . "' class='btn btn-danger btn-sm' onclick='return confirm(\"Yakin ingin menghapus data ini?\")'>Hapus</a>
                               </td>";
                                 echo "</tr>";
                                 $no++;

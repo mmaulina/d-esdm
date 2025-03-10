@@ -20,6 +20,10 @@ $result = mysqli_query($conn, $query);
     <hr>
     <div class="card shadow">
         <div class="card-body">
+            <div class="mb-3">
+                <a href='?page=pembangkit_tambah&id_user=<?= $id_user ?>' class='btn btn-primary'>Tambah Data</a>
+            </div>
+
             <div class="table-responsive" style="max-height: 500px; overflow-x: auto; overflow-y: auto;">
                 <table class="table table-bordered" style="table-layout: fixed; min-width: 1800px;">
                     <thead class="table-dark text-center align-middle">
@@ -85,7 +89,6 @@ $result = mysqli_query($conn, $query);
             <?php
             $id_user = isset($_SESSION['id_user']) ? $_SESSION['id_user'] : 0;
             ?>
-            <a href='?page=pembangkit_tambah&id_user=<?= $id_user ?>' class='btn btn-sm btn-primary mt-3'>Tambah</a>
         </div>
     </div>
 </div>

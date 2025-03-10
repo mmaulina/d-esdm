@@ -111,8 +111,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <input type="text" name="bahan_bakar_satuan" class="form-control" required>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary mt-3">Simpan</button>
-                <a href="?page=pembangkit" class="btn btn-secondary mt-3">Batal</a>
+
+                <div class="mt-3">
+                    <button type="submit" class="btn btn-success">Simpan</button>
+                    <a href="?page=pembangkit" class="btn btn-secondary">Batal</a>
+                </div>
             </form>
         </div>
     </div>

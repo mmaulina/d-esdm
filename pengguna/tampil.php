@@ -5,8 +5,8 @@
         <div class="card-body">
             <table class="table table-striped table-bordered">
                 <div class="mb-3">
-                    <a href="?page=pengguna_tambah_admin" class="btn btn-info" >Tambah Data</a>
-            </div>
+                    <a href="?page=pengguna_tambah_admin" class="btn btn-primary">Tambah Data</a>
+                </div>
                 <thead class="table-dark text-white">
                     <tr>
                         <th>No.</th>

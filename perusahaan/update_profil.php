@@ -128,9 +128,10 @@ $conn->close();
                     <input type="email" class="form-control" name="email" required value="<?php echo $profil['email']; ?>">
                 </div>
 
-
-                <button type="submit" class="btn btn-primary mt-2">Update</button>
-                <a href="?page=profil_perusahaan" class="btn btn-secondary mt-2">Batal</a>
+                <div class="mt-3">
+                    <button type="submit" class="btn btn-warning">Update</button>
+                    <a href="?page=profil_perusahaan" class="btn btn-secondary">Batal</a>
+                </div>
             </form>
         </div>
     </div>
