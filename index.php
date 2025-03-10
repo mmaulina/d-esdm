@@ -45,7 +45,15 @@ include "template/header.php";
                 case "pembangkit_admin": include "pembangkit/tampil_admin.php"; break;
                 case "pembangkit": include "pembangkit/tampil.php"; break;
                 case "pembangkit_tambah": include "pembangkit/tambah.php"; break;
+
+                // laporan perbulan
+                case "laporan_perbulan": include "laporan_perbulan/tampil.php"; break;
+                case "tambah_laporan_perbulan": include "laporan_perbulan/tambah_laporan.php"; break;
                 
+                // laporan persemester
+                case "laporan_persemester": include "laporan_persemester/tampil.php"; break;
+                case "tambah_laporan_persemester": include "laporan_persemester/tambah_laporan.php"; break;
+
                 // pengguna
                 case "pengguna": include "pengguna/tampil.php"; break;
                 case "pengguna_tambah_admin": include "pengguna/tambah_admin.php"; break;
