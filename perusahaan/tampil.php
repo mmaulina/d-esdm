@@ -48,6 +48,10 @@ $profil = $result->fetch_assoc();
                         <td><?php echo htmlspecialchars($profil['no_telp_kantor']); ?></td>
                     </tr>
                     <tr>
+                        <th>No.Fax</th>
+                        <td><?php echo htmlspecialchars($profil['no_fax']); ?></td>
+                    </tr>
+                    <tr>
                         <th>Tenaga Teknik</th>
                         <td><?php echo htmlspecialchars($profil['tenaga_teknik']); ?></td>
                     </tr>

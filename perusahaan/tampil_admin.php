@@ -13,6 +13,7 @@
                             <th rowspan="2">Alamat</th>
                             <th rowspan="2">Jenis Usaha</th>
                             <th rowspan="2">Nomor Telepon Kantor</th>
+                            <th rowspan="2">No. Fax</th>
                             <th rowspan="2">Tenaga Teknik</th>
                             <th colspan="3">Kontak Person</th>
                             <th rowspan="2">Aksi</th>
@@ -40,6 +41,7 @@
                                 echo "<td>" . htmlspecialchars($row['alamat']) . "</td>";
                                 echo "<td>" . htmlspecialchars($row['jenis_usaha']) . "</td>";
                                 echo "<td>" . htmlspecialchars($row['no_telp_kantor']) . "</td>";
+                                echo "<td>" . htmlspecialchars($row['no_fax']) . "</td>";
                                 echo "<td>" . htmlspecialchars($row['tenaga_teknik']) . "</td>";
                                 echo "<td>" . htmlspecialchars($row['nama']) . "</td>";
                                 echo "<td>" . htmlspecialchars($row['no_hp']) . "</td>";

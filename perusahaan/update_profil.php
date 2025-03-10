@@ -106,6 +106,11 @@ $conn->close();
                 </div>
 
                 <div class="form-group mb-2">
+                    <label>No. Fax</label>
+                    <input type="text" class="form-control" name="no_fax" required value="<?php echo $profil['no_fax']; ?>">
+                </div>
+
+                <div class="form-group mb-2">
                     <label>Tenaga Teknik</label>
                     <input type="text" class="form-control" name="tenaga_teknik" required value="<?php echo $profil['tenaga_teknik']; ?>">
                 </div>

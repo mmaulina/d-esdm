@@ -24,6 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $alamat = sanitize_input($_POST['alamat']);
     $jenis_usaha = sanitize_input($_POST['jenis_usaha']);
     $no_telp_kantor = sanitize_input($_POST['no_telp_kantor']);
+    $no_fax = sanitize_input($_POST['no_fax']);
     $tenaga_teknik = sanitize_input($_POST['tenaga_teknik']);
     $nama = sanitize_input($_POST['nama']);
     $no_hp = sanitize_input($_POST['no_hp']);
@@ -57,7 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Query menggunakan prepared statement
-    $sql = "INSERT INTO profil (id_user, nama_perusahaan, kabupaten, alamat, jenis_usaha, no_telp_kantor, tenaga_teknik, nama, no_hp, email) 
+    $sql = "INSERT INTO profil (id_user, nama_perusahaan, kabupaten, alamat, jenis_usaha, no_telp_kantor, no_fax, tenaga_teknik, nama, no_hp, email) 
             VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
 
@@ -67,7 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Bind parameter (semua string)
-    $stmt->bind_param("issssissis", $id_user, $nama_perusahaan, $kabupaten, $alamat, $jenis_usaha, $no_telp_kantor, $tenaga_teknik, $nama, $no_hp, $email);
+    $stmt->bind_param("issssissis", $id_user, $nama_perusahaan, $kabupaten, $alamat, $jenis_usaha, $no_telp_kantor, $no_fax, $tenaga_teknik, $nama, $no_hp, $email);
 
     // Eksekusi statement
     if ($stmt->execute()) {
@@ -129,6 +130,11 @@ $conn->close();
                 <div class="form-group mb-2">
                     <label>Nomor Telepon Kantor</label>
                     <input type="text" class="form-control" name="no_telp_kantor" required maxlength="15" pattern="[0-9]+">
+                </div>
+
+                <div class="form-group mb-2">
+                    <label>No. Fax</label>
+                    <input type="text" class="form-control" name="no_fax" required maxlength="15" pattern="[0-9]+">
                 </div>
 
                 <div class="form-group mb-2">
