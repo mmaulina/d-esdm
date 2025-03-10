@@ -59,7 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Query menggunakan prepared statement
     $sql = "INSERT INTO profil (id_user, nama_perusahaan, kabupaten, alamat, jenis_usaha, no_telp_kantor, no_fax, tenaga_teknik, nama, no_hp, email) 
-            VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
 
     // Periksa apakah statement berhasil disiapkan
@@ -68,7 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Bind parameter (semua string)
-    $stmt->bind_param("issssissis", $id_user, $nama_perusahaan, $kabupaten, $alamat, $jenis_usaha, $no_telp_kantor, $no_fax, $tenaga_teknik, $nama, $no_hp, $email);
+    $stmt->bind_param("issssiissis", $id_user, $nama_perusahaan, $kabupaten, $alamat, $jenis_usaha, $no_telp_kantor, $no_fax, $tenaga_teknik, $nama, $no_hp, $email);
 
     // Eksekusi statement
     if ($stmt->execute()) {

@@ -57,8 +57,8 @@
                                 echo "<td>" . htmlspecialchars($row['bahan_bakar_jenis']) . "</td>";
                                 echo "<td>" . htmlspecialchars($row['bahan_bakar_satuan']) . "</td>";
                                 echo "<td>
-                                <a href='edit.php?id=" . $row['id'] . "' class='btn btn-sm btn-primary'>Edit</a>
-                                <a href='hapus.php?id=" . $row['id'] . "' class='btn btn-sm btn-danger' onclick='return confirm(\"Hapus data ini?\")'>Hapus</a>
+                                <a href='?page=pembangkit_edit_admin&id=" . $row['id'] . "' class='btn btn-sm btn-primary'>Edit</a>
+                                <a href='?page=pembangkit_hapus_admin&id=" . $row['id'] . "' class='btn btn-sm btn-danger' onclick='return confirm(\"Hapus data ini?\")'>Hapus</a>
                               </td>";
                                 echo "</tr>";
                             }

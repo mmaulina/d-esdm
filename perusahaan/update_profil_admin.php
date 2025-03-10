@@ -10,12 +10,16 @@ if (!isset($_SESSION['id_user'])) {
     exit();
 }
 
-$id_user = $_SESSION['id_user'];
+$id_profil = $_GET['id_profil'];
 
+if (!isset($_GET['id_profil'])) {
+    echo "<script>alert('Data tidak ditemukan!'); window.location.href='?page=profil_admin';</script>";
+    exit;
+}
 // Ambil data profil perusahaan
-$sql = "SELECT * FROM profil WHERE id_user = ?";
+$sql = "SELECT * FROM profil WHERE id_profil = ?";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $id_user);
+$stmt->bind_param("i", $id_profil);
 $stmt->execute();
 $result = $stmt->get_result();
 $profil = $result->fetch_assoc();
@@ -44,12 +48,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "<script>alert('Kontak hanya boleh berisi angka dan tanda +!');</script>";
     } else {
         // Update data profil
-        $sql = "UPDATE profil SET nama_perusahaan=?, kabupaten=?, alamat=?, jenis_usaha=?, no_telp_kantor=?,no_fax =?, tenaga_teknik=?, nama=?, no_hp=?, email=? WHERE id_user=?";
+        $sql = "UPDATE profil SET nama_perusahaan=?, kabupaten=?, alamat=?, jenis_usaha=?, no_telp_kantor=?, no_fax=?, tenaga_teknik=?, nama=?, no_hp=?, email=? WHERE id_profil=?";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ssssiissisi", $nama_perusahaan, $kabupaten, $alamat, $jenis_usaha, $no_telp_kantor,$no_fax, $tenaga_teknik, $nama, $no_hp, $email, $id_user);
+        $stmt->bind_param("ssssiissisi", $nama_perusahaan, $kabupaten, $alamat, $jenis_usaha, $no_telp_kantor,$no_fax, $tenaga_teknik, $nama, $no_hp, $email, $id_profil);
 
         if ($stmt->execute()) {
-            echo "<script>alert('Profil berhasil diperbarui!'); window.location.href='?page=profil_perusahaan';</script>";
+            echo "<script>alert('Profil berhasil diperbarui!'); window.location.href='?page=profil_admin';</script>";
         } else {
             echo "<script>alert('Gagal memperbarui profil. Silakan coba lagi.');</script>";
         }
@@ -136,7 +140,7 @@ $conn->close();
 
                 <div class="mt-3">
                     <button type="submit" class="btn btn-warning">Update</button>
-                    <a href="?page=profil_perusahaan" class="btn btn-secondary">Batal</a>
+                    <a href="?page=profil_admin" class="btn btn-secondary">Batal</a>
                 </div>
             </form>
         </div>

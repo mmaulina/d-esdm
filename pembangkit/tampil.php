@@ -73,8 +73,8 @@ $result = mysqli_query($conn, $query);
                                 echo "<td style='white-space: normal; word-wrap: break-word;'>" . htmlspecialchars($row['bahan_bakar_jenis']) . "</td>";
                                 echo "<td style='white-space: normal; word-wrap: break-word;'>" . htmlspecialchars($row['bahan_bakar_satuan']) . "</td>";
                                 echo "<td>
-                                <a href='?page=edit_pembangkit&id=" . $row['id'] . "' class='btn btn-sm btn-primary'>Edit</a>
-                                <a href='?page=hapus_pembangkit&id=" . $row['id'] . "' class='btn btn-sm btn-danger' onclick='return confirm(\"Hapus data ini?\")'>Hapus</a>
+                                <a href='?page=pembangkit_edit&id_user=" . $row['id_user'] . "' class='btn btn-sm btn-warning'>Edit</a>
+                                <a href='?page=pembangkit_hapus&id_user=" . $row['id_user'] . "' class='btn btn-sm btn-danger' onclick='return confirm(\"Hapus data ini?\")'>Hapus</a>
                               </td>";
                                 echo "</tr>";
                             }

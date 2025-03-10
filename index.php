@@ -39,12 +39,18 @@ include "template/header.php";
                 case "profil_admin": include "perusahaan/tampil_admin.php"; break;
                 case "tambah_profil": include "perusahaan/tambah_profil.php"; break;
                 case "update_profil": include "perusahaan/update_profil.php"; break;
+                case "update_profil_admin": include "perusahaan/update_profil_admin.php"; break;
                 case "delete_profil": include "perusahaan/delete_profil.php"; break;
+                case "delete_profil_admin": include "perusahaan/delete_profil_admin.php"; break;
 
                 // data pembangkit dan data teknis pembangkit
                 case "pembangkit_admin": include "pembangkit/tampil_admin.php"; break;
                 case "pembangkit": include "pembangkit/tampil.php"; break;
                 case "pembangkit_tambah": include "pembangkit/tambah.php"; break;
+                case "pembangkit_edit": include "pembangkit/update.php"; break;
+                case "pembangkit_edit_admin": include "pembangkit/update_admin.php"; break;
+                case "pembangkit_hapus_admin": include "pembangkit/delete_admin.php"; break;
+                case "pembangkit_hapus": include "pembangkit/delete.php"; break;
 
                 // laporan perbulan
                 case "laporan_perbulan": include "laporan_perbulan/tampil.php"; break;

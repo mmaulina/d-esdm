@@ -48,8 +48,8 @@
                                 echo "<td>" . htmlspecialchars($row['email']) . "</td>";
                                 echo "<td>
                                 
-                                <a href='?page=update_profil&id_profil=" . htmlspecialchars($row['id_profil']) . "' class='btn btn-warning btn-sm'>Edit</a>
-                                <a href='?page=delete_profil&id_profil=" . htmlspecialchars($row['id_profil']) . "' class='btn btn-danger btn-sm' onclick='return confirm(\"Yakin ingin menghapus data ini?\")'>Hapus</a>
+                                <a href='?page=update_profil_admin&id_profil=" . htmlspecialchars($row['id_profil']) . "' class='btn btn-warning btn-sm'>Edit</a>
+                                <a href='?page=delete_profil_admin&id_profil=" . htmlspecialchars($row['id_profil']) . "' class='btn btn-danger btn-sm' onclick='return confirm(\"Yakin ingin menghapus data ini?\")'>Hapus</a>
                               </td>";
                                 echo "</tr>";
                                 $no++;
