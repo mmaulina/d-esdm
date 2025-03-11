@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.1.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 08 Mar 2025 pada 06.41
--- Versi server: 10.4.28-MariaDB
--- Versi PHP: 8.0.28
+-- Generation Time: Mar 11, 2025 at 07:49 AM
+-- Server version: 10.4.18-MariaDB
+-- PHP Version: 7.4.16
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,7 +24,31 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `pembangkit`
+-- Table structure for table `laporan_bulanan`
+--
+
+CREATE TABLE `laporan_bulanan` (
+  `id` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL,
+  `parameter` varchar(225) NOT NULL,
+  `buku_mutu` varchar(225) NOT NULL,
+  `hasil` varchar(100) NOT NULL,
+  `file_laporan` varchar(225) NOT NULL,
+  `file_lhu` varchar(225) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `laporan_bulanan`
+--
+
+INSERT INTO `laporan_bulanan` (`id`, `id_user`, `parameter`, `buku_mutu`, `hasil`, `file_laporan`, `file_lhu`) VALUES
+(1, 1, 'aaaaaaaa', 'aaaaaaaaa', 'aaaaaaaaa', 'uploads/file_laporan_biasa-20250311-073909.pdf', 'uploads/file_LHU-20250311-073909.pdf'),
+(2, 1, 'bbbbbbb', 'bbbbbb', 'bbbbbb', 'uploads/file_laporan_bulanan-20250311-074614.xlsx', 'uploads/file_LHU-20250311-074614.docx');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `pembangkit`
 --
 
 CREATE TABLE `pembangkit` (
@@ -44,12 +68,12 @@ CREATE TABLE `pembangkit` (
   `status_operasi` varchar(100) NOT NULL,
   `bahan_bakar_jenis` varchar(100) NOT NULL,
   `bahan_bakar_satuan` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `profil`
+-- Table structure for table `profil`
 --
 
 CREATE TABLE `profil` (
@@ -60,23 +84,24 @@ CREATE TABLE `profil` (
   `alamat` varchar(200) NOT NULL,
   `jenis_usaha` varchar(100) NOT NULL,
   `no_telp_kantor` varchar(15) NOT NULL,
+  `no_fax` varchar(20) NOT NULL,
   `tenaga_teknik` varchar(100) NOT NULL,
   `nama` varchar(100) NOT NULL,
   `no_hp` varchar(15) NOT NULL,
   `email` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data untuk tabel `profil`
+-- Dumping data for table `profil`
 --
 
-INSERT INTO `profil` (`id_profil`, `id_user`, `nama_perusahaan`, `kabupaten`, `alamat`, `jenis_usaha`, `no_telp_kantor`, `tenaga_teknik`, `nama`, `no_hp`, `email`) VALUES
-(6, 1, 'irwan group', 'Tanah Bumbu', 'asam-asam', 'Tambang', '88247342027', 'irwan', 'MUHAMMAD IRWAN FIRDAUS', '88247342027', 'irwan@gmail.com');
+INSERT INTO `profil` (`id_profil`, `id_user`, `nama_perusahaan`, `kabupaten`, `alamat`, `jenis_usaha`, `no_telp_kantor`, `no_fax`, `tenaga_teknik`, `nama`, `no_hp`, `email`) VALUES
+(7, 1, 'irwan group', 'Kota Banjarbaru', 'komp.husindo raya', 'Tambang', '88247342027', '2134342124', 'irwan', 'MUHAMMAD IRWAN FIRDAUS', '88247342027', 'irwan@gmail.com');
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `users`
+-- Table structure for table `users`
 --
 
 CREATE TABLE `users` (
@@ -86,58 +111,71 @@ CREATE TABLE `users` (
   `password` varchar(255) NOT NULL,
   `role` enum('admin','umum') NOT NULL,
   `status` enum('diajukan','diverifikasi','ditolak') NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data untuk tabel `users`
+-- Dumping data for table `users`
 --
 
 INSERT INTO `users` (`id_user`, `username`, `email`, `password`, `role`, `status`) VALUES
-(1, 'admin', 'admin@gmail.com', 'admin', 'umum', 'diajukan');
+(1, 'admin', 'admin@gmail.com', 'admin', 'admin', 'diverifikasi'),
+(2, 'irwan', 'irwanfirdaus508@gmail.com', 'irwan', 'admin', 'diverifikasi');
 
 --
 -- Indexes for dumped tables
 --
 
 --
--- Indeks untuk tabel `pembangkit`
+-- Indexes for table `laporan_bulanan`
+--
+ALTER TABLE `laporan_bulanan`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `pembangkit`
 --
 ALTER TABLE `pembangkit`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `profil`
+-- Indexes for table `profil`
 --
 ALTER TABLE `profil`
   ADD PRIMARY KEY (`id_profil`);
 
 --
--- Indeks untuk tabel `users`
+-- Indexes for table `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id_user`);
 
 --
--- AUTO_INCREMENT untuk tabel yang dibuang
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT untuk tabel `pembangkit`
+-- AUTO_INCREMENT for table `laporan_bulanan`
+--
+ALTER TABLE `laporan_bulanan`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `pembangkit`
 --
 ALTER TABLE `pembangkit`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
--- AUTO_INCREMENT untuk tabel `profil`
+-- AUTO_INCREMENT for table `profil`
 --
 ALTER TABLE `profil`
-  MODIFY `id_profil` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_profil` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
--- AUTO_INCREMENT untuk tabel `users`
+-- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

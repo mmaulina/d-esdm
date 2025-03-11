@@ -23,6 +23,7 @@ include "template/header.php";
     padding: 20px; /* Menambahkan padding untuk konten */
 }
 </style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 <div class="container-fluid">
     <div class="row"> <!-- Mulai baris untuk sidebar dan konten -->
         

@@ -23,7 +23,13 @@ $currentPage = $_GET['page'] ?? 'dashboard'; // Ambil halaman dari URL
             <a class="nav-link <?= ($currentPage == 'laporan_perbulan') ? 'active' : ''; ?>" href="?page=laporan_perbulan">Laporan Perbulan</a>
         </li>
         <li class="nav-item">
+            <a class="nav-link <?= ($currentPage == 'laporan_perbulan_admin') ? 'active' : ''; ?>" href="?page=laporan_perbulan">Laporan Perbulan (A)</a>
+        </li>
+        <li class="nav-item">
             <a class="nav-link <?= ($currentPage == 'laporan_persemester') ? 'active' : ''; ?>" href="?page=laporan_persemester">Laporan Persemester</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link <?= ($currentPage == 'laporan_persemester_admin') ? 'active' : ''; ?>" href="?page=laporan_persemester">Laporan Persemester (A)</a>
         </li>
         <li class="nav-item">
             <a class="nav-link <?= ($currentPage == 'pengguna') ? 'active' : ''; ?>" href="?page=pengguna">Data Pengguna</a>

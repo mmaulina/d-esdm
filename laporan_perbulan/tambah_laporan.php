@@ -1,89 +1,81 @@
 <?php
-include 'koneksi.php'; // Pastikan file koneksi ke database sudah ada
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+include 'koneksi.php';
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $bulan = htmlspecialchars($_POST['bulan']);
-    $nama_perusahaan = htmlspecialchars($_POST['nama_perusahaan']);
-    $volume = htmlspecialchars($_POST['volume']);
-    $produksi_listrik = htmlspecialchars($_POST['produksi_listrik']);
-    $susut_jaringan = htmlspecialchars($_POST['susut_jaringan']);
-    $konsumsi_listrik = htmlspecialchars($_POST['konsumsi_listrik']);
+// Pastikan pengguna sudah login
+if (!isset($_SESSION['id_user'])) {
+    echo "<script>alert('Silakan login terlebih dahulu!'); window.location.href='login.php';</script>";
+    exit;
+}
 
-    $sql = "INSERT INTO users (username, email, password, role, status) VALUES (?, ?, ?, ?, ?)";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sssss", $username, $email, $password, $role, $status);
+$id_user = $_SESSION['id_user'];
 
-    if ($stmt->execute()) {
-        echo "<script>alert('Data berhasil ditambahkan!'); window.location='?page=pengguna';</script>";
-    } else {
-        echo "<script>alert('Gagal menambahkan data!');</script>";
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $parameter = $_POST['parameter'];
+    $buku_mutu = $_POST['buku_mutu'];
+    $hasil = $_POST['hasil'];
+    
+    $file_laporan = $_FILES['file_laporan'];
+    $file_lhu = $_FILES['file_lhu'];
+    
+    $upload_dir = 'uploads/';
+    if (!is_dir($upload_dir)) {
+        mkdir($upload_dir, 0777, true);
     }
+
+    $timestamp = date('Ymd-His');
+    $file_laporan_ext = pathinfo($file_laporan['name'], PATHINFO_EXTENSION);
+    $file_lhu_ext = pathinfo($file_lhu['name'], PATHINFO_EXTENSION);
+    
+    $file_laporan_name = "file_laporan_bulanan-{$timestamp}.{$file_laporan_ext}";
+    $file_lhu_name = "file_LHU-{$timestamp}.{$file_lhu_ext}";
+    
+    $file_laporan_path = $upload_dir . $file_laporan_name;
+    $file_lhu_path = $upload_dir . $file_lhu_name;
+    
+    move_uploaded_file($file_laporan['tmp_name'], $file_laporan_path);
+    move_uploaded_file($file_lhu['tmp_name'], $file_lhu_path);
+    
+    $query = "INSERT INTO laporan_bulanan (id_user, parameter, buku_mutu, hasil, file_laporan, file_lhu) VALUES (?, ?, ?, ?, ?, ?)";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("isssss", $id_user, $parameter, $buku_mutu, $hasil, $file_laporan_path, $file_lhu_path);
+    $stmt->execute();
+    
+    echo "<script>alert('Laporan berhasil ditambahkan!'); window.location.href='?page=laporan_perbulan';</script>";
 }
 ?>
 
-<!DOCTYPE html>
-<html lang="id">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tambah Data Pengguna</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-</head>
-
-<body>
-    <div class="container mt-5">
-        <div class="card shadow">
-            <div class="card-header bg-primary text-white">
-                <h4 class="mb-0">Tambah Laporan Perbulan</h4>
-            </div>
-            <div class="card-body">
-                <form method="POST">
-                    <div class="mb-3">
-                        <label class="form-label">Bulan</label>
-                        <select name="bulan" class="form-control" required>
-                            <option value="">Pilih Bulan</option>
-                            <option value="01">Januari</option>
-                            <option value="02">Februari</option>
-                            <option value="03">Maret</option>
-                            <option value="04">April</option>
-                            <option value="05">Mei</option>
-                            <option value="06">Juni</option>
-                            <option value="07">Juli</option>
-                            <option value="08">Agustus</option>
-                            <option value="09">September</option>
-                            <option value="10">Oktober</option>
-                            <option value="11">November</option>
-                            <option value="12">Desember</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Nama Perusahaan</label>
-                        <input type="nama_perusahaan" name="nama_perusahaan" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Volume Bahan Bakar</label>
-                        <input type="volume" name="volume" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Produksi Listrik</label>
-                        <input type="produksi_listrik" name="produksi_listrik" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Susut Jaringan (bila ada) (kWh)</label>
-                        <!-- tidak pakai required supaya bisa dikosongkan -->
-                        <input type="produksi_listrik" name="produksi_listrik" class="form-control"> 
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Konsumsi Listrik</label>
-                        <input type="konsumsi_listrik" name="konsumsi_listrik" class="form-control" required>
-                    </div>
-                    <button type="submit" class="btn btn-success">Simpan</button>
-                    <a href="?page=pengguna" class="btn btn-secondary">Kembali</a>
-                </form>
-            </div>
+<div class="container mt-4">
+    <h3 class="text-center mb-3">Tambah Laporan Bulanan</h3>
+    <hr>
+    <div class="card shadow">
+        <div class="card-body">
+            <form method="POST" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label class="form-label">Parameter</label>
+                    <input type="text" name="parameter" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Buku Mutu</label>
+                    <input type="text" name="buku_mutu" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Hasil</label>
+                    <input type="text" name="hasil" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Upload Laporan</label>
+                    <input type="file" name="file_laporan" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Upload LHU</label>
+                    <input type="file" name="file_lhu" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Simpan</button>
+                <a href="?page=laporan_perbulan" class="btn btn-secondary">Kembali</a>
+            </form>
         </div>
     </div>
-</body>
-
-</html>
+</div>
