@@ -1,32 +1,33 @@
 <?php
-include '../koneksi.php'; // Pastikan koneksi tersedia
+session_start();
+include '../koneksi.php';
+
+$error = '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = htmlspecialchars($_POST['username']);
-    $email = htmlspecialchars($_POST['email']);
-    $password = password_hash($_POST['password'], PASSWORD_DEFAULT); // Hash password
-    $role = "umum"; // Otomatis diisi "umum"
-    $status = "diajukan"; // Otomatis diisi "diajukan"
+    $username = trim($_POST['username']);
+    $password = trim($_POST['password']);
 
-    try {
+    if (!empty($username) && !empty($password)) {
         $db = new Database();
-        $conn = $db->getConnection();
-        // Cek apakah email sudah terdaftar
-        $stmt = $conn->prepare("SELECT email FROM users WHERE email = ?");
-        $stmt->execute([$email]);
-        
-        if ($stmt->rowCount() > 0) {
-            echo "<script>alert('Email sudah terdaftar!');</script>";
-        } else {
-            // Query untuk menambahkan user baru
-            $sql = "INSERT INTO users (username, email, password, role, status) VALUES (?, ?, ?, ?, ?)";
-            $stmt = $conn->prepare($sql);
-            $stmt->execute([$username, $email, $password, $role, $status]);
+        $pdo = $db->getConnection();
+        $sql = "SELECT * FROM users WHERE username = :username OR email = :username";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(":username", $username, PDO::PARAM_STR);
+        $stmt->execute();
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            echo "<script>alert('Pendaftaran berhasil!'); window.location='login.php';</script>";
+        if ($user && $password === $user['password']) { // Perbandingan langsung tanpa hashing
+            $_SESSION['id_user'] = $user['id_user'];
+            $_SESSION['username'] = $user['username'];
+
+            header("Location: ../index.php");
+            exit();
+        } else {
+            $error = "Username atau password salah!";
         }
-    } catch (PDOException $e) {
-        echo "<script>alert('Gagal mendaftar: " . $e->getMessage() . "');</script>";
+    } else {
+        $error = "Harap isi username/email dan password!";
     }
 }
 ?>
@@ -36,35 +37,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daftar Akun</title>
+    <meta name="viewport" content="width=\, initial-scale=1.0">
+    <title>Login</title>
     <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/login.css">
 </head>
 
-<body class="d-flex justify-content-center align-items-center vh-100 bg-light">
+<body class="d-flex justify-content-center align-items-center vh-100">
     <div class="card shadow p-4" style="width: 350px;">
-        <h3 class="text-center">Daftar</h3>
+        <h3 class="text-center">Login</h3>
         <hr>
-        <form method="post">
-            <div class="mb-3">
-                <label for="username" class="form-label">Username</label>
-                <input name="username" type="text" class="form-control" id="username" placeholder="Masukkan username" required>
+        <?php if (!empty($error)) : ?>
+            <div class="alert alert-danger" role="alert">
+                <?php echo $error; ?>
             </div>
+        <?php endif; ?>
+
+        <form method="POST" action="">
             <div class="mb-3">
-                <label for="email" class="form-label">Email</label>
-                <input name="email" type="email" class="form-control" id="email" placeholder="Masukkan email" required>
+                <label for="username" class="form-label">Username atau Email</label>
+                <input type="text" class="form-control" id="username" name="username" placeholder="Masukkan username atau email" required>
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
-                <input name="password" type="password" class="form-control" id="password" placeholder="Masukkan password" required>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Masukkan password" required>
             </div>
-            <button type="submit" class="btn btn-primary w-100">Daftar</button>
+            <button type="submit" class="btn btn-primary w-100">Login</button>
         </form>
+
         <div class="text-center mt-3">
-            <a href="login.php">Sudah punya akun?</a>
+            <a href="daftar.php">Belum punya akun?</a>
         </div>
     </div>
+
     <script src="../assets/js/bootstrap.bundle.min.js"></script>
 </body>
 
