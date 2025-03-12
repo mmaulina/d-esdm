@@ -1,21 +1,32 @@
 <?php
-include '../koneksi.php'; // Pastikan file koneksi ke database sudah ada
+include '../koneksi.php'; // Pastikan koneksi tersedia
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = htmlspecialchars($_POST['username']);
     $email = htmlspecialchars($_POST['email']);
-    $password = htmlspecialchars($_POST['password'], );
+    $password = password_hash($_POST['password'], PASSWORD_DEFAULT); // Hash password
     $role = "umum"; // Otomatis diisi "umum"
     $status = "diajukan"; // Otomatis diisi "diajukan"
 
-    $sql = "INSERT INTO users (username, email, password, role, status) VALUES (?, ?, ?, ?, ?)";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sssss", $username, $email, $password, $role, $status);
+    try {
+        $db = new Database();
+        $conn = $db->getConnection();
+        // Cek apakah email sudah terdaftar
+        $stmt = $conn->prepare("SELECT email FROM users WHERE email = ?");
+        $stmt->execute([$email]);
+        
+        if ($stmt->rowCount() > 0) {
+            echo "<script>alert('Email sudah terdaftar!');</script>";
+        } else {
+            // Query untuk menambahkan user baru
+            $sql = "INSERT INTO users (username, email, password, role, status) VALUES (?, ?, ?, ?, ?)";
+            $stmt = $conn->prepare($sql);
+            $stmt->execute([$username, $email, $password, $role, $status]);
 
-    if ($stmt->execute()) {
-        echo "<script>alert('Data berhasil ditambahkan!'); window.location='login.php';</script>";
-    } else {
-        echo "<script>alert('Gagal menambahkan data!');</script>";
+            echo "<script>alert('Pendaftaran berhasil!'); window.location='login.php';</script>";
+        }
+    } catch (PDOException $e) {
+        echo "<script>alert('Gagal mendaftar: " . $e->getMessage() . "');</script>";
     }
 }
 ?>
@@ -38,7 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <form method="post">
             <div class="mb-3">
                 <label for="username" class="form-label">Username</label>
-                <input name="username" type="username" class="form-control" id="username" placeholder="Masukkan username" required>
+                <input name="username" type="text" class="form-control" id="username" placeholder="Masukkan username" required>
             </div>
             <div class="mb-3">
                 <label for="email" class="form-label">Email</label>

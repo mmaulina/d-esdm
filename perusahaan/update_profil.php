@@ -12,14 +12,14 @@ if (!isset($_SESSION['id_user'])) {
 
 $id_user = $_SESSION['id_user'];
 
+$db = new Database();
+$conn = $db->getConnection();
 // Ambil data profil perusahaan
-$sql = "SELECT * FROM profil WHERE id_user = ?";
+$sql = "SELECT * FROM profil WHERE id_user = :id_user";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $id_user);
+$stmt->bindParam(':id_user', $id_user, PDO::PARAM_INT);
 $stmt->execute();
-$result = $stmt->get_result();
-$profil = $result->fetch_assoc();
-$stmt->close();
+$profil = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Fungsi untuk sanitasi input
@@ -44,19 +44,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "<script>alert('Kontak hanya boleh berisi angka dan tanda +!');</script>";
     } else {
         // Update data profil
-        $sql = "UPDATE profil SET nama_perusahaan=?, kabupaten=?, alamat=?, jenis_usaha=?, no_telp_kantor=?,no_fax =?, tenaga_teknik=?, nama=?, no_hp=?, email=? WHERE id_user=?";
+        $sql = "UPDATE profil SET nama_perusahaan=:nama_perusahaan, kabupaten=:kabupaten, alamat=:alamat, jenis_usaha=:jenis_usaha, no_telp_kantor=:no_telp_kantor, no_fax=:no_fax, tenaga_teknik=:tenaga_teknik, nama=:nama, no_hp=:no_hp, email=:email WHERE id_user=:id_user";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ssssiissisi", $nama_perusahaan, $kabupaten, $alamat, $jenis_usaha, $no_telp_kantor,$no_fax, $tenaga_teknik, $nama, $no_hp, $email, $id_user);
+        $stmt->bindParam(':nama_perusahaan', $nama_perusahaan);
+        $stmt->bindParam(':kabupaten', $kabupaten);
+        $stmt->bindParam(':alamat', $alamat);
+        $stmt->bindParam(':jenis_usaha', $jenis_usaha);
+        $stmt->bindParam(':no_telp_kantor', $no_telp_kantor);
+        $stmt->bindParam(':no_fax', $no_fax);
+        $stmt->bindParam(':tenaga_teknik', $tenaga_teknik);
+        $stmt->bindParam(':nama', $nama);
+        $stmt->bindParam(':no_hp', $no_hp);
+        $stmt->bindParam(':email', $email);
+        $stmt->bindParam(':id_user', $id_user, PDO::PARAM_INT);
 
         if ($stmt->execute()) {
             echo "<script>alert('Profil berhasil diperbarui!'); window.location.href='?page=profil_perusahaan';</script>";
         } else {
             echo "<script>alert('Gagal memperbarui profil. Silakan coba lagi.');</script>";
         }
-        $stmt->close();
     }
 }
-$conn->close();
 ?>
 
 <!-- UPDATE PROFIL PERUSAHAAN -->

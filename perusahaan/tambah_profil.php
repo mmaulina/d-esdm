@@ -38,51 +38,46 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Validasi Kabupaten hanya dari daftar yang diperbolehkan
     $valid_kabupaten = [
-        "Balangan",
-        "Banjar",
-        "Barito Kuala",
-        "Hulu Sungai Selatan",
-        "Hulu Sungai Tengah",
-        "Hulu Sungai Utara",
-        "Kotabaru",
-        "Tabalong",
-        "Tanah Bumbu",
-        "Tanah Laut",
-        "Tapin",
-        "Kota Banjarmasin",
-        "Kota Banjarbaru"
+        "Balangan", "Banjar", "Barito Kuala", "Hulu Sungai Selatan", "Hulu Sungai Tengah",
+        "Hulu Sungai Utara", "Kotabaru", "Tabalong", "Tanah Bumbu", "Tanah Laut",
+        "Tapin", "Kota Banjarmasin", "Kota Banjarbaru"
     ];
     if (!in_array($kabupaten, $valid_kabupaten)) {
         echo "<script>alert('Kabupaten tidak valid!');</script>";
         exit();
     }
 
-    // Query menggunakan prepared statement
-    $sql = "INSERT INTO profil (id_user, nama_perusahaan, kabupaten, alamat, jenis_usaha, no_telp_kantor, no_fax, tenaga_teknik, nama, no_hp, email) 
-            VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    $stmt = $conn->prepare($sql);
+    try {
+        $db = new Database();
+        $conn = $db->getConnection();
+        // Query menggunakan prepared statement dengan PDO
+        $sql = "INSERT INTO profil (id_user, nama_perusahaan, kabupaten, alamat, jenis_usaha, no_telp_kantor, no_fax, tenaga_teknik, nama, no_hp, email) 
+                VALUES (:id_user, :nama_perusahaan, :kabupaten, :alamat, :jenis_usaha, :no_telp_kantor, :no_fax, :tenaga_teknik, :nama, :no_hp, :email)";
+        $stmt = $conn->prepare($sql);
 
-    // Periksa apakah statement berhasil disiapkan
-    if ($stmt === false) {
-        die("Error preparing statement: " . $conn->error);
+        // Bind parameter
+        $stmt->bindParam(':id_user', $id_user, PDO::PARAM_INT);
+        $stmt->bindParam(':nama_perusahaan', $nama_perusahaan, PDO::PARAM_STR);
+        $stmt->bindParam(':kabupaten', $kabupaten, PDO::PARAM_STR);
+        $stmt->bindParam(':alamat', $alamat, PDO::PARAM_STR);
+        $stmt->bindParam(':jenis_usaha', $jenis_usaha, PDO::PARAM_STR);
+        $stmt->bindParam(':no_telp_kantor', $no_telp_kantor, PDO::PARAM_STR);
+        $stmt->bindParam(':no_fax', $no_fax, PDO::PARAM_STR);
+        $stmt->bindParam(':tenaga_teknik', $tenaga_teknik, PDO::PARAM_STR);
+        $stmt->bindParam(':nama', $nama, PDO::PARAM_STR);
+        $stmt->bindParam(':no_hp', $no_hp, PDO::PARAM_STR);
+        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+
+        // Eksekusi statement
+        if ($stmt->execute()) {
+            echo "<script>alert('Profil berhasil ditambahkan!'); window.location.href='?page=profil_perusahaan';</script>";
+        } else {
+            echo "<script>alert('Gagal menambahkan profil. Silakan coba lagi.');</script>";
+        }
+    } catch (PDOException $e) {
+        die("Error: " . $e->getMessage());
     }
-
-    // Bind parameter (semua string)
-    $stmt->bind_param("issssiissis", $id_user, $nama_perusahaan, $kabupaten, $alamat, $jenis_usaha, $no_telp_kantor, $no_fax, $tenaga_teknik, $nama, $no_hp, $email);
-
-    // Eksekusi statement
-    if ($stmt->execute()) {
-        echo "<script>alert('Profil berhasil ditambahkan!'); window.location.href='?page=profil_perusahaan';</script>";
-    } else {
-        echo "<script>alert('Gagal menambahkan profil. Silakan coba lagi.');</script>";
-    }
-
-    // Tutup statement
-    $stmt->close();
 }
-
-// Tutup koneksi
-$conn->close();
 ?>
 
 <!-- TAMBAH PROFIL PERUSAHAAN -->

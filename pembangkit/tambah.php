@@ -2,7 +2,7 @@
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
-include 'koneksi.php'; // Pastikan koneksi ke database
+include 'koneksi.php'; // Pastikan koneksi ke database menggunakan PDO
 
 // Pastikan pengguna sudah login
 if (!isset($_SESSION['id_user'])) {
@@ -13,35 +13,55 @@ if (!isset($_SESSION['id_user'])) {
 $id_user = $_SESSION['id_user']; // Ambil id_user dari sesi
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Sanitasi input
-    $nama_perusahaan = mysqli_real_escape_string($conn, trim($_POST['nama_perusahaan']));
-    $alamat = mysqli_real_escape_string($conn, trim($_POST['alamat']));
-    $longitude = mysqli_real_escape_string($conn, trim($_POST['longitude']));
-    $latitude = mysqli_real_escape_string($conn, trim($_POST['latitude']));
-    $jenis_pembangkit = mysqli_real_escape_string($conn, trim($_POST['jenis_pembangkit']));
-    $fungsi = mysqli_real_escape_string($conn, trim($_POST['fungsi']));
-    $kapasitas_terpasang = mysqli_real_escape_string($conn, trim($_POST['kapasitas_terpasang']));
-    $daya_mampu_netto = mysqli_real_escape_string($conn, trim($_POST['daya_mampu_netto']));
-    $jumlah_unit = intval($_POST['jumlah_unit']);
-    $no_unit = mysqli_real_escape_string($conn, trim($_POST['no_unit']));
-    $tahun_operasi = intval($_POST['tahun_operasi']);
-    $status_operasi = mysqli_real_escape_string($conn, trim($_POST['status_operasi']));
-    $bahan_bakar_jenis = mysqli_real_escape_string($conn, trim($_POST['bahan_bakar_jenis']));
-    $bahan_bakar_satuan = mysqli_real_escape_string($conn, trim($_POST['bahan_bakar_satuan']));
-
-    // Query dengan prepared statement
-    $query = "INSERT INTO pembangkit (id_user, nama_perusahaan, alamat, longitude, latitude, jenis_pembangkit, fungsi, kapasitas_terpasang, daya_mampu_netto, jumlah_unit, no_unit, tahun_operasi, status_operasi, bahan_bakar_jenis, bahan_bakar_satuan) 
-              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
-
-    $stmt = mysqli_prepare($conn, $query);
-    mysqli_stmt_bind_param($stmt, "issssssssssisss", $id_user, $nama_perusahaan, $alamat, $longitude, $latitude, $jenis_pembangkit, $fungsi, $kapasitas_terpasang, $daya_mampu_netto, $jumlah_unit, $no_unit, $tahun_operasi, $status_operasi, $bahan_bakar_jenis, $bahan_bakar_satuan);
-
-    if (mysqli_stmt_execute($stmt)) {
-        echo "<script>alert('Data berhasil ditambahkan!'); window.location.href='?page=pembangkit';</script>";
-    } else {
-        echo "<script>alert('Gagal menambahkan data!');</script>";
+    try {
+        $db = new Database();
+        $conn = $db->getConnection();
+        
+        // Sanitasi input
+        $nama_perusahaan = htmlspecialchars(trim($_POST['nama_perusahaan']));
+        $alamat = htmlspecialchars(trim($_POST['alamat']));
+        $longitude = htmlspecialchars(trim($_POST['longitude']));
+        $latitude = htmlspecialchars(trim($_POST['latitude']));
+        $jenis_pembangkit = htmlspecialchars(trim($_POST['jenis_pembangkit']));
+        $fungsi = htmlspecialchars(trim($_POST['fungsi']));
+        $kapasitas_terpasang = htmlspecialchars(trim($_POST['kapasitas_terpasang']));
+        $daya_mampu_netto = htmlspecialchars(trim($_POST['daya_mampu_netto']));
+        $jumlah_unit = intval($_POST['jumlah_unit']);
+        $no_unit = htmlspecialchars(trim($_POST['no_unit']));
+        $tahun_operasi = intval($_POST['tahun_operasi']);
+        $status_operasi = htmlspecialchars(trim($_POST['status_operasi']));
+        $bahan_bakar_jenis = htmlspecialchars(trim($_POST['bahan_bakar_jenis']));
+        $bahan_bakar_satuan = htmlspecialchars(trim($_POST['bahan_bakar_satuan']));
+        
+        // Query dengan prepared statement
+        $query = "INSERT INTO pembangkit (id_user, nama_perusahaan, alamat, longitude, latitude, jenis_pembangkit, fungsi, kapasitas_terpasang, daya_mampu_netto, jumlah_unit, no_unit, tahun_operasi, status_operasi, bahan_bakar_jenis, bahan_bakar_satuan) 
+                  VALUES (:id_user, :nama_perusahaan, :alamat, :longitude, :latitude, :jenis_pembangkit, :fungsi, :kapasitas_terpasang, :daya_mampu_netto, :jumlah_unit, :no_unit, :tahun_operasi, :status_operasi, :bahan_bakar_jenis, :bahan_bakar_satuan)";
+        
+        $stmt = $conn->prepare($query);
+        $stmt->bindParam(':id_user', $id_user);
+        $stmt->bindParam(':nama_perusahaan', $nama_perusahaan);
+        $stmt->bindParam(':alamat', $alamat);
+        $stmt->bindParam(':longitude', $longitude);
+        $stmt->bindParam(':latitude', $latitude);
+        $stmt->bindParam(':jenis_pembangkit', $jenis_pembangkit);
+        $stmt->bindParam(':fungsi', $fungsi);
+        $stmt->bindParam(':kapasitas_terpasang', $kapasitas_terpasang);
+        $stmt->bindParam(':daya_mampu_netto', $daya_mampu_netto);
+        $stmt->bindParam(':jumlah_unit', $jumlah_unit, PDO::PARAM_INT);
+        $stmt->bindParam(':no_unit', $no_unit);
+        $stmt->bindParam(':tahun_operasi', $tahun_operasi, PDO::PARAM_INT);
+        $stmt->bindParam(':status_operasi', $status_operasi);
+        $stmt->bindParam(':bahan_bakar_jenis', $bahan_bakar_jenis);
+        $stmt->bindParam(':bahan_bakar_satuan', $bahan_bakar_satuan);
+        
+        if ($stmt->execute()) {
+            echo "<script>alert('Data berhasil ditambahkan!'); window.location.href='?page=pembangkit';</script>";
+        } else {
+            echo "<script>alert('Gagal menambahkan data!');</script>";
+        }
+    } catch (PDOException $e) {
+        echo "<script>alert('Error: " . $e->getMessage() . "');</script>";
     }
-    mysqli_stmt_close($stmt);
 }
 ?>
 

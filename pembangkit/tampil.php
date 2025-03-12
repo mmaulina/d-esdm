@@ -12,8 +12,16 @@ if (!isset($_SESSION['id_user'])) {
 
 $id_user = $_SESSION['id_user']; // Ambil id_user dari sesi
 
-$query = "SELECT * FROM pembangkit WHERE id_user = '$id_user'";
-$result = mysqli_query($conn, $query);
+try {
+    $db = new Database();
+    $conn = $db->getConnection();
+    $stmt = $conn->prepare("SELECT * FROM pembangkit WHERE id_user = :id_user");
+    $stmt->bindParam(':id_user', $id_user, PDO::PARAM_INT);
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    die("Error: " . $e->getMessage());
+}
 ?>
 <div class="container mt-4">
     <h3 class="text-center mb-3">Data Pembangkit dan Data Teknis Pembangkit</h3>
@@ -33,62 +41,56 @@ $result = mysqli_query($conn, $query);
                             <th rowspan="3" style="min-width: 150px;">Aksi</th>
                         </tr>
                         <tr>
-                            <th rowspan="2" style="min-width: 250px;">Nama Perusahaan</th>
-                            <th rowspan="2" style="min-width: 250px;">Alamat</th>
-                            <th colspan="2" style="min-width: 250px;">Koordinat Pembangkit</th>
-                            <th rowspan="2" style="min-width: 250px;">Jenis Pembangkit</th>
-                            <th rowspan="2" style="min-width: 250px;">Fungsi</th>
-                            <th rowspan="2" style="min-width: 250px;">Kapasitas Terpasang (kW)</th>
-                            <th rowspan="2" style="min-width: 250px;">Daya Mampu Netto (kW) </th>
-                            <th rowspan="2" style="min-width: 250px;">Jumlah Unit</th>
-                            <th rowspan="2" style="min-width: 250px;">No. Unit</th>
-                            <th rowspan="2" style="min-width: 250px;">Tahun Operasi</th>
-                            <th rowspan="2" style="min-width: 250px;">Status Operasi</th>
-                            <th colspan="2" style="min-width: 250px;">Bahan Bakar yang Digunakan</th>
+                            <th rowspan="2">Nama Perusahaan</th>
+                            <th rowspan="2">Alamat</th>
+                            <th colspan="2">Koordinat Pembangkit</th>
+                            <th rowspan="2">Jenis Pembangkit</th>
+                            <th rowspan="2">Fungsi</th>
+                            <th rowspan="2">Kapasitas Terpasang (kW)</th>
+                            <th rowspan="2">Daya Mampu Netto (kW)</th>
+                            <th rowspan="2">Jumlah Unit</th>
+                            <th rowspan="2">No. Unit</th>
+                            <th rowspan="2">Tahun Operasi</th>
+                            <th rowspan="2">Status Operasi</th>
+                            <th colspan="2">Bahan Bakar yang Digunakan</th>
                         </tr>
                         <tr>
-                            <th style="min-width: 200px;">Longitude</th>
-                            <th style="min-width: 200px;">Latitude</th>
-                            <th style="min-width: 250px;">Jenis</th>
-                            <th style="min-width: 250px;">Satuan</th>
+                            <th>Longitude</th>
+                            <th>Latitude</th>
+                            <th>Jenis</th>
+                            <th>Satuan</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php
-                        if (mysqli_num_rows($result) > 0) {
-                            while ($row = mysqli_fetch_assoc($result)) {
-                                echo "<tr>";
-                                echo "<td style='white-space: normal; word-wrap: break-word;'>" . htmlspecialchars($row['nama_perusahaan']) . "</td>";
-                                echo "<td style='white-space: normal; word-wrap: break-word;'>" . htmlspecialchars($row['alamat']) . "</td>";
-                                echo "<td style='white-space: normal; word-wrap: break-word;'>" . htmlspecialchars($row['longitude']) . "</td>";
-                                echo "<td style='white-space: normal; word-wrap: break-word;'>" . htmlspecialchars($row['latitude']) . "</td>";
-                                echo "<td style='white-space: normal; word-wrap: break-word;'>" . htmlspecialchars($row['jenis_pembangkit']) . "</td>";
-                                echo "<td style='white-space: normal; word-wrap: break-word;'>" . htmlspecialchars($row['fungsi']) . "</td>";
-                                echo "<td style='white-space: normal; word-wrap: break-word;'>" . htmlspecialchars($row['kapasitas_terpasang']) . "</td>";
-                                echo "<td style='white-space: normal; word-wrap: break-word;'>" . htmlspecialchars($row['daya_mampu_netto']) . "</td>";
-                                echo "<td style='white-space: normal; word-wrap: break-word;'>" . htmlspecialchars($row['jumlah_unit']) . "</td>";
-                                echo "<td style='white-space: normal; word-wrap: break-word;'>" . htmlspecialchars($row['no_unit']) . "</td>";
-                                echo "<td style='white-space: normal; word-wrap: break-word;'>" . htmlspecialchars($row['tahun_operasi']) . "</td>";
-                                echo "<td style='white-space: normal; word-wrap: break-word;'>" . htmlspecialchars($row['status_operasi']) . "</td>";
-                                echo "<td style='white-space: normal; word-wrap: break-word;'>" . htmlspecialchars($row['bahan_bakar_jenis']) . "</td>";
-                                echo "<td style='white-space: normal; word-wrap: break-word;'>" . htmlspecialchars($row['bahan_bakar_satuan']) . "</td>";
-                                echo "<td>
-                                <a href='?page=pembangkit_edit&id_user=" . $row['id_user'] . "' class='btn btn-sm btn-warning'>Edit</a>
-                                <a href='?page=pembangkit_hapus&id_user=" . $row['id_user'] . "' class='btn btn-sm btn-danger' onclick='return confirm(\"Hapus data ini?\")'>Hapus</a>
-                              </td>";
-                                echo "</tr>";
-                            }
-                        } else {
-                            echo "<tr><td colspan='14' class='text-center'>Data tidak ditemukan</td></tr>";
-                        }
-                        ?>
+                        <?php if (count($result) > 0): ?>
+                            <?php foreach ($result as $row): ?>
+                                <tr>
+                                    <td><?= htmlspecialchars($row['nama_perusahaan']) ?></td>
+                                    <td><?= htmlspecialchars($row['alamat']) ?></td>
+                                    <td><?= htmlspecialchars($row['longitude']) ?></td>
+                                    <td><?= htmlspecialchars($row['latitude']) ?></td>
+                                    <td><?= htmlspecialchars($row['jenis_pembangkit']) ?></td>
+                                    <td><?= htmlspecialchars($row['fungsi']) ?></td>
+                                    <td><?= htmlspecialchars($row['kapasitas_terpasang']) ?></td>
+                                    <td><?= htmlspecialchars($row['daya_mampu_netto']) ?></td>
+                                    <td><?= htmlspecialchars($row['jumlah_unit']) ?></td>
+                                    <td><?= htmlspecialchars($row['no_unit']) ?></td>
+                                    <td><?= htmlspecialchars($row['tahun_operasi']) ?></td>
+                                    <td><?= htmlspecialchars($row['status_operasi']) ?></td>
+                                    <td><?= htmlspecialchars($row['bahan_bakar_jenis']) ?></td>
+                                    <td><?= htmlspecialchars($row['bahan_bakar_satuan']) ?></td>
+                                    <td>
+                                        <a href='?page=pembangkit_edit&id=<?= $row['id'] ?>' class='btn btn-sm btn-warning'>Edit</a>
+                                        <a href='?page=pembangkit_hapus_admin&id=<?= $row['id'] ?>' class='btn btn-sm btn-danger' onclick='return confirm("Hapus data ini?")'>Hapus</a>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <tr><td colspan='15' class='text-center'>Data tidak ditemukan</td></tr>
+                        <?php endif; ?>
                     </tbody>
                 </table>
             </div>
-
-            <?php
-            $id_user = isset($_SESSION['id_user']) ? $_SESSION['id_user'] : 0;
-            ?>
         </div>
     </div>
 </div>

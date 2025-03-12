@@ -9,26 +9,31 @@ if (!isset($_GET['id_user'])) {
 
 $id_user = $_GET['id_user'];
 
-// Periksa apakah pengguna ada dalam database
-$sql = "SELECT id_user FROM users WHERE id_user = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $id_user);
-$stmt->execute();
-$result = $stmt->get_result();
+try {
+    $db = new Database();
+    $conn = $db->getConnection();
+    // Periksa apakah pengguna ada dalam database
+    $sql = "SELECT id_user FROM users WHERE id_user = :id_user";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':id_user', $id_user, PDO::PARAM_INT);
+    $stmt->execute();
 
-if ($result->num_rows == 0) {
-    echo "<script>alert('Pengguna tidak ditemukan!'); window.location='?page=pengguna';</script>";
-    exit();
-}
+    if ($stmt->rowCount() == 0) {
+        echo "<script>alert('Pengguna tidak ditemukan!'); window.location='?page=pengguna';</script>";
+        exit();
+    }
 
-// Hapus pengguna berdasarkan ID
-$sql = "DELETE FROM users WHERE id_user = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $id_user);
+    // Hapus pengguna berdasarkan ID
+    $sql = "DELETE FROM users WHERE id_user = :id_user";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':id_user', $id_user, PDO::PARAM_INT);
 
-if ($stmt->execute()) {
-    echo "<script>alert('Pengguna berhasil dihapus!'); window.location='?page=pengguna';</script>";
-} else {
-    echo "<script>alert('Gagal menghapus pengguna!'); window.location='?page=pengguna';</script>";
+    if ($stmt->execute()) {
+        echo "<script>alert('Pengguna berhasil dihapus!'); window.location='?page=pengguna';</script>";
+    } else {
+        echo "<script>alert('Gagal menghapus pengguna!'); window.location='?page=pengguna';</script>";
+    }
+} catch (PDOException $e) {
+    echo "<script>alert('Kesalahan: " . $e->getMessage() . "'); window.location='?page=pengguna';</script>";
 }
 ?>

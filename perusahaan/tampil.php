@@ -12,14 +12,16 @@ if (!isset($_SESSION['id_user'])) {
 
 $id_user = $_SESSION['id_user'];
 
-// Ambil data profil perusahaan dari database
-$sql = "SELECT * FROM profil WHERE id_user = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $id_user);
+$database = new Database();
+$pdo = $database->getConnection(); // Dapatkan koneksi PDO
+// Ambil data profil perusahaan dari database menggunakan PDO
+$sql = "SELECT * FROM profil WHERE id_user = :id_user";
+$stmt = $pdo->prepare($sql);
+$stmt->bindParam(':id_user', $id_user, PDO::PARAM_INT);
 $stmt->execute();
-$result = $stmt->get_result();
-$profil = $result->fetch_assoc();
+$profil = $stmt->fetch(PDO::FETCH_ASSOC);
 ?>
+
 <div class="container mt-5">
     <div class="card shadow">
         <div class="card-body">

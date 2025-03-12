@@ -20,31 +20,31 @@ if (isset($_GET['id_user'])) {
         exit();
     }
 
-    // Periksa apakah profil ada
-    $sql_check = "SELECT id_user FROM profil WHERE id_user = ?";
-    $stmt_check = $conn->prepare($sql_check);
-    $stmt_check->bind_param("i", $id_hapus);
-    $stmt_check->execute();
-    $stmt_check->store_result();
-    
-    if ($stmt_check->num_rows > 0) {
-        // Hapus profil
-        $sql_delete = "DELETE FROM profil WHERE id_user = ?";
-        $stmt_delete = $conn->prepare($sql_delete);
-        $stmt_delete->bind_param("i", $id_hapus);
-        
-        if ($stmt_delete->execute()) {
-            echo "<script>alert('Profil berhasil dihapus!'); window.location.href='?page=profil_perusahaan';</script>";
+    try {
+        $db = new Database();
+        $conn = $db->getConnection();
+        // Periksa apakah profil ada
+        $sql_check = "SELECT id_user FROM profil WHERE id_user = ?";
+        $stmt_check = $conn->prepare($sql_check);
+        $stmt_check->execute([$id_hapus]);
+
+        if ($stmt_check->rowCount() > 0) {
+            // Hapus profil
+            $sql_delete = "DELETE FROM profil WHERE id_user = ?";
+            $stmt_delete = $conn->prepare($sql_delete);
+
+            if ($stmt_delete->execute([$id_hapus])) {
+                echo "<script>alert('Profil berhasil dihapus!'); window.location.href='?page=profil_perusahaan';</script>";
+            } else {
+                echo "<script>alert('Gagal menghapus profil. Silakan coba lagi.'); window.location.href='?page=profil_perusahaan';</script>";
+            }
         } else {
-            echo "<script>alert('Gagal menghapus profil. Silakan coba lagi.'); window.location.href='?page=profil_perusahaan';</script>";
+            echo "<script>alert('Profil tidak ditemukan!'); window.location.href='?page=profil_perusahaan';</script>";
         }
-        $stmt_delete->close();
-    } else {
-        echo "<script>alert('Profil tidak ditemukan!'); window.location.href='?page=profil_perusahaan';</script>";
+    } catch (PDOException $e) {
+        echo "<script>alert('Terjadi kesalahan: " . $e->getMessage() . "'); window.location.href='?page=profil_perusahaan';</script>";
     }
-    $stmt_check->close();
 } else {
     echo "<script>alert('ID Profil tidak valid!'); window.location.href='?page=profil_perusahaan';</script>";
 }
-$conn->close();
 ?>

@@ -1,65 +1,40 @@
 <?php
 include "koneksi.php";
 
-// Cek koneksi
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+try {
+    $db = new Database();
+    $conn = $db->getConnection();
+    // Query untuk menghitung jumlah perusahaan
+    $sql = "SELECT COUNT(*) AS total_perusahaan FROM profil";
+    $stmt = $conn->query($sql);
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    $total_perusahaan = $row['total_perusahaan'] ?? 0;
 
-// Query untuk menghitung jumlah perusahaan
-$sql = "SELECT COUNT(*) AS total_perusahaan FROM profil";
-$result = $conn->query($sql);
+    // Query untuk menghitung jumlah perusahaan di kota dan kabupaten lainnya
+    $kota_kabupaten = [
+        'Kota Banjarbaru', 'Kota Banjarmasin', 'Balangan', 'Banjar', 'Barito Kuala',
+        'Hulu Sungai Selatan', 'Hulu Sungai Tengah', 'Hulu Sungai Utara', 'Kotabaru',
+        'Tabalong', 'Tanah Bumbu', 'Tanah Laut', 'Tapin'
+    ];
 
-$total_perusahaan = 0; // Inisialisasi variabel
+    $jumlah_per_kota = [];
+    $total_kota = 0;
 
-if ($result->num_rows > 0) {
-    // Ambil data dari hasil query
-    $row = $result->fetch_assoc();
-    $total_perusahaan = $row['total_perusahaan'];
-}
-
-// Query untuk menghitung jumlah perusahaan di kota dan kabupaten lainnya
-$kota_kabupaten = [
-    'Kota Banjarbaru',
-    'Kota Banjarmasin',
-    'Balangan',
-    'Banjar',
-    'Barito Kuala',
-    'Hulu Sungai Selatan',
-    'Hulu Sungai Tengah',
-    'Hulu Sungai Utara',
-    'Kotabaru',
-    'Tabalong',
-    'Tanah Bumbu',
-    'Tanah Laut',
-    'Tapin'
-];
-
-$jumlah_per_kota = [];
-$total_kota = 0; // Inisialisasi variabel untuk menghitung kota yang memiliki perusahaan
-
-foreach ($kota_kabupaten as $kota) {
     $sql_kota = "SELECT COUNT(*) AS total FROM profil WHERE kabupaten = ?";
-    $stmt = $conn->prepare($sql_kota);
-    $stmt->bind_param("s", $kota);
-    $stmt->execute();
-    $result_kota = $stmt->get_result();
-    $jumlah_per_kota[$kota] = 0; // Inisialisasi variabel
+    $stmt_kota = $conn->prepare($sql_kota);
 
-    if ($result_kota->num_rows > 0) {
-        $row_kota = $result_kota->fetch_assoc();
-        $jumlah_per_kota[$kota] = $row_kota['total'];
+    foreach ($kota_kabupaten as $kota) {
+        $stmt_kota->execute([$kota]);
+        $row_kota = $stmt_kota->fetch(PDO::FETCH_ASSOC);
+        $jumlah_per_kota[$kota] = $row_kota['total'] ?? 0;
 
-        // Jika ada perusahaan di kota tersebut, tambahkan ke total kota
         if ($row_kota['total'] > 0) {
             $total_kota++;
         }
     }
-    $stmt->close();
+} catch (PDOException $e) {
+    die("Error: " . $e->getMessage());
 }
-
-// Tutup koneksi
-$conn->close();
 ?>
 <main>
     <div class="container">
@@ -83,7 +58,7 @@ $conn->close();
             <div class="col-md-6">
                 <div class="card text-black mb-3" style="background-color: #008B47;">
                     <div class="card-body">
-                        <h5 class="card-title">Total Apa Hayo wkwk</h5>
+                        <h5 class="card-title">Total Kota dengan Perusahaan</h5>
                         <p class="card-text"><?php echo $total_kota; ?></p>
                     </div>
                 </div>

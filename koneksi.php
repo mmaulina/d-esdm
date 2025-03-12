@@ -1,12 +1,21 @@
 <?php
-$host = "localhost";
-$username = "root";
-$password = "";
-$database = "d-esdm";
+if (!class_exists('Database')) {
+    class Database {
+        private $host = "localhost";
+        private $db_name = "d-esdm";
+        private $username = "root";
+        private $password = "";
+        public $conn;
 
-$conn =  new mysqli($host, $username, $password, $database);
-
-if ($conn ->connect_error) {
-    die("Koneksi gagal: " . $koneksi ->connect_error);
+        public function getConnection() {
+            $this->conn = null;
+            try {
+                $this->conn = new PDO("mysql:host=" . $this->host . ";dbname=" . $this->db_name, $this->username, $this->password);
+                $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            } catch (PDOException $exception) {
+                echo "Connection error: " . $exception->getMessage();
+            }
+            return $this->conn;
+        }
+    }
 }
-?>

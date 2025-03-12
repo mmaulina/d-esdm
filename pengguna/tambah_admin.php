@@ -8,14 +8,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $role = htmlspecialchars($_POST['role']);
     $status = htmlspecialchars($_POST['status']);
 
-    $sql = "INSERT INTO users (username, email, password, role, status) VALUES (?, ?, ?, ?, ?)";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sssss", $username, $email, $password, $role, $status);
-
-    if ($stmt->execute()) {
-        echo "<script>alert('Data berhasil ditambahkan!'); window.location='?page=pengguna';</script>";
-    } else {
-        echo "<script>alert('Gagal menambahkan data!');</script>";
+    try {
+        $db = new Database();
+        $conn = $db->getConnection();
+        $sql = "INSERT INTO users (username, email, password, role, status) VALUES (:username, :email, :password, :role, :status)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':username', $username);
+        $stmt->bindParam(':email', $email);
+        $stmt->bindParam(':password', $password);
+        $stmt->bindParam(':role', $role);
+        $stmt->bindParam(':status', $status);
+        
+        if ($stmt->execute()) {
+            echo "<script>alert('Data berhasil ditambahkan!'); window.location='?page=pengguna';</script>";
+        } else {
+            echo "<script>alert('Gagal menambahkan data!');</script>";
+        }
+    } catch (PDOException $e) {
+        echo "<script>alert('Error: " . $e->getMessage() . "');</script>";
     }
 }
 ?>
@@ -58,9 +68,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div class="mb-3">
                         <label class="form-label">Status</label>
                         <select name="status" class="form-control" required>
-                            <option value="diajukan">diajukan</option>
-                            <option value="diverifikasi">diverifikasi</option>
-                            <option value="ditolak">ditolak</option>
+                            <option value="diajukan">Diajukan</option>
+                            <option value="diverifikasi">Diverifikasi</option>
+                            <option value="ditolak">Ditolak</option>
                         </select>
                     </div>
                     <button type="submit" class="btn btn-success">Simpan</button>

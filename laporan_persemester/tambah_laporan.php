@@ -1,79 +1,118 @@
 <?php
-include 'koneksi.php'; // Pastikan file koneksi ke database sudah ada
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+include_once 'koneksi.php';
+
+// Pastikan pengguna sudah login
+if (!isset($_SESSION['id_user'])) {
+    echo "<script>alert('Silakan login terlebih dahulu!'); window.location.href='login.php';</script>";
+    exit;
+}
+
+$id_user = $_SESSION['id_user'];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $bulan = htmlspecialchars($_POST['bulan']);
-    $nama_perusahaan = htmlspecialchars($_POST['nama_perusahaan']);
-    $volume = htmlspecialchars($_POST['volume']);
-    $produksi_listrik = htmlspecialchars($_POST['produksi_listrik']);
-    $susut_jaringan = htmlspecialchars($_POST['susut_jaringan']);
-    $konsumsi_listrik = htmlspecialchars($_POST['konsumsi_listrik']);
+    $database = new Database();
+    $db = $database->getConnection();
 
-    $sql = "INSERT INTO users (username, email, password, role, status) VALUES (?, ?, ?, ?, ?)";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sssss", $username, $email, $password, $role, $status);
-
-    if ($stmt->execute()) {
-        echo "<script>alert('Data berhasil ditambahkan!'); window.location='?page=pengguna';</script>";
-    } else {
-        echo "<script>alert('Gagal menambahkan data!');</script>";
+    function sanitizeInput($input) {
+        return htmlspecialchars(strip_tags(trim($input)));
     }
+
+    $nama_perusahaan = sanitizeInput($_POST['nama_perusahaan']);
+    $parameter = sanitizeInput($_POST['parameter']);
+    $buku_mutu = sanitizeInput($_POST['buku_mutu']);
+    $hasil = sanitizeInput($_POST['hasil']);
+
+    // Ambil id_user dari session
+    $id_user = $_SESSION['id_user'];
+
+    // Handle file upload
+    $file_laporan = uploadFile('file_laporan');
+    $file_lhu = uploadFile('file_lhu');
+
+    // Simpan data ke database dengan id_user
+    $insertSQL = "INSERT INTO laporan_semester (id_user, nama_perusahaan, parameter, buku_mutu, hasil, file_laporan, file_lhu) 
+                  VALUES (:id_user, :nama_perusahaan, :parameter, :buku_mutu, :hasil, :file_laporan, :file_lhu)";
+    $stmt = $db->prepare($insertSQL);
+
+    $stmt->bindParam(':id_user', $id_user);
+    $stmt->bindParam(':nama_perusahaan', $nama_perusahaan);
+    $stmt->bindParam(':parameter', $parameter);
+    $stmt->bindParam(':buku_mutu', $buku_mutu);
+    $stmt->bindParam(':hasil', $hasil);
+    $stmt->bindParam(':file_laporan', $file_laporan);
+    $stmt->bindParam(':file_lhu', $file_lhu);
+    
+    if ($stmt->execute()) {
+        $_SESSION['hasil'] = true;
+        $_SESSION['pesan'] = "Berhasil Simpan Data";
+    } else {
+        $_SESSION['hasil'] = false;
+        $_SESSION['pesan'] = "Gagal Simpan Data";
+    }
+    echo "<meta http-equiv='refresh' content='0; url=?page=laporan_persemester'>";
+}
+
+
+// Fungsi untuk upload file dengan validasi format
+function uploadFile($input_name) {
+    if (!empty($_FILES[$input_name]['name'])) {
+        $target_dir = "uploads/";
+        $file_name = basename($_FILES[$input_name]["name"]);
+        $file_name = preg_replace("/[^a-zA-Z0-9.\-_]/", "", $file_name); // Hapus karakter berbahaya
+        $target_file = $target_dir . time() . "_" . $file_name; // Rename file untuk menghindari duplikasi
+        $file_type = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+
+        // Format file yang diizinkan (PDF, Word, Excel)
+        $allowed_types = ['pdf', 'doc', 'docx', 'xls', 'xlsx'];
+        if (!in_array($file_type, $allowed_types)) {
+            $_SESSION['pesan'] = "Format file tidak diizinkan!";
+            return null;
+        }
+
+        if (move_uploaded_file($_FILES[$input_name]["tmp_name"], $target_file)) {
+            return $target_file;
+        }
+    }
+    return null;
 }
 ?>
 
-<!DOCTYPE html>
-<html lang="id">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tambah Data Pengguna</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-</head>
-
-<body>
-    <div class="container mt-5">
-        <div class="card shadow">
-            <div class="card-header bg-primary text-white">
-                <h4 class="mb-0">Tambah Laporan Persemester</h4>
-            </div>
-            <div class="card-body">
-                <form method="POST">
-                    <div class="mb-3">
-                        <label class="form-label">Semester</label>
-                        <select name="semester" class="form-control" required>
-                            <option value="">Pilih Semester</option>
-                            <option value="01">Januari - Juni</option>
-                            <option value="02">Juli - Desember</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Nama Perusahaan</label>
-                        <input type="nama_perusahaan" name="nama_perusahaan" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Volume Bahan Bakar</label>
-                        <input type="volume" name="volume" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Produksi Listrik</label>
-                        <input type="produksi_listrik" name="produksi_listrik" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Susut Jaringan (bila ada) (kWh)</label>
-                        <!-- tidak pakai required supaya bisa dikosongkan -->
-                        <input type="produksi_listrik" name="produksi_listrik" class="form-control"> 
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Konsumsi Listrik</label>
-                        <input type="konsumsi_listrik" name="konsumsi_listrik" class="form-control" required>
-                    </div>
-                    <button type="submit" class="btn btn-success">Simpan</button>
-                    <a href="?page=pengguna" class="btn btn-secondary">Kembali</a>
-                </form>
-            </div>
+<div class="container mt-4">
+    <h3 class="text-center mb-3">Tambah Laporan Semester</h3>
+    <hr>
+    <div class="card shadow">
+        <div class="card-body">
+            <form method="POST" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label class="form-label">Nama Perusahaan</label>
+                    <input type="text" name="nama_perusahaan" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Parameter</label>
+                    <input type="text" name="parameter" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Buku Mutu</label>
+                    <input type="text" name="buku_mutu" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Hasil</label>
+                    <input type="text" name="hasil" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Upload Laporan (PDF, DOC, DOCX, XLS, XLSX)</label>
+                    <input type="file" name="file_laporan" class="form-control" accept=".pdf,.doc,.docx,.xls,.xlsx">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Upload LHU (PDF, DOC, DOCX, XLS, XLSX)</label>
+                    <input type="file" name="file_lhu" class="form-control" accept=".pdf,.doc,.docx,.xls,.xlsx">
+                </div>
+                <button type="submit" class="btn btn-primary">Simpan</button>
+                <a href="?page=laporan_persemester" class="btn btn-secondary">Kembali</a>
+            </form>
         </div>
     </div>
-</body>
-
-</html>
+</div>

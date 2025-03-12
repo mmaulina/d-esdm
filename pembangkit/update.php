@@ -2,7 +2,7 @@
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
-include 'koneksi.php'; // Pastikan koneksi ke database
+include 'koneksi.php'; // Pastikan koneksi ke database menggunakan PDO
 
 // Pastikan pengguna sudah login
 if (!isset($_SESSION['id_user'])) {
@@ -10,20 +10,18 @@ if (!isset($_SESSION['id_user'])) {
     exit;
 }
 
-
 // Pastikan ID pembangkit tersedia
 if (!isset($_GET['id'])) {
     echo "<script>alert('Data tidak ditemukan!'); window.location.href='?page=pembangkit';</script>";
     exit;
 }
-
+$db = new Database();
+$conn = $db->getConnection();
 $id_pembangkit = intval($_GET['id']);
 $query = "SELECT * FROM pembangkit WHERE id = ?";
-$stmt = mysqli_prepare($conn, $query);
-mysqli_stmt_bind_param($stmt, "i", $id_pembangkit);
-mysqli_stmt_execute($stmt);
-$result = mysqli_stmt_get_result($stmt);
-$data = mysqli_fetch_assoc($result);
+$stmt = $conn->prepare($query);
+$stmt->execute([$id_pembangkit]);
+$data = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$data) {
     echo "<script>alert('Data tidak ditemukan!'); window.location.href='?page=pembangkit';</script>";
@@ -32,32 +30,31 @@ if (!$data) {
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Sanitasi input
-    $nama_perusahaan = mysqli_real_escape_string($conn, trim($_POST['nama_perusahaan']));
-    $alamat = mysqli_real_escape_string($conn, trim($_POST['alamat']));
-    $longitude = mysqli_real_escape_string($conn, trim($_POST['longitude']));
-    $latitude = mysqli_real_escape_string($conn, trim($_POST['latitude']));
-    $jenis_pembangkit = mysqli_real_escape_string($conn, trim($_POST['jenis_pembangkit']));
-    $fungsi = mysqli_real_escape_string($conn, trim($_POST['fungsi']));
-    $kapasitas_terpasang = mysqli_real_escape_string($conn, trim($_POST['kapasitas_terpasang']));
-    $daya_mampu_netto = mysqli_real_escape_string($conn, trim($_POST['daya_mampu_netto']));
+    $nama_perusahaan = trim($_POST['nama_perusahaan']);
+    $alamat = trim($_POST['alamat']);
+    $longitude = trim($_POST['longitude']);
+    $latitude = trim($_POST['latitude']);
+    $jenis_pembangkit = trim($_POST['jenis_pembangkit']);
+    $fungsi = trim($_POST['fungsi']);
+    $kapasitas_terpasang = trim($_POST['kapasitas_terpasang']);
+    $daya_mampu_netto = trim($_POST['daya_mampu_netto']);
     $jumlah_unit = intval($_POST['jumlah_unit']);
-    $no_unit = mysqli_real_escape_string($conn, trim($_POST['no_unit']));
+    $no_unit = trim($_POST['no_unit']);
     $tahun_operasi = intval($_POST['tahun_operasi']);
-    $status_operasi = mysqli_real_escape_string($conn, trim($_POST['status_operasi']));
-    $bahan_bakar_jenis = mysqli_real_escape_string($conn, trim($_POST['bahan_bakar_jenis']));
-    $bahan_bakar_satuan = mysqli_real_escape_string($conn, trim($_POST['bahan_bakar_satuan']));
+    $status_operasi = trim($_POST['status_operasi']);
+    $bahan_bakar_jenis = trim($_POST['bahan_bakar_jenis']);
+    $bahan_bakar_satuan = trim($_POST['bahan_bakar_satuan']);
 
     // Query update
     $query = "UPDATE pembangkit SET nama_perusahaan=?, alamat=?, longitude=?, latitude=?, jenis_pembangkit=?, fungsi=?, kapasitas_terpasang=?, daya_mampu_netto=?, jumlah_unit=?, no_unit=?, tahun_operasi=?, status_operasi=?, bahan_bakar_jenis=?, bahan_bakar_satuan=? WHERE id =?";
-    $stmt = mysqli_prepare($conn, $query);
-    mysqli_stmt_bind_param($stmt, "ssssssiiiiisssi", $nama_perusahaan, $alamat, $longitude, $latitude, $jenis_pembangkit, $fungsi, $kapasitas_terpasang, $daya_mampu_netto, $jumlah_unit, $no_unit, $tahun_operasi, $status_operasi, $bahan_bakar_jenis, $bahan_bakar_satuan, $id_pembangkit);
+    $stmt = $conn->prepare($query);
+    $success = $stmt->execute([$nama_perusahaan, $alamat, $longitude, $latitude, $jenis_pembangkit, $fungsi, $kapasitas_terpasang, $daya_mampu_netto, $jumlah_unit, $no_unit, $tahun_operasi, $status_operasi, $bahan_bakar_jenis, $bahan_bakar_satuan, $id_pembangkit]);
 
-    if (mysqli_stmt_execute($stmt)) {
+    if ($success) {
         echo "<script>alert('Data berhasil diperbarui!'); window.location.href='?page=pembangkit';</script>";
     } else {
         echo "<script>alert('Gagal memperbarui data!');</script>";
     }
-    mysqli_stmt_close($stmt);
 }
 ?>
 

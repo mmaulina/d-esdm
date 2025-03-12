@@ -1,3 +1,18 @@
+<?php
+include_once 'koneksi.php'; // Pastikan koneksi.php sudah menggunakan PDO
+
+try {
+    $database = new Database();
+    $pdo = $database->getConnection(); // Dapatkan koneksi PDO
+    $query = "SELECT * FROM profil ORDER BY id_profil ASC";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute();
+    $profiles = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    die("Error: " . $e->getMessage());
+}
+?>
+
 <div class="container mt-4">
     <h3 class="text-center mb-3">Data Profil Perusahaan</h3>
     <hr>
@@ -24,40 +39,30 @@
                             <th>Email</th>
                         </tr>
                     </thead>
-
                     <tbody>
-                        <?php
-                        include 'koneksi.php';
-                        $query = "SELECT * FROM profil ORDER BY id_profil ASC";
-                        $result = mysqli_query($conn, $query);
-
-                        if (mysqli_num_rows($result) > 0) {
-                            $no = 1;
-                            while ($row = mysqli_fetch_assoc($result)) {
-                                echo "<tr>";
-                                echo "<td>" . $no . "</td>";
-                                echo "<td>" . htmlspecialchars($row['nama_perusahaan']) . "</td>";
-                                echo "<td>" . htmlspecialchars($row['kabupaten']) . "</td>";
-                                echo "<td>" . htmlspecialchars($row['alamat']) . "</td>";
-                                echo "<td>" . htmlspecialchars($row['jenis_usaha']) . "</td>";
-                                echo "<td>" . htmlspecialchars($row['no_telp_kantor']) . "</td>";
-                                echo "<td>" . htmlspecialchars($row['no_fax']) . "</td>";
-                                echo "<td>" . htmlspecialchars($row['tenaga_teknik']) . "</td>";
-                                echo "<td>" . htmlspecialchars($row['nama']) . "</td>";
-                                echo "<td>" . htmlspecialchars($row['no_hp']) . "</td>";
-                                echo "<td>" . htmlspecialchars($row['email']) . "</td>";
-                                echo "<td>
-                                
-                                <a href='?page=update_profil_admin&id_profil=" . htmlspecialchars($row['id_profil']) . "' class='btn btn-warning btn-sm'>Edit</a>
-                                <a href='?page=delete_profil_admin&id_profil=" . htmlspecialchars($row['id_profil']) . "' class='btn btn-danger btn-sm' onclick='return confirm(\"Yakin ingin menghapus data ini?\")'>Hapus</a>
-                              </td>";
-                                echo "</tr>";
-                                $no++;
-                            }
-                        } else {
-                            echo "<tr><td colspan='11' class='text-center'>Data tidak ditemukan</td></tr>";
-                        }
-                        ?>
+                        <?php if (count($profiles) > 0): ?>
+                            <?php $no = 1; foreach ($profiles as $row): ?>
+                                <tr>
+                                    <td><?= $no++; ?></td>
+                                    <td><?= htmlspecialchars($row['nama_perusahaan']); ?></td>
+                                    <td><?= htmlspecialchars($row['kabupaten']); ?></td>
+                                    <td><?= htmlspecialchars($row['alamat']); ?></td>
+                                    <td><?= htmlspecialchars($row['jenis_usaha']); ?></td>
+                                    <td><?= htmlspecialchars($row['no_telp_kantor']); ?></td>
+                                    <td><?= htmlspecialchars($row['no_fax']); ?></td>
+                                    <td><?= htmlspecialchars($row['tenaga_teknik']); ?></td>
+                                    <td><?= htmlspecialchars($row['nama']); ?></td>
+                                    <td><?= htmlspecialchars($row['no_hp']); ?></td>
+                                    <td><?= htmlspecialchars($row['email']); ?></td>
+                                    <td>
+                                        <a href="?page=update_profil_admin&id_profil=<?= htmlspecialchars($row['id_profil']); ?>" class="btn btn-warning btn-sm">Edit</a>
+                                        <a href="?page=delete_profil_admin&id_profil=<?= htmlspecialchars($row['id_profil']); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus data ini?')">Hapus</a>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <tr><td colspan="12" class="text-center">Data tidak ditemukan</td></tr>
+                        <?php endif; ?>
                     </tbody>
                 </table>
             </div>

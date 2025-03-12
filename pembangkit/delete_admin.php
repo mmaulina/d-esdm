@@ -1,28 +1,38 @@
 <?php
 include 'koneksi.php'; // Pastikan koneksi sudah tersedia
 
-$id = $_GET['id'];
-
-// Periksa apakah pengguna ada dalam database
-$sql = "SELECT id FROM pembangkit WHERE id = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $id);
-$stmt->execute();
-$result = $stmt->get_result();
-
-if ($result->num_rows == 0) {
-    echo "<script>alert('Pengguna tidak ditemukan!'); window.location='?page=pembangkit_admin';</script>";
+if (!isset($_GET['id']) || empty($_GET['id'])) {
+    echo "<script>alert('ID tidak valid!'); window.location='?page=pembangkit_admin';</script>";
     exit();
 }
 
-// Hapus pengguna berdasarkan ID
-$sql = "DELETE FROM pembangkit WHERE id = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $id);
+$id = intval($_GET['id']);
 
-if ($stmt->execute()) {
-    echo "<script>alert('Pembangkit berhasil dihapus!'); window.location='?page=pembangkit_admin';</script>";
-} else {
-    echo "<script>alert('Gagal menghapus pembangkit!'); window.location='?page=pembangkit_admin';</script>";
+try {
+    $db = new Database();
+    $conn = $db->getConnection();
+    // Periksa apakah data ada dalam database
+    $sql = "SELECT id FROM pembangkit WHERE id = :id";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    
+    if ($stmt->rowCount() == 0) {
+        echo "<script>alert('Data tidak ditemukan!'); window.location='?page=pembangkit_admin';</script>";
+        exit();
+    }
+
+    // Hapus data dari database
+    $sql = "DELETE FROM pembangkit WHERE id = :id";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    
+    if ($stmt->execute()) {
+        echo "<script>alert('Pembangkit berhasil dihapus!'); window.location='?page=pembangkit_admin';</script>";
+    } else {
+        echo "<script>alert('Gagal menghapus pembangkit!'); window.location='?page=pembangkit_admin';</script>";
+    }
+} catch (PDOException $e) {
+    echo "<script>alert('Kesalahan: " . $e->getMessage() . "'); window.location='?page=pembangkit_admin';</script>";
 }
 ?>

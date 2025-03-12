@@ -10,23 +10,22 @@ if (!isset($_SESSION['id_user'])) {
     exit();
 }
 
-$id_profil = $_GET['id_profil'];
-
 if (!isset($_GET['id_profil'])) {
     echo "<script>alert('Data tidak ditemukan!'); window.location.href='?page=profil_admin';</script>";
-    exit;
+    exit();
 }
+
+$id_profil = $_GET['id_profil'];
+
+$database = new Database();
+$pdo = $database->getConnection(); // Dapatkan koneksi PDO
 // Ambil data profil perusahaan
 $sql = "SELECT * FROM profil WHERE id_profil = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $id_profil);
-$stmt->execute();
-$result = $stmt->get_result();
-$profil = $result->fetch_assoc();
-$stmt->close();
+$stmt = $pdo->prepare($sql);
+$stmt->execute([$id_profil]);
+$profil = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Fungsi untuk sanitasi input
     function sanitize_input($data)
     {
         return htmlspecialchars(trim($data), ENT_QUOTES, 'UTF-8');
@@ -43,24 +42,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $no_hp = sanitize_input($_POST['no_hp']);
     $email = sanitize_input($_POST['email']);
 
-    // Validasi nomor telepon hanya angka dan tanda +
     if (!preg_match('/^[0-9\+]+$/', $no_telp_kantor) || !preg_match('/^[0-9\+]+$/', $no_hp)) {
         echo "<script>alert('Kontak hanya boleh berisi angka dan tanda +!');</script>";
     } else {
-        // Update data profil
         $sql = "UPDATE profil SET nama_perusahaan=?, kabupaten=?, alamat=?, jenis_usaha=?, no_telp_kantor=?, no_fax=?, tenaga_teknik=?, nama=?, no_hp=?, email=? WHERE id_profil=?";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ssssiissisi", $nama_perusahaan, $kabupaten, $alamat, $jenis_usaha, $no_telp_kantor,$no_fax, $tenaga_teknik, $nama, $no_hp, $email, $id_profil);
+        $stmt = $pdo->prepare($sql);
+        $success = $stmt->execute([$nama_perusahaan, $kabupaten, $alamat, $jenis_usaha, $no_telp_kantor, $no_fax, $tenaga_teknik, $nama, $no_hp, $email, $id_profil]);
 
-        if ($stmt->execute()) {
+        if ($success) {
             echo "<script>alert('Profil berhasil diperbarui!'); window.location.href='?page=profil_admin';</script>";
         } else {
             echo "<script>alert('Gagal memperbarui profil. Silakan coba lagi.');</script>";
         }
-        $stmt->close();
     }
 }
-$conn->close();
 ?>
 
 <!-- UPDATE PROFIL PERUSAHAAN -->

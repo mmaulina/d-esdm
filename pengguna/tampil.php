@@ -1,3 +1,18 @@
+<?php
+include 'koneksi.php'; // Pastikan koneksi tersedia
+
+try {
+    $db = new Database();
+    $conn = $db->getConnection();
+    $sql = "SELECT id_user, username, email, role, status FROM users";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    die("Error: " . $e->getMessage());
+}
+?>
+
 <div class="container mt-4">
     <h3 class="text-center mb-3">Data Pengguna</h3>
     <hr>
@@ -19,12 +34,9 @@
                 </thead>
                 <tbody>
                     <?php
-                    $sql = "SELECT id_user, username, email, role, status FROM users";
-                    $result = $conn->query($sql);
-                    $no = 1; // Inisialisasi nomor
-
-                    if ($result->num_rows > 0) {
-                        while ($row = $result->fetch_assoc()) {
+                    if (!empty($users)) {
+                        $no = 1;
+                        foreach ($users as $row) {
                             echo "<tr>
                                     <td>{$no}</td>
                                     <td>" . htmlspecialchars($row['username']) . "</td>
@@ -36,10 +48,10 @@
                                         <a href='?page=pengguna_hapus_admin&id_user=" . htmlspecialchars($row['id_user']) . "' class='btn btn-danger btn-sm' onclick='return confirm(\"Yakin ingin menghapus?\")'>Hapus</a>
                                     </td>
                                   </tr>";
-                            $no++; // Menambah nomor setiap iterasi
+                            $no++;
                         }
                     } else {
-                        echo "<tr><td colspan='5' class='text-center'>Tidak ada data pengguna</td></tr>";
+                        echo "<tr><td colspan='6' class='text-center'>Tidak ada data pengguna</td></tr>";
                     }
                     ?>
                 </tbody>

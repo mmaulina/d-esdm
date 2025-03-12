@@ -9,19 +9,18 @@ if (!isset($_GET['id_user'])) {
 
 $id_user = $_GET['id_user'];
 
+$db = new Database();
+$conn = $db->getConnection();
 // Ambil data pengguna berdasarkan ID
 $sql = "SELECT username, email, role, status FROM users WHERE id_user = ?";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $id_user);
-$stmt->execute();
-$result = $stmt->get_result();
+$stmt->execute([$id_user]);
+$data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-if ($result->num_rows == 0) {
+if (!$data) {
     echo "<script>alert('Pengguna tidak ditemukan!'); window.location='?page=pengguna';</script>";
     exit();
 }
-
-$data = $result->fetch_assoc();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = htmlspecialchars($_POST['username']);
@@ -31,17 +30,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Periksa apakah password diubah
     if (!empty($_POST['password'])) {
-        $password = htmlspecialchars($_POST['password'],);
+        $password = htmlspecialchars($_POST['password'], );
         $sql = "UPDATE users SET username = ?, email = ?, password = ?, role = ?, status = ? WHERE id_user = ?";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("sssssi", $username, $email, $password, $role, $status, $id_user);
+        $execute = $stmt->execute([$username, $email, $password, $role, $status, $id_user]);
     } else {
         $sql = "UPDATE users SET username = ?, email = ?, role = ?, status = ? WHERE id_user = ?";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ssssi", $username, $email, $role, $status, $id_user);
+        $execute = $stmt->execute([$username, $email, $role, $status, $id_user]);
     }
 
-    if ($stmt->execute()) {
+    if ($execute) {
         echo "<script>alert('Data berhasil diperbarui!'); window.location='?page=pengguna';</script>";
     } else {
         echo "<script>alert('Gagal memperbarui data!');</script>";
@@ -67,11 +66,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <form method="POST">
                     <div class="mb-3">
                         <label class="form-label">Username</label>
-                        <input type="text" name="username" class="form-control" value="<?= $data['username']; ?>" required>
+                        <input type="text" name="username" class="form-control" value="<?= htmlspecialchars($data['username']); ?>" required>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Email</label>
-                        <input type="email" name="email" class="form-control" value="<?= $data['email']; ?>" required>
+                        <input type="email" name="email" class="form-control" value="<?= htmlspecialchars($data['email']); ?>" required>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Password (Kosongkan jika tidak diubah)</label>

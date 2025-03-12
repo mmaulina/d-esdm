@@ -32,38 +32,46 @@
                             <th>Satuan</th>
                         </tr>
                     </thead>
-
                     <tbody>
                         <?php
-                        include 'koneksi.php';
-                        $query = "SELECT * FROM pembangkit";
-                        $result = mysqli_query($conn, $query);
+                        require 'koneksi.php';
+                        
+                        try {
+                            $db = new Database();
+                            $conn = $db->getConnection();
+                            $query = "SELECT * FROM pembangkit";
+                            $stmt = $conn->prepare($query);
+                            $stmt->execute();
+                            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-                        if (mysqli_num_rows($result) > 0) {
-                            while ($row = mysqli_fetch_assoc($result)) {
-                                echo "<tr>";
-                                echo "<td>" . htmlspecialchars($row['nama_perusahaan']) . "</td>";
-                                echo "<td>" . htmlspecialchars($row['alamat']) . "</td>";
-                                echo "<td>" . htmlspecialchars($row['longitude']) . "</td>";
-                                echo "<td>" . htmlspecialchars($row['latitude']) . "</td>";
-                                echo "<td>" . htmlspecialchars($row['jenis_pembangkit']) . "</td>";
-                                echo "<td>" . htmlspecialchars($row['fungsi']) . "</td>";
-                                echo "<td>" . htmlspecialchars($row['kapasitas_terpasang']) . "</td>";
-                                echo "<td>" . htmlspecialchars($row['daya_mampu_netto']) . "</td>";
-                                echo "<td>" . htmlspecialchars($row['jumlah_unit']) . "</td>";
-                                echo "<td>" . htmlspecialchars($row['no_unit']) . "</td>";
-                                echo "<td>" . htmlspecialchars($row['tahun_operasi']) . "</td>";
-                                echo "<td>" . htmlspecialchars($row['status_operasi']) . "</td>";
-                                echo "<td>" . htmlspecialchars($row['bahan_bakar_jenis']) . "</td>";
-                                echo "<td>" . htmlspecialchars($row['bahan_bakar_satuan']) . "</td>";
-                                echo "<td>
-                                <a href='?page=pembangkit_edit_admin&id=" . $row['id'] . "' class='btn btn-sm btn-primary'>Edit</a>
-                                <a href='?page=pembangkit_hapus_admin&id=" . $row['id'] . "' class='btn btn-sm btn-danger' onclick='return confirm(\"Hapus data ini?\")'>Hapus</a>
-                              </td>";
-                                echo "</tr>";
+                            if (count($result) > 0) {
+                                foreach ($result as $row) {
+                                    echo "<tr>";
+                                    echo "<td>" . htmlspecialchars($row['nama_perusahaan']) . "</td>";
+                                    echo "<td>" . htmlspecialchars($row['alamat']) . "</td>";
+                                    echo "<td>" . htmlspecialchars($row['longitude']) . "</td>";
+                                    echo "<td>" . htmlspecialchars($row['latitude']) . "</td>";
+                                    echo "<td>" . htmlspecialchars($row['jenis_pembangkit']) . "</td>";
+                                    echo "<td>" . htmlspecialchars($row['fungsi']) . "</td>";
+                                    echo "<td>" . htmlspecialchars($row['kapasitas_terpasang']) . "</td>";
+                                    echo "<td>" . htmlspecialchars($row['daya_mampu_netto']) . "</td>";
+                                    echo "<td>" . htmlspecialchars($row['jumlah_unit']) . "</td>";
+                                    echo "<td>" . htmlspecialchars($row['no_unit']) . "</td>";
+                                    echo "<td>" . htmlspecialchars($row['tahun_operasi']) . "</td>";
+                                    echo "<td>" . htmlspecialchars($row['status_operasi']) . "</td>";
+                                    echo "<td>" . htmlspecialchars($row['bahan_bakar_jenis']) . "</td>";
+                                    echo "<td>" . htmlspecialchars($row['bahan_bakar_satuan']) . "</td>";
+                                    echo "<td>
+                                        <a href='?page=pembangkit_edit_admin&id=" . $row['id'] . "' class='btn btn-sm btn-primary'>Edit</a>
+                                        <button class='btn btn-sm btn-danger' onclick='confirmDelete(" . $row['id'] . ")'>Hapus</button>
+                                    </td>";
+                                    echo "</tr>";
+                                }
+                            } else {
+                                echo "<tr><td colspan='15' class='text-center'>Data tidak ditemukan</td></tr>";
                             }
-                        } else {
-                            echo "<tr><td colspan='14' class='text-center'>Data tidak ditemukan</td></tr>";
+                        } catch (PDOException $e) {
+                            echo "<tr><td colspan='15' class='text-center'>Gagal mengambil data: " . $e->getMessage() . "</td></tr>";
                         }
                         ?>
                     </tbody>
@@ -72,3 +80,31 @@
         </div>
     </div>
 </div>
+
+<!-- Modal Konfirmasi Hapus -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Konfirmasi Hapus</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Apakah Anda yakin ingin menghapus data ini?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                <a href="#" id="confirmDeleteButton" class="btn btn-danger">Yes</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript -->
+<script>
+    function confirmDelete(id) {
+        document.getElementById('confirmDeleteButton').href = '?page=pembangkit_hapus_admin&id=' + id;
+        var deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+        deleteModal.show();
+    }
+</script>

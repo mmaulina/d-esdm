@@ -1,27 +1,85 @@
+<?php
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+include 'koneksi.php';
+
+// Cek apakah pengguna sudah login
+if (!isset($_SESSION['id_user'])) {
+    echo "<script>alert('Silakan login terlebih dahulu!'); window.location.href='login.php';</script>";
+    exit;
+}
+
+$id_user = $_SESSION['id_user'];
+
+// Buat koneksi menggunakan PDO
+$database = new Database();
+$conn = $database->getConnection();
+
+$query = "SELECT * FROM laporan_semester WHERE id_user = :id_user";
+$stmt = $conn->prepare($query);
+$stmt->bindParam(":id_user", $id_user, PDO::PARAM_INT);
+$stmt->execute();
+$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
+
 <div class="container mt-4">
-    <h3 class="text-center mb-3">Laporan Bulanan</h3>
+    <h3 class="text-center mb-3">Laporan Persemester</h3>
     <hr>
     <div class="card shadow">
         <div class="card-body">
             <div class="mb-3">
-                <a href="?page=tambah_laporan" class="btn btn-primary">Tambah Data</a>
+                <a href="?page=tambah_laporan_persemester" class="btn btn-primary">Tambah Data</a>
             </div>
             <div class="table-responsive" style="max-height: 500px; overflow-x: auto; overflow-y: auto;">
                 <table class="table table-bordered" style="min-width: 1200px; white-space: nowrap;">
                     <thead class="table-dark text-center align-middle">
                         <tr>
-                            <th rowspan="2">No.</th>
-                            <th rowspan="2">Parameter</th>
-                            <th rowspan="2">Buku Mutu</th>
-                            <th rowspan="2">Hasil</th>
-                            <th rowspan="2">Laporan</th>
-                            <th colspan="3">LHU</th>
-                            <th rowspan="2">Aksi</th>
+                            <th>No.</th>
+                            <th>Parameter</th>
+                            <th>Buku Mutu</th>
+                            <th>Hasil</th>
+                            <th>Laporan</th>
+                            <th>LHU</th>
+                            <th>Aksi</th>
                         </tr>
                     </thead>
-
-                    <!-- TOLONG PERBAIKI INI YA WAN -->
                     <tbody>
+                        <?php
+                        $no = 1;
+                        foreach ($result as $row) {
+                        ?>
+                            <tr>
+                                <td class="text-center"><?php echo $no++; ?></td>
+                                <td><?php echo htmlspecialchars($row['parameter']); ?></td>
+                                <td><?php echo htmlspecialchars($row['buku_mutu']); ?></td>
+                                <td><?php echo htmlspecialchars($row['hasil']); ?></td>
+                                <td class="text-center">
+                                    <?php if (!empty($row['file_laporan'])) : ?>
+                                        <a href="<?php echo htmlspecialchars($row['file_laporan']); ?>" target="_blank" class="btn btn-sm btn-info">
+                                            <i class="fas fa-file-alt"></i> Lihat
+                                        </a>
+                                    <?php else : ?>
+                                        <span class="text-danger">Tidak ada file</span>
+                                    <?php endif; ?>
+                                </td>
+                                <td class="text-center">
+                                    <?php if (!empty($row['file_lhu'])) : ?>
+                                        <a href="<?php echo htmlspecialchars($row['file_lhu']); ?>" target="_blank" class="btn btn-sm btn-info">
+                                            <i class="fas fa-file-alt"></i> Lihat
+                                        </a>
+                                    <?php else : ?>
+                                        <span class="text-danger">Tidak ada file</span>
+                                    <?php endif; ?>
+                                </td>
+                                <td class="text-center">
+                                    <a href="?page=edit_laporan&id=<?php echo $row['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
+                                    <a href="hapus_laporan.php?id=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus?');">Hapus</a>
+                                </td>
+                            </tr>
+                        <?php
+                        }
+                        ?>
                     </tbody>
                 </table>
             </div>
