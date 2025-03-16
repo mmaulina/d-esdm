@@ -98,11 +98,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <input type="text" name="fungsi" class="form-control" required>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Kapasitas Terpasang (kW)</label>
+                    <label class="form-label">Kapasitas Terpasang (MW)</label>
                     <input type="text" name="kapasitas_terpasang" class="form-control" required>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Daya Mampu Netto (kW)</label>
+                    <label class="form-label">Daya Mampu Netto (MW)</label>
                     <input type="text" name="daya_mampu_netto" class="form-control" required>
                 </div>
                 <div class="mb-3">

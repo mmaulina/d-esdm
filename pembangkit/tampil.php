@@ -36,18 +36,18 @@ try {
                 <table class="table table-bordered" style="table-layout: fixed; min-width: 1800px;">
                     <thead class="table-dark text-center align-middle">
                         <tr>
+                            <th rowspan="3">Nama Perusahaan</th>
                             <th colspan="4" style="min-width: 250px;">Data Pembangkit</th>
                             <th colspan="10" style="min-width: 1500px;">Data Teknis Pembangkit</th>
                             <th rowspan="3" style="min-width: 150px;">Aksi</th>
                         </tr>
                         <tr>
-                            <th rowspan="2">Nama Perusahaan</th>
                             <th rowspan="2">Alamat</th>
                             <th colspan="2">Koordinat Pembangkit</th>
                             <th rowspan="2">Jenis Pembangkit</th>
                             <th rowspan="2">Fungsi</th>
-                            <th rowspan="2">Kapasitas Terpasang (kW)</th>
-                            <th rowspan="2">Daya Mampu Netto (kW)</th>
+                            <th rowspan="2">Kapasitas Terpasang (MW)</th>
+                            <th rowspan="2">Daya Mampu Netto (MW)</th>
                             <th rowspan="2">Jumlah Unit</th>
                             <th rowspan="2">No. Unit</th>
                             <th rowspan="2">Tahun Operasi</th>
@@ -86,7 +86,9 @@ try {
                                 </tr>
                             <?php endforeach; ?>
                         <?php else: ?>
-                            <tr><td colspan='15' class='text-center'>Data tidak ditemukan</td></tr>
+                            <tr>
+                                <td colspan='15' class='text-center'>Data tidak ditemukan</td>
+                            </tr>
                         <?php endif; ?>
                     </tbody>
                 </table>

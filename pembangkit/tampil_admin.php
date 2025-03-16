@@ -7,18 +7,18 @@
                 <table class="table table-bordered" style="min-width: 1500px; white-space: nowrap;">
                     <thead class="table-dark text-center align-middle">
                         <tr>
+                            <th rowspan="3">Nama Perusahaan</th>
                             <th colspan="4">Data Pembangkit</th>
                             <th colspan="10">Data Teknis Pembangkit</th>
                             <th rowspan="3">Aksi</th>
                         </tr>
                         <tr>
-                            <th rowspan="2">Nama Perusahaan</th>
-                            <th rowspan="2">Alamat</th>
+                            <th rowspan="2">Alamat Pembangkit</th>
                             <th colspan="2">Koordinat Pembangkit</th>
                             <th rowspan="2">Jenis Pembangkit</th>
                             <th rowspan="2">Fungsi</th>
-                            <th rowspan="2">Kapasitas Terpasang (kW)</th>
-                            <th rowspan="2">Daya Mampu Netto (kW) *)</th>
+                            <th rowspan="2">Kapasitas Terpasang (MW)</th>
+                            <th rowspan="2">Daya Mampu Netto (MW) *)</th>
                             <th rowspan="2">Jumlah Unit</th>
                             <th rowspan="2">No. Unit</th>
                             <th rowspan="2">Tahun Operasi</th>
