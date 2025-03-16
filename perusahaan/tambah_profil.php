@@ -38,9 +38,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Validasi Kabupaten hanya dari daftar yang diperbolehkan
     $valid_kabupaten = [
-        "Balangan", "Banjar", "Barito Kuala", "Hulu Sungai Selatan", "Hulu Sungai Tengah",
-        "Hulu Sungai Utara", "Kotabaru", "Tabalong", "Tanah Bumbu", "Tanah Laut",
-        "Tapin", "Kota Banjarmasin", "Kota Banjarbaru"
+        "Balangan",
+        "Banjar",
+        "Barito Kuala",
+        "Hulu Sungai Selatan",
+        "Hulu Sungai Tengah",
+        "Hulu Sungai Utara",
+        "Kotabaru",
+        "Tabalong",
+        "Tanah Bumbu",
+        "Tanah Laut",
+        "Tapin",
+        "Kota Banjarmasin",
+        "Kota Banjarbaru"
     ];
     if (!in_array($kabupaten, $valid_kabupaten)) {
         echo "<script>alert('Kabupaten tidak valid!');</script>";
@@ -119,7 +129,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 <div class="form-group mb-2">
                     <label>Jenis Usaha</label>
-                    <input type="text" class="form-control" name="jenis_usaha" required maxlength="100">
+                    <select class="form-control" name="jenis_usaha" required>
+                        <option value="">-- Pilih Jenis Usaha --</option>
+                        <option value="Perkantoran">Perkantoran</option>
+                        <option value="Kesehatan dan Rumah Sakit">Kesehatan dan Rumah Sakit</option>
+                        <option value="Industri dan Manufaktur">Industri dan Manufaktur</option>
+                        <option value="Restoran">Restoran</option>
+                        <option value="Event Organizer">Event Organizer</option>
+                        <option value="Pendidikan">Pendidikan</option>
+                        <option value="Perdagangan">Perdagangan</option>
+                        <option value="Telekomunikasi dan Teknologi">Telekomunikasi dan Teknologi</option>
+                        <option value="Transportasi">Transportasi</option>
+                        <option value="Logistik">Logistik</option>
+                        <option value="Pertanian">Pertanian</option>
+                        <option value="Perikanan">Perikanan</option>
+                        <option value="Perternakan">Perternakan</option>
+                        <option value="Hiburan dan Wisata">Hiburan dan Wisata</option>
+                        <option value="Lingkungan">Lingkungan</option>
+                        <option value="Konstruksi dan Infrastruktur">Konstruksi dan Infrastruktur</option>
+                        <option value="Jasa">Jasa</option>
+                        <option value="Lainnya">Lainnya</option>
+                    </select>
                 </div>
 
                 <div class="form-group mb-2">

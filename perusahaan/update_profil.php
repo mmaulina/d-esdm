@@ -106,7 +106,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 <div class="form-group mb-2">
                     <label>Jenis Usaha</label>
-                    <input type="text" class="form-control" name="jenis_usaha" required value="<?php echo $profil['jenis_usaha']; ?>">
+                    <select class="form-control" name="jenis_usaha" required>
+                        <option value="<?php echo $profil['jenis_usaha']; ?>" selected><?php echo $profil['jenis_usaha']; ?></option>                        <option value="Perkantoran">Perkantoran</option>
+                        <option value="Kesehatan dan Rumah Sakit">Kesehatan dan Rumah Sakit</option>
+                        <option value="Industri dan Manufaktur">Industri dan Manufaktur</option>
+                        <option value="Restoran">Restoran</option>
+                        <option value="Event Organizer">Event Organizer</option>
+                        <option value="Pendidikan">Pendidikan</option>
+                        <option value="Perdagangan">Perdagangan</option>
+                        <option value="Telekomunikasi dan Teknologi">Telekomunikasi dan Teknologi</option>
+                        <option value="Transportasi">Transportasi</option>
+                        <option value="Logistik">Logistik</option>
+                        <option value="Pertanian">Pertanian</option>
+                        <option value="Perikanan">Perikanan</option>
+                        <option value="Perternakan">Perternakan</option>
+                        <option value="Hiburan dan Wisata">Hiburan dan Wisata</option>
+                        <option value="Lingkungan">Lingkungan</option>
+                        <option value="Konstruksi dan Infrastruktur">Konstruksi dan Infrastruktur</option>
+                        <option value="Jasa">Jasa</option>
+                        <option value="Lainnya">Lainnya</option>
+                    </select>
                 </div>
 
                 <div class="form-group mb-2">
