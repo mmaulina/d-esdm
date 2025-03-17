@@ -28,9 +28,6 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <hr>
     <div class="card shadow">
         <div class="card-body">
-            <div class="mb-3">
-                <a href="?page=tambah_laporan_persemester" class="btn btn-primary">Tambah Data</a>
-            </div>
             <div class="table-responsive" style="max-height: 500px; overflow-x: auto; overflow-y: auto;">
                 <table class="table table-bordered" style="min-width: 1200px; white-space: nowrap;">
                     <thead class="table-dark text-center align-middle">
@@ -92,8 +89,8 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 </td>
                                 <td><?php echo htmlspecialchars($row['keterangan']); ?></td>
                                 <td class="text-center">
-                                    <a href="?page=edit_laporan_persemester&id=<?php echo $row['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
-                                    <a href="?page=hapus_laporan_persemester&id=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus?');">Hapus</a>
+                                    <a href="?page=edit_admin_laporan_persemester&id=<?php echo $row['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
+                                    <a href="?page=hapus_admin_laporan_persemester&id=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus?');">Hapus</a>
                                 </td>
                             </tr>
                         <?php

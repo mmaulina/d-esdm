@@ -4,15 +4,12 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 include_once 'koneksi.php';
 
-// Pastikan pengguna sudah login
 if (!isset($_SESSION['id_user'])) {
     echo "<script>alert('Silakan login terlebih dahulu!'); window.location.href='login.php';</script>";
     exit;
 }
 
 $id_user = $_SESSION['id_user'];
-
-// Ambil ID laporan dari URL
 $id_laporan = isset($_GET['id']) ? $_GET['id'] : null;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -28,30 +25,48 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $buku_mutu = sanitizeInput($_POST['buku_mutu']);
     $hasil = sanitizeInput($_POST['hasil']);
 
-    // Handle file upload
     $file_laporan = uploadFile('file_laporan');
     $file_lhu = uploadFile('file_lhu');
 
-    // Update data ke database
     $updateSQL = "UPDATE laporan_semester SET 
-                    nama_perusahaan = :nama_perusahaan, 
-                    parameter = :parameter, 
-                    buku_mutu = :buku_mutu, 
-                    hasil = :hasil, 
-                    file_laporan = COALESCE(:file_laporan, file_laporan), 
-                    file_lhu = COALESCE(:file_lhu, file_lhu) 
-                  WHERE id = :id AND id_user = :id_user";
+    nama_perusahaan = :nama_perusahaan, 
+    parameter = :parameter, 
+    buku_mutu = :buku_mutu, 
+    hasil = :hasil, 
+    status = 'Diajukan',
+    keterangan = '-'";
+
+    // Hanya tambahkan file_laporan ke query jika ada file yang diunggah
+    if ($file_laporan !== null) {
+        $updateSQL .= ", file_laporan = :file_laporan";
+    }
+
+    // Hanya tambahkan file_lhu ke query jika ada file yang diunggah
+    if ($file_lhu !== null) {
+        $updateSQL .= ", file_lhu = :file_lhu";
+    }
+
+    $updateSQL .= " WHERE id = :id AND id_user = :id_user";
+
     $stmt = $db->prepare($updateSQL);
 
+    // Bind parameter yang wajib
     $stmt->bindParam(':id', $id_laporan);
     $stmt->bindParam(':id_user', $id_user);
     $stmt->bindParam(':nama_perusahaan', $nama_perusahaan);
     $stmt->bindParam(':parameter', $parameter);
     $stmt->bindParam(':buku_mutu', $buku_mutu);
     $stmt->bindParam(':hasil', $hasil);
-    $stmt->bindParam(':file_laporan', $file_laporan);
-    $stmt->bindParam(':file_lhu', $file_lhu);
-    
+
+    // Bind parameter hanya jika file diunggah
+    if ($file_laporan !== null) {
+        $stmt->bindParam(':file_laporan', $file_laporan);
+    }
+
+    if ($file_lhu !== null) {
+        $stmt->bindParam(':file_lhu', $file_lhu);
+    }
+
     if ($stmt->execute()) {
         $_SESSION['hasil'] = true;
         $_SESSION['pesan'] = "Berhasil Update Data";
@@ -59,10 +74,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION['hasil'] = false;
         $_SESSION['pesan'] = "Gagal Update Data";
     }
+
     echo "<meta http-equiv='refresh' content='0; url=?page=laporan_persemester'>";
+
 }
 
-// Ambil data laporan untuk ditampilkan di form
 $database = new Database();
 $db = $database->getConnection();
 $query = "SELECT * FROM laporan_semester WHERE id = :id AND id_user = :id_user";
@@ -80,12 +96,10 @@ if (!$laporan) {
 function uploadFile($input_name) {
     if (!empty($_FILES[$input_name]['name'])) {
         $target_dir = "uploads/";
-        $file_name = basename($_FILES[$input_name]["name"]);
-        $file_name = preg_replace("/[^a-zA-Z0-9.\-_]/", "", $file_name); // Hapus karakter berbahaya
-        $target_file = $target_dir . time() . "_" . $file_name; // Rename file untuk menghindari duplikasi
+        $file_name = preg_replace("/[^a-zA-Z0-9.\-_]/", "", basename($_FILES[$input_name]["name"]));
+        $target_file = $target_dir . time() . "_" . $file_name;
         $file_type = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
-
-        // Format file yang diizinkan (PDF, Word, Excel)
+        
         $allowed_types = ['pdf', 'doc', 'docx', 'xls', 'xlsx'];
         if (!in_array($file_type, $allowed_types)) {
             $_SESSION['pesan'] = "Format file tidak diizinkan!";

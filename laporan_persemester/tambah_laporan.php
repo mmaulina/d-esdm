@@ -24,6 +24,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $parameter = sanitizeInput($_POST['parameter']);
     $buku_mutu = sanitizeInput($_POST['buku_mutu']);
     $hasil = sanitizeInput($_POST['hasil']);
+    $status = 'diajukan'; // Status diisi otomatis
+    $keterangan = '-'; // Keterangan diisi otomatis
 
     // Ambil id_user dari session
     $id_user = $_SESSION['id_user'];
@@ -33,8 +35,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $file_lhu = uploadFile('file_lhu');
 
     // Simpan data ke database dengan id_user
-    $insertSQL = "INSERT INTO laporan_semester (id_user, nama_perusahaan, parameter, buku_mutu, hasil, file_laporan, file_lhu) 
-                  VALUES (:id_user, :nama_perusahaan, :parameter, :buku_mutu, :hasil, :file_laporan, :file_lhu)";
+    $insertSQL = "INSERT INTO laporan_semester (id_user, nama_perusahaan, parameter, buku_mutu, hasil, status, keterangan, file_laporan, file_lhu) 
+                  VALUES (:id_user, :nama_perusahaan, :parameter, :buku_mutu, :hasil, :status, :keterangan, :file_laporan, :file_lhu)";
     $stmt = $db->prepare($insertSQL);
 
     $stmt->bindParam(':id_user', $id_user);
@@ -42,6 +44,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bindParam(':parameter', $parameter);
     $stmt->bindParam(':buku_mutu', $buku_mutu);
     $stmt->bindParam(':hasil', $hasil);
+    $stmt->bindParam(':status', $status);
+    $stmt->bindParam(':keterangan', $keterangan);
     $stmt->bindParam(':file_laporan', $file_laporan);
     $stmt->bindParam(':file_lhu', $file_lhu);
     
@@ -91,7 +95,7 @@ function uploadFile($input_name) {
                     <input type="text" name="nama_perusahaan" class="form-control" required>
                 </div>
                 <div class="form-group mb-2">
-                    <label>parameter</label>
+                    <label>Parameter</label>
                     <select class="form-control" name="parameter" required>
                         <option value="">-- Pilih Parameter --</option>
                         <option value="SO2">SO2</option>

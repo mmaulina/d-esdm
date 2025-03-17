@@ -20,6 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($user && $password === $user['password']) { // Perbandingan langsung tanpa hashing
             $_SESSION['id_user'] = $user['id_user'];
             $_SESSION['username'] = $user['username'];
+            $_SESSION['role'] = $user['role'];
 
             header("Location: ../index.php");
             exit();

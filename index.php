@@ -37,6 +37,7 @@ include "template/header.php";
 </style>
 <link rel="stylesheet" href="assets/fa/css/all.min.css">
 <link rel="stylesheet" href="assets/css/bootstraps.min.css">
+<script src="assets/js/bootstrap.min.js"></script>
 <div class="container-fluid">
     <div class="row"> <!-- Mulai baris untuk sidebar dan konten -->
         
@@ -75,12 +76,17 @@ include "template/header.php";
                 case "tambah_laporan_persemester": include "laporan_persemester/tambah_laporan.php"; break;
                 case "edit_laporan_persemester": include "laporan_persemester/edit_laporan.php"; break;
                 case "hapus_laporan_persemester": include "laporan_persemester/hapus_laporan.php"; break;
+                case "laporan_persemester_admin": include "laporan_persemester/tampil_admin.php"; break;
 
                 // pengguna
                 case "pengguna": include "pengguna/tampil.php"; break;
                 case "pengguna_tambah_admin": include "pengguna/tambah_admin.php"; break;
                 case "pengguna_edit_admin": include "pengguna/edit_admin.php"; break;
                 case "pengguna_hapus_admin": include "pengguna/hapus_admin.php"; break;
+
+                //notiifikasi
+                case "notifikasi": include "notif.php"; break;
+
 
                 // default saat login berhasil
                 default: include "dashboard.php"; break;
