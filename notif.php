@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['terima_id'])) {
     $updateStmt->bindParam(':id', $id);
     $updateStmt->execute();
 
-    echo "<script>alert('Laporan diterima!'); window.location.href='?page=notif';</script>";
+    echo "<script>alert('Laporan diterima!'); window.location.href='?page=notifikasi';</script>";
 }
 
 // Proses penolakan dengan metode POST
@@ -43,7 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id']) && isset($_POST
     $updateStmt->bindParam(':keterangan', $keterangan);
     $updateStmt->execute();
 
-    echo "<script>alert('Laporan ditolak!'); window.location.href='?page=notif';</script>";
+    echo "<script>alert('Laporan ditolak!'); window.location.href='?page=notifikasi';</script>";
 }
 
 ?>
