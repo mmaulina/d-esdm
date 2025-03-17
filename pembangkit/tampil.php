@@ -38,7 +38,7 @@ try {
                         <tr>
                             <th rowspan="3">Nama Perusahaan</th>
                             <th colspan="4" style="min-width: 250px;">Data Pembangkit</th>
-                            <th colspan="10" style="min-width: 1500px;">Data Teknis Pembangkit</th>
+                            <th colspan="9" style="min-width: 1500px;">Data Teknis Pembangkit</th>
                             <th rowspan="3" style="min-width: 150px;">Aksi</th>
                         </tr>
                         <tr>

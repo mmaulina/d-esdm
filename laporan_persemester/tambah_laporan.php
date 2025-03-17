@@ -90,9 +90,16 @@ function uploadFile($input_name) {
                     <label class="form-label">Nama Perusahaan</label>
                     <input type="text" name="nama_perusahaan" class="form-control" required>
                 </div>
-                <div class="mb-3">
-                    <label class="form-label">Parameter</label>
-                    <input type="text" name="parameter" class="form-control" required>
+                <div class="form-group mb-2">
+                    <label>parameter</label>
+                    <select class="form-control" name="parameter" required>
+                        <option value="">-- Pilih Parameter --</option>
+                        <option value="SO2">SO2</option>
+                        <option value="HO2">HO2</option>
+                        <option value="TSP/DEBU">TSP/DEBU</option>
+                        <option value="CO">CO</option>
+                        <option value="kebisingan">Kebisingan</option>
+                    </select>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Buku Mutu</label>

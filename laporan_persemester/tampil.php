@@ -36,6 +36,7 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <thead class="table-dark text-center align-middle">
                         <tr>
                             <th>No.</th>
+                            <th>Nama Perusahaan</th>
                             <th>Parameter</th>
                             <th>Buku Mutu</th>
                             <th>Hasil</th>
@@ -51,6 +52,7 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         ?>
                             <tr>
                                 <td class="text-center"><?php echo $no++; ?></td>
+                                <td><?php echo htmlspecialchars($row['nama_perusahaan']); ?></td>
                                 <td><?php echo htmlspecialchars($row['parameter']); ?></td>
                                 <td><?php echo htmlspecialchars($row['buku_mutu']); ?></td>
                                 <td><?php echo htmlspecialchars($row['hasil']); ?></td>
@@ -73,8 +75,8 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     <?php endif; ?>
                                 </td>
                                 <td class="text-center">
-                                    <a href="?page=edit_laporan&id=<?php echo $row['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
-                                    <a href="hapus_laporan.php?id=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus?');">Hapus</a>
+                                    <a href="?page=edit_laporan_persemester&id=<?php echo $row['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
+                                    <a href="?page=hapus_laporan_persemester&id=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus?');">Hapus</a>
                                 </td>
                             </tr>
                         <?php
