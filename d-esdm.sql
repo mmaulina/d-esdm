@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 11, 2025 at 07:49 AM
+-- Generation Time: Mar 17, 2025 at 03:23 PM
 -- Server version: 10.4.18-MariaDB
 -- PHP Version: 7.4.16
 
@@ -24,26 +24,29 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `laporan_bulanan`
+-- Table structure for table `laporan_semester`
 --
 
-CREATE TABLE `laporan_bulanan` (
+CREATE TABLE `laporan_semester` (
   `id` int(11) NOT NULL,
   `id_user` int(11) NOT NULL,
-  `parameter` varchar(225) NOT NULL,
+  `nama_perusahaan` varchar(225) NOT NULL,
+  `parameter` enum('SO2','HO2','TSP/DEBU','CO','kebisingan') NOT NULL,
   `buku_mutu` varchar(225) NOT NULL,
   `hasil` varchar(100) NOT NULL,
   `file_laporan` varchar(225) NOT NULL,
-  `file_lhu` varchar(225) NOT NULL
+  `file_lhu` varchar(225) NOT NULL,
+  `status` enum('diterima','ditolak','diajukan','') NOT NULL,
+  `keterangan` varchar(225) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `laporan_bulanan`
+-- Dumping data for table `laporan_semester`
 --
 
-INSERT INTO `laporan_bulanan` (`id`, `id_user`, `parameter`, `buku_mutu`, `hasil`, `file_laporan`, `file_lhu`) VALUES
-(1, 1, 'aaaaaaaa', 'aaaaaaaaa', 'aaaaaaaaa', 'uploads/file_laporan_biasa-20250311-073909.pdf', 'uploads/file_LHU-20250311-073909.pdf'),
-(2, 1, 'bbbbbbb', 'bbbbbb', 'bbbbbb', 'uploads/file_laporan_bulanan-20250311-074614.xlsx', 'uploads/file_LHU-20250311-074614.docx');
+INSERT INTO `laporan_semester` (`id`, `id_user`, `nama_perusahaan`, `parameter`, `buku_mutu`, `hasil`, `file_laporan`, `file_lhu`, `status`, `keterangan`) VALUES
+(9, 1, 'irwan group', 'SO2', 'aaaaaaaaa', 'aaaaaaaaa', 'uploads/1742217160_template_surat_rekomendasi_rbb2025.docx', 'uploads/1742217160_PortofolioMuhammadIrwanFirdaus1.pdf', 'diajukan', '-'),
+(10, 1, 'irwan group', 'CO', 'aaaaaaaaa', 'baik', 'uploads/1742220771_PortofolioMuhammadIrwanFirdaus1_compressed.pdf', 'uploads/1742220771_Chapter1139.pdf', 'ditolak', 'admin lagi nggak mood');
 
 -- --------------------------------------------------------
 
@@ -91,13 +94,6 @@ CREATE TABLE `profil` (
   `email` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `profil`
---
-
-INSERT INTO `profil` (`id_profil`, `id_user`, `nama_perusahaan`, `kabupaten`, `alamat`, `jenis_usaha`, `no_telp_kantor`, `no_fax`, `tenaga_teknik`, `nama`, `no_hp`, `email`) VALUES
-(7, 1, 'irwan group', 'Kota Banjarbaru', 'komp.husindo raya', 'Tambang', '88247342027', '2134342124', 'irwan', 'MUHAMMAD IRWAN FIRDAUS', '88247342027', 'irwan@gmail.com');
-
 -- --------------------------------------------------------
 
 --
@@ -126,9 +122,9 @@ INSERT INTO `users` (`id_user`, `username`, `email`, `password`, `role`, `status
 --
 
 --
--- Indexes for table `laporan_bulanan`
+-- Indexes for table `laporan_semester`
 --
-ALTER TABLE `laporan_bulanan`
+ALTER TABLE `laporan_semester`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -154,16 +150,16 @@ ALTER TABLE `users`
 --
 
 --
--- AUTO_INCREMENT for table `laporan_bulanan`
+-- AUTO_INCREMENT for table `laporan_semester`
 --
-ALTER TABLE `laporan_bulanan`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+ALTER TABLE `laporan_semester`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `pembangkit`
 --
 ALTER TABLE `pembangkit`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `profil`
