@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>D-ESDM</title>
+    <title>SIP2 GATRIK</title>
 
     <!-- Bootstrap CSS -->
     <link href="assets/css/bootstrap.min.css" rel="stylesheet">
@@ -13,11 +13,12 @@
 </head>
 
 <body>
+<div class="content flex-grow-1">
 <nav class="navbar navbar-expand-lg navbar-dark px-3" style="background-color: #008B47;">
     <div class="container-fluid">
         <a class="navbar-brand d-flex align-items-center" href="#">
             <img src="assets/img/kalsel.png" alt="Logo Kalsel" class="me-2">
-            <strong>Dinas Energi dan Sumber Daya Mineral</strong>
+            <strong>SIP2 GATRIK</strong>
         </a>
 
         <!-- Tombol Toggle untuk Mobile -->
@@ -81,3 +82,4 @@
         </div>
     </div>
 </nav>
+</div>

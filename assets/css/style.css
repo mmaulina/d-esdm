@@ -2,15 +2,56 @@ html, body {
     height: 100vh; /* Maksimal setinggi layar */
 }
 
+.content {
+    margin-left: 250px; /* Harus sama dengan lebar sidebar */
+    width: calc(100% - 250px);
+}
+
+navbar {
+    width: 100%;
+}
+
 /* Mengatur ukuran logo agar pas di header */
 .navbar-brand img {
     height: 50px;
     width: auto;
 }
 
+.nav-link i {
+    font-size: 1.2em; /* Ukuran ikon */
+    vertical-align: middle; /* Penjajaran vertikal */
+}
+
+.nav-link {
+    display: flex; /* Menggunakan flexbox untuk penjajaran */
+    align-items: center; /* Penjajaran item di tengah */
+    padding: 10px; /* Padding untuk link */
+    transition: background-color 0.3s; /* Efek transisi */
+}
+
+.nav-link:hover {
+    background-color: #FFE066; /* Efek hover */
+}
+
 .sidebar {
     background-color: #F7F6BB ;
+    transition: width 0.3s; /* Transisi untuk lebar */
+    width: 250px; /* Lebar sidebar saat terbuka */
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    padding: 1rem;
 }
+
+.sidebar.collapsed {
+    width: 60px; /* Lebar saat ter-collapse */
+}
+
+.sidebar.collapsed .sidebar-text {
+    display: none; /* Sembunyikan teks saat ter-collapse */
+}
+
 .sidebar .nav-link {
     background-color: #FCDC2A ;
     color: #000 !important;  /* Agar teks terlihat */
@@ -30,6 +71,54 @@ html, body {
     font-weight: bold; /* Membuat teks lebih tebal */
     border-radius: 5px; /* Membuat sudut lebih halus */
 }
+
+.sidebar-header {
+    display: flex;
+    justify-content: space-between; /* Menyebar logo dan tombol */
+    align-items: center; /* Penjajaran vertikal */
+}
+
+.sidebar-header .logo {
+    width: 50px; /* Atur lebar logo */
+    height: auto; /* Tinggi otomatis untuk menjaga rasio */
+}
+
+.toggle-sidebar {
+    background: none; /* Menghilangkan latar belakang */
+    border: none; /* Menghilangkan border */
+    color: #000; /* Warna teks */
+    cursor: pointer; /* Menunjukkan bahwa ini dapat diklik */
+    z-index: 1000; /* Pastikan tombol berada di atas elemen lain */
+    position: relative; /* Pastikan tetap terlihat */
+}
+
+/* Styling card utama */
+.user-card {
+    background-color: #fff; /* Warna latar */
+    border: 1px solid #008B47; /* Border */
+    padding: 15px;
+    border-radius: 5px;
+}
+
+/* Styling ikon user */
+.user-icon {
+    width: 40px;
+    height: 40px;
+    background-color: #008B47; /* Warna ikon */
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%; /* Membuat lingkaran */
+}
+
+/* Styling teks username */
+.user-name {
+    color: #333;
+    font-weight: 600;
+    margin-left: 10px;
+}
+
 
 
 

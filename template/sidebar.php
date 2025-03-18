@@ -1,61 +1,22 @@
 <?php
 $currentPage = $_GET['page'] ?? 'dashboard'; // Ambil halaman dari URL
 ?>
-<style>
-    .nav-link i {
-        font-size: 1.2em; /* Ukuran ikon */
-        vertical-align: middle; /* Penjajaran vertikal */
-    }
-
-    .nav-link {
-        display: flex; /* Menggunakan flexbox untuk penjajaran */
-        align-items: center; /* Penjajaran item di tengah */
-        padding: 10px; /* Padding untuk link */
-        transition: background-color 0.3s; /* Efek transisi */
-    }
-
-    .nav-link:hover {
-        background-color: rgba(255, 255, 255, 0.1); /* Efek hover */
-    }
-
-    .sidebar-header {
-        display: flex;
-        justify-content: space-between; /* Menyebar logo dan tombol */
-        align-items: center; /* Penjajaran vertikal */
-    }
-
-    .sidebar-header .logo {
-        width: 50px; /* Atur lebar logo */
-        height: auto; /* Tinggi otomatis untuk menjaga rasio */
-    }
-
-    .toggle-sidebar {
-        background: none; /* Menghilangkan latar belakang */
-        border: none; /* Menghilangkan border */
-        color: white; /* Warna teks */
-        cursor: pointer; /* Menunjukkan bahwa ini dapat diklik */
-    }
-
-    .sidebar {
-        transition: width 0.3s; /* Transisi untuk lebar */
-        width: 250px; /* Lebar sidebar saat terbuka */
-    }
-
-    .sidebar.collapsed {
-        width: 60px; /* Lebar saat ter-collapse */
-    }
-
-    .sidebar.collapsed .sidebar-text {
-        display: none; /* Sembunyikan teks saat ter-collapse */
-    }
-</style>
-
-<aside class="col-md-3 col-lg-2 sidebar p-3 vh-100 d-flex flex-column" id="sidebar">
-    <div class="sidebar-header mb-4">
-        <button class="toggle-sidebar" id="toggleSidebar">
-            <i class="fas fa-bars"></i> <!-- Ikon untuk men-toggle sidebar -->
+<aside class="sidebar col-md-3 col-lg-2 sidebar p-3 vh-100 d-flex flex-column" id="sidebar">
+    <div class="sidebar-header d-flex align-items-center gap-2 mb-4">
+        <button class="btn btn-dark toggle-sidebar" id="toggleSidebar">
+            <i class="fas fa-bars"></i>
         </button>
     </div>
+
+    <div class="user-card">
+        <div class="d-flex align-items-center">
+            <div class="user-icon">
+                <i class="fas fa-user fs-5"></i>
+            </div>
+            <span class="user-name"><?php echo $_SESSION['username']; ?></span>
+        </div>
+    </div>
+
     <ul class="nav flex-column flex-grow-1 mt-2">
         <li class="nav-item">
             <a class="nav-link <?= ($currentPage == 'dashboard') ? 'active' : ''; ?>" href="?page=dashboard">
@@ -120,39 +81,39 @@ $currentPage = $_GET['page'] ?? 'dashboard'; // Ambil halaman dari URL
 </aside>
 
 <script>
-// Function to check window size and collapse sidebar if necessary
-function checkWindowSize() {
-    var sidebar = document.getElementById('sidebar');
-    if (window.innerWidth < 768) { // Adjust the threshold as needed
-        sidebar.classList.add('collapsed'); // Collapse the sidebar
-        localStorage.setItem('sidebarCollapsed', 'true'); // Update local storage
-    } else {
-        // If the sidebar is not collapsed, ensure it is expanded
-        if (localStorage.getItem('sidebarCollapsed') !== 'true') {
-            sidebar.classList.remove('collapsed'); // Expand the sidebar
+    // Function to check window size and collapse sidebar if necessary
+    function checkWindowSize() {
+        var sidebar = document.getElementById('sidebar');
+        if (window.innerWidth < 768) { // Adjust the threshold as needed
+            sidebar.classList.add('collapsed'); // Collapse the sidebar
+            localStorage.setItem('sidebarCollapsed', 'true'); // Update local storage
+        } else {
+            // If the sidebar is not collapsed, ensure it is expanded
+            if (localStorage.getItem('sidebarCollapsed') !== 'true') {
+                sidebar.classList.remove('collapsed'); // Expand the sidebar
+            }
         }
     }
-}
 
-// Check local storage for sidebar state on page load
-if (localStorage.getItem('sidebarCollapsed') === 'true') {
-    document.getElementById('sidebar').classList.add('collapsed');
-}
+    // Check local storage for sidebar state on page load
+    if (localStorage.getItem('sidebarCollapsed') === 'true') {
+        document.getElementById('sidebar').classList.add('collapsed');
+    }
 
-// Event listener for the toggle button
-document.getElementById('toggleSidebar').addEventListener('click', function() {
-    var sidebar = document.getElementById('sidebar');
-    sidebar.classList.toggle('collapsed'); // Toggle kelas collapsed
+    // Event listener for the toggle button
+    document.getElementById('toggleSidebar').addEventListener('click', function() {
+        var sidebar = document.getElementById('sidebar');
+        sidebar.classList.toggle('collapsed'); // Toggle kelas collapsed
 
-    // Update local storage
-    localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
-});
+        // Update local storage
+        localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
+    });
 
-// Event listener for window resize
-window.addEventListener('resize', function() {
-    checkWindowSize(); // Call the function to check window size on resize
-});
+    // Event listener for window resize
+    window.addEventListener('resize', function() {
+        checkWindowSize(); // Call the function to check window size on resize
+    });
 
-// Initial check on page load
-checkWindowSize();
+    // Initial check on page load
+    checkWindowSize();
 </script>
