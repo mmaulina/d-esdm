@@ -51,22 +51,22 @@ $currentPage = $_GET['page'] ?? 'dashboard'; // Ambil halaman dari URL
                 <ul class="nav flex-column ms-3">
                     <li class="nav-item">
                         <a class="nav-link <?= ($currentPage == 'laporan_perbulan') ? 'active' : ''; ?>" href="?page=laporan_perbulan">
-                            <i class="fas fa-calendar-alt me-2"></i> <span class="sidebar-text">Laporan Perbulan</span>
+                            <i class="fas fa-calendar-alt me-2"></i> <span class="sidebar-text">Pelaporan Bulanan</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link <?= ($currentPage == 'laporan_perbulan_admin') ? 'active' : ''; ?>" href="?page=laporan_perbulan_admin">
-                            <i class="fas fa-calendar-check me-2"></i> <span class="sidebar-text">Laporan Perbulan (A)</span>
+                            <i class="fas fa-calendar-check me-2"></i> <span class="sidebar-text">Pelaporan Bulanan (A)</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link <?= ($currentPage == 'laporan_persemester') ? 'active' : ''; ?>" href="?page=laporan_persemester">
-                            <i class="fas fa-calendar me-2"></i> <span class="sidebar-text">Laporan Persemester</span>
+                            <i class="fas fa-calendar me-2"></i> <span class="sidebar-text">Pelaporan Semester</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link <?= ($currentPage == 'laporan_persemester_admin') ? 'active' : ''; ?>" href="?page=laporan_persemester_admin">
-                            <i class="fas fa-calendar-alt me-2"></i> <span class="sidebar-text">Laporan Persemester (A)</span>
+                            <i class="fas fa-calendar-alt me-2"></i> <span class="sidebar-text">Pelaporan Semester (A)</span>
                         </a>
                     </li>
                 </ul>

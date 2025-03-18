@@ -24,7 +24,7 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <div class="container mt-4">
-    <h3 class="text-center mb-3">Laporan Persemester</h3>
+    <h3 class="text-center mb-3">Pelaporan Semester</h3>
     <hr>
     <div class="card shadow">
         <div class="card-body">

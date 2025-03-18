@@ -85,7 +85,7 @@ function uploadFile($input_name) {
 ?>
 
 <div class="container mt-4">
-    <h3 class="text-center mb-3">Tambah Laporan Semester</h3>
+    <h3 class="text-center mb-3">Tambah Pelaporan Semester</h3>
     <hr>
     <div class="card shadow">
         <div class="card-body">
