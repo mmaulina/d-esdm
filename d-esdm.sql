@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 17, 2025 at 03:23 PM
--- Server version: 10.4.18-MariaDB
--- PHP Version: 7.4.16
+-- Waktu pembuatan: 18 Mar 2025 pada 19.05
+-- Versi server: 10.4.28-MariaDB
+-- Versi PHP: 8.0.28
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,7 +24,27 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `laporan_semester`
+-- Struktur dari tabel `laporan_bulanan`
+--
+
+CREATE TABLE `laporan_bulanan` (
+  `id` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL,
+  `bulan` enum('Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember') NOT NULL,
+  `nama_perusahaan` varchar(200) NOT NULL,
+  `volume_bb` int(10) NOT NULL,
+  `produksi_sendiri` int(20) NOT NULL,
+  `pemb_sumber_lain` int(20) NOT NULL,
+  `susut_jaringan` int(20) NOT NULL,
+  `penj_ke_pelanggan` int(20) NOT NULL,
+  `penj_ke_pln` int(20) NOT NULL,
+  `pemakaian_sendiri` int(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `laporan_semester`
 --
 
 CREATE TABLE `laporan_semester` (
@@ -38,10 +58,10 @@ CREATE TABLE `laporan_semester` (
   `file_lhu` varchar(225) NOT NULL,
   `status` enum('diterima','ditolak','diajukan','') NOT NULL,
   `keterangan` varchar(225) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `laporan_semester`
+-- Dumping data untuk tabel `laporan_semester`
 --
 
 INSERT INTO `laporan_semester` (`id`, `id_user`, `nama_perusahaan`, `parameter`, `buku_mutu`, `hasil`, `file_laporan`, `file_lhu`, `status`, `keterangan`) VALUES
@@ -51,7 +71,7 @@ INSERT INTO `laporan_semester` (`id`, `id_user`, `nama_perusahaan`, `parameter`,
 -- --------------------------------------------------------
 
 --
--- Table structure for table `pembangkit`
+-- Struktur dari tabel `pembangkit`
 --
 
 CREATE TABLE `pembangkit` (
@@ -71,12 +91,12 @@ CREATE TABLE `pembangkit` (
   `status_operasi` varchar(100) NOT NULL,
   `bahan_bakar_jenis` varchar(100) NOT NULL,
   `bahan_bakar_satuan` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `profil`
+-- Struktur dari tabel `profil`
 --
 
 CREATE TABLE `profil` (
@@ -92,12 +112,12 @@ CREATE TABLE `profil` (
   `nama` varchar(100) NOT NULL,
   `no_hp` varchar(15) NOT NULL,
   `email` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `users`
+-- Struktur dari tabel `users`
 --
 
 CREATE TABLE `users` (
@@ -107,71 +127,84 @@ CREATE TABLE `users` (
   `password` varchar(255) NOT NULL,
   `role` enum('admin','umum') NOT NULL,
   `status` enum('diajukan','diverifikasi','ditolak') NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `users`
+-- Dumping data untuk tabel `users`
 --
 
 INSERT INTO `users` (`id_user`, `username`, `email`, `password`, `role`, `status`) VALUES
 (1, 'admin', 'admin@gmail.com', 'admin', 'admin', 'diverifikasi'),
-(2, 'irwan', 'irwanfirdaus508@gmail.com', 'irwan', 'admin', 'diverifikasi');
+(2, 'irwan', 'irwanfirdaus508@gmail.com', 'irwan', 'admin', 'diverifikasi'),
+(4, 'maya', 'mayamaulina16@gmail.com', 'maya123', 'admin', 'diverifikasi');
 
 --
 -- Indexes for dumped tables
 --
 
 --
--- Indexes for table `laporan_semester`
+-- Indeks untuk tabel `laporan_bulanan`
+--
+ALTER TABLE `laporan_bulanan`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indeks untuk tabel `laporan_semester`
 --
 ALTER TABLE `laporan_semester`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `pembangkit`
+-- Indeks untuk tabel `pembangkit`
 --
 ALTER TABLE `pembangkit`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `profil`
+-- Indeks untuk tabel `profil`
 --
 ALTER TABLE `profil`
   ADD PRIMARY KEY (`id_profil`);
 
 --
--- Indexes for table `users`
+-- Indeks untuk tabel `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id_user`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT untuk tabel yang dibuang
 --
 
 --
--- AUTO_INCREMENT for table `laporan_semester`
+-- AUTO_INCREMENT untuk tabel `laporan_bulanan`
+--
+ALTER TABLE `laporan_bulanan`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT untuk tabel `laporan_semester`
 --
 ALTER TABLE `laporan_semester`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
--- AUTO_INCREMENT for table `pembangkit`
+-- AUTO_INCREMENT untuk tabel `pembangkit`
 --
 ALTER TABLE `pembangkit`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
--- AUTO_INCREMENT for table `profil`
+-- AUTO_INCREMENT untuk tabel `profil`
 --
 ALTER TABLE `profil`
   MODIFY `id_profil` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
--- AUTO_INCREMENT for table `users`
+-- AUTO_INCREMENT untuk tabel `users`
 --
 ALTER TABLE `users`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
