@@ -2,6 +2,7 @@ html, body {
     height: 100vh; /* Maksimal setinggi layar */
 }
 
+/* HEADER */
 .content {
     margin-left: 250px; /* Harus sama dengan lebar sidebar */
     width: calc(100% - 250px);
@@ -33,10 +34,11 @@ navbar {
     background-color: #FFE066; /* Efek hover */
 }
 
+/* SIDEBAR */
 .sidebar {
     background-color: #F7F6BB ;
     transition: width 0.3s; /* Transisi untuk lebar */
-    width: 250px; /* Lebar sidebar saat terbuka */
+    width: 300px; /* Lebar sidebar saat terbuka */
     position: fixed;
     top: 0;
     left: 0;
@@ -92,32 +94,54 @@ navbar {
     position: relative; /* Pastikan tetap terlihat */
 }
 
-/* Styling card utama */
+/* User card styling */
 .user-card {
-    background-color: #fff; /* Warna latar */
-    border: 1px solid #008B47; /* Border */
-    padding: 15px;
-    border-radius: 5px;
+    background-color: #fff;
+    border: 1px solid #008B47;
+    padding: 10px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease-in-out;
 }
 
-/* Styling ikon user */
+/* User icon */
 .user-icon {
     width: 40px;
     height: 40px;
-    background-color: #008B47; /* Warna ikon */
+    background-color: #008B47;
     color: white;
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 50%; /* Membuat lingkaran */
+    border-radius: 50%;
+    transition: all 0.3s ease-in-out;
 }
 
-/* Styling teks username */
+/* Username text */
 .user-name {
     color: #333;
     font-weight: 600;
     margin-left: 10px;
+    transition: opacity 0.3s ease-in-out;
 }
+
+/* Jika sidebar dalam keadaan collapsed */
+.sidebar.collapsed .user-card {
+    background: none;
+    border: none;
+    padding: 0;
+}
+
+.sidebar.collapsed .user-name {
+    display: none; /* Sembunyikan nama */
+}
+
+.sidebar.collapsed .user-icon {
+    width: 40px;
+    height: 40px;
+}
+
 
 
 
