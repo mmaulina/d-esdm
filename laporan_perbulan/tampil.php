@@ -16,7 +16,7 @@ $id_user = $_SESSION['id_user'];
 $database = new Database();
 $conn = $database->getConnection();
 
-$query = "SELECT * FROM laporan_semester WHERE id_user = :id_user";
+$query = "SELECT * FROM laporan_bulanan WHERE id_user = :id_user";
 $stmt = $conn->prepare($query);
 $stmt->bindParam(":id_user", $id_user, PDO::PARAM_INT);
 $stmt->execute();
@@ -59,10 +59,9 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         foreach ($result as $row) {
                         ?>
                             <tr>
-                                <td class="text-center"><?php $no++; ?></td>
+                                <td class="text-center"><?php echo $no++; ?></td>
                                 <td><?php echo htmlspecialchars($row['bulan']); ?> </td>
                                 <td><?php echo htmlspecialchars($row['nama_perusahaan']); ?> </td>
-                                <td><?php echo htmlspecialchars($row['alamat']); ?> </td>
                                 <td><?php echo htmlspecialchars($row['volume_bb']); ?> </td>
                                 <td><?php echo htmlspecialchars($row['produksi_sendiri']); ?> </td>
                                 <td><?php echo htmlspecialchars($row['pemb_sumber_lain']); ?> </td>
@@ -71,8 +70,8 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <td><?php echo htmlspecialchars($row['penj_ke_pln']); ?> </td>
                                 <td><?php echo htmlspecialchars($row['pemakaian_sendiri']); ?> </td>
                                 <td class="text-center">
-                                    <a href="?page=edit_laporan_persemester&id=<?php echo $row['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
-                                    <a href="?page=hapus_laporan_persemester&id=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus?');">Hapus</a>
+                                    <a href="?page=edit_laporan_perbulan&id=<?php echo $row['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
+                                    <a href="?page=hapus_laporan_perbulan&id=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus?');">Hapus</a>
                                 </td>
                             </tr>
                         <?php

@@ -10,15 +10,13 @@ if (!isset($_SESSION['id_user'])) {
     exit;
 }
 
-$id_user = $_SESSION['id_user'];
 
 // Buat koneksi menggunakan PDO
 $database = new Database();
 $conn = $database->getConnection();
 
-$query = "SELECT * FROM laporan_semester WHERE id_user = :id_user";
+$query = "SELECT * FROM laporan_semester";
 $stmt = $conn->prepare($query);
-$stmt->bindParam(":id_user", $id_user, PDO::PARAM_INT);
 $stmt->execute();
 $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>

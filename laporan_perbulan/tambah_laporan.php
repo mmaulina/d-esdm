@@ -20,23 +20,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         return htmlspecialchars(strip_tags(trim($input)));
     }
 
+    function checkEmpty($input) {
+        return empty($input) ? "-" : $input;
+    }
+
     $bulan = sanitizeInput($_POST['bulan']);
     $nama_perusahaan = sanitizeInput($_POST['nama_perusahaan']);
-    $volume_bb = sanitizeInput($_POST['volume_bb']);
-    $produksi_sendiri = sanitizeInput($_POST['produksi_sendiri']);
-    $pemb_sumber_lain = sanitizeInput($_POST['pemb_sumber_lain']);
-    $susut_jaringan = sanitizeInput($_POST['susut_jaringan']);
-    $penj_ke_pelanggan = sanitizeInput($_POST['penj_ke_pelanggan']);
-    $penj_ke_pln = sanitizeInput($_POST['penj_ke_pln']);
-    $pemakaian_sendiri = sanitizeInput($_POST['pemakaian_sendiri']);
+    $volume_bb = checkEmpty(sanitizeInput($_POST['volume_bb']));
+    $produksi_sendiri = checkEmpty(sanitizeInput($_POST['produksi_sendiri']));
+    $pemb_sumber_lain = checkEmpty(sanitizeInput($_POST['pemb_sumber_lain']));
+    $susut_jaringan = checkEmpty(sanitizeInput($_POST['susut_jaringan']));
+    $penj_ke_pelanggan = checkEmpty(sanitizeInput($_POST['penj_ke_pelanggan']));
+    $penj_ke_pln = checkEmpty(sanitizeInput($_POST['penj_ke_pln']));
+    $pemakaian_sendiri = checkEmpty(sanitizeInput($_POST['pemakaian_sendiri']));
 
-    // Ambil id_user dari session
-    $id_user = $_SESSION['id_user'];
-
-
-    // Simpan data ke database dengan id_user
     $insertSQL = "INSERT INTO laporan_bulanan (id_user, bulan, nama_perusahaan, volume_bb, produksi_sendiri, pemb_sumber_lain, susut_jaringan, penj_ke_pelanggan, penj_ke_pln, pemakaian_sendiri) 
-                  VALUES (:id_user, :bulan, :parameter, :volume_bb, :produksi_sendiri, :pemb_sumber_lain, :susut_jaringan, :penj_ke_pelanggan, :penj_ke_pln, :pemakaian_sendiri)";
+                  VALUES (:id_user, :bulan, :nama_perusahaan, :volume_bb, :produksi_sendiri, :pemb_sumber_lain, :susut_jaringan, :penj_ke_pelanggan, :penj_ke_pln, :pemakaian_sendiri)";
     $stmt = $db->prepare($insertSQL);
 
     $stmt->bindParam(':id_user', $id_user);
@@ -57,9 +56,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION['hasil'] = false;
         $_SESSION['pesan'] = "Gagal Simpan Data";
     }
-    echo "<meta http-equiv='refresh' content='0; url=?page=laporan_persemester'>";
+    echo "<meta http-equiv='refresh' content='0; url=?page=laporan_perbulan'>";
 }
 ?>
+
 
 <div class="container mt-4">
     <h3 class="text-center mb-3">Tambah Pelaporan Bulanan</h3>
@@ -99,19 +99,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Pembelian Sumber Lain (bila ada) (kWh)</label>
-                    <input type="number" name="pemb_sumber_lain" class="form-control" required>
+                    <input type="number" name="pemb_sumber_lain" class="form-control">
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Susut jaringan (bila ada) (kWh)</label>
-                    <input type="number" name="susut_jaringan" class="form-control" required>
+                    <input type="number" name="susut_jaringan" class="form-control">
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Penjualan ke Pelanggan (bila ada) (kWh)</label>
-                    <input type="number" name="penj_ke_pelanggan" class="form-control" required>
+                    <input type="number" name="penj_ke_pelanggan" class="form-control">
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Penjualan ke PLN (bila ada) (kWh)</label>
-                    <input type="number" name="penj_ke_pln" class="form-control" required>
+                    <input type="number" name="penj_ke_pln" class="form-control">
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Pemakaian Sendiri (kWh)</label>

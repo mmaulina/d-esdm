@@ -77,6 +77,7 @@ include "template/header.php";
                 case "edit_laporan_persemester": include "laporan_persemester/edit_laporan.php"; break;
                 case "hapus_laporan_persemester": include "laporan_persemester/hapus_laporan.php"; break;
                 case "laporan_persemester_admin": include "laporan_persemester/tampil_admin.php"; break;
+                case "edit_admin_laporan_persemester": include "laporan_persemester/tampil_admin.php"; break;
 
                 // pengguna
                 case "pengguna": include "pengguna/tampil.php"; break;
