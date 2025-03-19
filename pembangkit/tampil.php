@@ -5,32 +5,44 @@ if (session_status() == PHP_SESSION_NONE) {
 include 'koneksi.php'; // Pastikan file koneksi ke database sudah disertakan
 
 // Pastikan pengguna sudah login
-if (!isset($_SESSION['id_user'])) {
+if (!isset($_SESSION['id_user']) || !isset($_SESSION['role'])) {
     echo "<script>alert('Silakan login terlebih dahulu!'); window.location.href='login.php';</script>";
     exit;
 }
 
 $id_user = $_SESSION['id_user']; // Ambil id_user dari sesi
+$role = $_SESSION['role']; // Ambil peran pengguna dari sesi
 
 try {
     $db = new Database();
     $conn = $db->getConnection();
-    $stmt = $conn->prepare("SELECT * FROM pembangkit WHERE id_user = :id_user");
-    $stmt->bindParam(':id_user', $id_user, PDO::PARAM_INT);
+
+    if ($role === 'admin') {
+        // Admin melihat semua data
+        $stmt = $conn->prepare("SELECT * FROM pembangkit");
+    } else {
+        // Role umum hanya melihat data miliknya
+        $stmt = $conn->prepare("SELECT * FROM pembangkit WHERE id_user = :id_user");
+        $stmt->bindParam(':id_user', $id_user, PDO::PARAM_INT);
+    }
+    
     $stmt->execute();
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     die("Error: " . $e->getMessage());
 }
 ?>
+
 <div class="container mt-4">
     <h3 class="text-center mb-3">Data Pembangkit dan Data Teknis Pembangkit</h3>
     <hr>
     <div class="card shadow">
         <div class="card-body">
-            <div class="mb-3">
-                <a href='?page=pembangkit_tambah&id_user=<?= $id_user ?>' class='btn btn-primary'>Tambah Data</a>
-            </div>
+            <?php if ($role !== 'admin'): // Tombol Tambah hanya untuk umum ?>
+                <div class="mb-3">
+                    <a href='?page=pembangkit_tambah&id_user=<?= $id_user ?>' class='btn btn-primary'>Tambah Data</a>
+                </div>
+            <?php endif; ?>
 
             <div class="table-responsive" style="max-height: 500px; overflow-x: auto; overflow-y: auto;">
                 <table class="table table-bordered" style="table-layout: fixed; min-width: 1800px;">

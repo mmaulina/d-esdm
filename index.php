@@ -59,7 +59,7 @@ include "template/header.php";
                 case "delete_profil_admin": include "perusahaan/delete_profil_admin.php"; break;
 
                 // data pembangkit dan data teknis pembangkit
-                case "pembangkit_admin": include "pembangkit/tampil_admin.php"; break;
+                case "pembangkit_admin": include "pembangkit/tampil.php"; break;
                 case "pembangkit": include "pembangkit/tampil.php"; break;
                 case "pembangkit_tambah": include "pembangkit/tambah.php"; break;
                 case "pembangkit_edit": include "pembangkit/update.php"; break;

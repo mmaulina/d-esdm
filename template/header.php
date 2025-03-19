@@ -70,7 +70,11 @@
                             <?php endif; ?>
                         </a>
                     </li>
-                    
+                    <li class="nav-item">
+                    <a href="?page=pengguna" class="nav-link position-relative me-3">
+                                <i class="fas fa-table fs-6"> Pengguna</i>
+                    </a>
+                    </li>
                     <li class="nav-item dropdown d-flex align-items-center"> <!-- Tambahkan d-flex align-items-center -->
                     <!-- Dropdown User -->
                     <a class="nav-link dropdown-toggle" href="#" id="drop2" role="button" data-bs-toggle="dropdown" 
