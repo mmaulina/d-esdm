@@ -67,7 +67,10 @@ include "template/header.php";
 
                 // laporan perbulan
                 case "laporan_perbulan": include "laporan_perbulan/tampil.php"; break;
+                case "laporan_perbulan_admin": include "laporan_perbulan/tampil.php"; break;
                 case "tambah_laporan_perbulan": include "laporan_perbulan/tambah_laporan.php"; break;
+                case "edit_laporan_perbulan": include "laporan_perbulan/update.php"; break;
+                case "hapus_laporan_perbulan": include "laporan_perbulan/hapus.php"; break;
                 
                 // laporan persemester
                 case "laporan_persemester": include "laporan_persemester/tampil.php"; break;

@@ -11,14 +11,23 @@ if (!isset($_SESSION['id_user'])) {
 }
 
 $id_user = $_SESSION['id_user'];
+$role = $_SESSION['role']; // Pastikan role sudah tersimpan di session
 
 // Buat koneksi menggunakan PDO
 $database = new Database();
 $conn = $database->getConnection();
 
-$query = "SELECT * FROM laporan_bulanan WHERE id_user = :id_user";
-$stmt = $conn->prepare($query);
-$stmt->bindParam(":id_user", $id_user, PDO::PARAM_INT);
+if ($role == 'admin') {
+    // Admin melihat semua data
+    $query = "SELECT * FROM laporan_bulanan";
+    $stmt = $conn->prepare($query);
+} else {
+    // User umum hanya melihat data mereka sendiri
+    $query = "SELECT * FROM laporan_bulanan WHERE id_user = :id_user";
+    $stmt = $conn->prepare($query);
+    $stmt->bindParam(":id_user", $id_user, PDO::PARAM_INT);
+}
+
 $stmt->execute();
 $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -28,9 +37,12 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <hr>
     <div class="card shadow">
         <div class="card-body">
-            <div class="mb-3">
-                <a href="?page=tambah_laporan_perbulan" class="btn btn-primary">Tambah Data</a>
-            </div>
+            <?php if ($role != 'admin') : ?>
+                <div class="mb-3">
+                    <a href="?page=tambah_laporan_perbulan" class="btn btn-primary">Tambah Data</a>
+                </div>
+            <?php endif; ?>
+
             <div class="table-responsive" style="max-height: 500px; overflow-x: auto; overflow-y: auto;">
                 <table class="table table-bordered" style="min-width: 1200px; white-space: nowrap;">
                     <thead class="table-dark text-center align-middle">
