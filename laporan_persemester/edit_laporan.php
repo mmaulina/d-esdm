@@ -9,7 +9,7 @@ if (!isset($_SESSION['id_user'])) {
     exit;
 }
 
-$id_user = $_SESSION['id_user'];
+
 $id_laporan = isset($_GET['id']) ? $_GET['id'] : null;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -46,13 +46,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $updateSQL .= ", file_lhu = :file_lhu";
     }
 
-    $updateSQL .= " WHERE id = :id AND id_user = :id_user";
+    $updateSQL .= " WHERE id = :id ";
 
     $stmt = $db->prepare($updateSQL);
 
     // Bind parameter yang wajib
     $stmt->bindParam(':id', $id_laporan);
-    $stmt->bindParam(':id_user', $id_user);
     $stmt->bindParam(':nama_perusahaan', $nama_perusahaan);
     $stmt->bindParam(':parameter', $parameter);
     $stmt->bindParam(':buku_mutu', $buku_mutu);
@@ -75,21 +74,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION['pesan'] = "Gagal Update Data";
     }
 
-    echo "<meta http-equiv='refresh' content='0; url=?page=laporan_persemester'>";
+    echo "<meta http-equiv='refresh' content='0; url=?page=laporan_persemester_admin'>";
 
 }
 
 $database = new Database();
 $db = $database->getConnection();
-$query = "SELECT * FROM laporan_semester WHERE id = :id AND id_user = :id_user";
+$query = "SELECT * FROM laporan_semester WHERE id = :id";
 $stmt = $db->prepare($query);
 $stmt->bindParam(':id', $id_laporan);
-$stmt->bindParam(':id_user', $id_user);
 $stmt->execute();
 $laporan = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$laporan) {
-    echo "<script>alert('Data tidak ditemukan!'); window.location.href='?page=laporan_persemester';</script>";
+    echo "<script>alert('Data tidak ditemukan!'); window.location.href='?page=laporan_persemester_admin';</script>";
     exit;
 }
 
@@ -160,7 +158,7 @@ function uploadFile($input_name) {
                     <?php endif; ?>
                 </div>
                 <button type="submit" class="btn btn-primary">Update</button>
-                <a href="?page=laporan_persemester" class="btn btn-secondary">Kembali</a>
+                <a href="?page=laporan_persemester_admin" class="btn btn-secondary">Kembali</a>
             </form>
         </div>
     </div>

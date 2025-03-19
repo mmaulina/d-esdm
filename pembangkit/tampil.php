@@ -93,7 +93,7 @@ try {
                                     <td><?= htmlspecialchars($row['bahan_bakar_satuan']) ?></td>
                                     <td>
                                         <a href='?page=pembangkit_edit&id=<?= $row['id'] ?>' class='btn btn-sm btn-warning'>Edit</a>
-                                        <a href='?page=pembangkit_hapus_admin&id=<?= $row['id'] ?>' class='btn btn-sm btn-danger' onclick='return confirm("Hapus data ini?")'>Hapus</a>
+                                        <a href='?page=pembangkit_hapus&id=<?= $row['id'] ?>' class='btn btn-sm btn-danger' onclick='return confirm("Hapus data ini?")'>Hapus</a>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>

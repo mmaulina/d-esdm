@@ -63,8 +63,6 @@ include "template/header.php";
                 case "pembangkit": include "pembangkit/tampil.php"; break;
                 case "pembangkit_tambah": include "pembangkit/tambah.php"; break;
                 case "pembangkit_edit": include "pembangkit/update.php"; break;
-                case "pembangkit_edit_admin": include "pembangkit/update_admin.php"; break;
-                case "pembangkit_hapus_admin": include "pembangkit/delete_admin.php"; break;
                 case "pembangkit_hapus": include "pembangkit/delete.php"; break;
 
                 // laporan perbulan
@@ -76,8 +74,7 @@ include "template/header.php";
                 case "tambah_laporan_persemester": include "laporan_persemester/tambah_laporan.php"; break;
                 case "edit_laporan_persemester": include "laporan_persemester/edit_laporan.php"; break;
                 case "hapus_laporan_persemester": include "laporan_persemester/hapus_laporan.php"; break;
-                case "laporan_persemester_admin": include "laporan_persemester/tampil_admin.php"; break;
-                case "edit_admin_laporan_persemester": include "laporan_persemester/tampil_admin.php"; break;
+                case "laporan_persemester_admin": include "laporan_persemester/tampil.php"; break;
 
                 // pengguna
                 case "pengguna": include "pengguna/tampil.php"; break;
