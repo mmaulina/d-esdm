@@ -23,24 +23,23 @@ $currentPage = $_GET['page'] ?? 'dashboard'; // Ambil halaman dari URL
                 <i class="fas fa-home me-2"></i> <span class="sidebar-text">Beranda</span>
             </a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link <?= ($currentPage == 'profil_perusahaan') ? 'active' : ''; ?>" href="?page=profil_perusahaan">
-                <i class="fas fa-building me-2"></i> <span class="sidebar-text">Profile Perusahaan</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link <?= ($currentPage == 'profil_admin') ? 'active' : ''; ?>" href="?page=profil_admin">
-                <i class="fas fa-user-tie me-2"></i> <span class="sidebar-text">Profile Perusahaan (A)</span>
-            </a>
-        </li>
+        <?php if ($_SESSION['role'] == 'umum') { ?> <!-- hanya umum yang bisa mengakses menu ini -->
+            <li class="nav-item">
+                <a class="nav-link <?= ($currentPage == 'profil_perusahaan') ? 'active' : ''; ?>" href="?page=profil_perusahaan">
+                    <i class="fas fa-building me-2"></i> <span class="sidebar-text">Profile Perusahaan</span>
+                </a>
+            </li>
+        <?php } ?>
+        <?php if ($_SESSION['role'] == 'admin') { ?> <!-- hanya admin yang bisa mengakses menu ini -->
+            <li class="nav-item">
+                <a class="nav-link <?= ($currentPage == 'profil_admin') ? 'active' : ''; ?>" href="?page=profil_admin">
+                    <i class="fas fa-user-tie me-2"></i> <span class="sidebar-text">Profile Perusahaan (A)</span>
+                </a>
+            </li>
+        <?php } ?>
         <li class="nav-item">
             <a class="nav-link <?= ($currentPage == 'pembangkit') ? 'active' : ''; ?>" href="?page=pembangkit">
                 <i class="fas fa-plug me-2"></i> <span class="sidebar-text">Data Pembangkit</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link <?= ($currentPage == 'pembangkit_admin') ? 'active' : ''; ?>" href="?page=pembangkit_admin">
-                <i class="fas fa-tools me-2"></i> <span class="sidebar-text">Data Pembangkit (A)</span>
             </a>
         </li>
         <li class="nav-item">
@@ -55,18 +54,8 @@ $currentPage = $_GET['page'] ?? 'dashboard'; // Ambil halaman dari URL
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link <?= ($currentPage == 'laporan_perbulan_admin') ? 'active' : ''; ?>" href="?page=laporan_perbulan_admin">
-                            <i class="fas fa-calendar-check me-2"></i> <span class="sidebar-text">Pelaporan Bulanan (A)</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link <?= ($currentPage == 'laporan_persemester') ? 'active' : ''; ?>" href="?page=laporan_persemester">
                             <i class="fas fa-calendar me-2"></i> <span class="sidebar-text">Pelaporan Semester</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link <?= ($currentPage == 'laporan_persemester_admin') ? 'active' : ''; ?>" href="?page=laporan_persemester_admin">
-                            <i class="fas fa-calendar-alt me-2"></i> <span class="sidebar-text">Pelaporan Semester (A)</span>
                         </a>
                     </li>
                 </ul>
@@ -75,6 +64,11 @@ $currentPage = $_GET['page'] ?? 'dashboard'; // Ambil halaman dari URL
         <li class="nav-item">
             <a class="nav-link <?= ($currentPage == 'djih') ? 'active' : ''; ?>" href="?page=djih">
                 <i class="fas fa-chart-line me-2"></i> <span class="sidebar-text">Djih</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link <?= ($currentPage == 'pengguna') ? 'active' : ''; ?>" href="?page=pengguna">
+                <i class="fas fa-users me-2"></i> <span class="sidebar-text">Data Pengguna</span>
             </a>
         </li>
     </ul>

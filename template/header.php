@@ -10,11 +10,13 @@
     <link href="assets/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    
+
     <style>
         body {
-            padding-top: 60px; /* Untuk mencegah konten tertutup navbar */
+            padding-top: 60px;
+            /* Untuk mencegah konten tertutup navbar */
         }
+
         .navbar {
             width: 100%;
             position: fixed;
@@ -22,11 +24,15 @@
             left: 0;
             z-index: 1030;
         }
+
         .nav-item .fa-bell {
-            font-size: 1.2rem; /* Sesuaikan ukuran lonceng */
+            font-size: 1.2rem;
+            /* Sesuaikan ukuran lonceng */
         }
+
         .nav-item .badge {
-            font-size: 0.7rem; /* Ukuran badge notifikasi */
+            font-size: 0.7rem;
+            /* Ukuran badge notifikasi */
         }
     </style>
 </head>
@@ -40,7 +46,7 @@
             </a>
 
             <!-- Navbar Toggle untu mobile -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -48,6 +54,7 @@
             <!-- Menu Navbar -->
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto d-flex align-items-center"> <!-- Menjadikan elemen sejajar -->
+                    <!-- LONCENG NOTIFIKASI -->
                     <li class="nav-item">
                         <?php
                         include 'koneksi.php';
@@ -70,17 +77,14 @@
                             <?php endif; ?>
                         </a>
                     </li>
-                    <li class="nav-item">
-                    <a href="?page=pengguna" class="nav-link position-relative me-3">
-                                <i class="fas fa-table fs-6"> Pengguna</i>
-                    </a>
-                    </li>
+
+                    <!-- NAMA USER -->
                     <li class="nav-item dropdown d-flex align-items-center"> <!-- Tambahkan d-flex align-items-center -->
-                    <!-- Dropdown User -->
-                    <a class="nav-link dropdown-toggle" href="#" id="drop2" role="button" data-bs-toggle="dropdown" 
-                        aria-expanded="false">
-                        <i class="fas fa-user me-1"></i> <?= $_SESSION['username']; ?>
-                    </a>
+                        <!-- Dropdown User -->
+                        <a class="nav-link dropdown-toggle" href="#" id="drop2" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            <i class="fas fa-user me-1"></i> <?= $_SESSION['username']; ?>
+                        </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="drop2">
                             <li>
                                 <a href="?page=profil_perusahaan&id_user=<?= $_SESSION['id_user']; ?>" class="dropdown-item">
@@ -92,9 +96,11 @@
                                     <i class="fas fa-key fs-6"></i> Ganti Password
                                 </a>
                             </li>
-                            <li><hr class="dropdown-divider"></li>
                             <li>
-                                <a href="login/logout.php" onclick="return confirm('Anda yakin ingin logout?')" 
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li>
+                                <a href="login/logout.php" onclick="return confirm('Anda yakin ingin logout?')"
                                     class="dropdown-item text-danger">
                                     <i class="fas fa-sign-out-alt"></i> Logout
                                 </a>
@@ -109,4 +115,5 @@
     <!-- Bootstrap JS -->
     <script src="assets/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
