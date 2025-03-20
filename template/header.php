@@ -10,31 +10,6 @@
     <link href="assets/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
-    <style>
-        body {
-            padding-top: 60px;
-            /* Untuk mencegah konten tertutup navbar */
-        }
-
-        .navbar {
-            width: 100%;
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 1030;
-        }
-
-        .nav-item .fa-bell {
-            font-size: 1.2rem;
-            /* Sesuaikan ukuran lonceng */
-        }
-
-        .nav-item .badge {
-            font-size: 0.7rem;
-            /* Ukuran badge notifikasi */
-        }
-    </style>
 </head>
 
 <body>

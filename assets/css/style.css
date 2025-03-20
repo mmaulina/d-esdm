@@ -1,148 +1,158 @@
-html, body {
-    height: 100vh; /* Maksimal setinggi layar */
+html,
+body {
+  height: 100vh; /* Maksimal setinggi layar */
 }
 
 /* HEADER */
 .content {
-    margin-left: 250px; /* Harus sama dengan lebar sidebar */
-    width: calc(100% - 250px);
+  margin-left: 250px; /* Harus sama dengan lebar sidebar */
+  width: calc(100% - 250px);
 }
 
 navbar {
-    width: 100%;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1030;
 }
 
 /* Mengatur ukuran logo agar pas di header */
 .navbar-brand img {
-    height: 50px;
-    width: auto;
+  height: 50px;
+  width: auto;
+}
+
+.nav-item .fa-bell {
+  font-size: 1.2rem;
+  /* Sesuaikan ukuran lonceng */
+}
+
+.nav-item .badge {
+  font-size: 0.7rem;
+  /* Ukuran badge notifikasi */
 }
 
 .nav-link i {
-    font-size: 1.2em; /* Ukuran ikon */
-    vertical-align: middle; /* Penjajaran vertikal */
+  font-size: 1.2em; /* Ukuran ikon */
+  vertical-align: middle; /* Penjajaran vertikal */
 }
 
 .nav-link {
-    display: flex; /* Menggunakan flexbox untuk penjajaran */
-    align-items: center; /* Penjajaran item di tengah */
-    padding: 10px; /* Padding untuk link */
-    transition: background-color 0.3s; /* Efek transisi */
+  display: flex; /* Menggunakan flexbox untuk penjajaran */
+  align-items: center; /* Penjajaran item di tengah */
+  padding: 10px; /* Padding untuk link */
+  transition: color 0.3s; /* Efek transisi */
 }
 
 .nav-link:hover {
-    background-color: #FFE066; /* Efek hover */
+  color: #fff; /* Efek hover */
 }
 
 /* SIDEBAR */
 .sidebar {
-    background-color: #F7F6BB ;
-    transition: width 0.3s; /* Transisi untuk lebar */
-    width: 300px; /* Lebar sidebar saat terbuka */
-    position: fixed;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    padding: 1rem;
+  background-color: #f7f6bb;
+  transition: width 0.3s; /* Transisi untuk lebar */
+  width: 300px; /* Lebar sidebar saat terbuka */
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  padding: 1rem;
 }
 
 .sidebar.collapsed {
-    width: 60px; /* Lebar saat ter-collapse */
+  width: 60px; /* Lebar saat ter-collapse */
 }
 
 .sidebar.collapsed .sidebar-text {
-    display: none; /* Sembunyikan teks saat ter-collapse */
+  display: none; /* Sembunyikan teks saat ter-collapse */
 }
 
 .sidebar .nav-link {
-    background-color: #FCDC2A ;
-    color: #000 !important;  /* Agar teks terlihat */
-    padding: 10px;
-    border-radius: 5px; /* Opsional: Membuat sudut membulat */
-    margin-bottom: 5px; /* Opsional: Jarak antar menu */
-    display: block;
+  background-color: #fcdc2a;
+  color: #000 !important; /* Agar teks terlihat */
+  padding: 10px;
+  border-radius: 5px; /* Opsional: Membuat sudut membulat */
+  margin-bottom: 5px; /* Opsional: Jarak antar menu */
+  display: block;
 }
 
 .sidebar .nav-link:hover {
-    background-color: #FFE066; 
+  background-color: #ffe066;
 }
 
 .sidebar .nav-link.active {
-    background-color: #008B47 !important;
-    color: #fff !important; /* Warna teks agar lebih kontras */
-    font-weight: bold; /* Membuat teks lebih tebal */
-    border-radius: 5px; /* Membuat sudut lebih halus */
+  background-color: #008b47 !important;
+  color: #fff !important; /* Warna teks agar lebih kontras */
+  font-weight: bold; /* Membuat teks lebih tebal */
+  border-radius: 5px; /* Membuat sudut lebih halus */
 }
 
 .sidebar-header {
-    display: flex;
-    justify-content: space-between; /* Menyebar logo dan tombol */
-    align-items: center; /* Penjajaran vertikal */
+  display: flex;
+  justify-content: space-between; /* Menyebar logo dan tombol */
+  align-items: center; /* Penjajaran vertikal */
 }
 
 .sidebar-header .logo {
-    width: 50px; /* Atur lebar logo */
-    height: auto; /* Tinggi otomatis untuk menjaga rasio */
+  width: 50px; /* Atur lebar logo */
+  height: auto; /* Tinggi otomatis untuk menjaga rasio */
 }
 
 .toggle-sidebar {
-    background: none; /* Menghilangkan latar belakang */
-    border: none; /* Menghilangkan border */
-    color: #000; /* Warna teks */
-    cursor: pointer; /* Menunjukkan bahwa ini dapat diklik */
-    z-index: 1000; /* Pastikan tombol berada di atas elemen lain */
-    position: relative; /* Pastikan tetap terlihat */
+  background: none; /* Menghilangkan latar belakang */
+  border: none; /* Menghilangkan border */
+  color: #000; /* Warna teks */
+  cursor: pointer; /* Menunjukkan bahwa ini dapat diklik */
+  z-index: 1000; /* Pastikan tombol berada di atas elemen lain */
+  position: relative; /* Pastikan tetap terlihat */
 }
 
 /* User card styling */
 .user-card {
-    background-color: #fff;
-    border: 1px solid #008B47;
-    padding: 10px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    transition: all 0.3s ease-in-out;
+  background-color: #fff;
+  border: 1px solid #008b47;
+  padding: 10px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease-in-out;
 }
 
 /* User icon */
 .user-icon {
-    width: 40px;
-    height: 40px;
-    background-color: #008B47;
-    color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 50%;
-    transition: all 0.3s ease-in-out;
+  width: 40px;
+  height: 40px;
+  background-color: #008b47;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  transition: all 0.3s ease-in-out;
 }
 
 /* Username text */
 .user-name {
-    color: #333;
-    font-weight: 600;
-    margin-left: 10px;
-    transition: opacity 0.3s ease-in-out;
+  color: #333;
+  font-weight: 600;
+  margin-left: 10px;
+  transition: opacity 0.3s ease-in-out;
 }
 
 /* Jika sidebar dalam keadaan collapsed */
 .sidebar.collapsed .user-card {
-    background: none;
-    border: none;
-    padding: 0;
+  background: none;
+  border: none;
+  padding: 0;
 }
 
 .sidebar.collapsed .user-name {
-    display: none; /* Sembunyikan nama */
+  display: none; /* Sembunyikan nama */
 }
 
 .sidebar.collapsed .user-icon {
-    width: 40px;
-    height: 40px;
+  width: 40px;
+  height: 40px;
 }
-
-
-
-
-

@@ -72,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <label class="form-label">Alamat</label>
                     <input type="text" name="alamat" class="form-control" value="<?= $data['alamat'] ?>" required>
                 </div>
-                <div class="row">
+                <div class="row mb-3">
                     <div class="col-md-6">
                         <label class="form-label">Longitude</label>
                         <input type="text" name="longitude" class="form-control" value="<?= $data['longitude'] ?>" required>

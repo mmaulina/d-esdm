@@ -105,7 +105,7 @@ try {
                             <?php endforeach; ?>
                         <?php else: ?>
                             <tr>
-                                <td colspan='15' class='text-center'>Data tidak ditemukan</td>
+                                <td colspan='16' class='text-center'>Data tidak ditemukan</td>
                             </tr>
                         <?php endif; ?>
                     </tbody>

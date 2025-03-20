@@ -65,12 +65,14 @@ $currentPage = $_GET['page'] ?? 'dashboard'; // Ambil halaman dari URL
             <a class="nav-link <?= ($currentPage == 'djih') ? 'active' : ''; ?>" href="?page=djih">
                 <i class="fas fa-chart-line me-2"></i> <span class="sidebar-text">Djih</span>
             </a>
-        </li>
+        </li>        
+        <?php if ($_SESSION['role'] == 'admin') { ?> <!-- hanya admin yang bisa mengakses menu ini -->
         <li class="nav-item">
             <a class="nav-link <?= ($currentPage == 'pengguna') ? 'active' : ''; ?>" href="?page=pengguna">
                 <i class="fas fa-users me-2"></i> <span class="sidebar-text">Data Pengguna</span>
             </a>
         </li>
+        <?php } ?>
     </ul>
 </aside>
 
