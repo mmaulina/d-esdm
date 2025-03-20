@@ -66,29 +66,33 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </thead>
 
                     <tbody>
-                        <?php
-                        $no = 1;
-                        foreach ($result as $row) {
-                        ?>
+                        <?php if (count($result) > 0): ?>
+                            <?php
+                            $no = 1;
+                            foreach ($result as $row) {
+                            ?>
+                                <tr>
+                                    <td class="text-center"><?php echo $no++; ?></td>
+                                    <td><?php echo htmlspecialchars($row['bulan']); ?> </td>
+                                    <td><?php echo htmlspecialchars($row['nama_perusahaan']); ?> </td>
+                                    <td><?php echo htmlspecialchars($row['volume_bb']); ?> </td>
+                                    <td><?php echo htmlspecialchars($row['produksi_sendiri']); ?> </td>
+                                    <td><?php echo htmlspecialchars($row['pemb_sumber_lain']); ?> </td>
+                                    <td><?php echo htmlspecialchars($row['susut_jaringan']); ?> </td>
+                                    <td><?php echo htmlspecialchars($row['penj_ke_pelanggan']); ?> </td>
+                                    <td><?php echo htmlspecialchars($row['penj_ke_pln']); ?> </td>
+                                    <td><?php echo htmlspecialchars($row['pemakaian_sendiri']); ?> </td>
+                                    <td class="text-center">
+                                        <a href="?page=edit_laporan_perbulan&id=<?php echo $row['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
+                                        <a href="?page=hapus_laporan_perbulan&id=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus?');">Hapus</a>
+                                    </td>
+                                </tr>
+                            <?php } ?>
+                        <?php else: ?>
                             <tr>
-                                <td class="text-center"><?php echo $no++; ?></td>
-                                <td><?php echo htmlspecialchars($row['bulan']); ?> </td>
-                                <td><?php echo htmlspecialchars($row['nama_perusahaan']); ?> </td>
-                                <td><?php echo htmlspecialchars($row['volume_bb']); ?> </td>
-                                <td><?php echo htmlspecialchars($row['produksi_sendiri']); ?> </td>
-                                <td><?php echo htmlspecialchars($row['pemb_sumber_lain']); ?> </td>
-                                <td><?php echo htmlspecialchars($row['susut_jaringan']); ?> </td>
-                                <td><?php echo htmlspecialchars($row['penj_ke_pelanggan']); ?> </td>
-                                <td><?php echo htmlspecialchars($row['penj_ke_pln']); ?> </td>
-                                <td><?php echo htmlspecialchars($row['pemakaian_sendiri']); ?> </td>
-                                <td class="text-center">
-                                    <a href="?page=edit_laporan_perbulan&id=<?php echo $row['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
-                                    <a href="?page=hapus_laporan_perbulan&id=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus?');">Hapus</a>
-                                </td>
+                                <td colspan='15' class='text-center'>Data tidak ditemukan</td>
                             </tr>
-                        <?php
-                        }
-                        ?>
+                        <?php endif; ?>
                     </tbody>
                 </table>
             </div>

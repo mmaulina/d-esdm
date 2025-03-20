@@ -25,7 +25,7 @@ try {
         $stmt = $conn->prepare("SELECT * FROM pembangkit WHERE id_user = :id_user");
         $stmt->bindParam(':id_user', $id_user, PDO::PARAM_INT);
     }
-    
+
     $stmt->execute();
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
@@ -38,7 +38,8 @@ try {
     <hr>
     <div class="card shadow">
         <div class="card-body">
-            <?php if ($role !== 'admin'): // Tombol Tambah hanya untuk umum ?>
+            <?php if ($role !== 'admin'): // Tombol Tambah hanya untuk umum 
+            ?>
                 <div class="mb-3">
                     <a href='?page=pembangkit_tambah&id_user=<?= $id_user ?>' class='btn btn-primary'>Tambah Data</a>
                 </div>
@@ -48,6 +49,7 @@ try {
                 <table class="table table-bordered" style="table-layout: fixed; min-width: 1800px;">
                     <thead class="table-dark text-center align-middle">
                         <tr>
+                            <th rowspan="3">No.</th>
                             <th rowspan="3">Nama Perusahaan</th>
                             <th colspan="4" style="min-width: 250px;">Data Pembangkit</th>
                             <th colspan="9" style="min-width: 1500px;">Data Teknis Pembangkit</th>
@@ -75,8 +77,12 @@ try {
                     </thead>
                     <tbody>
                         <?php if (count($result) > 0): ?>
-                            <?php foreach ($result as $row): ?>
+                            <?php
+                            $no = 1;
+                            foreach ($result as $row):
+                            ?>
                                 <tr>
+                                    <td class="text-center"><?php echo $no++; ?></td>
                                     <td><?= htmlspecialchars($row['nama_perusahaan']) ?></td>
                                     <td><?= htmlspecialchars($row['alamat']) ?></td>
                                     <td><?= htmlspecialchars($row['longitude']) ?></td>
