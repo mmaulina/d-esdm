@@ -21,9 +21,12 @@ if (isset($_POST['btn_simpan'])) {
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
         // Verifikasi password lama dan update password baru
-        if ($data && ($password_lama) === $data['password']) {
+        if ($data && password_verify($password_lama, $data['password'])) {
+            // Hash password baru menggunakan Bcrypt
+            $hashed_password_baru = password_hash($password_baru, PASSWORD_BCRYPT);
+            
             $stmt = $conn->prepare("UPDATE users SET password = :password WHERE id_user = :id_user");
-            $stmt->bindParam(":password", $password_baru, PDO::PARAM_STR);
+            $stmt->bindParam(":password", $hashed_password_baru, PDO::PARAM_STR);
             $stmt->bindParam(":id_user", $id_user, PDO::PARAM_INT);
             $query = $stmt->execute();
 

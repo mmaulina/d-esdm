@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.1.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 18 Mar 2025 pada 19.05
--- Versi server: 10.4.28-MariaDB
--- Versi PHP: 8.0.28
+-- Generation Time: Mar 20, 2025 at 09:21 AM
+-- Server version: 10.4.18-MariaDB
+-- PHP Version: 7.4.16
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,7 +24,7 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `laporan_bulanan`
+-- Table structure for table `laporan_bulanan`
 --
 
 CREATE TABLE `laporan_bulanan` (
@@ -32,19 +32,19 @@ CREATE TABLE `laporan_bulanan` (
   `id_user` int(11) NOT NULL,
   `bulan` enum('Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember') NOT NULL,
   `nama_perusahaan` varchar(200) NOT NULL,
-  `volume_bb` int(10) NOT NULL,
-  `produksi_sendiri` int(20) NOT NULL,
-  `pemb_sumber_lain` int(20) NOT NULL,
-  `susut_jaringan` int(20) NOT NULL,
-  `penj_ke_pelanggan` int(20) NOT NULL,
-  `penj_ke_pln` int(20) NOT NULL,
-  `pemakaian_sendiri` int(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `volume_bb` varchar(200) NOT NULL,
+  `produksi_sendiri` varchar(200) NOT NULL,
+  `pemb_sumber_lain` varchar(200) NOT NULL,
+  `susut_jaringan` varchar(200) NOT NULL,
+  `penj_ke_pelanggan` varchar(200) NOT NULL,
+  `penj_ke_pln` varchar(200) NOT NULL,
+  `pemakaian_sendiri` varchar(200) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `laporan_semester`
+-- Table structure for table `laporan_semester`
 --
 
 CREATE TABLE `laporan_semester` (
@@ -58,20 +58,21 @@ CREATE TABLE `laporan_semester` (
   `file_lhu` varchar(225) NOT NULL,
   `status` enum('diterima','ditolak','diajukan','') NOT NULL,
   `keterangan` varchar(225) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data untuk tabel `laporan_semester`
+-- Dumping data for table `laporan_semester`
 --
 
 INSERT INTO `laporan_semester` (`id`, `id_user`, `nama_perusahaan`, `parameter`, `buku_mutu`, `hasil`, `file_laporan`, `file_lhu`, `status`, `keterangan`) VALUES
-(9, 1, 'irwan group', 'SO2', 'aaaaaaaaa', 'aaaaaaaaa', 'uploads/1742217160_template_surat_rekomendasi_rbb2025.docx', 'uploads/1742217160_PortofolioMuhammadIrwanFirdaus1.pdf', 'diajukan', '-'),
-(10, 1, 'irwan group', 'CO', 'aaaaaaaaa', 'baik', 'uploads/1742220771_PortofolioMuhammadIrwanFirdaus1_compressed.pdf', 'uploads/1742220771_Chapter1139.pdf', 'ditolak', 'admin lagi nggak mood');
+(9, 1, 'irwan group', 'TSP/DEBU', 'aaaaaaaaa', 'aaaaaaaaa', 'uploads/1742217160_template_surat_rekomendasi_rbb2025.docx', 'uploads/1742217160_PortofolioMuhammadIrwanFirdaus1.pdf', 'diajukan', '-'),
+(10, 1, 'irwan group', 'CO', 'aaaaaaaaa', 'baik', 'uploads/1742220771_PortofolioMuhammadIrwanFirdaus1_compressed.pdf', 'uploads/1742220771_Chapter1139.pdf', 'ditolak', 'admin lagi nggak mood'),
+(11, 2, 'maya group', 'kebisingan', 'aaaaaaaaa', 'baik', 'uploads/1742379527_AplikasiManajemenAdministrasidanKeuanganSMKN1AmuntaiBerbasisWeb.docx', 'uploads/1742379527_AplikasiManajemenAdministrasidanKeuanganSMKN1AmuntaiBerbasisWeb.pdf', 'diajukan', '-');
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `pembangkit`
+-- Table structure for table `pembangkit`
 --
 
 CREATE TABLE `pembangkit` (
@@ -91,12 +92,19 @@ CREATE TABLE `pembangkit` (
   `status_operasi` varchar(100) NOT NULL,
   `bahan_bakar_jenis` varchar(100) NOT NULL,
   `bahan_bakar_satuan` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `pembangkit`
+--
+
+INSERT INTO `pembangkit` (`id`, `id_user`, `nama_perusahaan`, `alamat`, `longitude`, `latitude`, `jenis_pembangkit`, `fungsi`, `kapasitas_terpasang`, `daya_mampu_netto`, `jumlah_unit`, `no_unit`, `tahun_operasi`, `status_operasi`, `bahan_bakar_jenis`, `bahan_bakar_satuan`) VALUES
+(10, 2, 'maya group', 'Jl. Mistar Cokrokusumo Kelurahan Cempaka, Kecamatan Cempaka, No 21 (Seberang Kelurahan Cempaka)', '110.3091878', '-7.075730113', 'genset', 'darurat', '1.00', '0.58', 1, '1', 2029, 'operasi', 'solar', 'liter');
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `profil`
+-- Table structure for table `profil`
 --
 
 CREATE TABLE `profil` (
@@ -112,12 +120,12 @@ CREATE TABLE `profil` (
   `nama` varchar(100) NOT NULL,
   `no_hp` varchar(15) NOT NULL,
   `email` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `users`
+-- Table structure for table `users`
 --
 
 CREATE TABLE `users` (
@@ -127,84 +135,83 @@ CREATE TABLE `users` (
   `password` varchar(255) NOT NULL,
   `role` enum('admin','umum') NOT NULL,
   `status` enum('diajukan','diverifikasi','ditolak') NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data untuk tabel `users`
+-- Dumping data for table `users`
 --
 
 INSERT INTO `users` (`id_user`, `username`, `email`, `password`, `role`, `status`) VALUES
-(1, 'admin', 'admin@gmail.com', 'admin', 'admin', 'diverifikasi'),
-(2, 'irwan', 'irwanfirdaus508@gmail.com', 'irwan', 'admin', 'diverifikasi'),
-(4, 'maya', 'mayamaulina16@gmail.com', 'maya123', 'admin', 'diverifikasi');
+(4, 'admin', 'admin@gmail.com', '$2y$10$kOhOzPUvmsTDTA2BuKwGMun4IxZvwjVNonHA0K6ocRuJIx4CWoTBm', 'admin', 'diverifikasi'),
+(5, 'irwan', 'irwanfirdaus508@gmail.com', '$2y$10$zmgD7Y1gcvhgey.N7VlBPeklVEEiCe2gqjDKE/XcuhrzigIT0dxAq', 'umum', 'diverifikasi');
 
 --
 -- Indexes for dumped tables
 --
 
 --
--- Indeks untuk tabel `laporan_bulanan`
+-- Indexes for table `laporan_bulanan`
 --
 ALTER TABLE `laporan_bulanan`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `laporan_semester`
+-- Indexes for table `laporan_semester`
 --
 ALTER TABLE `laporan_semester`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `pembangkit`
+-- Indexes for table `pembangkit`
 --
 ALTER TABLE `pembangkit`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `profil`
+-- Indexes for table `profil`
 --
 ALTER TABLE `profil`
   ADD PRIMARY KEY (`id_profil`);
 
 --
--- Indeks untuk tabel `users`
+-- Indexes for table `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id_user`);
 
 --
--- AUTO_INCREMENT untuk tabel yang dibuang
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT untuk tabel `laporan_bulanan`
+-- AUTO_INCREMENT for table `laporan_bulanan`
 --
 ALTER TABLE `laporan_bulanan`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT untuk tabel `laporan_semester`
+-- AUTO_INCREMENT for table `laporan_semester`
 --
 ALTER TABLE `laporan_semester`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- AUTO_INCREMENT for table `pembangkit`
+--
+ALTER TABLE `pembangkit`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
--- AUTO_INCREMENT untuk tabel `pembangkit`
---
-ALTER TABLE `pembangkit`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
-
---
--- AUTO_INCREMENT untuk tabel `profil`
+-- AUTO_INCREMENT for table `profil`
 --
 ALTER TABLE `profil`
   MODIFY `id_profil` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
--- AUTO_INCREMENT untuk tabel `users`
+-- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
