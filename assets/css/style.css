@@ -108,6 +108,15 @@ navbar {
   z-index: 1000; /* Pastikan tombol berada di atas elemen lain */
   position: relative; /* Pastikan tetap terlihat */
 }
+.card {
+  width: 100%; /* Pastikan card melebar penuh */
+  display: block; /* Pastikan tidak inline */
+}
+
+.rowkonten {
+  display: block !important; /* Paksa grid agar berbaris ke bawah */
+}
+
 
 /* User card styling */
 .user-card {

@@ -1,6 +1,15 @@
 <?php
 $currentPage = $_GET['page'] ?? 'dashboard'; // Ambil halaman dari URL
+$id_user = $_SESSION['id_user']; // Pastikan ada sesi id_user
+
+// Cek jumlah konten baru yang belum dilihat oleh user ini
+$query = "SELECT COUNT(*) AS jumlah_baru FROM news WHERE id NOT IN 
+          (SELECT konten_id FROM konten_dilihat WHERE id_user = :id_user)";
+$stmt = $conn->prepare($query);
+$stmt->execute(['id_user' => $id_user]);
+$konten_baru = $stmt->fetch(PDO::FETCH_ASSOC)['jumlah_baru'];
 ?>
+
 <aside class="sidebar col-md-3 col-lg-2 sidebar p-3 vh-100 d-flex flex-column" id="sidebar">
     <div class="sidebar-header d-flex align-items-center gap-2 mb-4">
         <button class="btn btn-dark toggle-sidebar" id="toggleSidebar">
@@ -18,9 +27,13 @@ $currentPage = $_GET['page'] ?? 'dashboard'; // Ambil halaman dari URL
     </div>
 
     <ul class="nav flex-column flex-grow-1 mt-2">
-        <li class="nav-item">
+    <li class="nav-item">
             <a class="nav-link <?= ($currentPage == 'dashboard') ? 'active' : ''; ?>" href="?page=dashboard">
-                <i class="fas fa-home me-2"></i> <span class="sidebar-text">Beranda</span>
+                <i class="fas fa-home me-2"></i> 
+                <span class="sidebar-text">Beranda</span>
+                <?php if ($konten_baru > 0) : ?>
+                    <span class="badge bg-danger ms-2"><?= $konten_baru; ?></span>
+                <?php endif; ?>
             </a>
         </li>
         <?php if ($_SESSION['role'] == 'umum') { ?> <!-- hanya umum yang bisa mengakses menu ini -->

@@ -83,6 +83,12 @@ include "template/header.php";
                 case "edit_password": include "pengguna/edit_password.php"; break;
                 case "pengguna_hapus_admin": include "pengguna/hapus_admin.php"; break;
 
+                //news
+                case "upload": include "news/tambah.php"; break;
+                case "tabel": include "news/tabel.php"; break;
+                case "edit_konten": include "news/edit.php"; break;
+                case "hapus_konten": include "news/hapus.php"; break;
+
                 //notiifikasi
                 case "notifikasi": include "notif.php"; break;
 

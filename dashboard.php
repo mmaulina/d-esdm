@@ -4,6 +4,7 @@ include "koneksi.php";
 try {
     $db = new Database();
     $conn = $db->getConnection();
+    
     // Query untuk menghitung jumlah perusahaan
     $sql = "SELECT COUNT(*) AS total_perusahaan FROM profil";
     $stmt = $conn->query($sql);
@@ -32,6 +33,18 @@ try {
             $total_kota++;
         }
     }
+    
+        // Tandai semua konten baru sebagai dilihat
+    $query = "INSERT IGNORE INTO konten_dilihat (id_user, konten_id) 
+    SELECT :id_user, id FROM news";
+    $stmt = $conn->prepare($query);
+    $stmt->execute(['id_user' => $_SESSION['id_user']]);
+
+
+    // Ambil semua konten
+    $sql = "SELECT * FROM news ORDER BY tanggal DESC";
+    $stmt = $conn->query($sql);
+    $konten_list = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     die("Error: " . $e->getMessage());
 }
@@ -64,5 +77,40 @@ try {
                 </div>
             </div>
         </div>
+
+<!-- Tampilkan Konten -->
+<div class="row mt-4">
+    <div class="col-12 d-flex justify-content-between align-items-center">
+        <h5 class="fw-bold mb-0">News</h5>
+        <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin') : ?>
+            <div class="btn-group d-inline-flex">
+                <a href="?page=tabel" class="btn btn-success">Tabel Konten</a>
+            </div>
+        <?php endif; ?>
+    </div>
+</div>
+</div>
+
+        <div class="rowkonten">
+    <?php foreach ($konten_list as $konten) : ?>
+        <div class="col-md-6 offset-md-3"> <!-- Agar konten berada di tengah -->
+            <div class="card mb-3">
+                <div class="card-body text-center">
+                    <?php if ($konten['jenis_konten'] === 'gambar') : ?>
+                        <img src="<?php echo htmlspecialchars($konten['konten']); ?>" class="img-fluid w-100 rounded" alt="Konten Gambar">
+                    <?php elseif ($konten['jenis_konten'] === 'file') : ?>
+                        <a href="<?php echo htmlspecialchars($konten['konten']); ?>" class="btn btn-secondary" download>Download File</a>
+                    <?php elseif ($konten['jenis_konten'] === 'link') : ?>
+                        <a href="<?php echo htmlspecialchars($konten['konten']); ?>" target="_blank" class="btn btn-info">Lihat Link</a>
+                    <?php endif; ?>
+                    <p class="card-text mt-3"><?php echo htmlspecialchars($konten['caption']); ?></p>
+                    <p class="card-text"><small class="text-muted">Diupload pada: <?php echo $konten['tanggal']; ?></small></p>
+                </div>
+            </div>
+        </div>
+    <?php endforeach; ?>
+</div>
+
+
     </div>
 </main>
