@@ -89,6 +89,13 @@ include "template/header.php";
                 case "edit_konten": include "news/edit.php"; break;
                 case "hapus_konten": include "news/hapus.php"; break;
 
+                //djih
+                case "upload_djih": include "djih/tambah.php"; break;
+                case "tabel_djih": include "djih/tabel.php"; break;
+                case "edit_konten_djih": include "djih/edit.php"; break;
+                case "hapus_konten_djih": include "djih/hapus.php"; break;
+                case "tampil_konten_djih": include "djih/tampil.php"; break;
+
                 //notiifikasi
                 case "notifikasi": include "notif.php"; break;
 

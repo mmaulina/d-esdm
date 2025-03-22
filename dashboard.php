@@ -81,35 +81,38 @@ try {
 <!-- Tampilkan Konten -->
 <div class="row mt-4">
     <div class="col-12 d-flex justify-content-between align-items-center">
-        <h5 class="fw-bold mb-0">News</h5>
-        <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin') : ?>
+    <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin') : ?>
             <div class="btn-group d-inline-flex">
                 <a href="?page=tabel" class="btn btn-success">Tabel Konten</a>
             </div>
         <?php endif; ?>
+        <h5 class="fw-bold mb-0">News</h5>
     </div>
 </div>
 </div>
 
-        <div class="rowkonten">
-    <?php foreach ($konten_list as $konten) : ?>
-        <div class="col-md-6 offset-md-3"> <!-- Agar konten berada di tengah -->
-            <div class="card mb-3">
-                <div class="card-body text-center">
+<div class="container">
+    <div class="timeline position-relative">
+        <?php foreach ($konten_list as $konten) : ?>
+            <div class="timeline-item d-flex flex-column align-items-center text-center position-relative">
+                <div class="circle bg-dark rounded-circle position-absolute" style="width: 15px; height: 15px; left: -10px; top: 50%; transform: translateY(-50%);"></div>
+                <div class="content w-75">
                     <?php if ($konten['jenis_konten'] === 'gambar') : ?>
-                        <img src="<?php echo htmlspecialchars($konten['konten']); ?>" class="img-fluid w-100 rounded" alt="Konten Gambar">
+                        <img src="<?php echo htmlspecialchars($konten['konten']); ?>" class="img-fluid w-50 rounded" alt="Konten Gambar">
                     <?php elseif ($konten['jenis_konten'] === 'file') : ?>
                         <a href="<?php echo htmlspecialchars($konten['konten']); ?>" class="btn btn-secondary" download>Download File</a>
                     <?php elseif ($konten['jenis_konten'] === 'link') : ?>
                         <a href="<?php echo htmlspecialchars($konten['konten']); ?>" target="_blank" class="btn btn-info">Lihat Link</a>
                     <?php endif; ?>
-                    <p class="card-text mt-3"><?php echo htmlspecialchars($konten['caption']); ?></p>
+                    <p class="card-text mt-3"> <?php echo htmlspecialchars($konten['caption']); ?> </p>
                     <p class="card-text"><small class="text-muted">Diupload pada: <?php echo $konten['tanggal']; ?></small></p>
                 </div>
+                <div class="line position-absolute bg-dark" style="width: 2px; height: 100%; left: -2px; top: 0;"></div>
             </div>
-        </div>
-    <?php endforeach; ?>
+        <?php endforeach; ?>
+    </div>
 </div>
+
 
 
     </div>

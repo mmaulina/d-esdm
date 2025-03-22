@@ -8,6 +8,12 @@ $query = "SELECT COUNT(*) AS jumlah_baru FROM news WHERE id NOT IN
 $stmt = $conn->prepare($query);
 $stmt->execute(['id_user' => $id_user]);
 $konten_baru = $stmt->fetch(PDO::FETCH_ASSOC)['jumlah_baru'];
+
+$query_djih = "SELECT COUNT(*) AS jumlah_baru FROM djih WHERE id NOT IN 
+          (SELECT konten_id FROM djih_dilihat WHERE id_user = :id_user)";
+$stmt = $conn->prepare($query_djih);
+$stmt->execute(['id_user' => $id_user]);
+$konten_djih = $stmt->fetch(PDO::FETCH_ASSOC)['jumlah_baru'];
 ?>
 
 <aside class="sidebar col-md-3 col-lg-2 sidebar p-3 vh-100 d-flex flex-column" id="sidebar">
@@ -75,8 +81,12 @@ $konten_baru = $stmt->fetch(PDO::FETCH_ASSOC)['jumlah_baru'];
             </div>
         </li>
         <li class="nav-item">
-            <a class="nav-link <?= ($currentPage == 'djih') ? 'active' : ''; ?>" href="?page=djih">
-                <i class="fas fa-chart-line me-2"></i> <span class="sidebar-text">Djih</span>
+        <a class="nav-link <?= ($currentPage == 'tampil_konten_djih') ? 'active' : ''; ?>" href="?page=tampil_konten_djih">
+                <i class="fas fa-earth-americas me-2"></i> 
+                <span class="sidebar-text">DJIH</span>
+                <?php if ($konten_djih > 0) : ?>
+                    <span class="badge bg-danger ms-2"><?= $konten_djih; ?></span>
+                <?php endif; ?>
             </a>
         </li>        
         <?php if ($_SESSION['role'] == 'admin') { ?> <!-- hanya admin yang bisa mengakses menu ini -->

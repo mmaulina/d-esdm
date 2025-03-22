@@ -113,10 +113,44 @@ navbar {
   display: block; /* Pastikan tidak inline */
 }
 
-.rowkonten {
-  display: block !important; /* Paksa grid agar berbaris ke bawah */
-}
 
+
+.timeline {
+  position: relative;
+  padding: 20px 0;
+}
+.timeline::before {
+  display: block !important; /* Paksa grid agar berbaris ke bawah */
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 4px;
+  height: 100%;
+  background-color: #ccc;
+  transform: translateX(-50%);
+}
+.timeline-item {
+  position: relative;
+  margin-bottom: 30px;
+}
+.timeline-item .circle {
+  width: 20px;
+  height: 20px;
+  background-color: #007bff;
+  border-radius: 50%;
+  position: absolute;
+  left: 50%;
+  top: 10px;
+  transform: translateX(-50%);
+  border: 3px solid white;
+}
+.timeline-item .content {
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
 
 /* User card styling */
 .user-card {
