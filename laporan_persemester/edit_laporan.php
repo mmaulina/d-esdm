@@ -74,7 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION['pesan'] = "Gagal Update Data";
     }
 
-    echo "<meta http-equiv='refresh' content='0; url=?page=laporan_persemester_admin'>";
+    echo "<meta http-equiv='refresh' content='0; url=?page=laporan_persemester'>";
 
 }
 
@@ -87,7 +87,7 @@ $stmt->execute();
 $laporan = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$laporan) {
-    echo "<script>alert('Data tidak ditemukan!'); window.location.href='?page=laporan_persemester_admin';</script>";
+    echo "<script>alert('Data tidak ditemukan!'); window.location.href='?page=laporan_persemester';</script>";
     exit;
 }
 
@@ -158,7 +158,7 @@ function uploadFile($input_name) {
                     <?php endif; ?>
                 </div>
                 <button type="submit" class="btn btn-primary">Update</button>
-                <a href="?page=laporan_persemester_admin" class="btn btn-secondary">Kembali</a>
+                <a href="?page=laporan_persemester" class="btn btn-secondary">Kembali</a>
             </form>
         </div>
     </div>
