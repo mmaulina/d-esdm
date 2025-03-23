@@ -44,19 +44,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['terima_id'])) {
 }
 
 // Proses penolakan dengan metode POST
-if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['tolak'])) {
-    if (isset($_POST['tolak_id']) && isset($_POST['keterangan'])) {
-        $id = $_POST['tolak_id'];
-        $keterangan = $_POST['keterangan'];
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id']) && isset($_POST['keterangan'])) {
+    $id = $_POST['id'];
+    $keterangan = $_POST['keterangan'];
 
-        $updateQuery = "UPDATE laporan_semester SET status = 'ditolak', keterangan = :keterangan WHERE id = :id";
-        $updateStmt = $conn->prepare($updateQuery);
-        $updateStmt->bindParam(':id', $id, PDO::PARAM_INT);
-        $updateStmt->bindParam(':keterangan', $keterangan, PDO::PARAM_STR);
-        $updateStmt->execute();
+    $updateQuery = "UPDATE laporan_semester SET status = 'ditolak', keterangan = :keterangan WHERE id = :id";
+    $updateStmt = $conn->prepare($updateQuery);
+    $updateStmt->bindParam(':id', $id);
+    $updateStmt->bindParam(':keterangan', $keterangan);
+    $updateStmt->execute();
 
-        echo "<script>alert('Laporan ditolak!'); window.location.href='?page=laporan_persemester';</script>";
-    }
+    echo "<script>alert('Laporan ditolak!'); window.location.href='?page=notifikasi';</script>";
 }
 
 $stmt->execute();
@@ -163,15 +161,15 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                             </div>
                                             <form action="" method="POST">
                                                 <div class="modal-body">
-                                                    <input type="hidden" name="tolak_id" value="<?php echo $row['id']; ?>">
+                                                    <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
                                                     <div class="form-group">
                                                         <label for="keterangan<?php echo $row['id']; ?>">Keterangan Penolakan</label>
-                                                        <textarea class="form-control" id="keterangan<?php echo $row['id']; ?>" name="keterangan" rows="3" required></textarea>
+                                                        <textarea class="form-control" id="keterangan" name="keterangan" rows="3" required></textarea>
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                                                    <button type="submit" name="tolak" class="btn btn-danger">Tolak</button>
+                                                    <button type="submit" name="id" class="btn btn-danger">Tolak</button>
                                                 </div>
                                             </form>
                                         </div>

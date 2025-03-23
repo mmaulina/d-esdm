@@ -36,21 +36,35 @@
                         $database = new Database();
                         $conn = $database->getConnection();
 
-                        $query = "SELECT COUNT(*) as total FROM laporan_semester WHERE status = 'diajukan'";
-                        $stmt = $conn->prepare($query);
-                        $stmt->execute();
-                        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-                        $jumlahLaporanDiajukan = $result['total'];
+                        // Query untuk menghitung jumlah laporan_semester yang berstatus 'diajukan'
+                        $queryLaporan = "SELECT COUNT(*) as total FROM laporan_semester WHERE status = 'diajukan'";
+                        $stmtLaporan = $conn->prepare($queryLaporan);
+                        $stmtLaporan->execute();
+                        $resultLaporan = $stmtLaporan->fetch(PDO::FETCH_ASSOC);
+                        $jumlahLaporanDiajukan = $resultLaporan['total'];
+
+                        // Query untuk menghitung jumlah pengguna yang berstatus 'diajukan'
+                        $queryPengguna = "SELECT COUNT(*) as total FROM users WHERE status = 'diajukan'";
+                        $stmtPengguna = $conn->prepare($queryPengguna);
+                        $stmtPengguna->execute();
+                        $resultPengguna = $stmtPengguna->fetch(PDO::FETCH_ASSOC);
+                        $jumlahPenggunaDiajukan = $resultPengguna['total'];
+
+                        // Total notifikasi yang diajukan
+                        $totalNotifikasi = $jumlahLaporanDiajukan + $jumlahPenggunaDiajukan;
                         ?>
-                        <a href="?page=notifikasi" class="nav-link position-relative me-3">
-                            <i class="fas fa-bell fa-lg"></i>
-                            <?php if ($jumlahLaporanDiajukan > 0): ?>
-                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                    <?= $jumlahLaporanDiajukan; ?>
-                                    <span class="visually-hidden">unread messages</span>
-                                </span>
-                            <?php endif; ?>
-                        </a>
+
+                        <?php if ($_SESSION['role'] == 'admin') { ?> <!-- hanya admin yang bisa mengakses menu ini -->
+                            <a href="?page=notifikasi" class="nav-link position-relative me-3">
+                                <i class="fas fa-bell fa-lg"></i>
+                                <?php if ($totalNotifikasi > 0): ?>
+                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                        <?= $totalNotifikasi; ?>
+                                        <span class="visually-hidden">unread messages</span>
+                                    </span>
+                                <?php endif; ?>
+                            </a>
+                        <?php } ?>
                     </li>
 
                     <!-- NAMA USER -->
