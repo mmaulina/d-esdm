@@ -11,20 +11,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (!empty($username) && !empty($password)) {
         $db = new Database();
         $pdo = $db->getConnection();
-        $sql = "SELECT * FROM users WHERE username = :username OR email = :username";
+        $sql = "SELECT * FROM users WHERE (username = :username OR email = :username)";
         $stmt = $pdo->prepare($sql);
         $stmt->bindParam(":username", $username, PDO::PARAM_STR);
         $stmt->execute();
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        // Memeriksa apakah pengguna ditemukan dan memverifikasi password
-        if ($user && password_verify($password, $user['password'])) {
-            $_SESSION['id_user'] = $user['id_user'];
-            $_SESSION['username'] = $user['username'];
-            $_SESSION['role'] = $user['role'];
+        // Cek apakah user ditemukan
+        if ($user) {
+            // Cek apakah statusnya 'verified'
+            if ($user['status'] !== 'diverifikasi') {
+                $error = "Akun Anda belum diverifikasi. Silakan hubungi admin.";
+            } else {
+                // Cek password
+                if (password_verify($password, $user['password'])) {
+                    $_SESSION['id_user'] = $user['id_user'];
+                    $_SESSION['username'] = $user['username'];
+                    $_SESSION['role'] = $user['role'];
 
-            header("Location: ../index.php");
-            exit();
+                    header("Location: ../index.php");
+                    exit();
+                } else {
+                    $error = "Username atau password salah!";
+                }
+            }
         } else {
             $error = "Username atau password salah!";
         }

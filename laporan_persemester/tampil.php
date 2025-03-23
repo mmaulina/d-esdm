@@ -44,18 +44,19 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['terima_id'])) {
 }
 
 // Proses penolakan dengan metode POST
-if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id']) && isset($_POST['keterangan'])) {
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['tolak_laporan'])) {
     $id = $_POST['id'];
     $keterangan = $_POST['keterangan'];
 
     $updateQuery = "UPDATE laporan_semester SET status = 'ditolak', keterangan = :keterangan WHERE id = :id";
     $updateStmt = $conn->prepare($updateQuery);
-    $updateStmt->bindParam(':id', $id);
-    $updateStmt->bindParam(':keterangan', $keterangan);
+    $updateStmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $updateStmt->bindParam(':keterangan', $keterangan, PDO::PARAM_STR);
     $updateStmt->execute();
 
     echo "<script>alert('Laporan ditolak!'); window.location.href='?page=notifikasi';</script>";
 }
+
 
 $stmt->execute();
 $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -141,7 +142,7 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                                 <button type="submit" class="btn btn-success btn-sm">Terima</button>
                                             </form>
                                             <!-- Tombol Tolak dengan Modal -->
-                                            <a href="#" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modalTolak<?php echo $row['id']; ?>">Tolak</a>
+                                            <a href="" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modalTolak<?php echo $row['id']; ?>">Tolak</a>
                                             <!-- Tombol edit dan hapus -->
                                         <?php elseif ($row['status'] == 'diterima' || $row['status'] == 'ditolak'): ?>
                                             <a href="?page=edit_laporan_persemester&id=<?php echo $row['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
@@ -160,18 +161,18 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                                 </button>
                                             </div>
                                             <form action="" method="POST">
-                                                <div class="modal-body">
-                                                    <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
-                                                    <div class="form-group">
-                                                        <label for="keterangan<?php echo $row['id']; ?>">Keterangan Penolakan</label>
-                                                        <textarea class="form-control" id="keterangan" name="keterangan" rows="3" required></textarea>
-                                                    </div>
+                                            <div class="modal-body">
+                                                <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
+                                                <div class="form-group">
+                                                    <label for="keterangan<?php echo $row['id']; ?>">Keterangan Penolakan</label>
+                                                    <textarea class="form-control" id="keterangan" name="keterangan" rows="3" required></textarea>
                                                 </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                                                    <button type="submit" name="id" class="btn btn-danger">Tolak</button>
-                                                </div>
-                                            </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                                                <button type="submit" name="tolak_laporan" class="btn btn-danger">Tolak</button>
+                                            </div>
+                                        </form>
                                         </div>
                                     </div>
                                 </div>
@@ -187,3 +188,10 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
     </div>
 </div>
+
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.3/css/bootstrap.min.css">
+
+<!-- jQuery dan Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.3/js/bootstrap.bundle.min.js"></script>
