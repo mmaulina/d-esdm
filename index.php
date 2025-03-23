@@ -63,6 +63,7 @@ include "template/header.php";
                 case "pembangkit_tambah": include "pembangkit/tambah.php"; break;
                 case "pembangkit_edit": include "pembangkit/update.php"; break;
                 case "pembangkit_hapus": include "pembangkit/delete.php"; break;
+                case "pembangkit_export": include "pembangkit/export.php"; break;
 
                 // laporan perbulan
                 case "laporan_perbulan": include "laporan_perbulan/tampil.php"; break;

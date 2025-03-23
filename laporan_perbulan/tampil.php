@@ -14,20 +14,35 @@ $id_user = $_SESSION['id_user'];
 $role = $_SESSION['role']; // Pastikan role sudah tersimpan di session
 
 // Buat koneksi menggunakan PDO
-$database = new Database();
-$conn = $database->getConnection();
+$db = new Database();
+$conn = $db->getConnection();
 
-if ($role == 'admin') {
-    // Admin melihat semua data
-    $query = "SELECT * FROM laporan_bulanan";
-    $stmt = $conn->prepare($query);
-} else {
-    // User umum hanya melihat data mereka sendiri
-    $query = "SELECT * FROM laporan_bulanan WHERE id_user = :id_user";
-    $stmt = $conn->prepare($query);
-    $stmt->bindParam(":id_user", $id_user, PDO::PARAM_INT);
+// Query dasar
+$query = "SELECT * FROM laporan_bulanan";
+$params = [];
+
+// Jika bukan admin, tambahkan filter berdasarkan id_user
+if ($role !== 'admin') {
+    $query .= " WHERE id_user = :id_user";
+    $params[':id_user'] = $id_user;
 }
 
+// Cek apakah ada keyword pencarian
+if (!empty($_GET['keyword'])) {
+    $keyword = "%" . $_GET['keyword'] . "%";
+
+    // Tambahkan WHERE jika belum ada, atau AND jika sudah ada filter sebelumnya
+    $query .= (strpos($query, 'WHERE') === false) ? " WHERE" : " AND";
+    $query .= " nama_perusahaan LIKE :keyword";
+
+    $params[':keyword'] = $keyword;
+}
+
+// Persiapkan dan jalankan query
+$stmt = $conn->prepare($query);
+foreach ($params as $key => $value) {
+    $stmt->bindValue($key, $value, PDO::PARAM_STR);
+}
 $stmt->execute();
 $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -37,11 +52,23 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <hr>
     <div class="card shadow">
         <div class="card-body">
-            <?php if ($role != 'admin') : ?>
-                <div class="mb-3">
-                    <a href="?page=tambah_laporan_perbulan" class="btn btn-primary">Tambah Data</a>
+            <!-- Fitur pencarian -->
+            <form method="GET" class="mb-3">
+                <input type="hidden" name="page" value="pembangkit">
+                <div class="input-group">
+                    <input type="text" name="keyword" class="form-control" placeholder="Cari berdasarkan nama perusahaan..." value="<?= isset($_GET['keyword']) ? htmlspecialchars($_GET['keyword']) : '' ?>">
+                    <button type="submit" class="btn btn-success">Cari</button>
+                    <a href="?page=pembangkit" class="btn btn-secondary">Reset</a>
                 </div>
-            <?php endif; ?>
+            </form>
+            <div class="mb-3">
+                <!-- Tombol tambah -->
+                <?php if ($role != 'admin') : ?>
+                    <a href="?page=tambah_laporan_perbulan" class="btn btn-primary">Tambah Data</a>
+                <?php endif; ?>
+                <!-- Tombol export spreadsheet -->
+                <a href="?page=pembangkit_export" class="btn btn-success">Ekspor ke Spreadsheet</a>
+            </div>
 
             <div class="table-responsive" style="max-height: 500px; overflow-x: auto; overflow-y: auto;">
                 <table class="table table-bordered" style="min-width: 1200px; white-space: nowrap;">
@@ -90,7 +117,7 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <?php } ?>
                         <?php else: ?>
                             <tr>
-                                <td colspan='15' class='text-center'>Data tidak ditemukan</td>
+                                <td colspan='11' class='text-center'>Data tidak ditemukan</td>
                             </tr>
                         <?php endif; ?>
                     </tbody>

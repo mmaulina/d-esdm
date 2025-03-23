@@ -2,7 +2,6 @@
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
-include 'koneksi.php'; // Pastikan file koneksi ke database sudah disertakan
 
 // Pastikan pengguna sudah login
 if (!isset($_SESSION['id_user']) || !isset($_SESSION['role'])) {
@@ -26,6 +25,29 @@ try {
         $stmt->bindParam(':id_user', $id_user, PDO::PARAM_INT);
     }
 
+    // Query fitur pencarian
+    $query = "SELECT * FROM pembangkit";
+    $params = [];
+    if ($role !== 'admin') {
+        $query .= " WHERE id_user = :id_user";
+        $params[':id_user'] = $id_user;
+    }
+    // Cek apakah ada keyword pencarian
+    if (!empty($_GET['keyword'])) {
+        $keyword = "%" . $_GET['keyword'] . "%";
+
+        if ($role === 'admin') {
+            $query .= " WHERE nama_perusahaan LIKE :keyword";
+        } else {
+            $query .= " AND nama_perusahaan LIKE :keyword";
+        }
+        $params[':keyword'] = $keyword;
+    }
+    $stmt = $conn->prepare($query);
+    foreach ($params as $key => $value) {
+        $stmt->bindValue($key, $value, PDO::PARAM_STR);
+    }
+
     $stmt->execute();
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
@@ -38,12 +60,23 @@ try {
     <hr>
     <div class="card shadow">
         <div class="card-body">
-            <?php if ($role !== 'admin'): // Tombol Tambah hanya untuk umum 
-            ?>
-                <div class="mb-3">
-                    <a href='?page=pembangkit_tambah&id_user=<?= $id_user ?>' class='btn btn-primary'>Tambah Data</a>
+            <!-- Fitur pencarian -->
+            <form method="GET" class="mb-3">
+                <input type="hidden" name="page" value="pembangkit">
+                <div class="input-group">
+                    <input type="text" name="keyword" class="form-control" placeholder="Cari berdasarkan nama perusahaan..." value="<?= isset($_GET['keyword']) ? htmlspecialchars($_GET['keyword']) : '' ?>">
+                    <button type="submit" class="btn btn-primary">Cari</button>
+                    <a href="?page=pembangkit" class="btn btn-secondary">Reset</a>
                 </div>
-            <?php endif; ?>
+            </form>
+            <div class="mb-3">
+                <!-- Tombol tambah data -->
+                <?php if ($role !== 'admin'): ?>
+                    <a href='?page=pembangkit_tambah&id_user=<?= $id_user ?>' class='btn btn-primary'>Tambah Data</a>
+                <?php endif; ?>
+                <!-- Tombol export spreadsheet -->
+                <a href="?page=pembangkit_export" class="btn btn-success">Ekspor ke Spreadsheet</a>
+            </div>
 
             <div class="table-responsive" style="max-height: 500px; overflow-x: auto; overflow-y: auto;">
                 <table class="table table-bordered" style="table-layout: fixed; min-width: 1800px;">

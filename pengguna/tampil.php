@@ -2,18 +2,39 @@
 try {
     $db = new Database();
     $conn = $db->getConnection();
+
+    // Query dasar
     $sql = "SELECT id_user, username, email, role, status FROM users 
             ORDER BY FIELD(status, 'diajukan') DESC, status ASC";
+
+    // Inisialisasi array parameter
+    $params = [];
+
+    // Fitur pencarian
+    if (!empty($_GET['keyword'])) {
+        $keyword = "%" . $_GET['keyword'] . "%";
+        $sql .= " AND username LIKE :keyword";
+        $params[':keyword'] = $keyword;
+    }
+
+    // Persiapkan statement
     $stmt = $conn->prepare($sql);
+
+    // Bind parameter jika ada pencarian
+    foreach ($params as $key => $value) {
+        $stmt->bindValue($key, $value, PDO::PARAM_STR);
+    }
+
+    // Eksekusi query
     $stmt->execute();
     $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     die("Error: " . $e->getMessage());
 }
 
-// Proses persetujuan (Terima) dengan metode POST
+// Proses persetujuan (Verifikasi)
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['terima_id'])) {
-    $id = $_POST['terima_id']; // Pastikan variabel ini sesuai dengan input hidden di form
+    $id = $_POST['terima_id'];
 
     $updateQuery = "UPDATE users SET status = 'diverifikasi' WHERE id_user = :id_user";
     $updateStmt = $conn->prepare($updateQuery);
@@ -23,9 +44,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['terima_id'])) {
     echo "<script>alert('Pengguna telah diverifikasi!'); window.location.href='?page=pengguna';</script>";
 }
 
-// Proses penolakan (Tolak) dengan metode POST
+// Proses penolakan
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['tolak_id'])) {
-    $id = $_POST['tolak_id']; // Pastikan variabel ini sesuai dengan input hidden di form
+    $id = $_POST['tolak_id'];
 
     $updateQuery = "UPDATE users SET status = 'ditolak' WHERE id_user = :id_user";
     $updateStmt = $conn->prepare($updateQuery);
@@ -36,13 +57,23 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['tolak_id'])) {
 }
 ?>
 
+
 <div class="container mt-4">
     <h3 class="text-center mb-3">Data Pengguna</h3>
     <hr>
     <div class="card shadow">
         <div class="card-body">
             <table class="table table-striped table-bordered">
-                <div class="mb-3">
+                <!-- Fitur pencarian -->
+                <form method="GET" class="mb-3">
+                    <input type="hidden" name="page" value="username">
+                    <div class="input-group">
+                        <input type="text" name="keyword" class="form-control" placeholder="Cari berdasarkan username..." value="<?= isset($_GET['keyword']) ? htmlspecialchars($_GET['keyword']) : '' ?>">
+                        <button type="submit" class="btn btn-primary">Cari</button>
+                        <a href="?page=username" class="btn btn-secondary">Reset</a>
+                    </div>
+                </form>
+                <div class="mt-3 mb-3">
                     <a href="?page=pengguna_tambah_admin" class="btn btn-primary">Tambah Data</a>
                 </div>
                 <thead class="table-dark text-white">

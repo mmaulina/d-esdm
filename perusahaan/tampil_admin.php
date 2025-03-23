@@ -1,13 +1,26 @@
 <?php
-include_once 'koneksi.php'; // Pastikan koneksi.php sudah menggunakan PDO
-
 try {
     $database = new Database();
     $pdo = $database->getConnection(); // Dapatkan koneksi PDO
-    $query = "SELECT * FROM profil ORDER BY id_profil ASC";
+    
+    // Query utama
+    $query = "SELECT * FROM profil WHERE 1=1"; // Gunakan WHERE 1=1 agar AND bisa ditambahkan
+    $params = [];
+
+    // Fitur pencarian
+    if (!empty($_GET['keyword'])) {
+        $keyword = "%" . $_GET['keyword'] . "%";
+        $query .= " AND nama_perusahaan LIKE :keyword";
+        $params[':keyword'] = $keyword;
+    }
+
     $stmt = $pdo->prepare($query);
+    foreach ($params as $key => $value) {
+        $stmt->bindValue($key, $value, PDO::PARAM_STR);
+    }
     $stmt->execute();
     $profiles = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 } catch (PDOException $e) {
     die("Error: " . $e->getMessage());
 }
@@ -18,6 +31,18 @@ try {
     <hr>
     <div class="card shadow">
         <div class="card-body">
+            <!-- Fitur pencarian -->
+            <form method="GET" class="mb-3">
+                <input type="hidden" name="page" value="profil_admin">
+                <div class="input-group">
+                    <input type="text" name="keyword" class="form-control" placeholder="Cari berdasarkan nama perusahaan..." value="<?= isset($_GET['keyword']) ? htmlspecialchars($_GET['keyword']) : '' ?>">
+                    <button type="submit" class="btn btn-primary">Cari</button>
+                    <a href="?page=profil_admin" class="btn btn-secondary">Reset</a>
+                </div>
+            </form>
+            <!-- Tombol export spreadsheet -->
+            <a href="?page=profil_export" class="btn btn-success mb-3">Ekspor ke Spreadsheet</a>
+
             <div class="table-responsive" style="max-height: 500px; overflow-x: auto; overflow-y: auto;">
                 <table class="table table-bordered" style="min-width: 1200px; white-space: nowrap;">
                     <thead class="table-dark text-center align-middle">
@@ -41,7 +66,8 @@ try {
                     </thead>
                     <tbody>
                         <?php if (count($profiles) > 0): ?>
-                            <?php $no = 1; foreach ($profiles as $row): ?>
+                            <?php $no = 1;
+                            foreach ($profiles as $row): ?>
                                 <tr>
                                     <td><?= $no++; ?></td>
                                     <td><?= htmlspecialchars($row['nama_perusahaan']); ?></td>
@@ -61,7 +87,9 @@ try {
                                 </tr>
                             <?php endforeach; ?>
                         <?php else: ?>
-                            <tr><td colspan="12" class="text-center">Data tidak ditemukan</td></tr>
+                            <tr>
+                                <td colspan="12" class="text-center">Data tidak ditemukan</td>
+                            </tr>
                         <?php endif; ?>
                     </tbody>
                 </table>
