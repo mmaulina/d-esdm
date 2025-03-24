@@ -113,8 +113,45 @@ try {
     $writer = new Xlsx($spreadsheet);
     $writer->save($filePath);
 
-    // Berikan tautan untuk mengunduh file
-    echo "<script>alert('Data berhasil diekspor! Klik OK untuk mengunduh.'); window.location.href='$filePath';</script>";
+    // Tampilkan loading dan mulai pengunduhan
+    echo "
+    <html>
+    <head>
+        <script>
+            function startDownload() {
+                document.getElementById('loading').style.display = 'block';
+                setTimeout(() => {
+                    window.location.href = '$filePath';
+                    setTimeout(() => {
+                        document.getElementById('loading').innerHTML = 'Download selesai, kembali ke halaman...';
+                        setTimeout(() => {
+                            window.location.href = '?page=pembangkit';
+                        }, 2000);
+                    }, 2000);
+                }, 1000);
+            }
+        </script>
+        <style>
+            #loading {
+                display: none;
+                width: 100%;
+                height: 100vh;
+                position: fixed;
+                top: 0;
+                left: 0;
+                background: rgba(0, 0, 0, 0.7);
+                color: white;
+                font-size: 20px;
+                text-align: center;
+                line-height: 100vh;
+                z-index: 9999;
+            }
+        </style>
+    </head>
+    <body onload='startDownload()'>
+        <div id='loading'>Sedang mengunduh, harap tunggu...</div>
+    </body>
+    </html>";
 } catch (PDOException $e) {
     die("Error: " . $e->getMessage());
 }
