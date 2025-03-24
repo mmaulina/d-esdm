@@ -2,7 +2,6 @@
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
-include 'koneksi.php';
 
 // Cek apakah pengguna sudah login
 if (!isset($_SESSION['id_user'])) {
@@ -14,8 +13,11 @@ $id_user = $_SESSION['id_user'];
 $role = $_SESSION['role']; // Pastikan role sudah tersimpan di session
 
 // Buat koneksi menggunakan PDO
-$database = new Database();
-$conn = $database->getConnection();
+$db = new Database();
+$conn = $db->getConnection();
+
+$query = "SELECT * FROM laporan_semester";
+$params = [];
 
 if ($role == 'admin') {
     // Admin melihat semua data, dengan 'Diajukan' di atas dan sisanya urut abjad
@@ -57,6 +59,22 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['tolak_laporan'])) {
     echo "<script>alert('Laporan ditolak!'); window.location.href='?page=notifikasi';</script>";
 }
 
+// Cek apakah ada keyword pencarian
+if (!empty($_GET['keyword'])) {
+    $keyword = "%" . $_GET['keyword'] . "%";
+
+    // Tambahkan WHERE jika belum ada, atau AND jika sudah ada filter sebelumnya
+    $query .= (strpos($query, 'WHERE') === false) ? " WHERE" : " AND";
+    $query .= " nama_perusahaan LIKE :keyword";
+
+    $params[':keyword'] = $keyword;
+}
+
+// Persiapkan dan jalankan query
+$stmt = $conn->prepare($query);
+foreach ($params as $key => $value) {
+    $stmt->bindValue($key, $value, PDO::PARAM_STR);
+}
 
 $stmt->execute();
 $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -67,6 +85,14 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <hr>
     <div class="card shadow">
         <div class="card-body">
+            <form method="GET" class="mb-3">
+                <input type="hidden" name="page" value="laporan_persemester">
+                <div class="input-group">
+                    <input type="text" name="keyword" class="form-control" placeholder="Cari berdasarkan nama perusahaan..." value="<?= isset($_GET['keyword']) ? htmlspecialchars($_GET['keyword']) : '' ?>">
+                    <button type="submit" class="btn btn-info">Cari</button>
+                    <a href="?page=laporan_persemester" class="btn btn-secondary">Reset</a>
+                </div>
+            </form>
             <?php if ($role != 'admin') : ?>
                 <div class="mb-3">
                     <a href="?page=tambah_laporan_persemester" class="btn btn-primary">Tambah Data</a>
@@ -156,23 +182,20 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <h5 class="modal-title" id="modalTolakLabel">Tolak Laporan</h5>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
                                             </div>
                                             <form action="" method="POST">
-                                            <div class="modal-body">
-                                                <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
-                                                <div class="form-group">
-                                                    <label for="keterangan<?php echo $row['id']; ?>">Keterangan Penolakan</label>
-                                                    <textarea class="form-control" id="keterangan" name="keterangan" rows="3" required></textarea>
+                                                <div class="modal-body">
+                                                    <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
+                                                    <div class="form-group">
+                                                        <label for="keterangan<?php echo $row['id']; ?>">Keterangan Penolakan</label>
+                                                        <textarea class="form-control" id="keterangan" name="keterangan" rows="3" required></textarea>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                                                <button type="submit" name="tolak_laporan" class="btn btn-danger">Tolak</button>
-                                            </div>
-                                        </form>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                                                    <button type="submit" name="tolak_laporan" class="btn btn-danger">Tolak</button>
+                                                </div>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
@@ -190,8 +213,8 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </div>
 
 <!-- Bootstrap CSS -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.3/css/bootstrap.min.css">
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.3/css/bootstrap.min.css"> -->
 
 <!-- jQuery dan Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.3/js/bootstrap.bundle.min.js"></script>
+<!-- <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script> -->
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.3/js/bootstrap.bundle.min.js"></script> -->
