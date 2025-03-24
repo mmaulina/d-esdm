@@ -78,7 +78,7 @@ try {
                         </select>
                     </div>
                     <div class="col-md-2">
-                        <button type="submit" class="btn btn-primary">Filter</button>
+                        <button type="submit" class="btn btn-info">Filter</button>
                         <a href="?page=profil_admin" class="btn btn-secondary">Reset</a>
                     </div>
                 </div>

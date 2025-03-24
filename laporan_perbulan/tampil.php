@@ -57,7 +57,7 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <input type="hidden" name="page" value="pembangkit">
                 <div class="input-group">
                     <input type="text" name="keyword" class="form-control" placeholder="Cari berdasarkan nama perusahaan..." value="<?= isset($_GET['keyword']) ? htmlspecialchars($_GET['keyword']) : '' ?>">
-                    <button type="submit" class="btn btn-success">Cari</button>
+                    <button type="submit" class="btn btn-info">Cari</button>
                     <a href="?page=pembangkit" class="btn btn-secondary">Reset</a>
                 </div>
             </form>
