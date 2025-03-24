@@ -35,11 +35,7 @@ include "template/header.php";
         }
     }
 </style>
-<link rel="stylesheet" href="assets/fa/css/all.min.css">
-<link rel="stylesheet" href="assets/css/bootstraps.min.css">
-<script src="assets/js/bootstrap.min.js"></script>
-<div class="container-fluid">
-    <div class="row"> <!-- Mulai baris untuk sidebar dan konten -->
+
         
         <!-- Sidebar -->
         <?php include "template/sidebar.php"; ?>
