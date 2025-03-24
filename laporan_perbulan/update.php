@@ -109,7 +109,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <label class="form-label">Nama Perusahaan</label>
                     <input type="text" name="nama_perusahaan" class="form-control" value="<?= $data['nama_perusahaan'] ?>" required>
                 </div>
-                <button type="submit" class="btn btn-primary">Update</button>
+                <button type="submit" class="btn btn-warning">Simpan Perubahan</button>
                 <a href="?page=laporan_perbulan" class="btn btn-secondary">Kembali</a>
             </form>
         </div>

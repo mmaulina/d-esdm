@@ -125,7 +125,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </div>
                 </div>
                 <div class="mt-3">
-                    <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                    <button type="submit" class="btn btn-warning">Simpan Perubahan</button>
                     <a href="?page=pembangkit" class="btn btn-secondary">Batal</a>
                 </div>
             </form>

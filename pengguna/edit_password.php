@@ -60,8 +60,8 @@ if (isset($_POST['btn_simpan'])) {
                     <label for="inputPasswordBaru" class="form-label">Password Baru</label>
                     <input type="password" class="form-control" id="inputPasswordBaru" required name="password_baru">
                 </div>
-                <button type="submit" class="btn btn-success" name="btn_simpan">Simpan</button>
-                <button type="reset" class="btn btn-danger">Batal</button>
+                <button type="submit" class="btn btn-warning" name="btn_simpan">Simpan Perubahan</button>
+                <button type="reset" class="btn btn-secondary">Batal</button>
             </form>
         </div>
     </div>

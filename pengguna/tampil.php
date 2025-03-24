@@ -69,7 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['tolak_id'])) {
                     <input type="hidden" name="page" value="username">
                     <div class="input-group">
                         <input type="text" name="keyword" class="form-control" placeholder="Cari berdasarkan username..." value="<?= isset($_GET['keyword']) ? htmlspecialchars($_GET['keyword']) : '' ?>">
-                        <button type="submit" class="btn btn-info">Cari</button>
+                        <button type="submit" class="btn btn-success">Cari</button>
                         <a href="?page=username" class="btn btn-secondary">Reset</a>
                     </div>
                 </form>

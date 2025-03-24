@@ -162,7 +162,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
 
                 <div class="mt-3">
-                    <button type="submit" class="btn btn-warning">Update</button>
+                    <button type="submit" class="btn btn-warning">Simpan Perubahan</button>
                     <a href="?page=profil_perusahaan" class="btn btn-secondary">Batal</a>
                 </div>
             </form>

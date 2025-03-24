@@ -94,7 +94,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </select>
                     </div>
                 <?php } ?>
-                <button type="submit" class="btn btn-success">Simpan Perubahan</button>
+                <button type="submit" class="btn btn-warning">Simpan Perubahan</button>
                 <?php if ($_SESSION['role'] == 'admin') { ?> <!-- hanya admin yang bisa mengakses button ini -->
                     <a href="?page=pengguna" class="btn btn-secondary">Kembali</a>
                 <?php } ?>

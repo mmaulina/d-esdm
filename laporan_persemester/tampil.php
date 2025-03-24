@@ -89,7 +89,7 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <input type="hidden" name="page" value="laporan_persemester">
                 <div class="input-group">
                     <input type="text" name="keyword" class="form-control" placeholder="Cari berdasarkan nama perusahaan..." value="<?= isset($_GET['keyword']) ? htmlspecialchars($_GET['keyword']) : '' ?>">
-                    <button type="submit" class="btn btn-info">Cari</button>
+                    <button type="submit" class="btn btn-success">Cari</button>
                     <a href="?page=laporan_persemester" class="btn btn-secondary">Reset</a>
                 </div>
             </form>
@@ -129,7 +129,7 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     <td><?php echo htmlspecialchars($row['hasil']); ?></td>
                                     <td class="text-center">
                                         <?php if (!empty($row['file_laporan'])) : ?>
-                                            <a href="<?php echo htmlspecialchars($row['file_laporan']); ?>" target="_blank" class="btn btn-sm btn-info">
+                                            <a href="<?php echo htmlspecialchars($row['file_laporan']); ?>" target="_blank" class="btn btn-sm btn-dark">
                                                 <i class="fas fa-file-alt"></i> Lihat
                                             </a>
                                         <?php else : ?>
@@ -138,7 +138,7 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     </td>
                                     <td class="text-center">
                                         <?php if (!empty($row['file_lhu'])) : ?>
-                                            <a href="<?php echo htmlspecialchars($row['file_lhu']); ?>" target="_blank" class="btn btn-sm btn-info">
+                                            <a href="<?php echo htmlspecialchars($row['file_lhu']); ?>" target="_blank" class="btn btn-sm btn-dark">
                                                 <i class="fas fa-file-alt"></i> Lihat
                                             </a>
                                         <?php else : ?>

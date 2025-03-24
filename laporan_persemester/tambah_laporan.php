@@ -121,7 +121,7 @@ function uploadFile($input_name) {
                     <label class="form-label">Upload LHU (PDF, DOC, DOCX, XLS, XLSX)</label>
                     <input type="file" name="file_lhu" class="form-control" accept=".pdf,.doc,.docx,.xls,.xlsx">
                 </div>
-                <button type="submit" class="btn btn-primary">Simpan</button>
+                <button type="submit" class="btn btn-success">Simpan</button>
                 <a href="?page=laporan_persemester" class="btn btn-secondary">Kembali</a>
             </form>
         </div>

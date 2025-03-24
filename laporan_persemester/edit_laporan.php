@@ -157,7 +157,7 @@ function uploadFile($input_name) {
                         <p>File yang sudah di-upload: <a href="<?= htmlspecialchars($laporan['file_lhu']) ?>" target="_blank">Download</a></p>
                     <?php endif; ?>
                 </div>
-                <button type="submit" class="btn btn-primary">Update</button>
+                <button type="submit" class="btn btn-warning">Simpan Perubahan</button>
                 <a href="?page=laporan_persemester" class="btn btn-secondary">Kembali</a>
             </form>
         </div>

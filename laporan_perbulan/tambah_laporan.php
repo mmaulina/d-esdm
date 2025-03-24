@@ -118,7 +118,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <input type="number" name="pemakaian_sendiri" class="form-control" required>
                 </div>
                 
-                <button type="submit" class="btn btn-primary">Simpan</button>
+                <button type="submit" class="btn btn-success">Simpan</button>
                 <a href="?page=laporan_persemester" class="btn btn-secondary">Kembali</a>
             </form>
         </div>
