@@ -27,9 +27,9 @@ try {
     $conn = $db->getConnection();
 
     if ($role === 'admin') {
-        $stmt = $conn->prepare("SELECT * FROM pembangkit");
+        $stmt = $conn->prepare("SELECT * FROM laporan_bulanan");
     } else {
-        $stmt = $conn->prepare("SELECT * FROM pembangkit WHERE id_user = :id_user");
+        $stmt = $conn->prepare("SELECT * FROM laporan_bulanan WHERE id_user = :id_user");
         $stmt->bindParam(':id_user', $id_user, PDO::PARAM_INT);
     }
 
@@ -40,16 +40,15 @@ try {
     $sheet = $spreadsheet->getActiveSheet();
 
     // Judul
-    $sheet->setCellValue('A1', 'DATA PEMBANGKIT LIST');
-    $sheet->mergeCells('A1:O1'); // Gabungkan sel untuk judul
+    $sheet->setCellValue('A1', 'LAPORAN BULANAN');
+    $sheet->mergeCells('A1:J1'); // Gabungkan sel untuk judul
     $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(14);
     $sheet->getStyle('A1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
     
     // Header
     $headers = [
-        'No.', 'Nama Perusahaan', 'Alamat', 'Longitude', 'Latitude', 'Jenis Pembangkit', 'Fungsi',
-        'Kapasitas Terpasang (MW)', 'Daya Mampu Netto (MW)', 'Jumlah Unit', 'No. Unit',
-        'Tahun Operasi', 'Status Operasi', 'Jenis Bahan Bakar', 'Satuan Bahan Bakar'
+        'No.', 'Bulan', 'Nama Perusahaan', 'Volume Bahan Bakar', 'Produksi Sendiri Kwh', 'Pembelian Sumber lain(Bila ada)Kwh', 'Susut jaringan(Bila ada)Kwh',
+        'Penjualan Ke Pelanggan Kwh','Penjualan ke PLN(Bila ada)Kwh', 'Pemakaian Sendiri Kwh'
     ];
     
     $column = 'A';
@@ -65,43 +64,38 @@ try {
         'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
         'borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]]
     ];
-    $sheet->getStyle('A3:O3')->applyFromArray($headerStyle);
+    $sheet->getStyle('A3:J3')->applyFromArray($headerStyle);
 
     // Isi Data
     $rowNum = 4;
     $no = 1;
     foreach ($data as $row) {
         $sheet->setCellValue('A' . $rowNum, $no++);
-        $sheet->setCellValue('B' . $rowNum, $row['nama_perusahaan']);
-        $sheet->setCellValue('C' . $rowNum, $row['alamat']);
-        $sheet->setCellValue('D' . $rowNum, $row['longitude']);
-        $sheet->setCellValue('E' . $rowNum, $row['latitude']);
-        $sheet->setCellValue('F' . $rowNum, $row['jenis_pembangkit']);
-        $sheet->setCellValue('G' . $rowNum, $row['fungsi']);
-        $sheet->setCellValue('H' . $rowNum, $row['kapasitas_terpasang']);
-        $sheet->setCellValue('I' . $rowNum, $row['daya_mampu_netto']);
-        $sheet->setCellValue('J' . $rowNum, $row['jumlah_unit']);
-        $sheet->setCellValue('K' . $rowNum, $row['no_unit']);
-        $sheet->setCellValue('L' . $rowNum, $row['tahun_operasi']);
-        $sheet->setCellValue('M' . $rowNum, $row['status_operasi']);
-        $sheet->setCellValue('N' . $rowNum, $row['bahan_bakar_jenis']);
-        $sheet->setCellValue('O' . $rowNum, $row['bahan_bakar_satuan']);
+        $sheet->setCellValue('B' . $rowNum, $row['bulan']);
+        $sheet->setCellValue('C' . $rowNum, $row['nama_perusahaan']);
+        $sheet->setCellValue('D' . $rowNum, $row['volume_bb']);
+        $sheet->setCellValue('E' . $rowNum, $row['produksi_sendiri']);
+        $sheet->setCellValue('F' . $rowNum, $row['pemb_sumber_lain']);
+        $sheet->setCellValue('G' . $rowNum, $row['susut_jaringan']);
+        $sheet->setCellValue('H' . $rowNum, $row['penj_ke_pelanggan']);
+        $sheet->setCellValue('I' . $rowNum, $row['penj_ke_pln']);
+        $sheet->setCellValue('J' . $rowNum, $row['pemakaian_sendiri']);
 
         $rowNum++;
     }
 
     // Border untuk seluruh data
-    $sheet->getStyle('A3:O' . ($rowNum - 1))->applyFromArray([
+    $sheet->getStyle('A3:J' . ($rowNum - 1))->applyFromArray([
         'borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]]
     ]);
 
     // Auto-fit kolom
-    foreach (range('A', 'O') as $col) {
+    foreach (range('A', 'J') as $col) {
         $sheet->getColumnDimension($col)->setAutoSize(true);
     }
 
     // Nama file
-    $fileName = 'data_pembangkit_' . time() . '.xlsx';
+    $fileName = 'Laporan Bulanan_' . time() . '.xlsx';
     $filePath = 'exports/' . $fileName;
 
     // Pastikan folder exports ada

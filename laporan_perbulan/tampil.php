@@ -67,7 +67,7 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <a href="?page=tambah_laporan_perbulan" class="btn btn-primary">Tambah Data</a>
                 <?php endif; ?>
                 <!-- Tombol export spreadsheet -->
-                <a href="?page=pembangkit_export" class="btn btn-success">Ekspor ke Spreadsheet</a>
+                <a href="?page=excel_laporan_bulanan" class="btn btn-success">Ekspor ke Spreadsheet</a>
             </div>
 
             <div class="table-responsive" style="max-height: 500px; overflow-x: auto; overflow-y: auto;">
