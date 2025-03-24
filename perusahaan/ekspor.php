@@ -26,12 +26,7 @@ try {
     $db = new Database();
     $conn = $db->getConnection();
 
-    if ($role === 'admin') {
-        $stmt = $conn->prepare("SELECT * FROM pembangkit");
-    } else {
-        $stmt = $conn->prepare("SELECT * FROM pembangkit WHERE id_user = :id_user");
-        $stmt->bindParam(':id_user', $id_user, PDO::PARAM_INT);
-    }
+    $stmt = $conn->prepare("SELECT * FROM profil");
 
     $stmt->execute();
     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -40,16 +35,15 @@ try {
     $sheet = $spreadsheet->getActiveSheet();
 
     // Judul
-    $sheet->setCellValue('A1', 'DATA PEMBANGKIT LIST');
-    $sheet->mergeCells('A1:O1'); // Gabungkan sel untuk judul
+    $sheet->setCellValue('A1', 'DATA PERUSAHAAN LIST');
+    $sheet->mergeCells('A1:K1'); // Gabungkan sel untuk judul
     $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(14);
     $sheet->getStyle('A1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
     
     // Header
     $headers = [
-        'No.', 'Nama Perusahaan', 'Alamat', 'Longitude', 'Latitude', 'Jenis Pembangkit', 'Fungsi',
-        'Kapasitas Terpasang (MW)', 'Daya Mampu Netto (MW)', 'Jumlah Unit', 'No. Unit',
-        'Tahun Operasi', 'Status Operasi', 'Jenis Bahan Bakar', 'Satuan Bahan Bakar'
+        'No.', 'Nama Perusahaan', 'Kabupaten/Kota', 'Alamat', 'Jenis Usaha', 'No_telp_kantor', 'No_fax',
+        'Tenaga Teknik', 'Nama', 'Nomor Hp', 'Email'
     ];
     
     $column = 'A';
@@ -65,7 +59,7 @@ try {
         'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
         'borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]]
     ];
-    $sheet->getStyle('A3:O3')->applyFromArray($headerStyle);
+    $sheet->getStyle('A3:K3')->applyFromArray($headerStyle);
 
     // Isi Data
     $rowNum = 4;
@@ -73,35 +67,31 @@ try {
     foreach ($data as $row) {
         $sheet->setCellValue('A' . $rowNum, $no++);
         $sheet->setCellValue('B' . $rowNum, $row['nama_perusahaan']);
-        $sheet->setCellValue('C' . $rowNum, $row['alamat']);
-        $sheet->setCellValue('D' . $rowNum, $row['longitude']);
-        $sheet->setCellValue('E' . $rowNum, $row['latitude']);
-        $sheet->setCellValue('F' . $rowNum, $row['jenis_pembangkit']);
-        $sheet->setCellValue('G' . $rowNum, $row['fungsi']);
-        $sheet->setCellValue('H' . $rowNum, $row['kapasitas_terpasang']);
-        $sheet->setCellValue('I' . $rowNum, $row['daya_mampu_netto']);
-        $sheet->setCellValue('J' . $rowNum, $row['jumlah_unit']);
-        $sheet->setCellValue('K' . $rowNum, $row['no_unit']);
-        $sheet->setCellValue('L' . $rowNum, $row['tahun_operasi']);
-        $sheet->setCellValue('M' . $rowNum, $row['status_operasi']);
-        $sheet->setCellValue('N' . $rowNum, $row['bahan_bakar_jenis']);
-        $sheet->setCellValue('O' . $rowNum, $row['bahan_bakar_satuan']);
+        $sheet->setCellValue('C' . $rowNum, $row['kabupaten']);
+        $sheet->setCellValue('D' . $rowNum, $row['alamat']);
+        $sheet->setCellValue('E' . $rowNum, $row['jenis_usaha']);
+        $sheet->setCellValue('F' . $rowNum, $row['no_telp_kantor']);
+        $sheet->setCellValue('G' . $rowNum, $row['no_fax']);
+        $sheet->setCellValue('H' . $rowNum, $row['tenaga_teknik']);
+        $sheet->setCellValue('I' . $rowNum, $row['nama']);
+        $sheet->setCellValue('J' . $rowNum, $row['no_hp']);
+        $sheet->setCellValue('K' . $rowNum, $row['email']);
 
         $rowNum++;
     }
 
     // Border untuk seluruh data
-    $sheet->getStyle('A3:O' . ($rowNum - 1))->applyFromArray([
+    $sheet->getStyle('A3:K' . ($rowNum - 1))->applyFromArray([
         'borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]]
     ]);
 
     // Auto-fit kolom
-    foreach (range('A', 'O') as $col) {
+    foreach (range('A', 'K') as $col) {
         $sheet->getColumnDimension($col)->setAutoSize(true);
     }
 
     // Nama file
-    $fileName = 'data_pembangkit_' . time() . '.xlsx';
+    $fileName = 'data_perusahaan_' . time() . '.xlsx';
     $filePath = 'exports/' . $fileName;
 
     // Pastikan folder exports ada
@@ -115,7 +105,6 @@ try {
 
     // Berikan tautan untuk mengunduh file
     echo "<script>alert('Data berhasil diekspor! Klik OK untuk mengunduh.'); window.location.href='$filePath';</script>";
-    echo "window.location.href = ?page=pembangkit";
 } catch (PDOException $e) {
     die("Error: " . $e->getMessage());
 }

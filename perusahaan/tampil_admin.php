@@ -41,7 +41,7 @@ try {
                 </div>
             </form>
             <!-- Tombol export spreadsheet -->
-            <a href="?page=profil_export" class="btn btn-success mb-3">Ekspor ke Spreadsheet</a>
+            <a href="?page=excel_profil" class="btn btn-success mb-3">Ekspor ke Spreadsheet</a>
 
             <div class="table-responsive" style="max-height: 500px; overflow-x: auto; overflow-y: auto;">
                 <table class="table table-bordered" style="min-width: 1200px; white-space: nowrap;">

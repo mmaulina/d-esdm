@@ -57,6 +57,7 @@ include "template/header.php";
                 case "update_profil_admin": include "perusahaan/update_profil_admin.php"; break;
                 case "delete_profil": include "perusahaan/delete_profil.php"; break;
                 case "delete_profil_admin": include "perusahaan/delete_profil_admin.php"; break;
+                case "excel_profil": include "perusahaan/ekspor.php"; break;
 
                 // data pembangkit dan data teknis pembangkit
                 case "pembangkit": include "pembangkit/tampil.php"; break;
