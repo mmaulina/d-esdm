@@ -4,14 +4,26 @@ try {
     $pdo = $database->getConnection(); // Dapatkan koneksi PDO
     
     // Query utama
-    $query = "SELECT * FROM profil WHERE 1=1"; // Gunakan WHERE 1=1 agar AND bisa ditambahkan
+    $query = "SELECT * FROM profil WHERE 1=1"; 
     $params = [];
 
-    // Fitur pencarian
+    // Fitur pencarian nama perusahaan
     if (!empty($_GET['keyword'])) {
         $keyword = "%" . $_GET['keyword'] . "%";
         $query .= " AND nama_perusahaan LIKE :keyword";
         $params[':keyword'] = $keyword;
+    }
+
+    // Filter berdasarkan jenis usaha
+    if (!empty($_GET['jenis_usaha'])) {
+        $query .= " AND jenis_usaha = :jenis_usaha";
+        $params[':jenis_usaha'] = $_GET['jenis_usaha'];
+    }
+
+    // Filter berdasarkan kabupaten/kota
+    if (!empty($_GET['kabupaten'])) {
+        $query .= " AND kabupaten = :kabupaten";
+        $params[':kabupaten'] = $_GET['kabupaten'];
     }
 
     $stmt = $pdo->prepare($query);
@@ -20,6 +32,13 @@ try {
     }
     $stmt->execute();
     $profiles = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Ambil daftar jenis usaha dan kabupaten/kota untuk dropdown filter
+    $jenisUsahaStmt = $pdo->query("SELECT DISTINCT jenis_usaha FROM profil ORDER BY jenis_usaha");
+    $jenisUsahaList = $jenisUsahaStmt->fetchAll(PDO::FETCH_COLUMN);
+
+    $kabupatenStmt = $pdo->query("SELECT DISTINCT kabupaten FROM profil ORDER BY kabupaten");
+    $kabupatenList = $kabupatenStmt->fetchAll(PDO::FETCH_COLUMN);
 
 } catch (PDOException $e) {
     die("Error: " . $e->getMessage());
@@ -31,15 +50,40 @@ try {
     <hr>
     <div class="card shadow">
         <div class="card-body">
-            <!-- Fitur pencarian -->
+            <!-- Fitur pencarian dan filter -->
             <form method="GET" class="mb-3">
                 <input type="hidden" name="page" value="profil_admin">
-                <div class="input-group">
-                    <input type="text" name="keyword" class="form-control" placeholder="Cari berdasarkan nama perusahaan..." value="<?= isset($_GET['keyword']) ? htmlspecialchars($_GET['keyword']) : '' ?>">
-                    <button type="submit" class="btn btn-primary">Cari</button>
-                    <a href="?page=profil_admin" class="btn btn-secondary">Reset</a>
+                <div class="row">
+                    <div class="col-md-4">
+                        <input type="text" name="keyword" class="form-control" placeholder="Cari berdasarkan nama perusahaan..." value="<?= isset($_GET['keyword']) ? htmlspecialchars($_GET['keyword']) : '' ?>">
+                    </div>
+                    <div class="col-md-3">
+                        <select name="jenis_usaha" class="form-select">
+                            <option value="">-- Pilih Jenis Usaha --</option>
+                            <?php foreach ($jenisUsahaList as $jenis): ?>
+                                <option value="<?= htmlspecialchars($jenis) ?>" <?= (isset($_GET['jenis_usaha']) && $_GET['jenis_usaha'] == $jenis) ? 'selected' : '' ?>>
+                                    <?= htmlspecialchars($jenis) ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <select name="kabupaten" class="form-select">
+                            <option value="">-- Pilih Kabupaten/Kota --</option>
+                            <?php foreach ($kabupatenList as $kab): ?>
+                                <option value="<?= htmlspecialchars($kab) ?>" <?= (isset($_GET['kabupaten']) && $_GET['kabupaten'] == $kab) ? 'selected' : '' ?>>
+                                    <?= htmlspecialchars($kab) ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary">Filter</button>
+                        <a href="?page=profil_admin" class="btn btn-secondary">Reset</a>
+                    </div>
                 </div>
             </form>
+
             <!-- Tombol export spreadsheet -->
             <a href="?page=excel_profil" class="btn btn-success mb-3">Ekspor ke Spreadsheet</a>
 
