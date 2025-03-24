@@ -52,7 +52,7 @@ $konten_djih = $stmt->fetch(PDO::FETCH_ASSOC)['jumlah_baru'];
         <?php if ($_SESSION['role'] == 'admin') { ?> <!-- hanya admin yang bisa mengakses menu ini -->
             <li class="nav-item">
                 <a class="nav-link <?= ($currentPage == 'profil_admin') ? 'active' : ''; ?>" href="?page=profil_admin">
-                    <i class="fas fa-user-tie me-2"></i> <span class="sidebar-text">Profile Perusahaan (A)</span>
+                    <i class="fas fa-user-tie me-2"></i> <span class="sidebar-text">Profile Perusahaan</span>
                 </a>
             </li>
         <?php } ?>
@@ -89,6 +89,11 @@ $konten_djih = $stmt->fetch(PDO::FETCH_ASSOC)['jumlah_baru'];
                 <?php endif; ?>
             </a>
         </li>        
+        <li class="nav-item">
+            <a class="nav-link <?= ($currentPage == 'kontak') ? 'active' : ''; ?>" href="?page=kontak">
+                <i class="fas fa-solid fa-address-book me-2"></i> <span class="sidebar-text">Kontak</span>
+            </a>
+        </li>
         <?php if ($_SESSION['role'] == 'admin') { ?> <!-- hanya admin yang bisa mengakses menu ini -->
         <li class="nav-item">
             <a class="nav-link <?= ($currentPage == 'pengguna') ? 'active' : ''; ?>" href="?page=pengguna">

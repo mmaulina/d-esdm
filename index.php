@@ -102,6 +102,10 @@ include "template/header.php";
                 //notiifikasi
                 case "notifikasi": include "notif.php"; break;
 
+                //kontak
+                case "kontak": include "kontak/tampil.php"; break;
+                case "update_kontak": include "kontak/edit_kontak.php"; break;
+
 
                 // default saat login berhasil
                 default: include "dashboard.php"; break;
