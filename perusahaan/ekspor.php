@@ -99,6 +99,13 @@ try {
         mkdir('exports', 0777, true);
     }
 
+    // Hapus file lama (lebih dari 24 jam)
+    foreach (glob('exports/*.xlsx') as $file) {
+        if (filemtime($file) < time() - 30) { // 86400 detik = 24 jam
+            unlink($file);
+        }
+    }
+    
     // Simpan file
     $writer = new Xlsx($spreadsheet);
     $writer->save($filePath);
