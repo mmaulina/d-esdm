@@ -55,6 +55,9 @@ navbar {
   transition: width 0.3s; /* Transisi untuk lebar */
   width: 300px; /* Lebar sidebar saat terbuka */
   position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
   padding: 1rem;
 }
 
