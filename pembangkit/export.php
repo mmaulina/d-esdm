@@ -111,14 +111,15 @@ try {
 
     // Hapus file lama (lebih dari 24 jam)
     foreach (glob('exports/*.xlsx') as $file) {
-        if (filemtime($file) < time() - 86400) { // 86400 detik = 24 jam
+        if (filemtime($file) < time() - 30) { // 86400 detik = 24 jam
             unlink($file);
         }
     }
 
     // Simpan file
+    $fileName = 'exports/data_pembangkit_' . time() . '.xlsx';
     $writer = new Xlsx($spreadsheet);
-    $writer->save($filePath);
+    $writer->save($fileName);
 
     // Tampilkan loading dan mulai pengunduhan
     echo "
