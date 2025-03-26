@@ -4,44 +4,69 @@ include '../koneksi.php';
 
 $error = '';
 
+if (!isset($_SESSION['login_attempts'])) {
+    $_SESSION['login_attempts'] = 0;
+}
+
+// Proteksi CSRF
+if (!isset($_SESSION['token'])) {
+    $_SESSION['token'] = bin2hex(random_bytes(32));
+}
+
+// if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on') {
+//     die("Akses hanya diperbolehkan melalui koneksi aman (HTTPS).");
+// }
+
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = trim($_POST['username']);
-    $password = trim($_POST['password']);
+    if ($_SESSION['login_attempts'] >= 5) {
+        $error = "Terlalu banyak percobaan login. Coba lagi nanti.";
+    } else {
+        if (!isset($_POST['token']) || $_POST['token'] !== $_SESSION['token']) {
+            die("CSRF Detected!");
+        }
 
-    if (!empty($username) && !empty($password)) {
-        $db = new Database();
-        $pdo = $db->getConnection();
-        $sql = "SELECT * FROM users WHERE (username = :username OR email = :username)";
-        $stmt = $pdo->prepare($sql);
-        $stmt->bindParam(":username", $username, PDO::PARAM_STR);
-        $stmt->execute();
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        $username = trim($_POST['username']);
+        $password = trim($_POST['password']);
 
-        // Cek apakah user ditemukan
-        if ($user) {
-            // Cek apakah statusnya 'verified'
-            if ($user['status'] !== 'diverifikasi') {
-                $error = "Akun Anda belum diverifikasi. Silakan hubungi admin.";
-            } else {
-                // Cek password
-                if (password_verify($password, $user['password'])) {
-                    $_SESSION['id_user'] = $user['id_user'];
-                    $_SESSION['username'] = $user['username'];
-                    $_SESSION['role'] = $user['role'];
+        if (!empty($username) && !empty($password)) {
+            $db = new Database();
+            $pdo = $db->getConnection();
+            $sql = "SELECT * FROM users WHERE (username = :username OR email = :username)";
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindParam(":username", $username, PDO::PARAM_STR);
+            $stmt->execute();
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-                    header("Location: ../index.php");
-                    exit();
+            if ($user) {
+                if ($user['status'] !== 'diverifikasi') {
+                    $error = "Akun Anda belum diverifikasi. Silakan hubungi admin.";
                 } else {
-                    $error = "Username atau password salah!";
+                    if (password_verify($password, $user['password'])) {
+                        session_regenerate_id(true); // Tambahkan keamanan sesi
+                        $_SESSION['id_user'] = $user['id_user'];
+                        $_SESSION['username'] = $user['username'];
+                        $_SESSION['role'] = $user['role'];
+                        $_SESSION['login_attempts'] = 0;
+
+                        header("Location: ../index.php");
+                        exit();
+                    } else {
+                        $_SESSION['login_attempts'] += 1;
+                        $error = "Username atau password salah!";
+                        file_put_contents("log_login.txt", date('Y-m-d H:i:s') . " - Gagal login: $username\n", FILE_APPEND);
+                    }
                 }
+            } else {
+                $_SESSION['login_attempts'] += 1;
+                $error = "Username atau password salah!";
             }
         } else {
-            $error = "Username atau password salah!";
+            $error = "Harap isi username/email dan password!";
         }
-    } else {
-        $error = "Harap isi username/email dan password!";
     }
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -66,6 +91,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <?php endif; ?>
 
         <form method="POST" action="">
+        <input type="hidden" name="token" value="<?php echo $_SESSION['token']; ?>">
+
             <div class="mb-3">
                 <label for="username" class="form-label">Username atau Email</label>
                 <input type="text" class="form-control" id="username" name="username" placeholder="Masukkan username atau email" required>

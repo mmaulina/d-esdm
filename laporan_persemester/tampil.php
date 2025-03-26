@@ -5,80 +5,65 @@ if (session_status() == PHP_SESSION_NONE) {
 
 // Cek apakah pengguna sudah login
 if (!isset($_SESSION['id_user'])) {
-    echo "<script>alert('Silakan login terlebih dahulu!'); window.location.href='login.php';</script>";
+    header("Location: login.php");
     exit;
 }
 
 $id_user = $_SESSION['id_user'];
-$role = $_SESSION['role']; // Pastikan role sudah tersimpan di session
+$role = $_SESSION['role'];
 
-// Buat koneksi menggunakan PDO
 $db = new Database();
 $conn = $db->getConnection();
 
-$query = "SELECT * FROM laporan_semester";
+// Query berdasarkan role
 $params = [];
-
 if ($role == 'admin') {
-    // Admin melihat semua data, dengan 'Diajukan' di atas dan sisanya urut abjad
-    $query = "SELECT * FROM laporan_semester 
-              ORDER BY FIELD(status, 'diajukan') DESC, status ASC";
-    $stmt = $conn->prepare($query);
+    $query = "SELECT * FROM laporan_semester ORDER BY FIELD(status, 'diajukan', 'ditolak', 'diterima')";
 } else {
-    // User umum melihat data mereka sendiri, diurutkan sesuai urutan yang diinginkan
-    $query = "SELECT * FROM laporan_semester 
-              WHERE id_user = :id_user 
-              ORDER BY FIELD(status, 'ditolak', 'diajukan', 'diterima')";
-    $stmt = $conn->prepare($query);
-    $stmt->bindParam(":id_user", $id_user, PDO::PARAM_INT);
+    $query = "SELECT * FROM laporan_semester WHERE id_user = :id_user ORDER BY FIELD(status, 'ditolak', 'diajukan', 'diterima')";
+    $params[':id_user'] = $id_user;
 }
 
-// Proses persetujuan dengan metode POST
-if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['terima_id'])) {
-    $id = $_POST['terima_id'];
-
-    $updateQuery = "UPDATE laporan_semester SET status = 'diterima' WHERE id = :id";
-    $updateStmt = $conn->prepare($updateQuery);
-    $updateStmt->bindParam(':id', $id);
-    $updateStmt->execute();
-
-    echo "<script>alert('Laporan diterima!'); window.location.href='?page=laporan_persemester';</script>";
-}
-
-// Proses penolakan dengan metode POST
-if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['tolak_laporan'])) {
-    $id = $_POST['id'];
-    $keterangan = $_POST['keterangan'];
-
-    $updateQuery = "UPDATE laporan_semester SET status = 'ditolak', keterangan = :keterangan WHERE id = :id";
-    $updateStmt = $conn->prepare($updateQuery);
-    $updateStmt->bindParam(':id', $id, PDO::PARAM_INT);
-    $updateStmt->bindParam(':keterangan', $keterangan, PDO::PARAM_STR);
-    $updateStmt->execute();
-
-    echo "<script>alert('Laporan ditolak!'); window.location.href='?page=notifikasi';</script>";
-}
-
-// Cek apakah ada keyword pencarian
+// Cek pencarian
 if (!empty($_GET['keyword'])) {
     $keyword = "%" . $_GET['keyword'] . "%";
-
-    // Tambahkan WHERE jika belum ada, atau AND jika sudah ada filter sebelumnya
     $query .= (strpos($query, 'WHERE') === false) ? " WHERE" : " AND";
     $query .= " nama_perusahaan LIKE :keyword";
-
     $params[':keyword'] = $keyword;
 }
 
-// Persiapkan dan jalankan query
+// Jalankan Query
 $stmt = $conn->prepare($query);
 foreach ($params as $key => $value) {
     $stmt->bindValue($key, $value, PDO::PARAM_STR);
 }
-
 $stmt->execute();
 $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Proses Persetujuan/Tolak
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    if (isset($_POST['terima_id'])) {
+        $id = $_POST['terima_id'];
+        $updateQuery = "UPDATE laporan_semester SET status = 'diterima' WHERE id = :id";
+    } elseif (isset($_POST['tolak_laporan'])) {
+        $id = $_POST['id'];
+        $keterangan = $_POST['keterangan'];
+        $updateQuery = "UPDATE laporan_semester SET status = 'ditolak', keterangan = :keterangan WHERE id = :id";
+    }
+
+    if (isset($updateQuery)) {
+        $updateStmt = $conn->prepare($updateQuery);
+        $updateStmt->bindParam(':id', $id, PDO::PARAM_INT);
+        if (isset($keterangan)) {
+            $updateStmt->bindParam(':keterangan', $keterangan, PDO::PARAM_STR);
+        }
+        $updateStmt->execute();
+        echo "<meta http-equiv='refresh' content='0; url=?page=laporan_persemester'>";
+        exit;
+    }
+}
 ?>
+
 
 <div class="container mt-4">
     <h3 class="text-center mb-3">Pelaporan Semester</h3>
@@ -161,7 +146,7 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     </td>
                                     <td><?php echo htmlspecialchars($row['keterangan']); ?></td>
                                     <td class="text-center">
-                                        <?php if ($row['status'] == 'diajukan'): ?>
+                                        <?php if ($role == 'admin' && $row['status'] == 'diajukan'): ?>
                                             <!-- Tombol Terima menggunakan POST -->
                                             <form method="POST" style="display: inline;">
                                                 <input type="hidden" name="terima_id" value="<?php echo $row['id']; ?>">
@@ -169,8 +154,9 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                             </form>
                                             <!-- Tombol Tolak dengan Modal -->
                                             <a href="" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modalTolak<?php echo $row['id']; ?>">Tolak</a>
-                                            <!-- Tombol edit dan hapus -->
-                                        <?php elseif ($row['status'] == 'diterima' || $row['status'] == 'ditolak'): ?>
+                                        <?php endif; ?>
+
+                                        <?php if ($row['status'] == 'diterima' || $row['status'] == 'ditolak'): ?>
                                             <a href="?page=edit_laporan_persemester&id=<?php echo $row['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
                                             <a href="?page=hapus_laporan_persemester&id=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus?');">Hapus</a>
                                         <?php endif; ?>
