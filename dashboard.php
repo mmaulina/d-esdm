@@ -4,6 +4,18 @@ include "koneksi.php";
 try {
     $db = new Database();
     $conn = $db->getConnection();
+
+    // Periksa apakah user adalah 'umum' dan tidak ada di tabel profil
+    if (isset($_SESSION['role']) && $_SESSION['role'] === 'umum') {
+        $query = "SELECT COUNT(*) AS jumlah FROM profil WHERE id_user = ?";
+        $stmt = $conn->prepare($query);
+        $stmt->execute([$_SESSION['id_user']]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if ($row['jumlah'] == 0) {
+            echo '<div class="alert alert-warning text-center" role="alert">Anda wajib melengkapi data profil terlebih dahulu! di menu profil perusahaan</div>';
+        }
+    }
     
     // Query untuk menghitung jumlah perusahaan
     $sql = "SELECT COUNT(*) AS total_perusahaan FROM profil";

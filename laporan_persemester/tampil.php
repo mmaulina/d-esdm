@@ -62,6 +62,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         exit;
     }
 }
+// Cek apakah id_user ada di laporan_bulanan
+$queryCheck = "SELECT COUNT(*) FROM laporan_bulanan WHERE id_user = :id_user";
+$stmtCheck = $conn->prepare($queryCheck);
+$stmtCheck->bindParam(':id_user', $id_user, PDO::PARAM_INT);
+$stmtCheck->execute();
+$hasLaporanBulanan = $stmtCheck->fetchColumn() > 0;
 ?>
 
 
@@ -78,11 +84,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     <a href="?page=laporan_persemester" class="btn btn-secondary">Reset</a>
                 </div>
             </form>
-            <?php if ($role != 'admin') : ?>
-                <div class="mb-3">
-                    <a href="?page=tambah_laporan_persemester" class="btn btn-primary">Tambah Data</a>
-                </div>
-            <?php endif; ?>
+            <?php if (!$hasLaporanBulanan && $role == 'umum') : ?>
+        <div class="alert alert-warning text-center" role="alert">
+            Anda harus mengisi <strong>Laporan Bulanan</strong> terlebih dahulu sebelum dapat menambahkan Laporan Semester.
+        </div>
+        <?php endif; ?>
 
             <div class="table-responsive" style="max-height: 500px; overflow-x: auto; overflow-y: auto;">
                 <table class="table table-bordered" style="min-width: 1200px; white-space: nowrap;">
