@@ -199,3 +199,25 @@ navbar {
   width: 40px;
   height: 40px;
 }
+
+form {
+  max-width: 100%;
+}
+
+@media (min-width: 768px) {
+  .filter-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+  }
+
+  .filter-group select {
+      flex: 1;
+  }
+
+  .filter-group .btn {
+      white-space: nowrap; /* Mencegah teks tombol meluas */
+  }
+}
+
+

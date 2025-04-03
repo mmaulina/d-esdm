@@ -2,9 +2,9 @@
 try {
     $database = new Database();
     $pdo = $database->getConnection(); // Dapatkan koneksi PDO
-    
+
     // Query utama
-    $query = "SELECT * FROM profil WHERE 1=1"; 
+    $query = "SELECT * FROM profil WHERE 1=1";
     $params = [];
 
     // Fitur pencarian nama perusahaan
@@ -39,7 +39,6 @@ try {
 
     $kabupatenStmt = $pdo->query("SELECT DISTINCT kabupaten FROM profil ORDER BY kabupaten");
     $kabupatenList = $kabupatenStmt->fetchAll(PDO::FETCH_COLUMN);
-
 } catch (PDOException $e) {
     die("Error: " . $e->getMessage());
 }
@@ -53,39 +52,53 @@ try {
             <!-- Fitur pencarian dan filter -->
             <form method="GET" class="mb-3">
                 <input type="hidden" name="page" value="profil_admin">
+
+                <!-- Tombol Filter & Reset -->
                 <div class="row">
-                    <div class="col-md-4">
-                        <input type="text" name="keyword" class="form-control" placeholder="Cari berdasarkan nama perusahaan..." value="<?= isset($_GET['keyword']) ? htmlspecialchars($_GET['keyword']) : '' ?>">
-                    </div>
-                    <div class="col-md-3">
+                    <!-- Dropdown Jenis Usaha & Kabupaten -->
+                    <div class="col-12 col-md-4 mb-2">
                         <select name="jenis_usaha" class="form-select">
                             <option value="">-- Pilih Jenis Usaha --</option>
                             <?php foreach ($jenisUsahaList as $jenis): ?>
-                                <option value="<?= htmlspecialchars($jenis) ?>" <?= (isset($_GET['jenis_usaha']) && $_GET['jenis_usaha'] == $jenis) ? 'selected' : '' ?>>
+                                <option value="<?= htmlspecialchars($jenis) ?>"
+                                    <?= (isset($_GET['jenis_usaha']) && $_GET['jenis_usaha'] == $jenis) ? 'selected' : '' ?>>
                                     <?= htmlspecialchars($jenis) ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
                     </div>
-                    <div class="col-md-3">
+
+                    <div class="col-12 col-md-4 mb-2">
                         <select name="kabupaten" class="form-select">
                             <option value="">-- Pilih Kabupaten/Kota --</option>
                             <?php foreach ($kabupatenList as $kab): ?>
-                                <option value="<?= htmlspecialchars($kab) ?>" <?= (isset($_GET['kabupaten']) && $_GET['kabupaten'] == $kab) ? 'selected' : '' ?>>
+                                <option value="<?= htmlspecialchars($kab) ?>"
+                                    <?= (isset($_GET['kabupaten']) && $_GET['kabupaten'] == $kab) ? 'selected' : '' ?>>
                                     <?= htmlspecialchars($kab) ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
                     </div>
-                    <div class="col-md-2">
-                        <button type="submit" class="btn btn-success">Filter</button>
-                        <a href="?page=profil_admin" class="btn btn-secondary">Reset</a>
+                </div>
+
+                <div class="row mt-2">
+                    <!-- Input Pencarian -->
+                    <div class="col-12 col-md-4 mb-2">
+                        <input type="text" name="keyword" class="form-control" placeholder="Cari berdasarkan nama perusahaan..."
+                            value="<?= isset($_GET['keyword']) ? htmlspecialchars($_GET['keyword']) : '' ?>">
+                    </div>
+                    <div class="col-12 d-flex gap-2 justify-content-start mb-2">
+                        <button type="submit" class="btn btn-success px-4">Filter</button>
+                        <a href="?page=profil_admin" class="btn btn-secondary px-4">Reset</a>
                     </div>
                 </div>
             </form>
 
-            <!-- Tombol export spreadsheet -->
+            <!-- Tombol Export Spreadsheet -->
             <a href="?page=excel_profil" class="btn btn-success mb-3">Ekspor ke Spreadsheet</a>
+
+
+
 
             <div class="table-responsive" style="max-height: 500px; overflow-x: auto; overflow-y: auto;">
                 <table class="table table-bordered" style="min-width: 1200px; white-space: nowrap;">
