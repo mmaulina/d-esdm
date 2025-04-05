@@ -82,7 +82,7 @@ try {
                 <table class="table table-bordered" style="table-layout: fixed; min-width: 1800px;">
                     <thead class="table-dark text-center align-middle">
                         <tr>
-                            <th rowspan="3">No.</th>
+                            <th rowspan="3" style="width: 3%;">No.</th>
                             <th rowspan="3">Nama Perusahaan</th>
                             <th colspan="4" style="min-width: 250px;">Data Pembangkit</th>
                             <th colspan="9" style="min-width: 1500px;">Data Teknis Pembangkit</th>
