@@ -5,14 +5,15 @@ if (session_status() == PHP_SESSION_NONE) {
 
 // Pastikan hanya admin yang dapat mengakses halaman ini
 if (!isset($_SESSION['id_user']) || $_SESSION['role'] !== 'admin') {
-    echo "<script>alert('Anda tidak memiliki akses!'); window.location.href='tampil.php';</script>";
+    echo "<script>alert('Anda tidak memiliki akses!'); window.location.href=?page=kontak';</script>";
     exit();
 }
 
-$id_user = $_SESSION['id_user'];
-
+require_once 'koneksi.php'; // pastikan file koneksi disertakan
 $database = new Database();
 $pdo = $database->getConnection();
+
+$id_user = $_SESSION['id_user'];
 
 // Ambil data kontak admin (id_user = 1)
 $sql = "SELECT email, no_hp FROM users WHERE id_user = 1";
@@ -21,6 +22,7 @@ $stmt->execute();
 $kontak = $stmt->fetch(PDO::FETCH_ASSOC);
 
 // Proses update jika form dikirim
+$alert = null;
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = trim($_POST['email']);
     $no_hp = trim($_POST['no_hp']);
@@ -32,24 +34,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $update_stmt->bindParam(':no_hp', $no_hp);
 
         if ($update_stmt->execute()) {
-            echo "<script>
-                    Swal.fire({
-                        title: 'Berhasil!',
-                        text: 'Kontak admin telah diperbarui.',
-                        icon: 'success',
-                        confirmButtonText: 'OK'
-                    }).then(() => {
-                        window.location.href = 'tampil.php';
-                    });
-                  </script>";
+            $alert = [
+                'icon' => 'success',
+                'title' => 'Berhasil!',
+                'text' => 'Kontak admin telah diperbarui.',
+                'redirect' => '?page=kontak'
+            ];
         } else {
-            echo "<script>Swal.fire('Gagal!', 'Terjadi kesalahan saat memperbarui kontak.', 'error');</script>";
+            $alert = [
+                'icon' => 'error',
+                'title' => 'Gagal!',
+                'text' => 'Terjadi kesalahan saat memperbarui kontak.'
+            ];
         }
     } else {
-        echo "<script>Swal.fire('Peringatan!', 'Mohon isi semua bidang!', 'warning');</script>";
+        $alert = [
+            'icon' => 'warning',
+            'title' => 'Peringatan!',
+            'text' => 'Mohon isi semua bidang!'
+        ];
     }
 }
 ?>
+
 
 <div class="container mt-5">
     <div class="card shadow">
@@ -74,3 +81,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
     </div>
 </div>
+
+<?php if ($alert): ?>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    Swal.fire({
+        icon: '<?= $alert['icon'] ?>',
+        title: '<?= $alert['title'] ?>',
+        text: '<?= $alert['text'] ?>'
+    }).then(() => {
+        <?php if (isset($alert['redirect'])): ?>
+        window.location.href = '<?= $alert['redirect'] ?>';
+        <?php endif; ?>
+    });
+</script>
+<?php endif; ?>
