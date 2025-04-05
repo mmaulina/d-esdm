@@ -7,38 +7,17 @@ try {
     $query = "SELECT * FROM profil WHERE 1=1";
     $params = [];
 
-    // Fitur pencarian nama perusahaan
+    // Filter pencarian berdasarkan nama perusahaan, kabupaten, jenis usaha
     if (!empty($_GET['keyword'])) {
         $keyword = "%" . $_GET['keyword'] . "%";
-        $query .= " AND nama_perusahaan LIKE :keyword";
+        $query .= " AND (nama_perusahaan LIKE :keyword OR kabupaten LIKE :keyword OR jenis_usaha LIKE :keyword)";
         $params[':keyword'] = $keyword;
     }
 
-    // Filter berdasarkan jenis usaha
-    if (!empty($_GET['jenis_usaha'])) {
-        $query .= " AND jenis_usaha = :jenis_usaha";
-        $params[':jenis_usaha'] = $_GET['jenis_usaha'];
-    }
-
-    // Filter berdasarkan kabupaten/kota
-    if (!empty($_GET['kabupaten'])) {
-        $query .= " AND kabupaten = :kabupaten";
-        $params[':kabupaten'] = $_GET['kabupaten'];
-    }
-
+    // Eksekusi Query
     $stmt = $pdo->prepare($query);
-    foreach ($params as $key => $value) {
-        $stmt->bindValue($key, $value, PDO::PARAM_STR);
-    }
-    $stmt->execute();
+    $stmt->execute($params);
     $profiles = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    // Ambil daftar jenis usaha dan kabupaten/kota untuk dropdown filter
-    $jenisUsahaStmt = $pdo->query("SELECT DISTINCT jenis_usaha FROM profil ORDER BY jenis_usaha");
-    $jenisUsahaList = $jenisUsahaStmt->fetchAll(PDO::FETCH_COLUMN);
-
-    $kabupatenStmt = $pdo->query("SELECT DISTINCT kabupaten FROM profil ORDER BY kabupaten");
-    $kabupatenList = $kabupatenStmt->fetchAll(PDO::FETCH_COLUMN);
 } catch (PDOException $e) {
     die("Error: " . $e->getMessage());
 }
@@ -50,78 +29,43 @@ try {
     <div class="card shadow">
         <div class="card-body">
             <!-- Fitur pencarian dan filter -->
-            <form method="GET" class="mb-3">
+            <form method="GET" class="mb-2">
                 <input type="hidden" name="page" value="profil_admin">
-
-                <!-- Tombol Filter & Reset -->
-                <div class="row">
-                    <!-- Dropdown Jenis Usaha & Kabupaten -->
-                    <div class="col-12 col-md-4 mb-2">
-                        <select name="jenis_usaha" class="form-select">
-                            <option value="">-- Pilih Jenis Usaha --</option>
-                            <?php foreach ($jenisUsahaList as $jenis): ?>
-                                <option value="<?= htmlspecialchars($jenis) ?>"
-                                    <?= (isset($_GET['jenis_usaha']) && $_GET['jenis_usaha'] == $jenis) ? 'selected' : '' ?>>
-                                    <?= htmlspecialchars($jenis) ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-
-                    <div class="col-12 col-md-4 mb-2">
-                        <select name="kabupaten" class="form-select">
-                            <option value="">-- Pilih Kabupaten/Kota --</option>
-                            <?php foreach ($kabupatenList as $kab): ?>
-                                <option value="<?= htmlspecialchars($kab) ?>"
-                                    <?= (isset($_GET['kabupaten']) && $_GET['kabupaten'] == $kab) ? 'selected' : '' ?>>
-                                    <?= htmlspecialchars($kab) ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="row mt-2">
-                    <!-- Input Pencarian -->
-                    <div class="col-12 col-md-4 mb-2">
-                        <input type="text" name="keyword" class="form-control" placeholder="Cari berdasarkan nama perusahaan..."
-                            value="<?= isset($_GET['keyword']) ? htmlspecialchars($_GET['keyword']) : '' ?>">
-                    </div>
-                    <div class="col-12 d-flex gap-2 justify-content-start mb-2">
-                        <button type="submit" class="btn btn-success px-4">Filter</button>
-                        <a href="?page=profil_admin" class="btn btn-secondary px-4">Reset</a>
-                    </div>
+                <div class="input-group">
+                    <input type="text" name="keyword" class="form-control" placeholder="Cari .." value="<?= isset($_GET['keyword']) ? htmlspecialchars($_GET['keyword']) : '' ?>">
+                    <button type="submit" class="btn btn-success">Cari</button>
+                    <a href="?page=profil_perusahaan" class="btn btn-secondary">Reset</a>
                 </div>
             </form>
+            <div class="row mb-3">
+                <small class="text-muted">Cari berdasarkan Nama Perusahaan, Kabupaten/Kota, atau Jenis Usaha.</small>
+            </div>
 
             <!-- Tombol Export Spreadsheet -->
             <a href="?page=excel_profil" class="btn btn-success mb-3">Ekspor ke Spreadsheet</a>
 
-
-
-
             <div class="table-responsive" style="max-height: 500px; overflow-x: auto; overflow-y: auto;">
-                <table class="table table-bordered" style="min-width: 1200px; white-space: nowrap;">
+                <table class="table table-bordered" style="min-width: 1800px; white-space: nowrap;">
                     <thead class="table-dark text-center align-middle">
                         <tr>
-                            <th rowspan="2">No.</th>
-                            <th rowspan="2">Nama Perusahaan</th>
-                            <th rowspan="2">Kabupaten/Kota</th>
-                            <th rowspan="2">Alamat</th>
-                            <th rowspan="2">Jenis Usaha</th>
-                            <th rowspan="2">Nomor Telepon Kantor</th>
-                            <th rowspan="2">No. Fax</th>
-                            <th rowspan="2">Tenaga Teknik</th>
+                            <th rowspan="2" style="width: 5%;">No.</th>
+                            <th rowspan="2" onclick="sortTable(1)">Nama Perusahaan <i class="fa fa-sort"></i></th>
+                            <th rowspan="2" onclick="sortTable(2)">Kabupaten/Kota <i class="fa fa-sort"></i></th>
+                            <th rowspan="2" onclick="sortTable(3)">Alamat <i class="fa fa-sort"></i></th>
+                            <th rowspan="2" onclick="sortTable(4)">Jenis Usaha <i class="fa fa-sort"></i></th>
+                            <th rowspan="2" onclick="sortTable(5)">Nomor Telepon Kantor <i class="fa fa-sort"></i></th>
+                            <th rowspan="2" onclick="sortTable(6)">No. Fax <i class="fa fa-sort"></i></th>
+                            <th rowspan="2" onclick="sortTable(7)">Tenaga Teknik <i class="fa fa-sort"></i></th>
                             <th colspan="3">Kontak Person</th>
                             <th rowspan="2">Aksi</th>
                         </tr>
                         <tr>
-                            <th>Nama</th>
-                            <th>No. HP</th>
-                            <th>Email</th>
+                            <th onclick="sortTable(8)">Nama <i class="fa fa-sort"></i></th>
+                            <th onclick="sortTable(9)">No. HP <i class="fa fa-sort"></i></th>
+                            <th onclick="sortTable(10)">Email <i class="fa fa-sort"></i></th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="tableBody">
                         <?php if (count($profiles) > 0): ?>
                             <?php $no = 1;
                             foreach ($profiles as $row): ?>
@@ -154,3 +98,45 @@ try {
         </div>
     </div>
 </div>
+
+<!-- JAVASCRIPT FILTER -->
+<script>
+    function sortTable(columnIndex) {
+        var table = document.querySelector("table tbody");
+        var rows = Array.from(table.querySelectorAll("tr"));
+        var isAscending = table.getAttribute("data-sort-order") === "asc";
+
+        // Sort rows
+        rows.sort((rowA, rowB) => {
+            var cellA = rowA.children[columnIndex].textContent.trim().toLowerCase();
+            var cellB = rowB.children[columnIndex].textContent.trim().toLowerCase();
+
+            if (!isNaN(cellA) && !isNaN(cellB)) {
+                return isAscending ? cellA - cellB : cellB - cellA;
+            }
+            return isAscending ? cellA.localeCompare(cellB) : cellB.localeCompare(cellA);
+        });
+
+        // Remove existing rows
+        table.innerHTML = "";
+
+        // Append sorted rows
+        rows.forEach(row => table.appendChild(row));
+
+        // Toggle sorting order
+        table.setAttribute("data-sort-order", isAscending ? "desc" : "asc");
+
+        // Update icon
+        updateSortIcons(columnIndex, isAscending);
+    }
+
+    function updateSortIcons(columnIndex, isAscending) {
+        var headers = document.querySelectorAll("thead th i");
+        headers.forEach(icon => icon.className = "fa fa-sort"); // Reset semua ikon
+
+        var selectedHeader = document.querySelector(`thead th:nth-child(${columnIndex + 1}) i`);
+        if (selectedHeader) {
+            selectedHeader.className = isAscending ? "fa fa-sort-up" : "fa fa-sort-down";
+        }
+    }
+</script>
