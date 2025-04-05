@@ -40,7 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if ($user) {
                 if ($user['status'] !== 'diverifikasi') {
-                    $error = "Akun Anda belum diverifikasi. Silakan hubungi admin.";
+                    $error = "Akun Anda belum diverifikasi. Silakan hubungi admin di <a href='https://wa.me/628115128607' target='_blank'>WhatsApp</a>.";
                 } else {
                     if (password_verify($password, $user['password'])) {
                         session_regenerate_id(true); // Tambahkan keamanan sesi
