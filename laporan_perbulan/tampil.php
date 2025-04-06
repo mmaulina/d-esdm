@@ -45,6 +45,13 @@ foreach ($params as $key => $value) {
 }
 $stmt->execute();
 $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Cek apakah id_user ada di laporan_bulanan
+$queryCheck = "SELECT COUNT(*) FROM profil WHERE id_user = :id_user";
+$stmtCheck = $conn->prepare($queryCheck);
+$stmtCheck->bindParam(':id_user', $id_user, PDO::PARAM_INT);
+$stmtCheck->execute();
+$hasprofil = $stmtCheck->fetchColumn() > 0;
 ?>
 
 <div class="container mt-4">
@@ -62,14 +69,20 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </div>
             </form>
             <div class="mb-3">
-                <!-- Tombol tambah -->
-                <?php if ($role != 'admin') : ?>
-                    <a href="?page=tambah_laporan_perbulan" class="btn btn-primary">Tambah Data</a>
+            <?php if (!$hasprofil && $role == 'umum') : ?>
+                <div class="alert alert-warning text-center" role="alert">
+                    Anda harus melengkapi <strong>Profil Perusahaan</strong> terlebih dahulu sebelum dapat menambahkan Laporan Bulanan.
+                </div>
                 <?php endif; ?>
-                <!-- Tombol export spreadsheet -->
+                <?php if ($hasprofil && $role == 'umum') : ?>
+            <div class="mb-3 text-end">
+                <a href="?page=tambah_laporan_perbulan" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Tambah Data
+                </a>
                 <a href="?page=excel_laporan_bulanan" class="btn btn-success">Ekspor ke Spreadsheet</a>
             </div>
-
+                <?php endif; ?>
+            </div>
             <div class="table-responsive" style="max-height: 500px; overflow-x: auto; overflow-y: auto;">
                 <table class="table table-bordered" style="min-width: 1200px; white-space: nowrap;">
                     <thead class="table-dark text-center align-middle">

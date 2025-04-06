@@ -62,6 +62,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         exit;
     }
 }
+
 // Cek apakah id_user ada di laporan_bulanan
 $queryCheck = "SELECT COUNT(*) FROM laporan_bulanan WHERE id_user = :id_user";
 $stmtCheck = $conn->prepare($queryCheck);
@@ -89,7 +90,13 @@ $hasLaporanBulanan = $stmtCheck->fetchColumn() > 0;
             Anda harus mengisi <strong>Laporan Bulanan</strong> terlebih dahulu sebelum dapat menambahkan Laporan Semester.
         </div>
         <?php endif; ?>
-
+        <?php if ($hasLaporanBulanan && $role == 'umum') : ?>
+    <div class="mb-3 text-end">
+        <a href="?page=tambah_laporan_persemester" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Tambah Data
+        </a>
+    </div>
+<?php endif; ?>
             <div class="table-responsive" style="max-height: 500px; overflow-x: auto; overflow-y: auto;">
                 <table class="table table-bordered" style="min-width: 1200px; white-space: nowrap;">
                     <thead class="table-dark text-center align-middle">
