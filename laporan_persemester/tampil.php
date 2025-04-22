@@ -86,17 +86,17 @@ $hasLaporanBulanan = $stmtCheck->fetchColumn() > 0;
                 </div>
             </form>
             <?php if (!$hasLaporanBulanan && $role == 'umum') : ?>
-        <div class="alert alert-warning text-center" role="alert">
-            Anda harus mengisi <strong>Laporan Bulanan</strong> terlebih dahulu sebelum dapat menambahkan Laporan Semester.
-        </div>
-        <?php endif; ?>
-        <?php if ($hasLaporanBulanan && $role == 'umum') : ?>
-    <div class="mb-3 text-end">
-        <a href="?page=tambah_laporan_persemester" class="btn btn-primary">
-            <i class="fas fa-plus"></i> Tambah Data
-        </a>
-    </div>
-<?php endif; ?>
+                <div class="alert alert-warning text-center" role="alert">
+                    Anda harus mengisi <strong>Laporan Bulanan</strong> terlebih dahulu sebelum dapat menambahkan Laporan Semester.
+                </div>
+            <?php endif; ?>
+            <?php if ($_SESSION['role'] !== 'admin') { ?> <!-- hanya admin yang tidak bisa mengakses ini -->
+                <div class="mb-3">
+                    <a href="?page=tambah_laporan_persemester" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Tambah Data
+                    </a>
+                </div>
+            <?php } ?> 
             <div class="table-responsive" style="max-height: 500px; overflow-x: auto; overflow-y: auto;">
                 <table class="table table-bordered" style="min-width: 1200px; white-space: nowrap;">
                     <thead class="table-dark text-center align-middle">

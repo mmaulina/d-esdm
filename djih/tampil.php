@@ -40,7 +40,7 @@ try {
     </div>
     <div class="row mt-4">
         <div class="col-12 d-flex justify-content-between align-items-center">
-            <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin') : ?>
+            <?php if (isset($_SESSION['role']) && $_SESSION['role'] !== 'umum') : ?>
                 <div class="btn-group d-inline-flex">
                     <a href="?page=tabel_djih" class="btn btn-success">Tabel Konten</a>
                 </div>

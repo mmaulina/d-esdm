@@ -69,19 +69,19 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                 </div>
             </form>
             <div class="mb-3">
-            <?php if (!$hasprofil && $role == 'umum') : ?>
-                <div class="alert alert-warning text-center" role="alert">
-                    Anda harus melengkapi <strong>Profil Perusahaan</strong> terlebih dahulu sebelum dapat menambahkan Laporan Bulanan.
+                <?php if (!$hasprofil && $role == 'umum') : ?>
+                    <div class="alert alert-warning text-center" role="alert">
+                        Anda harus melengkapi <strong>Profil Perusahaan</strong> terlebih dahulu sebelum dapat menambahkan Laporan Bulanan.
+                    </div>
+                <?php endif; ?>
+                <div class="mb-3">
+                    <?php if ($_SESSION['role'] !== 'admin') { ?> <!-- hanya admin yang tidak bisa mengakses ini -->
+                        <a href="?page=tambah_laporan_perbulan" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Tambah Data
+                        </a>
+                    <?php } ?>
+                    <a href="?page=excel_laporan_bulanan" class="btn btn-success">Ekspor ke Spreadsheet</a>
                 </div>
-                <?php endif; ?>
-                <?php if ($hasprofil && $role == 'umum') : ?>
-            <div class="mb-3 text-end">
-                <a href="?page=tambah_laporan_perbulan" class="btn btn-primary">
-                    <i class="fas fa-plus"></i> Tambah Data
-                </a>
-                <a href="?page=excel_laporan_bulanan" class="btn btn-success">Ekspor ke Spreadsheet</a>
-            </div>
-                <?php endif; ?>
             </div>
             <div class="table-responsive" style="max-height: 500px; overflow-x: auto; overflow-y: auto;">
                 <table class="table table-bordered" style="min-width: 1200px; white-space: nowrap;">

@@ -59,7 +59,7 @@ if (session_status() == PHP_SESSION_NONE) {
                         $totalNotifikasi = $jumlahLaporanDiajukan + $jumlahPenggunaDiajukan;
                         ?>
 
-                        <?php if ($_SESSION['role'] == 'admin') { ?> <!-- hanya admin yang bisa mengakses menu ini -->
+                        <?php if ($_SESSION['role'] == 'superadmin') { ?> <!-- hanya superadmin yang bisa mengakses menu ini -->
                             <a href="?page=notifikasi" class="nav-link position-relative me-3">
                                 <i class="fas fa-bell fa-lg"></i>
                                 <?php if ($totalNotifikasi > 0): ?>

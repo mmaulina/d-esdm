@@ -4,8 +4,8 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 include "koneksi.php";
 
-// Pastikan hanya admin yang bisa mengakses halaman ini
-if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
+// Pastikan hanya umum yang tidak bisa mengakses halaman ini
+if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'admin' && $_SESSION['role'] !== 'superadmin')) {
     echo "<script>alert('Akses ditolak!'); window.location.href='index.php';</script>";
     exit;
 }

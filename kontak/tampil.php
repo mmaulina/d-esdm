@@ -64,7 +64,7 @@ $kontak = $stmt->fetch(PDO::FETCH_ASSOC);
                 </tr>
             </table>
 
-            <?php if (isset($_SESSION['role']) && $_SESSION['role'] == 'admin') { ?> 
+            <?php if (isset($_SESSION['role']) && $_SESSION['role'] == 'superadmin') { ?> 
                 <a href="?page=update_kontak" class="btn btn-warning">
                     <i class="fa-solid fa-pen-to-square"></i> Update Kontak
                 </a>

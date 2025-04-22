@@ -3,8 +3,8 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-// Pastikan hanya admin yang dapat mengakses halaman ini
-if (!isset($_SESSION['id_user']) || $_SESSION['role'] !== 'admin') {
+// Pastikan hanya superadmin yang dapat mengakses halaman ini
+if (!isset($_SESSION['id_user']) || $_SESSION['role'] !== 'superadmin') {
     echo "<script>alert('Anda tidak memiliki akses!'); window.location.href=?page=kontak';</script>";
     exit();
 }
@@ -15,7 +15,7 @@ $pdo = $database->getConnection();
 
 $id_user = $_SESSION['id_user'];
 
-// Ambil data kontak admin (id_user = 1)
+// Ambil data kontak superadmin (id_user = 1)
 $sql = "SELECT email, no_hp FROM users WHERE id_user = 1";
 $stmt = $pdo->prepare($sql);
 $stmt->execute();
@@ -74,7 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <button type="submit" class="btn btn-primary">
                     <i class="fa-solid fa-save"></i> Simpan Perubahan
                 </button>
-                <a href="tampil.php" class="btn btn-secondary">
+                <a href="?page=kontak" class="btn btn-secondary">
                     <i class="fa-solid fa-arrow-left"></i> Kembali
                 </a>
             </form>

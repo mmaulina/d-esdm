@@ -41,8 +41,15 @@ try {
                 <small class="text-muted">Cari berdasarkan Nama Perusahaan, Kabupaten/Kota, atau Jenis Usaha.</small>
             </div>
 
-            <!-- Tombol Export Spreadsheet -->
-            <a href="?page=excel_profil" class="btn btn-success mb-3">Ekspor ke Spreadsheet</a>
+            <!-- Tombol Tambah & Export Spreadsheet -->
+            <div class="mb-3">
+                <?php if ($_SESSION['role'] !== 'admin') { ?> <!-- hanya admin yang tidak bisa mengakses ini -->
+                    <a href="?page=tambah_profil" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Tambah Data
+                    </a>
+                <?php } ?>
+                <a href="?page=excel_profil" class="btn btn-success">Ekspor ke Spreadsheet</a>
+            </div>
 
             <div class="table-responsive" style="max-height: 500px; overflow-x: auto; overflow-y: auto;">
                 <table class="table table-bordered" style="min-width: 1800px; white-space: nowrap;">
