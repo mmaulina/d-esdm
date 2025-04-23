@@ -1,5 +1,5 @@
-DATA PENGGUNA / UPDATE PROFIL
-- ketika update profil akun harus kembali minta verifikasi admin (status diajukan)
-
 PELAPORAN SEMESTER
 - ketika update laporan ini harus kembali minta verifikasi admin (status diajukan)
+
+LOGIN
+- jika superadmin ganti nomor maka nomor tsb otomatis berubah juga di yang bisa dihubungi saat akun berstatus diajukan
