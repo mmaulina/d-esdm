@@ -17,7 +17,7 @@ $conn = $db->getConnection();
 
 // Query berdasarkan role
 $params = [];
-if ($role == 'admin') {
+if ($role == 'admin' || $role == 'superadmin') {
     $query = "SELECT * FROM laporan_semester ORDER BY FIELD(status, 'diajukan', 'ditolak', 'diterima')";
 } else {
     $query = "SELECT * FROM laporan_semester WHERE id_user = :id_user ORDER BY FIELD(status, 'ditolak', 'diajukan', 'diterima')";
@@ -90,13 +90,16 @@ $hasLaporanBulanan = $stmtCheck->fetchColumn() > 0;
                     Anda harus mengisi <strong>Laporan Bulanan</strong> terlebih dahulu sebelum dapat menambahkan Laporan Semester.
                 </div>
             <?php endif; ?>
-            <?php if ($_SESSION['role'] !== 'admin') { ?> <!-- hanya admin yang tidak bisa mengakses ini -->
-                <div class="mb-3">
-                    <a href="?page=tambah_laporan_persemester" class="btn btn-primary">
+                <?php if ($hasLaporanBulanan && $role == 'umum') : ?>
+                    <a href="?page=tambah_laporan_persemester" class="btn btn-primary mb-3">
                         <i class="fas fa-plus"></i> Tambah Data
                     </a>
-                </div>
-            <?php } ?> 
+                <?php endif; ?>
+                <?php if ($_SESSION['role'] == 'superadmin') { ?> 
+                        <a href="?page=tambah_laporan_persemester" class="btn btn-primary mb-3">
+                            <i class="fas fa-plus"></i> Tambah Data
+                        </a>
+                        <?php } ?>
             <div class="table-responsive" style="max-height: 500px; overflow-x: auto; overflow-y: auto;">
                 <table class="table table-bordered" style="min-width: 1200px; white-space: nowrap;">
                     <thead class="table-dark text-center align-middle">

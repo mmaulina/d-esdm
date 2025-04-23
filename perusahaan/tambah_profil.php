@@ -78,12 +78,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bindParam(':no_hp', $no_hp, PDO::PARAM_STR);
         $stmt->bindParam(':email', $email, PDO::PARAM_STR);
 
-        // Eksekusi statement
-        if ($stmt->execute()) {
-            echo "<script>alert('Profil berhasil ditambahkan!'); window.location.href='?page=profil_perusahaan';</script>";
-        } else {
-            echo "<script>alert('Gagal menambahkan profil. Silakan coba lagi.');</script>";
-        }
+                    // Eksekusi statement
+            if ($stmt->execute()) {
+                if ($role === 'superadmin') {
+                    echo "<script>alert('Profil berhasil ditambahkan!'); window.location.href='?page=profil_admin';</script>";
+                } else {
+                    echo "<script>alert('Profil berhasil ditambahkan!'); window.location.href='?page=profil_perusahaan';</script>";
+                }
+            } else {
+                echo "<script>alert('Gagal menambahkan profil. Silakan coba lagi.');</script>";
+            }
+
     } catch (PDOException $e) {
         die("Error: " . $e->getMessage());
     }
@@ -188,7 +193,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 <div class="mt-3">
                     <button type="submit" class="btn btn-success">Simpan</button>
-                    <a href="?page=profil_perusahaan" class="btn btn-secondary">Batal</a>
+                    <a href="?page=<?= ($role === 'superadmin') ? 'profil_admin' : 'profil_perusahaan'; ?>" class="btn btn-secondary">Batal</a>
                 </div>
             </form>
         </div>

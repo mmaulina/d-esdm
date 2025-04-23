@@ -26,7 +26,7 @@ try {
     $db = new Database();
     $conn = $db->getConnection();
 
-    if ($role === 'admin') {
+    if ($role === 'admin'||$role === 'superadmin') {
         $stmt = $conn->prepare("SELECT * FROM pembangkit");
     } else {
         $stmt = $conn->prepare("SELECT * FROM pembangkit WHERE id_user = :id_user");

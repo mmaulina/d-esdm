@@ -16,27 +16,27 @@ try {
     $db = new Database();
     $conn = $db->getConnection();
 
-    if ($role === 'admin') {
-        // Admin melihat semua data
+    if ($role == 'admin' || $role == 'superadmin') {
+        // Admin dan Superadmin melihat semua data
         $stmt = $conn->prepare("SELECT * FROM pembangkit");
     } else {
         // Role umum hanya melihat data miliknya
         $stmt = $conn->prepare("SELECT * FROM pembangkit WHERE id_user = :id_user");
         $stmt->bindParam(':id_user', $id_user, PDO::PARAM_INT);
-    }
+    }        
 
-    // Query fitur pencarian
     $query = "SELECT * FROM pembangkit";
     $params = [];
-    if ($role !== 'admin') {
+
+    if (!in_array($role, ['admin', 'superadmin'])) {
         $query .= " WHERE id_user = :id_user";
         $params[':id_user'] = $id_user;
     }
-    // Cek apakah ada keyword pencarian
+
     if (!empty($_GET['keyword'])) {
         $keyword = "%" . $_GET['keyword'] . "%";
 
-        if ($role === 'admin') {
+        if (in_array($role, ['admin', 'superadmin'])) {
             $query .= " WHERE nama_perusahaan LIKE :keyword";
         } else {
             $query .= " AND nama_perusahaan LIKE :keyword";
@@ -84,7 +84,12 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                     </div>
                 <?php endif; ?>
                 <div class="mb-3">
-                        <?php if ($_SESSION['role'] !== 'admin') { ?> <!-- hanya admin yang tidak bisa mengakses ini -->
+                <?php if ($hasprofil && $role == 'umum') : ?>
+                    <a href="?page=pembangkit_tambah" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Tambah Data
+                    </a>
+                <?php endif; ?>
+                        <?php if ($_SESSION['role'] == 'superadmin') { ?> 
                         <a href="?page=pembangkit_tambah" class="btn btn-primary">
                             <i class="fas fa-plus"></i> Tambah Data
                         </a>

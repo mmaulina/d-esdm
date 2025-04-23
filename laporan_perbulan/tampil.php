@@ -21,11 +21,12 @@ $conn = $db->getConnection();
 $query = "SELECT * FROM laporan_bulanan";
 $params = [];
 
-// Jika bukan admin, tambahkan filter berdasarkan id_user
-if ($role !== 'admin') {
+
+if (!in_array($role, ['admin', 'superadmin'])) {
     $query .= " WHERE id_user = :id_user";
     $params[':id_user'] = $id_user;
 }
+
 
 // Cek apakah ada keyword pencarian
 if (!empty($_GET['keyword'])) {
@@ -74,14 +75,17 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                         Anda harus melengkapi <strong>Profil Perusahaan</strong> terlebih dahulu sebelum dapat menambahkan Laporan Bulanan.
                     </div>
                 <?php endif; ?>
-                <div class="mb-3">
-                    <?php if ($_SESSION['role'] !== 'admin') { ?> <!-- hanya admin yang tidak bisa mengakses ini -->
+                <?php if ($hasprofil && $role == 'umum') : ?>
+                    <a href="?page=tambah_laporan_perbulan" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Tambah Data
+                    </a>
+                <?php endif; ?>
+                <?php if ($_SESSION['role'] == 'superadmin') { ?> 
                         <a href="?page=tambah_laporan_perbulan" class="btn btn-primary">
                             <i class="fas fa-plus"></i> Tambah Data
                         </a>
-                    <?php } ?>
+                        <?php } ?>
                     <a href="?page=excel_laporan_bulanan" class="btn btn-success">Ekspor ke Spreadsheet</a>
-                </div>
             </div>
             <div class="table-responsive" style="max-height: 500px; overflow-x: auto; overflow-y: auto;">
                 <table class="table table-bordered" style="min-width: 1200px; white-space: nowrap;">

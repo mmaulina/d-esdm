@@ -50,7 +50,7 @@ $konten_djih = $stmt->fetch(PDO::FETCH_ASSOC)['jumlah_baru'];
                         </a>
                     </li>
                 <?php } ?>
-                <?php if ($_SESSION['role'] == 'superadmin') { ?> <!-- hanya superadmin yang bisa mengakses menu ini -->
+                <?php if ($_SESSION['role'] == 'superadmin'|| $_SESSION['role'] == 'admin') { ?> 
                     <li class="nav-item">
                         <a class="nav-link <?= ($currentPage == 'profil_admin') ? 'active' : ''; ?>" href="?page=profil_admin">
                             <i class="fas fa-user-tie me-2"></i> <span class="sidebar-text">Profile Perusahaan</span>

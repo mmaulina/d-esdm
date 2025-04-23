@@ -119,7 +119,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
                 
                 <button type="submit" class="btn btn-success">Simpan</button>
-                <a href="?page=laporan_persemester" class="btn btn-secondary">Kembali</a>
+                <a href="?page=laporan_perbulan" class="btn btn-secondary">Kembali</a>
             </form>
         </div>
     </div>
