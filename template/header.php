@@ -9,7 +9,7 @@ if (session_status() == PHP_SESSION_NONE) {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>SIP2 GATRIK</title>
+    <title>SIP2GATRIK</title>
     <link rel="icon" href="assets/img/kalsel.png" type="image/png">
     <!-- Bootstrap CSS -->
     <link href="assets/css/bootstrap.min.css" rel="stylesheet">
