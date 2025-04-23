@@ -12,13 +12,13 @@ $id_user = $_GET['id_user'];
 $db = new Database();
 $conn = $db->getConnection();
 // Ambil data pengguna berdasarkan ID
-$sql = "SELECT username, email, role, status FROM users WHERE id_user = ?";
+$sql = "SELECT username, email, no_hp, role, status FROM users WHERE id_user = ?";
 $stmt = $conn->prepare($sql);
 $stmt->execute([$id_user]);
 $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$data) {
-    if ($_SESSION['role'] == 'admin'||$_SESSION['role'] == 'superadmin') { //hanya admin yang bisa mengakses ini
+    if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'superadmin') { //hanya admin yang bisa mengakses ini
         echo "<script>alert('Pengguna tidak ditemukan!'); window.location='?page=pengguna';</script>";
         exit();
     }
@@ -31,8 +31,9 @@ if (!$data) {
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = htmlspecialchars($_POST['username']);
     $email = htmlspecialchars($_POST['email']);
-    $status = htmlspecialchars($_POST['status']);
+    $no_hp = htmlspecialchars($_POST['no_hp']);
     $role = htmlspecialchars($_POST['role']);
+    $status = htmlspecialchars($_POST['status']);
 
     // Periksa apakah password diubah
     // if (!empty($_POST['password'])) {
@@ -41,13 +42,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     //     $stmt = $conn->prepare($sql);
     //     $execute = $stmt->execute([$username, $email, $password, $role, $status, $id_user]);
     // } else {
-    $sql = "UPDATE users SET username = ?, email = ?, role = ?, status = ? WHERE id_user = ?";
+    $sql = "UPDATE users SET username = ?, email = ?, no_hp = ?, role = ?, status = ? WHERE id_user = ?";
     $stmt = $conn->prepare($sql);
-    $execute = $stmt->execute([$username, $email, $role, $status, $id_user]);
+    $execute = $stmt->execute([$username, $email, $no_hp, $role, $status, $id_user]);
     // }
 
     if ($execute) {
-        if ($_SESSION['role'] == 'admin'||$_SESSION['role'] == 'superadmin') { //hanya admin yang bisa mengakses ini
+        if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'superadmin') { //hanya admin yang bisa mengakses ini
             echo "<script>alert('Data berhasil diperbarui!'); window.location='?page=pengguna';</script>";
         }
         if ($_SESSION['role'] == 'umum') { //hanya umum yang bisa mengakses ini
@@ -89,6 +90,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </select>
                     </div>
                     <div class="mb-3">
+                        <label class="form-label">No.HP</label>
+                        <input type="number" pattern="[0-9]+" name="no_hp" class="form-control" value="<?= htmlspecialchars($data['no_hp']); ?>" required>
+                    </div>
+                    <div class="mb-3">
                         <label class="form-label">Status</label>
                         <select name="status" class="form-control" required>
                             <option value="diajukan" <?= $data['status'] == 'diajukan' ? 'selected' : ''; ?>>Diajukan</option>
@@ -102,7 +107,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <input type="hidden" name="status" value="<?= htmlspecialchars($data['status']) ?>">
                 <?php } ?>
                 <button type="submit" class="btn btn-warning">Simpan Perubahan</button>
-                <?php if ($_SESSION['role'] == 'admin'||$_SESSION['role'] == 'superadmin') { ?> <!-- hanya admin yang bisa mengakses button ini -->
+                <?php if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'superadmin') { ?> <!-- hanya admin yang bisa mengakses button ini -->
                     <a href="?page=pengguna" class="btn btn-secondary">Kembali</a>
                 <?php } ?>
                 <?php if ($_SESSION['role'] == 'umum') { ?> <!-- hanya umum yang bisa mengakses button ini -->

@@ -7,12 +7,12 @@ try {
     $role = $_SESSION['role'];
 
     if ($role == 'admin') {
-        $sql = "SELECT id_user, username, email, role, status 
+        $sql = "SELECT id_user, username, email, no_hp, role, status 
                 FROM users 
                 WHERE role != 'superadmin'
                 ORDER BY FIELD(status, 'diajukan') DESC, status ASC";
     } else {
-        $sql = "SELECT id_user, username, email, role, status 
+        $sql = "SELECT id_user, username, email, no_hp, role, status 
                 FROM users 
                 ORDER BY FIELD(status, 'diajukan') DESC, status ASC";
     }
@@ -93,6 +93,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['tolak_id'])) {
                             <th style="width: 5%;">No.</th>
                             <th style="width: 20%;">Username</th>
                             <th style="width: 25%;">Email</th>
+                            <th style="width: 15%;">No. HP</th>
                             <th style="width: 15%;">Role</th>
                             <th style="width: 15%;">Status</th>
                             <th style="width: 20%;">Aksi</th>
@@ -108,6 +109,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['tolak_id'])) {
                                     <td class="text-center"><?php echo $no++; ?></td>
                                     <td><?php echo htmlspecialchars($row['username']); ?></td>
                                     <td><?php echo htmlspecialchars($row['email']); ?></td>
+                                    <td><?php echo htmlspecialchars($row['no_hp']); ?></td>
                                     <td><?php echo htmlspecialchars($row['role']); ?></td>
                                     <td><?php echo htmlspecialchars($row['status']); ?></td>
                                     <td class="text-center">
