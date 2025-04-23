@@ -18,7 +18,7 @@ $stmt->execute([$id_user]);
 $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$data) {
-    if ($_SESSION['role'] == 'admin') { //hanya admin yang bisa mengakses ini
+    if ($_SESSION['role'] == 'admin'||$_SESSION['role'] == 'superadmin') { //hanya admin yang bisa mengakses ini
         echo "<script>alert('Pengguna tidak ditemukan!'); window.location='?page=pengguna';</script>";
         exit();
     }
@@ -47,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // }
 
     if ($execute) {
-        if ($_SESSION['role'] == 'admin') { //hanya admin yang bisa mengakses ini
+        if ($_SESSION['role'] == 'admin'||$_SESSION['role'] == 'superadmin') { //hanya admin yang bisa mengakses ini
             echo "<script>alert('Data berhasil diperbarui!'); window.location='?page=pengguna';</script>";
         }
         if ($_SESSION['role'] == 'umum') { //hanya umum yang bisa mengakses ini
@@ -77,10 +77,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <label class="form-label">Password (Kosongkan jika tidak diubah)</label>
                     <input type="password" name="password" class="form-control">
                 </div> -->
-                <?php if ($_SESSION['role'] == 'admin') { ?> <!-- hanya admin yang bisa mengakses ini -->
+                <?php if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'superadmin') { ?>
                     <div class="mb-3">
                         <label class="form-label">Role</label>
                         <select name="role" class="form-control" required>
+                            <?php if ($_SESSION['role'] == 'superadmin') { ?>
+                                <option value="superadmin" <?= $data['role'] == 'superadmin' ? 'selected' : ''; ?>>SuperAdmin</option>
+                            <?php } ?>
                             <option value="admin" <?= $data['role'] == 'admin' ? 'selected' : ''; ?>>Admin</option>
                             <option value="umum" <?= $data['role'] == 'umum' ? 'selected' : ''; ?>>Umum</option>
                         </select>
@@ -93,9 +96,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <option value="ditolak" <?= $data['status'] == 'ditolak' ? 'selected' : ''; ?>>Ditolak</option>
                         </select>
                     </div>
+                <?php } else { ?>
+                    <!-- Jika bukan admin/superadmin, jangan tampilkan input, tapi kirim nilai lama sebagai hidden -->
+                    <input type="hidden" name="role" value="<?= htmlspecialchars($data['role']) ?>">
+                    <input type="hidden" name="status" value="<?= htmlspecialchars($data['status']) ?>">
                 <?php } ?>
                 <button type="submit" class="btn btn-warning">Simpan Perubahan</button>
-                <?php if ($_SESSION['role'] == 'admin') { ?> <!-- hanya admin yang bisa mengakses button ini -->
+                <?php if ($_SESSION['role'] == 'admin'||$_SESSION['role'] == 'superadmin') { ?> <!-- hanya admin yang bisa mengakses button ini -->
                     <a href="?page=pengguna" class="btn btn-secondary">Kembali</a>
                 <?php } ?>
                 <?php if ($_SESSION['role'] == 'umum') { ?> <!-- hanya umum yang bisa mengakses button ini -->
