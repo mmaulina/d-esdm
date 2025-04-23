@@ -95,7 +95,7 @@ $konten_djih = $stmt->fetch(PDO::FETCH_ASSOC)['jumlah_baru'];
                         <i class="fas fa-solid fa-address-book me-2"></i> <span class="sidebar-text">Kontak</span>
                     </a>
                 </li>
-                <?php if ($_SESSION['role'] == 'superadmin') { ?> <!-- hanya superadmin yang bisa mengakses menu ini -->
+                <?php if ($_SESSION['role'] == 'superadmin'||$_SESSION['role'] == 'admin') { ?> <!-- hanya superadmin yang bisa mengakses menu ini -->
                     <li class="nav-item">
                         <a class="nav-link <?= ($currentPage == 'pengguna') ? 'active' : ''; ?>" href="?page=pengguna">
                             <i class="fas fa-users me-2"></i> <span class="sidebar-text">Data Pengguna</span>

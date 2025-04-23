@@ -162,7 +162,7 @@ $hasLaporanBulanan = $stmtCheck->fetchColumn() > 0;
                                     </td>
                                     <td><?php echo htmlspecialchars($row['keterangan']); ?></td>
                                     <td class="text-center">
-                                        <?php if ($role == 'admin' && $row['status'] == 'diajukan'): ?>
+                                        <?php if ($role == 'admin'||$role == 'superadmin' && $row['status'] == 'diajukan'): ?>
                                             <!-- Tombol Terima menggunakan POST -->
                                             <form method="POST" style="display: inline;">
                                                 <input type="hidden" name="terima_id" value="<?php echo $row['id']; ?>">

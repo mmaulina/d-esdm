@@ -3,9 +3,20 @@ try {
     $db = new Database();
     $conn = $db->getConnection();
 
-    // Query dasar
-    $sql = "SELECT id_user, username, email, role, status FROM users 
-            ORDER BY FIELD(status, 'diajukan') DESC, status ASC";
+    $id_user = $_SESSION['id_user'];
+    $role = $_SESSION['role'];
+
+    if ($role == 'admin') {
+        $sql = "SELECT id_user, username, email, role, status 
+                FROM users 
+                WHERE role != 'superadmin'
+                ORDER BY FIELD(status, 'diajukan') DESC, status ASC";
+    } else {
+        $sql = "SELECT id_user, username, email, role, status 
+                FROM users 
+                ORDER BY FIELD(status, 'diajukan') DESC, status ASC";
+    }
+
 
     // Inisialisasi array parameter
     $params = [];
