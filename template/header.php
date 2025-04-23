@@ -22,7 +22,7 @@ if (session_status() == PHP_SESSION_NONE) {
         <div class="container-fluid">
             <a class="navbar-brand d-flex align-items-center" href="#">
                 <img src="assets/img/kalsel.png" alt="Logo Kalsel" class="me-2" style="max-height: 40px;">
-                <strong>SIP2 GATRIK</strong>
+                <strong>SIP2GATRIK</strong>
             </a>
 
             <!-- Navbar Toggle untu mobile -->
