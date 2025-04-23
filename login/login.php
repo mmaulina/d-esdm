@@ -82,8 +82,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 
 <body class="d-flex justify-content-center align-items-center vh-100">
-    <div class="card shadow p-4" style="width: 350px;">
-        <h3 class="text-center">Login</h3>
+    <div class="card shadow p-4" style="width: 400px;">
+        <div class="text-center mb-3">
+            <img src="../assets/img/kalsel.png" alt="Logo" style="width: 50px;">
+        </div>
+        <h3 class="text-center">Login SIP2GATRIK</h3>
         <hr>
         <?php if (!empty($error)) : ?>
             <div class="alert alert-danger" role="alert">
@@ -92,7 +95,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <?php endif; ?>
 
         <form method="POST" action="">
-        <input type="hidden" name="token" value="<?php echo $_SESSION['token']; ?>">
+            <input type="hidden" name="token" value="<?php echo $_SESSION['token']; ?>">
 
             <div class="mb-3">
                 <label for="username" class="form-label">Username atau Email</label>

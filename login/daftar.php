@@ -8,31 +8,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = htmlspecialchars($_POST['username']);
     $email = htmlspecialchars($_POST['email']);
     $password = password_hash($_POST['password'], PASSWORD_BCRYPT); // Hash password menggunakan Bcrypt
+    $no_hp = htmlspecialchars($_POST['no_hp']);
     $role = "umum"; // Otomatis diisi "umum"
     $status = "diajukan"; // Otomatis diisi "diajukan"
 
     try {
         $db = new Database();
         $conn = $db->getConnection();
-        
+
         // Cek apakah email sudah terdaftar
         $stmt = $conn->prepare("SELECT email FROM users WHERE email = ?");
         $stmt->execute([$email]);
-        
+
         if ($stmt->rowCount() > 0) {
             $error_message = "Email sudah terdaftar!";
         } else {
             // Cek apakah username sudah terdaftar
             $stmt = $conn->prepare("SELECT username FROM users WHERE username = ?");
             $stmt->execute([$username]);
-            
+
             if ($stmt->rowCount() > 0) {
                 $error_message = "Username sudah terdaftar!";
             } else {
                 // Query untuk menambahkan user baru
-                $sql = "INSERT INTO users (username, email, password, role, status) VALUES (?, ?, ?, ?, ?)";
+                $sql = "INSERT INTO users (username, email, password, no_hp, role, status) VALUES (?, ?, ?, ?, ?, ?)";
                 $stmt = $conn->prepare($sql);
-                $stmt->execute([$username, $email, $password, $role, $status]);
+                $stmt->execute([$username, $email, $password, $no_hp, $role, $status]);
 
                 echo "<script>alert('Pendaftaran berhasil!'); window.location='login.php';</script>";
                 exit; // Pastikan untuk keluar setelah redirect
@@ -51,13 +52,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daftar Akun</title>
+    <link rel="icon" href="../assets/img/kalsel.png" type="image/png">
     <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/login.css">
 </head>
 
 <body class="d-flex justify-content-center align-items-center vh-100 bg-light">
-    <div class="card shadow p-4" style="width: 350px;">
-        <h3 class="text-center">Daftar</h3>
+    <div class="card shadow p-4" style="width: 450px;">
+        <div class="text-center mb-3">
+            <img src="../assets/img/kalsel.png" alt="Logo" style="width: 50px;">
+        </div>
+        <h3 class="text-center">Daftar SIP2GATRIK</h3>
         <hr>
         <form method="post">
             <div class="mb-3">
@@ -77,6 +82,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
                 <input name="password" type="password" class="form-control" id="password" placeholder="Masukkan password" required>
+            </div>
+            <div class="mb-3">
+                <label for="no_hp" class="form-label">No. HP</label>
+                <input name="no_hp" type="number" pattern="[0-9]+" class="form-control" id="no_hp" placeholder="Masukkan nomor handphone" required>
+                <?php if (strpos($error_message, 'No. HP') !== false): ?>
+                    <div class="text-danger"><?php echo $error_message; ?></div>
+                <?php endif; ?>
             </div>
             <button type="submit" class="btn btn-primary w-100">Daftar</button>
         </form>
