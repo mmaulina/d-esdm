@@ -3,3 +3,13 @@ PELAPORAN SEMESTER
 
 LOGIN
 - jika superadmin ganti nomor maka nomor tsb otomatis berubah juga di yang bisa dihubungi saat akun berstatus diajukan
+
+DATA PEMBANGKIT > PELAPORAN BULANAN
+- data pembangkit gabung ke pelaporan bulanan
+- update database
+- pencarian : nama perusahaan
+- filter : jenis pembangkit, fungsi, jenis bahan bakar
+
+SEMUA FORM
+- untuk pemunculan data max 10 data, selanjutnya pakai tombol next
+- pakai sort by ascending descending
