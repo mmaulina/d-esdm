@@ -66,25 +66,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <form method="POST">
                 <div class="mb-3">
                     <label class="form-label">Nama Perusahaan</label>
-                    <input type="text" name="nama_perusahaan" class="form-control" value="<?= $data['nama_perusahaan'] ?>" required>
+                    <input type="text" name="nama_perusahaan" class="form-control" placeholder="Masukkan jenis pembangkit" value="<?= $data['nama_perusahaan'] ?>" required>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Alamat</label>
-                    <input type="text" name="alamat" class="form-control" value="<?= $data['alamat'] ?>" required>
+                    <input type="text" name="alamat" class="form-control" placeholder="Masukkan alamat lengkap" value="<?= $data['alamat'] ?>" required>
                 </div>
                 <div class="row mb-3">
                     <div class="col-md-6">
-                        <label class="form-label">Longitude</label>
-                        <input type="text" name="longitude" class="form-control" value="<?= $data['longitude'] ?>" required>
+                        <label class="form-label">Latitude</label>
+                        <input type="text" name="latitude" class="form-control" placeholder="Contoh : 3°26&#39;43&quot;LS" value="<?= $data['latitude'] ?>" required>
+                        <small class="text-muted">Gunakan tanda * sebagai pengganti derajat (°). Contoh: 3*26'43"LS</small>
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label">Latitude</label>
-                        <input type="text" name="latitude" class="form-control" value="<?= $data['latitude'] ?>" required>
+                        <label class="form-label">Longitude</label>
+                        <input type="text" name="longitude" class="form-control" placeholder="Contoh : 114°50&#39;21&quot;BT" value="<?= $data['longitude'] ?>" required>
+                        <small class="text-muted">Gunakan tanda * sebagai pengganti derajat (°). Contoh: 114*50'21"BT</small>
                     </div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Jenis Pembangkit</label>
-                    <input type="text" name="jenis_pembangkit" class="form-control" value="<?= $data['jenis_pembangkit'] ?>" required>
+                    <input type="text" name="jenis_pembangkit" class="form-control" placeholder="Masukkan jenis pembangkit" value="<?= $data['jenis_pembangkit'] ?>" required>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Fungsi</label>
@@ -117,7 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <div class="row">
                     <div class="col-md-6">
                         <label class="form-label">Jenis Bahan Bakar</label>
-                        <input type="text" name="bahan_bakar_jenis" class="form-control" value="<?= $data['bahan_bakar_jenis'] ?>"required>
+                        <input type="text" name="bahan_bakar_jenis" class="form-control" value="<?= $data['bahan_bakar_jenis'] ?>" required>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">Satuan Bahan Bakar</label>
@@ -132,3 +134,52 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
     </div>
 </div>
+
+<!-- SCRIPT SIMBOL DERAJAT -->
+<script>
+    function replaceAsterisk(input) {
+        input.value = input.value.replace(/\*/g, "°");
+    }
+</script>
+
+<!-- SCRIPT PENULISAN ANGKA FORMAT INDONESIA -->
+<script>
+    function formatAngkaIndonesia(input) {
+        let value = input.value;
+
+        // Hapus semua karakter kecuali angka dan koma
+        value = value.replace(/[^0-9,]/g, "");
+
+        // Pisahkan angka dan desimal
+        let parts = value.split(",");
+        let angka = parts[0];
+        let desimal = parts[1] || "";
+
+        // Tambah titik ribuan
+        angka = angka.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+        // Gabungkan kembali
+        input.value = desimal ? angka + "," + desimal : angka;
+    }
+</script>
+
+<!-- SCRIPT JUMLAH UNIT MAX 200 UNIT -->
+<script>
+    const jumlahUnitInput = document.getElementById('jumlahUnitInput');
+    jumlahUnitInput.addEventListener('input', function() {
+        if (parseInt(this.value) > 200) {
+            this.value = 200;
+        }
+    });
+</script>
+
+<!-- SCRIPT PILIHAN TAHUN OPERASI -->
+<script>
+    const selectTahun = document.querySelector('select[name="tahun_operasi"]');
+    for (let tahun = 2030; tahun >= 2000; tahun--) {
+        const option = document.createElement('option');
+        option.value = tahun;
+        option.textContent = tahun;
+        selectTahun.appendChild(option);
+    }
+</script>

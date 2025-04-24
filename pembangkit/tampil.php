@@ -121,8 +121,8 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                             <th colspan="2">Bahan Bakar yang Digunakan</th>
                         </tr>
                         <tr>
-                            <th>Longitude</th>
                             <th>Latitude</th>
+                            <th>Longitude</th>
                             <th>Jenis</th>
                             <th>Satuan</th>
                         </tr>
@@ -137,8 +137,8 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                                     <td class="text-center"><?php echo $no++; ?></td>
                                     <td><?= htmlspecialchars($row['nama_perusahaan']) ?></td>
                                     <td><?= htmlspecialchars($row['alamat']) ?></td>
-                                    <td><?= htmlspecialchars($row['longitude']) ?></td>
                                     <td><?= htmlspecialchars($row['latitude']) ?></td>
+                                    <td><?= htmlspecialchars($row['longitude']) ?></td>
                                     <td><?= htmlspecialchars($row['jenis_pembangkit']) ?></td>
                                     <td><?= htmlspecialchars($row['fungsi']) ?></td>
                                     <td><?= htmlspecialchars($row['kapasitas_terpasang']) ?></td>
