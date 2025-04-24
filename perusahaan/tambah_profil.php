@@ -104,7 +104,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <form method="POST">
                 <div class="form-group mb-2">
                     <label>Nama Perusahaan</label>
-                    <input type="text" class="form-control" name="nama_perusahaan" required maxlength="100">
+                    <input type="text" class="form-control" name="nama_perusahaan" placeholder="Masukkan nama perusahaan" required maxlength="100">
                 </div>
 
                 <div class="form-group mb-2">
@@ -129,7 +129,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 <div class="form-group mb-2">
                     <label>Alamat</label>
-                    <textarea class="form-control" name="alamat" required maxlength="200"></textarea>
+                    <textarea class="form-control" name="alamat" placeholder="Masukkan alamat lengkap perusahaan" required maxlength="200"></textarea>
                 </div>
 
                 <div class="form-group mb-2">
@@ -159,17 +159,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 <div class="form-group mb-2">
                     <label>Nomor Telepon Kantor</label>
-                    <input type="text" class="form-control" name="no_telp_kantor" required maxlength="15" pattern="[0-9]+">
+                    <input type="text" class="form-control" name="no_telp_kantor" placeholder="Contoh : 081234567890" maxlength="15" pattern="[0-9]+">
                 </div>
 
                 <div class="form-group mb-2">
                     <label>No. Fax</label>
-                    <input type="text" class="form-control" name="no_fax" required maxlength="15" pattern="[0-9]+">
+                    <input type="text" class="form-control" name="no_fax" placeholder="Contoh : (021) 1234567" maxlength="15" pattern="[0-9]+">
                 </div>
 
                 <div class="form-group mb-2">
                     <label>Tenaga Teknik</label>
-                    <input type="text" class="form-control" name="tenaga_teknik" required maxlength="100">
+                    <input type="text" class="form-control" name="tenaga_teknik" placeholder="Masukkan nama tenaga teknik" required maxlength="100">
                 </div>
 
                 <div class="card-header mt-4">
@@ -178,17 +178,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 <div class="form-group mb-2">
                     <label>Nama</label>
-                    <input type="text" class="form-control" name="nama" required maxlength="100">
+                    <input type="text" class="form-control" name="nama" placeholder="Masukkan nama" required maxlength="100">
                 </div>
 
                 <div class="form-group mb-2">
                     <label>Nomor HP</label>
-                    <input type="text" class="form-control" name="no_hp" required maxlength="15" pattern="[0-9]+">
+                    <input type="text" class="form-control" name="no_hp" placeholder="Masukkan nomor handphone/whatsapp" required maxlength="15" pattern="[0-9]+">
                 </div>
 
                 <div class="form-group mb-2">
                     <label>Email</label>
-                    <input type="text" class="form-control" name="email" required maxlength="100">
+                    <input type="text" class="form-control" name="email" placeholder="Masukkan email" required maxlength="100">
                 </div>
 
                 <div class="mt-3">

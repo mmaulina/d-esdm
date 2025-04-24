@@ -76,7 +76,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <form method="POST">
                 <div class="form-group mb-2">
                     <label>Nama Perusahaan</label>
-                    <input type="text" class="form-control" name="nama_perusahaan" required value="<?php echo $profil['nama_perusahaan']; ?>">
+                    <input type="text" class="form-control" name="nama_perusahaan" placeholder="Masukkan nama perusahaan" required value="<?php echo $profil['nama_perusahaan']; ?>">
                 </div>
 
                 <div class="form-group mb-2">
@@ -101,7 +101,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 <div class="form-group mb-2">
                     <label>Alamat</label>
-                    <textarea class="form-control" name="alamat" required><?php echo $profil['alamat']; ?></textarea>
+                    <textarea class="form-control" name="alamat" placeholder="Masukkan alamat lengkap perusahaan" required><?php echo $profil['alamat']; ?></textarea>
                 </div>
 
                 <div class="form-group mb-2">
@@ -130,17 +130,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 <div class="form-group mb-2">
                     <label>Nomor Telepon Kantor</label>
-                    <input type="text" class="form-control" name="no_telp_kantor" required value="<?php echo $profil['no_telp_kantor']; ?>">
+                    <input type="text" class="form-control" name="no_telp_kantor" placeholder="Contoh : 081234567890" maxlength="15" pattern="[0-9]+" required value="<?php echo $profil['no_telp_kantor']; ?>">
                 </div>
 
                 <div class="form-group mb-2">
                     <label>No. Fax</label>
-                    <input type="text" class="form-control" name="no_fax" required value="<?php echo $profil['no_fax']; ?>">
+                    <input type="text" class="form-control" name="no_fax" placeholder="Contoh : (021) 1234567" maxlength="15" pattern="[0-9]+" required value="<?php echo $profil['no_fax']; ?>">
                 </div>
 
                 <div class="form-group mb-2">
                     <label>Tenaga Teknik</label>
-                    <input type="text" class="form-control" name="tenaga_teknik" required value="<?php echo $profil['tenaga_teknik']; ?>">
+                    <input type="text" class="form-control" name="tenaga_teknik" placeholder="Masukkan nama tenaga teknik" required value="<?php echo $profil['tenaga_teknik']; ?>">
                 </div>
 
                 <div class="card-header mt-4">
@@ -148,17 +148,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
                 <div class="form-group mt-2 mb-2">
                     <label>Nama</label>
-                    <input type="text" class="form-control" name="nama" required value="<?php echo $profil['nama']; ?>">
+                    <input type="text" class="form-control" name="nama" placeholder="Masukkan nama" required value="<?php echo $profil['nama']; ?>">
                 </div>
 
                 <div class="form-group mb-2">
                     <label>Nomor HP</label>
-                    <input type="text" class="form-control" name="no_hp" required value="<?php echo $profil['no_hp']; ?>">
+                    <input type="text" class="form-control" name="no_hp" placeholder="Masukkan nomor handphone/whatsapp" required maxlength="15" pattern="[0-9]+" value="<?php echo $profil['no_hp']; ?>">
                 </div>
 
                 <div class="form-group mb-2">
                     <label>Email</label>
-                    <input type="email" class="form-control" name="email" required value="<?php echo $profil['email']; ?>">
+                    <input type="email" class="form-control" name="email" placeholder="Masukkan email" required value="<?php echo $profil['email']; ?>">
                 </div>
 
                 <div class="mt-3">
