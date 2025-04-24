@@ -9,7 +9,7 @@ if (session_status() == PHP_SESSION_NONE) {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>SIP2GATRIK</title>
+    <title>E-WASDAL GATRIK</title>
     <link rel="icon" href="assets/img/kalsel.png" type="image/png">
     <!-- Bootstrap CSS -->
     <link href="assets/css/bootstrap.min.css" rel="stylesheet">
@@ -22,7 +22,7 @@ if (session_status() == PHP_SESSION_NONE) {
         <div class="container-fluid">
             <a class="navbar-brand d-flex align-items-center" href="#">
                 <img src="assets/img/kalsel.png" alt="Logo Kalsel" class="me-2" style="max-height: 40px;">
-                <strong>SIP2GATRIK</strong>
+                <strong>E-WASDAL GATRIK</strong>
             </a>
 
             <!-- Navbar Toggle untu mobile -->
@@ -59,7 +59,7 @@ if (session_status() == PHP_SESSION_NONE) {
                         $totalNotifikasi = $jumlahLaporanDiajukan + $jumlahPenggunaDiajukan;
                         ?>
 
-                        <?php if ($_SESSION['role'] == 'superadmin') { ?> <!-- hanya superadmin yang bisa mengakses menu ini -->
+                        <?php if ($_SESSION['role'] == 'superadmin' || $_SESSION['role'] == 'admin') { ?> <!-- hanya superadmin yang bisa mengakses menu ini -->
                             <a href="?page=notifikasi" class="nav-link position-relative me-3">
                                 <i class="fas fa-bell fa-lg"></i>
                                 <?php if ($totalNotifikasi > 0): ?>

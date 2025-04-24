@@ -62,7 +62,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="text-center mb-3">
             <img src="../assets/img/kalsel.png" alt="Logo" style="width: 50px;">
         </div>
-        <h3 class="text-center">Daftar SIP2GATRIK</h3>
+        <h3 class="text-center">Daftar E-WASDAL GATRIK</h3>
         <hr>
         <form method="post">
             <div class="mb-3">
