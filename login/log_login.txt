@@ -3,3 +3,5 @@
 2025-04-23 04:03:12 - Gagal login: irwan
 2025-04-23 13:56:59 - Gagal login: admin
 2025-04-23 17:28:15 - Gagal login: admin
+2025-04-24 06:10:15 - Gagal login: umum
+2025-04-24 17:16:01 - Gagal login: admin
