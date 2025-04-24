@@ -13,3 +13,7 @@ DATA PEMBANGKIT > PELAPORAN BULANAN
 SEMUA FORM
 - untuk pemunculan data max 10 data, selanjutnya pakai tombol next
 - pakai sort by ascending descending
+
+DJIH DAN NEWS
+- tambahkan title
+- kolom input caption diperbesar dan buat supaya bisa enter
