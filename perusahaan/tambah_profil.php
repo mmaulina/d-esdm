@@ -12,6 +12,7 @@ if (!isset($_SESSION['id_user'])) {
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $id_user = $_SESSION['id_user'];
+    $role = $_SESSION['role'];
 
     // Fungsi untuk sanitasi input
     function sanitize_input($data)

@@ -70,6 +70,67 @@ try {
 } catch (PDOException $e) {
     die("Error: " . $e->getMessage());
 }
+$kota_kabupaten_kalsel = [
+    'Kota Banjarbaru',
+    'Kota Banjarmasin',
+    'Balangan',
+    'Banjar',
+    'Barito Kuala',
+    'Hulu Sungai Selatan',
+    'Hulu Sungai Tengah',
+    'Hulu Sungai Utara',
+    'Kotabaru',
+    'Tabalong',
+    'Tanah Bumbu',
+    'Tanah Laut',
+    'Tapin'
+];
+
+// Variabel untuk menyimpan data laporan yang belum di-upload
+$laporan_tidak_upload = [];
+$tahun = date('Y'); // Atau sesuaikan dengan tahun yang diinginkan
+
+// Ambil data perusahaan dari tabel profil
+$sql_perusahaan = "SELECT id_user, kabupaten, nama_perusahaan FROM profil";
+$stmt_perusahaan = $conn->query($sql_perusahaan);
+$daftar_perusahaan = $stmt_perusahaan->fetchAll(PDO::FETCH_ASSOC);
+
+foreach ($daftar_perusahaan as $perusahaan) {
+    $id_user = $perusahaan['id_user'];
+    $kabupaten = $perusahaan['kabupaten'];
+
+    // Cek Semester I
+    $stmt1 = $conn->prepare("SELECT COUNT(*) FROM laporan_semester WHERE id_user = :id_user AND semester = :semester");
+    $stmt1->execute([
+        'id_user' => $id_user,
+        'semester' => "Semester I $tahun"
+    ]);
+    $hasSemester1 = $stmt1->fetchColumn() > 0;
+
+    // Cek Semester II
+    $stmt2 = $conn->prepare("SELECT COUNT(*) FROM laporan_semester WHERE id_user = :id_user AND semester = :semester");
+    $stmt2->execute([
+        'id_user' => $id_user,
+        'semester' => "Semester II $tahun"
+    ]);
+    $hasSemester2 = $stmt2->fetchColumn() > 0;
+
+    // Mengelompokkan laporan berdasarkan kabupaten
+    if (!isset($laporan_tidak_upload[$kabupaten])) {
+        $laporan_tidak_upload[$kabupaten] = [
+            'semester1' => 0,
+            'semester2' => 0
+        ];
+    }
+
+    if (!$hasSemester1) {
+        $laporan_tidak_upload[$kabupaten]['semester1']++;
+    }
+    if (!$hasSemester2) {
+        $laporan_tidak_upload[$kabupaten]['semester2']++;
+    }
+}
+
 ?>
 <main>
     <div class="container">
@@ -81,6 +142,7 @@ try {
             </div>
         </div>
 
+        <!-- Row for Total Perusahaan and Total Kota -->
         <div class="row">
             <div class="col-12 col-md-6 mb-3">
                 <div class="card text-black" style="background-color: #FCDC2A;">
@@ -100,8 +162,55 @@ try {
             </div>
         </div>
 
+        <!-- Row for Perusahaan Belum Upload Laporan -->
+        <div class="row mt-3">
+            <div class="col-6">
+                <h5 class="fw-bold mb-3">Perusahaan Belum Upload Laporan Semester</h5>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped table-sm">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Kabupaten/Kota</th>
+                                <th>Belum Upload Semester I (<?php echo $tahun; ?>)</th>
+                                <th>Belum Upload Semester II (<?php echo $tahun; ?>)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            $total_semester1 = 0;
+                            $total_semester2 = 0;
+                            foreach ($kota_kabupaten_kalsel as $kota):
+                                $data = isset($laporan_tidak_upload[$kota]) ? $laporan_tidak_upload[$kota] : ['semester1' => 0, 'semester2' => 0];
 
-        <!-- Tampilkan Konten -->
+                                $total_semester1 += $data['semester1'];
+                                $total_semester2 += $data['semester2'];
+                            ?>
+                                <tr>
+                                    <td><?php echo htmlspecialchars($kota); ?></td>
+                                    <td><?php echo $data['semester1']; ?></td>
+                                    <td><?php echo $data['semester2']; ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+
+                            <?php if (empty($laporan_tidak_upload)): ?>
+                                <tr>
+                                    <td colspan="3" class="text-center">Semua perusahaan telah mengunggah laporan semester.</td>
+                                </tr>
+                            <?php endif; ?>
+                        </tbody>
+                        <tfoot>
+                            <tr class="table-dark">
+                                <td><strong>Total</strong></td>
+                                <td><strong><?php echo $total_semester1; ?></strong></td>
+                                <td><strong><?php echo $total_semester2; ?></strong></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row for News Content -->
         <div class="row mt-4">
             <div class="col-12 d-flex justify-content-between align-items-center">
                 <h5 class="fw-bold mb-0">News</h5>
@@ -112,32 +221,30 @@ try {
                 <?php endif; ?>
             </div>
         </div>
-    </div>
 
-    <div class="container">
-        <div class="timeline position-relative">
-            <?php foreach ($konten_list as $konten) : ?>
-                <div class="timeline-item d-flex flex-column align-items-center text-center position-relative">
-                    <div class="circle bg-dark rounded-circle position-absolute" style="width: 15px; height: 15px; left: 0; top: 50%; transform: translateY(-50%);"></div>
-                    <div class="content w-75 ms-3">
-                        <?php if ($konten['jenis_konten'] === 'gambar') : ?>
-                            <img src="<?php echo htmlspecialchars($konten['konten']); ?>" class="img-fluid w-50 rounded" alt="Konten Gambar">
-                        <?php elseif ($konten['jenis_konten'] === 'file') : ?>
-                            <a href="<?php echo htmlspecialchars($konten['konten']); ?>" class="btn btn-secondary" download>Download File</a>
-                        <?php elseif ($konten['jenis_konten'] === 'link') : ?>
-                            <a href="<?php echo htmlspecialchars($konten['konten']); ?>" target="_blank" class="btn btn-info">Lihat Link</a>
-                        <?php endif; ?>
-                        <p class="card-text mt-3"> <?php echo htmlspecialchars($konten['caption']); ?> </p>
-                        <p class="card-text"><small class="text-muted">Diupload pada: <?php echo $konten['tanggal']; ?></small></p>
-                    </div>
-                    <div class="line position-absolute bg-dark" style="width: 2px; height: 100%; left: 0; top: 0;"></div>
+        <div class="row mt-3">
+            <div class="col-12">
+                <div class="timeline position-relative">
+                    <?php foreach ($konten_list as $konten) : ?>
+                        <div class="timeline-item d-flex flex-column align-items-center text-center position-relative">
+                            <div class="circle bg-dark rounded-circle position-absolute" style="width: 15px; height: 15px; left: 0; top: 50%; transform: translateY(-50%);"></div>
+                            <div class="content w-75 ms-3">
+                                <?php if ($konten['jenis_konten'] === 'gambar') : ?>
+                                    <img src="<?php echo htmlspecialchars($konten['konten']); ?>" class="img-fluid w-50 rounded" alt="Konten Gambar">
+                                <?php elseif ($konten['jenis_konten'] === 'file') : ?>
+                                    <a href="<?php echo htmlspecialchars($konten['konten']); ?>" class="btn btn-secondary" download>Download File</a>
+                                <?php elseif ($konten['jenis_konten'] === 'link') : ?>
+                                    <a href="<?php echo htmlspecialchars($konten['konten']); ?>" target="_blank" class="btn btn-info">Lihat Link</a>
+                                <?php endif; ?>
+                                <p class="card-text mt-3"> <?php echo htmlspecialchars($konten['caption']); ?> </p>
+                                <p class="card-text"><small class="text-muted">Diupload pada: <?php echo $konten['tanggal']; ?></small></p>
+                            </div>
+                            <div class="line position-absolute bg-dark" style="width: 2px; height: 100%; left: 0; top: 0;"></div>
+                        </div>
+                    <?php endforeach; ?>
                 </div>
-            <?php endforeach; ?>
+            </div>
         </div>
     </div>
-
-
-
-
-    </div>
 </main>
+

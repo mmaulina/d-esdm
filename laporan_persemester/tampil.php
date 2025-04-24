@@ -16,7 +16,7 @@ $db = new Database();
 $conn = $db->getConnection();
 
 // Query berdasarkan role
-$params = [];
+    $params = [];
 if ($role == 'admin' || $role == 'superadmin') {
     $query = "SELECT * FROM laporan_semester ORDER BY FIELD(status, 'diajukan', 'ditolak', 'diterima')";
 } else {
@@ -111,6 +111,8 @@ $hasLaporanBulanan = $stmtCheck->fetchColumn() > 0;
                             <th>Hasil</th>
                             <th>Laporan</th>
                             <th>LHU</th>
+                            <th>Tahun</th>
+                            <th>Semester</th>
                             <th>Status</th>
                             <th>Keterangan</th>
                             <th>Aksi</th>
@@ -146,6 +148,8 @@ $hasLaporanBulanan = $stmtCheck->fetchColumn() > 0;
                                             <span class="text-danger">Tidak ada file</span>
                                         <?php endif; ?>
                                     </td>
+                                    <td><?php echo htmlspecialchars($row['tahun']); ?></td>
+                                    <td><?php echo htmlspecialchars($row['semester']); ?></td>
                                     <td class="text-center">
                                         <?php
                                         // Menampilkan status dengan ikon dan warna
@@ -213,6 +217,80 @@ $hasLaporanBulanan = $stmtCheck->fetchColumn() > 0;
         </div>
     </div>
 </div>
+
+<?php if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'superadmin'): ?>
+
+    <?php
+    include_once 'koneksi.php';
+    $database = new Database();
+    $db = $database->getConnection();
+
+    $tahun = date("Y"); // Tahun yang ingin dicek
+
+    // Ambil semua user dan nama perusahaan dari tabel profil
+    $query = "SELECT id_user, nama_perusahaan FROM profil";
+    $stmt = $db->prepare($query);
+    $stmt->execute();
+    $data_perusahaan = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $keterangan = [];
+
+    foreach ($data_perusahaan as $perusahaan) {
+        $id_user = $perusahaan['id_user'];
+        $nama_perusahaan = $perusahaan['nama_perusahaan'];
+
+        // Cek apakah sudah ada laporan Semester I
+        $cekSemester1 = $db->prepare("SELECT COUNT(*) FROM laporan_semester WHERE id_user = :id_user AND semester = 'Semester I $tahun'");
+        $cekSemester1->bindParam(':id_user', $id_user);
+        $cekSemester1->execute();
+        $adaSemester1 = $cekSemester1->fetchColumn() > 0;
+
+        // Cek apakah sudah ada laporan Semester II
+        $cekSemester2 = $db->prepare("SELECT COUNT(*) FROM laporan_semester WHERE id_user = :id_user AND semester = 'Semester II $tahun'");
+        $cekSemester2->bindParam(':id_user', $id_user);
+        $cekSemester2->execute();
+        $adaSemester2 = $cekSemester2->fetchColumn() > 0;
+
+        // Buat keterangan
+        if (!$adaSemester1 && !$adaSemester2) {
+            $ket = "Belum mengupload Semester I & II";
+        } elseif (!$adaSemester1) {
+            $ket = "Belum mengupload Semester I";
+        } elseif (!$adaSemester2) {
+            $ket = "Belum mengupload Semester II";
+        } else {
+            $ket = "Sudah mengupload kedua semester";
+        }
+
+        $keterangan[] = [
+            'nama_perusahaan' => $nama_perusahaan,
+            'keterangan' => $ket
+        ];
+    }
+    ?>
+
+    <h4 class="mt-4">Status Laporan Semester Tahun <?= $tahun ?></h4>
+    <table class="table table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>No</th>
+                <th>Nama Perusahaan</th>
+                <th>Keterangan</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($keterangan as $index => $data): ?>
+                <tr>
+                    <td><?= $index + 1 ?></td>
+                    <td><?= htmlspecialchars($data['nama_perusahaan']) ?></td>
+                    <td><?= htmlspecialchars($data['keterangan']) ?></td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+
+<?php endif; ?>
+
 
 <!-- Bootstrap CSS -->
 <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.3/css/bootstrap.min.css"> -->
