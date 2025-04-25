@@ -83,12 +83,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <div class="col-md-6">
                         <label class="form-label">Latitude</label>
                         <input type="text" name="latitude" class="form-control" placeholder="Contoh : 3°26&#39;43&quot;LS" required>
-                        <small class="text-muted">Gunakan tanda * sebagai pengganti derajat (°). Contoh: 3*26'43"LS</small>
+                        <small class="text-muted">Gunakan tanda * sebagai pengganti derajat (°). Contoh: 3*26'43,25"LS</small>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">Longitude</label>
                         <input type="text" name="longitude" class="form-control" placeholder="Contoh : 114°50&#39;21&quot;BT" required>
-                        <small class="text-muted">Gunakan tanda * sebagai pengganti derajat (°). Contoh: 114*50'21"BT</small>
+                        <small class="text-muted">Gunakan tanda * sebagai pengganti derajat (°). Contoh: 114*50'21,15"BT</small>
                     </div>
                 </div>
                 <div class="mb-3">
@@ -180,7 +180,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </script>
 
 <!-- SCRIPT PENULISAN ANGKA FORMAT INDONESIA -->
-<script>
+<!-- <script>
     function formatAngkaIndonesia(input) {
         let value = input.value;
 
@@ -198,7 +198,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Gabungkan kembali
         input.value = desimal ? angka + "," + desimal : angka;
     }
-</script>
+</script> -->
 
 <!-- SCRIPT JUMLAH UNIT MAX 200 UNIT -->
 <script>
