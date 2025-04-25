@@ -17,3 +17,4 @@ SEMUA FORM
 DJIH DAN NEWS
 - tambahkan title
 - kolom input caption diperbesar dan buat supaya bisa enter
+- upload foto bisa lebih dari satu
