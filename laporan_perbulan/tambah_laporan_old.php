@@ -11,53 +11,21 @@ if (!isset($_SESSION['id_user'])) {
 }
 
 $id_user = $_SESSION['id_user'];
-$role = $_SESSION['role'] ?? '';
-
-$nama_perusahaan_profil = '';
-
-// Ambil nama_perusahaan berdasarkan id_user
-$database = new Database();
-$db = $database->getConnection();
-$query = "SELECT nama_perusahaan FROM profil WHERE id_user = :id_user";
-$stmt = $db->prepare($query);
-$stmt->bindParam(':id_user', $id_user);
-$stmt->execute();
-
-if ($stmt->rowCount() > 0) {
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    $nama_perusahaan_profil = $result['nama_perusahaan'];
-}
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $database = new Database();
     $db = $database->getConnection();
 
-    function sanitizeInput($input)
-    {
+    function sanitizeInput($input) {
         return htmlspecialchars(strip_tags(trim($input)));
     }
 
-    function checkEmpty($input)
-    {
+    function checkEmpty($input) {
         return empty($input) ? "-" : $input;
     }
 
-    $nama_perusahaan = sanitizeInput($_POST['nama_perusahaan']);
-    $tahun = sanitizeInput($_POST['tahun']);
     $bulan = sanitizeInput($_POST['bulan']);
-    $alamat = checkEmpty(sanitizeInput($_POST['alamat']));
-    $latitude = checkEmpty(sanitizeInput($_POST['latitude']));
-    $longitude = checkEmpty(sanitizeInput($_POST['longitude']));
-    $jenis_pembangkit = checkEmpty(sanitizeInput($_POST['jenis_pembangkit']));
-    $fungsi = checkEmpty(sanitizeInput($_POST['fungsi']));
-    $kapasitas_terpasang = checkEmpty(sanitizeInput($_POST['kapasitas_terpasang']));
-    $daya_mampu_netto = checkEmpty(sanitizeInput($_POST['daya_mampu_netto']));
-    $jumlah_unit = checkEmpty(sanitizeInput($_POST['jumlah_unit']));
-    $no_unit = checkEmpty(sanitizeInput($_POST['no_unit']));
-    $tahun_operasi = checkEmpty(sanitizeInput($_POST['tahun_operasi']));
-    $status_operasi = checkEmpty(sanitizeInput($_POST['status_operasi']));
-    $bahan_bakar_jenis = checkEmpty(sanitizeInput($_POST['bahan_bakar_jenis']));
-    $bahan_bakar_satuan = checkEmpty(sanitizeInput($_POST['bahan_bakar_satuan']));
+    $nama_perusahaan = sanitizeInput($_POST['nama_perusahaan']);
     $volume_bb = checkEmpty(sanitizeInput($_POST['volume_bb']));
     $produksi_sendiri = checkEmpty(sanitizeInput($_POST['produksi_sendiri']));
     $pemb_sumber_lain = checkEmpty(sanitizeInput($_POST['pemb_sumber_lain']));
@@ -65,30 +33,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $penj_ke_pelanggan = checkEmpty(sanitizeInput($_POST['penj_ke_pelanggan']));
     $penj_ke_pln = checkEmpty(sanitizeInput($_POST['penj_ke_pln']));
     $pemakaian_sendiri = checkEmpty(sanitizeInput($_POST['pemakaian_sendiri']));
-    $status = 'diajukan'; // Status diisi otomatis
-    $keterangan = '-'; // Keterangan diisi otomatis
 
-    $insertSQL = "INSERT INTO laporan_bulanan (id_user, nama_perusahaan, tahun, bulan, alamat, latitude longitude, jenis_pembangkit, fungsi, kapasitas_terpasang, daya_mampu_netto, jumlah_unit, no_unit, tahun_operasi, status_operasi, bahan_bakar_jenis, bahan_bakar_satuan, volume_bb, produksi_sendiri, pemb_sumber_lain, susut_jaringan, penj_ke_pelanggan, penj_ke_pln, pemakaian_sendiri, status, keterangan) 
-                  VALUES (:id_user, :nama_perusahaan, :tahun, :bulan, :alamat, :latitude, :longitude, :jenis_pembangkit, :fungsi, :kapasitas_terpasang, :daya_mampu_netto, :jumlah_unit, :no_unit, :tahun_operasi, :status_operasi, :bahan_bakar_jenis, :bahan_bakar_satuan, :volume_bb, :produksi_sendiri, :pemb_sumber_lain, :susut_jaringan, :penj_ke_pelanggan, :penj_ke_pln, :pemakaian_sendiri, :status, :keterangan)";
+    $insertSQL = "INSERT INTO laporan_bulanan (id_user, bulan, nama_perusahaan, volume_bb, produksi_sendiri, pemb_sumber_lain, susut_jaringan, penj_ke_pelanggan, penj_ke_pln, pemakaian_sendiri) 
+                  VALUES (:id_user, :bulan, :nama_perusahaan, :volume_bb, :produksi_sendiri, :pemb_sumber_lain, :susut_jaringan, :penj_ke_pelanggan, :penj_ke_pln, :pemakaian_sendiri)";
     $stmt = $db->prepare($insertSQL);
 
     $stmt->bindParam(':id_user', $id_user);
-    $stmt->bindParam(':nama_perusahaan', $nama_perusahaan);
-    $stmt->bindParam(':tahun', $tahun);
     $stmt->bindParam(':bulan', $bulan);
-    $stmt->bindParam(':alamat', $alamat);
-    $stmt->bindParam(':latitude', $latitude);
-    $stmt->bindParam(':longitude', $longitude);
-    $stmt->bindParam(':jenis_pembangkit', $jenis_pembangkit);
-    $stmt->bindParam(':fungsi', $fungsi);
-    $stmt->bindParam(':kapasitas_terpasang', $kapasitas_terpasang);
-    $stmt->bindParam(':daya_mampu_netto', $daya_mampu_netto);
-    $stmt->bindParam(':jumlah_unit', $jumlah_unit,);
-    $stmt->bindParam(':no_unit', $no_unit);
-    $stmt->bindParam(':tahun_operasi', $tahun_operasi,);
-    $stmt->bindParam(':status_operasi', $status_operasi);
-    $stmt->bindParam(':bahan_bakar_jenis', $bahan_bakar_jenis);
-    $stmt->bindParam(':bahan_bakar_satuan', $bahan_bakar_satuan);
+    $stmt->bindParam(':nama_perusahaan', $nama_perusahaan);
     $stmt->bindParam(':volume_bb', $volume_bb);
     $stmt->bindParam(':produksi_sendiri', $produksi_sendiri);
     $stmt->bindParam(':pemb_sumber_lain', $pemb_sumber_lain);
@@ -96,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bindParam(':penj_ke_pelanggan', $penj_ke_pelanggan);
     $stmt->bindParam(':penj_ke_pln', $penj_ke_pln);
     $stmt->bindParam(':pemakaian_sendiri', $pemakaian_sendiri);
-
+    
     if ($stmt->execute()) {
         $_SESSION['hasil'] = true;
         $_SESSION['pesan'] = "Berhasil Simpan Data";
@@ -115,20 +67,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="card shadow">
         <div class="card-body">
             <form method="POST" enctype="multipart/form-data">
-                <div class="mb-3">
-                <label class="form-label">Nama Perusahaan</label>
-                <?php if ($role === 'superadmin') : ?>
-                    <input type="text" name="nama_perusahaan" class="form-control" value="<?= htmlspecialchars($nama_perusahaan_profil) ?>">
-                <?php else : ?>
-                    <input type="text" name="nama_perusahaan" class="form-control" value="<?= htmlspecialchars($nama_perusahaan_profil) ?>" readonly>
-                <?php endif; ?>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Tahun</label>
-                    <select class="form-control" name="tahun" id="tahun" required>
-                        <option value="">-- Pilih Tahun --</option>
-                    </select>
-                </div>
                 <div class="form-group mb-3">
                     <label>Bulan</label>
                     <select class="form-control" name="bulan" required>
@@ -179,26 +117,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <label class="form-label">Pemakaian Sendiri (kWh)</label>
                     <input type="number" name="pemakaian_sendiri" class="form-control" required>
                 </div>
-
+                
                 <button type="submit" class="btn btn-success">Simpan</button>
                 <a href="?page=laporan_perbulan" class="btn btn-secondary">Kembali</a>
             </form>
         </div>
     </div>
 </div>
-
-<!-- SCRIPT TAHUN OTOMATIS -->
-<script>
-    const tahunSelect = document.getElementById('tahun');
-
-    const currentYear = new Date().getFullYear(); // Tahun sekarang (otomatis)
-    const endYear = currentYear + 10;
-
-    // Isi dropdown tahun dari currentYear sampai endYear
-    for (let year = currentYear; year <= endYear; year++) {
-        const option = document.createElement("option");
-        option.value = year;
-        option.text = year;
-        tahunSelect.appendChild(option);
-    }
-</script>
