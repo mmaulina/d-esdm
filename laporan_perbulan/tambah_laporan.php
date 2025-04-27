@@ -148,8 +148,92 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </select>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Nama Perusahaan</label>
-                    <input type="text" name="nama_perusahaan" class="form-control" required>
+                    <label class="form-label">Alamat</label>
+                    <input type="text" name="alamat" class="form-control" placeholder="Masukkan alamat lengkap" required>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Latitude</label>
+                        <input type="text" name="latitude" class="form-control" placeholder="Contoh : 3°26&#39;43&quot;LS" required>
+                        <small class="text-muted">Gunakan tanda * sebagai pengganti derajat (°). Contoh: 3*26'43,25"LS</small>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Longitude</label>
+                        <input type="text" name="longitude" class="form-control" placeholder="Contoh : 114°50&#39;21&quot;BT" required>
+                        <small class="text-muted">Gunakan tanda * sebagai pengganti derajat (°). Contoh: 114*50'21,15"BT</small>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Jenis Pembangkit</label>
+                    <input type="text" name="jenis_pembangkit" class="form-control" placeholder="Masukkan jenis pembangkit" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Fungsi</label>
+                    <select name="fungsi" class="form-select" required>
+                        <option value="">-- Pilih Fungsi --</option>
+                        <option value="Utama">Utama</option>
+                        <option value="Darurat">Darurat</option>
+                        <option value="Cadangan">Cadangan</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Kapasitas Terpasang (MW)</label>
+                    <input type="text" name="kapasitas_terpasang" class="form-control"
+                        placeholder="Contoh: 1.250,75" required oninput="formatAngkaIndonesia(this)">
+                    <small class="text-muted">Catatan : Gunakan titik untuk ribuan dan koma untuk desimal.</small>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Daya Mampu Netto (MW)</label>
+                    <input type="text" name="daya_mampu_netto" class="form-control"
+                        placeholder="Contoh: 1.250,75" required oninput="formatAngkaIndonesia(this)">
+                    <small class="text-muted">Catatan : Gunakan titik untuk ribuan dan koma untuk desimal.</small>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Jumlah Unit</label>
+                    <input type="number" name="jumlah_unit" class="form-control" id="jumlahUnitInput" placeholder="Masukkan jumlah unit" required min="1" max="200">
+                    <small class="text-muted">Catatan : Max. 200 unit</small>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">No. Unit</label>
+                    <input type="text" name="no_unit" class="form-control" placeholder="Masukkan nomor unit" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Tahun Operasi</label>
+                    <select name="tahun_operasi" class="form-select" required>
+                        <option value="">-- Pilih Tahun --</option>
+                        <!-- Tahun dari 2030 ke 2000 -->
+                        <!-- Kode ini akan diisi otomatis dengan JavaScript -->
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Status Operasi</label>
+                    <select name="status_operasi" class="form-select" required>
+                        <option value="">-- Pilih Status Operasi --</option>
+                        <option value="Beroperasi">Beroperasi</option>
+                        <option value="Maintenance/Perbaikan">Maintenance/Perbaikan</option>
+                        <option value="Rusak">Rusak</option>
+                    </select>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Jenis Bahan Bakar</label>
+                        <select name="bahan_bakar_jenis" class="form-select" required>
+                            <option value="">-- Pilih Jenis Bahan Bakar --</option>
+                            <option value="Solar">Solar</option>
+                            <option value="Biomasa">Biomasa</option>
+                        </select>
+                        <small class="text-muted">
+                            Catatan: <strong>Biomasa</strong> mencakup bahan-bahan organik seperti <em>cangkang sawit</em>, <em>serbuk gergaji</em>, dan <em>sekam padi</em>, dll yang digunakan sebagai bahan bakar alternatif dalam pembangkit listrik.
+                        </small>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Satuan Bahan Bakar</label>
+                        <select name="bahan_bakar_satuan" class="form-select" required>
+                            <option value="">-- Pilih Satuan --</option>
+                            <option value="Liter">Liter</option>
+                            <option value="Ton">Ton</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Volume Bahan Bakar</label>
