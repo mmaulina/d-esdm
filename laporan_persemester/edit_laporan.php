@@ -11,6 +11,8 @@ if (!isset($_SESSION['id_user'])) {
 
 
 $id_laporan = isset($_GET['id']) ? $_GET['id'] : null;
+$role = isset($_SESSION['role']) ? $_SESSION['role'] : null;
+
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $database = new Database();
@@ -27,12 +29,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $file_laporan = uploadFile('file_laporan');
     $file_lhu = uploadFile('file_lhu');
+    $tahun = sanitizeInput($_POST['tahun']);
+    $semester_final = sanitizeInput($_POST['semester_final']);
 
     $updateSQL = "UPDATE laporan_semester SET 
     nama_perusahaan = :nama_perusahaan, 
     parameter = :parameter, 
     buku_mutu = :buku_mutu, 
-    hasil = :hasil, 
+    hasil = :hasil,
+    tahun = :tahun,
+    semester = :semester_final,
     status = 'Diajukan',
     keterangan = '-'";
 
@@ -65,6 +71,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($file_lhu !== null) {
         $stmt->bindParam(':file_lhu', $file_lhu);
     }
+    $stmt->bindParam(':tahun', $tahun);
+    $stmt->bindParam(':semester_final', $semester_final);
 
     if ($stmt->execute()) {
         $_SESSION['hasil'] = true;
@@ -118,10 +126,14 @@ function uploadFile($input_name) {
     <div class="card shadow">
         <div class="card-body">
             <form method="POST" enctype="multipart/form-data">
-                <div class="mb-3">
-                    <label class="form-label">Nama Perusahaan</label>
+            <div class="mb-3">
+                <label class="form-label">Nama Perusahaan</label>
+                <?php if ($role === 'superadmin') : ?>
                     <input type="text" name="nama_perusahaan" class="form-control" value="<?= htmlspecialchars($laporan['nama_perusahaan']) ?>" required>
-                </div>
+                <?php elseif ($role === 'umum') : ?>
+                    <input type="text" name="nama_perusahaan" class="form-control" value="<?= htmlspecialchars($laporan['nama_perusahaan']) ?>" required readonly>
+                <?php endif; ?>
+            </div>
                 <div class="form-group mb-2">
                     <label>parameter</label>
                     <select class="form-control" name="parameter" required>
@@ -157,9 +169,83 @@ function uploadFile($input_name) {
                         <p>File yang sudah di-upload: <a href="<?= htmlspecialchars($laporan['file_lhu']) ?>" target="_blank">Download</a></p>
                     <?php endif; ?>
                 </div>
+                <div class="mb-3">
+                    <label class="form-label">Tahun</label>
+                    <select class="form-control" name="tahun" id="tahun" required>
+                        <option value="">-- Pilih Tahun --</option>
+                        <?php
+                        // Isi dropdown tahun dari currentYear sampai endYear
+                        for ($year = 2025; $year <= 2035; $year++) { 
+                            $selected = ($laporan['tahun'] == $year) ? 'selected' : '';
+                            echo "<option value='$year' $selected>$year</option>";
+                        }
+                        ?>
+                    </select>
+                </div>
+                <div class="form-group mb-2">
+                    <label>Semester</label>
+                    <select class="form-control" name="semester" id="semester" required>
+                        <option value="">-- Pilih Semester --</option>
+                        <option value="Semester I" <?php echo ($laporan['semester'] == 'Semester I') ? 'selected' : ''; ?> id="semester1">Semester I (Januari - Juni)</option>
+                        <option value="Semester II" <?php echo ($laporan['semester'] == 'Semester II') ? 'selected' : ''; ?> id="semester2">Semester II (Juli - Desember)</option>
+                    </select>
+                    <p style="color: red; font-size: 0.875em; margin-top: 5px;">
+                        * Untuk semester yang sudah terlewat, pengisian tidak dapat dilakukan
+                    </p>
+                </div>
+                <input type="hidden" name="semester_final" id="semester_final">
                 <button type="submit" class="btn btn-warning">Simpan Perubahan</button>
                 <a href="?page=laporan_persemester" class="btn btn-secondary">Kembali</a>
             </form>
         </div>
     </div>
 </div>
+
+
+<script>
+    const monthNow = new Date().getMonth() + 1; // getMonth() = 0 (Jan) s.d. 11 (Des)
+    const semester1 = document.getElementById('semester1');
+    const semester2 = document.getElementById('semester2');
+
+    // Jika bulan sekarang Januari - Juni (1-6), Semester II dikunci
+    if (monthNow >= 1 && monthNow <= 6) {
+        semester2.disabled = true;
+    }
+    // Jika bulan sekarang Juli - Desember (7-12), Semester I dikunci
+    else {
+        semester1.disabled = true;
+    }
+
+    const tahunSelect = document.getElementById('tahun');
+    const semesterSelect = document.getElementById('semester');
+    const semesterFinal = document.getElementById('semester_final');
+
+    semesterSelect.addEventListener('change', function () {
+        semesterFinal.value = semesterSelect.value; // Menyimpan pilihan semester di input hidden
+    });
+
+
+    const currentYear = new Date().getFullYear();  // Tahun sekarang (otomatis)
+    const endYear = currentYear + 10;
+
+    // Isi dropdown tahun dari currentYear sampai endYear
+    for (let year = currentYear; year <= endYear; year++) {
+        const option = document.createElement("option");
+        option.value = year;
+        option.text = year;
+        tahunSelect.appendChild(option);
+    }
+
+    function updateSemesterFinal() {
+        const tahun = tahunSelect.value;
+        const semester = semesterSelect.value;
+        if (tahun && semester) {
+            semesterFinal.value = `${semester} ${tahun}`;
+        } else {
+            semesterFinal.value = "";
+        }
+    }
+
+    tahunSelect.addEventListener('change', updateSemesterFinal);
+    semesterSelect.addEventListener('change', updateSemesterFinal);
+</script>

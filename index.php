@@ -5,6 +5,7 @@ if (!isset($_SESSION['id_user'])) {
 }
 include "koneksi.php";
 include "template/header.php";
+include 'template/alert.php'; 
 ?>
 <style>
     .row {

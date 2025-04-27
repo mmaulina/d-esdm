@@ -17,6 +17,49 @@ if (session_status() == PHP_SESSION_NONE) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+.alert {
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 16px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.alert-success {
+  background-color: #d4edda;
+  color: #155724;
+  border-left: 5px solid #28a745;
+}
+
+.alert-error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border-left: 5px solid #dc3545;
+}
+
+.alert i {
+  font-size: 20px;
+}
+</style>
+
+<script>
+  setTimeout(() => {
+    const alertBox = document.querySelector('.alert');
+    if (alertBox) {
+      alertBox.style.transition = 'opacity 0.5s';
+      alertBox.style.opacity = '0';
+      setTimeout(() => alertBox.remove(), 500);
+    }
+  }, 3000);
+</script>
+
+
+
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark px-3 w-100" style="background-color: #008B47;">
         <div class="container-fluid">
