@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 25 Apr 2025 pada 07.43
+-- Waktu pembuatan: 28 Apr 2025 pada 16.58
 -- Versi server: 10.4.28-MariaDB
 -- Versi PHP: 8.0.28
 
@@ -36,7 +36,7 @@ CREATE TABLE `laporan_bulanan` (
   `alamat` varchar(255) NOT NULL,
   `latitude` varchar(20) NOT NULL,
   `longitude` varchar(20) NOT NULL,
-  `jenis_pembangkit` int(100) NOT NULL,
+  `jenis_pembangkit` varchar(255) NOT NULL,
   `fungsi` enum('Utama','Darurat','Cadangan') NOT NULL,
   `kapasitas_terpasang` varchar(20) NOT NULL,
   `daya_mampu_netto` varchar(20) NOT NULL,
@@ -52,16 +52,18 @@ CREATE TABLE `laporan_bulanan` (
   `susut_jaringan` varchar(200) NOT NULL,
   `penj_ke_pelanggan` varchar(200) NOT NULL,
   `penj_ke_pln` varchar(200) NOT NULL,
-  `pemakaian_sendiri` varchar(200) NOT NULL
+  `pemakaian_sendiri` varchar(200) NOT NULL,
+  `status` enum('diterima','ditolak','diajukan') NOT NULL,
+  `keterangan` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data untuk tabel `laporan_bulanan`
 --
 
-INSERT INTO `laporan_bulanan` (`id`, `id_user`, `tahun`, `bulan`, `nama_perusahaan`, `alamat`, `latitude`, `longitude`, `jenis_pembangkit`, `fungsi`, `kapasitas_terpasang`, `daya_mampu_netto`, `jumlah_unit`, `no_unit`, `tahun_operasi`, `status_operasi`, `bahan_bakar_jenis`, `bahan_bakar_satuan`, `volume_bb`, `produksi_sendiri`, `pemb_sumber_lain`, `susut_jaringan`, `penj_ke_pelanggan`, `penj_ke_pln`, `pemakaian_sendiri`) VALUES
-(3, 1, '0000', 'April', 'PT Energi Mandiri', '', '', '', 0, 'Utama', '', '', '', '', '', 'Beroperasi', 'Solar', 'Liter', '1200', '75000', '5000', '800', '60000', '10000', '9200'),
-(4, 5, '0000', 'April', 'Perusahaan', '', '', '', 0, 'Utama', '', '', '', '', '', 'Beroperasi', 'Solar', 'Liter', '-', '-', '-', '-', '-', '-', '-');
+INSERT INTO `laporan_bulanan` (`id`, `id_user`, `tahun`, `bulan`, `nama_perusahaan`, `alamat`, `latitude`, `longitude`, `jenis_pembangkit`, `fungsi`, `kapasitas_terpasang`, `daya_mampu_netto`, `jumlah_unit`, `no_unit`, `tahun_operasi`, `status_operasi`, `bahan_bakar_jenis`, `bahan_bakar_satuan`, `volume_bb`, `produksi_sendiri`, `pemb_sumber_lain`, `susut_jaringan`, `penj_ke_pelanggan`, `penj_ke_pln`, `pemakaian_sendiri`, `status`, `keterangan`) VALUES
+(3, 1, '2025', 'April', 'PT Energi Mandiri', 'Jl. Satu, Kota Banjarbaru', '3*26\'43&quot;LS', '114*50\'21&quot;BT', '0', 'Utama', '15', '12.5', '2', '022', '2023', 'Beroperasi', 'Solar', 'Liter', '-', '-', '-', '-', '-', '-', '-', 'diajukan', '-'),
+(4, 5, '0000', 'April', 'Perusahaan', '', '', '', '0', 'Utama', '', '', '', '', '', 'Beroperasi', 'Solar', 'Liter', '-', '-', '-', '-', '-', '-', '-', 'diterima', '');
 
 --
 -- Indexes for dumped tables
