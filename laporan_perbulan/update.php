@@ -28,7 +28,6 @@ $id_laporan = $_GET['id'];
 $query = "SELECT * FROM laporan_bulanan WHERE id = :id";
 $stmt = $db->prepare($query);
 $stmt->bindParam(':id', $id_laporan);
-$stmt->bindParam(':id_user', $id_user);
 $stmt->execute();
 $data = $stmt->fetch(PDO::FETCH_ASSOC);
 

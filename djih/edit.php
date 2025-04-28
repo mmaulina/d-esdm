@@ -27,12 +27,14 @@ if (!$konten) {
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    function sanitizeInput($input) {
+    function sanitize_input($input) {
         return htmlspecialchars(strip_tags(trim($input)));
     }
-
-    $caption = sanitizeInput($_POST['caption']);
-    $jenis_konten = sanitizeInput($_POST['jenis_konten']);
+    
+    $id_title = sanitize_input($_POST['id_title']);
+    $title = sanitize_input($_POST['title']);
+    $caption = sanitize_input($_POST['caption']);
+    $jenis_konten = sanitize_input($_POST['jenis_konten']);
     $new_konten = $konten['konten'];
     $tanggal = date('Y-m-d H:i:s');
 
@@ -41,11 +43,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $new_konten = uploadFile('konten');
         }
     } elseif ($jenis_konten == 'link') {
-        $new_konten = sanitizeInput($_POST['konten']);
+        $new_konten = sanitize_input($_POST['konten']);
     }
 
-    $updateSQL = "UPDATE djih SET caption = :caption, jenis_konten = :jenis_konten, konten = :konten, tanggal = :tanggal WHERE id = :id";
+    $updateSQL = "UPDATE djih SET id_title = :id_title, title = :title, caption = :caption, jenis_konten = :jenis_konten, konten = :konten, tanggal = :tanggal WHERE id = :id";
     $stmt = $db->prepare($updateSQL);
+    $stmt->bindParam(':title', $title);
+    $stmt->bindParam(':id_title', $id_title);
     $stmt->bindParam(':caption', $caption);
     $stmt->bindParam(':jenis_konten', $jenis_konten);
     $stmt->bindParam(':konten', $new_konten);
@@ -91,6 +95,11 @@ function uploadFile($input_name) {
     <div class="card shadow">
         <div class="card-body">
             <form method="POST" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label class="form-label">Title</label>
+                <input type="hidden" name="id_title" class="form-control" value="<?= htmlspecialchars($konten['id_title']); ?>">
+                <input type="text" name="title" class="form-control" required value="<?= htmlspecialchars($konten['title']); ?>" required>
+            </div>
                 <div class="mb-3">
                     <label class="form-label">Caption</label>
                     <input type="text" name="caption" class="form-control" required value="<?= $konten['caption']; ?>">

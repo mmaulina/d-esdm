@@ -69,7 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $updateStmt->bindParam(':keterangan', $keterangan, PDO::PARAM_STR);
         }
         $updateStmt->execute();
-        echo "<meta http-equiv='refresh' content='0; url=?page=laporan_bulanan'>";
+        echo "<meta http-equiv='refresh' content='0; url=?page=laporan_perbulan'>";
         exit;
     }
 }
@@ -125,6 +125,8 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                             <th colspan="3" style="min-width: 250px;">Data Pembangkit</th>
                             <th colspan="10" style="min-width: 1500px;">Data Teknis Pembangkit</th>
                             <th colspan="7" style="min-width: 250px;">Pelaporan Bulanan</th>
+                            <th rowspan="3" style="min-width: 150px;">Status</th>
+                            <th rowspan="3" style="min-width: 150px;">Keterangan</th>
                             <th rowspan="3" style="min-width: 150px;">Aksi</th>
                         </tr>
                         <tr>
@@ -189,10 +191,60 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                                     <td><?php echo htmlspecialchars($row['penj_ke_pln']); ?> </td>
                                     <td><?php echo htmlspecialchars($row['pemakaian_sendiri']); ?> </td>
                                     <td class="text-center">
-                                        <a href="?page=edit_laporan_perbulan&id=<?php echo $row['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
-                                        <a href="?page=hapus_laporan_perbulan&id=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus?');">Hapus</a>
+                                        <?php
+                                        // Menampilkan status dengan ikon dan warna
+                                        if ($row['status'] == 'diajukan') {
+                                            echo '<i class="fas fa-clock" style="color: yellow;"></i> Diajukan';
+                                        } elseif ($row['status'] == 'diterima') {
+                                            echo '<i class="fas fa-check" style="color: green;"></i> Diterima';
+                                        } elseif ($row['status'] == 'ditolak') {
+                                            echo '<i class="fas fa-times" style="color: red;"></i> Ditolak';
+                                        } else {
+                                            echo '<span class="text-muted">Status tidak diketahui</span>';
+                                        }
+                                        ?>
+                                    </td>
+                                    <td><?php echo htmlspecialchars($row['keterangan']); ?></td>
+                                    <td class="text-center">
+                                        <?php if ($role == 'admin'||$role == 'superadmin' && $row['status'] == 'diajukan'): ?>
+                                            <!-- Tombol Terima menggunakan POST -->
+                                            <form method="POST" style="display: inline;">
+                                                <input type="hidden" name="terima_id" value="<?php echo $row['id']; ?>">
+                                                <button type="submit" class="btn btn-success btn-sm">Terima</button>
+                                            </form>
+                                            <!-- Tombol Tolak dengan Modal -->
+                                            <a href="" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modalTolak<?php echo $row['id']; ?>">Tolak</a>
+                                        <?php endif; ?>
+
+                                        <?php if ($row['status'] == 'diterima' || $row['status'] == 'ditolak'): ?>
+                                            <a href="?page=edit_laporan_perbulan&id=<?php echo $row['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
+                                            <a href="?page=hapus_laporan_perbulan&id=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus?');">Hapus</a>
+                                        <?php endif; ?>
                                     </td>
                                 </tr>
+                                <!-- Modal untuk Tolak -->
+                                <div class="modal fade" id="modalTolak<?php echo $row['id']; ?>" tabindex="-1" role="dialog" aria-labelledby="modalTolakLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="modalTolakLabel">Tolak Laporan</h5>
+                                            </div>
+                                            <form action="" method="POST">
+                                                <div class="modal-body">
+                                                    <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
+                                                    <div class="form-group">
+                                                        <label for="keterangan<?php echo $row['id']; ?>">Keterangan Penolakan</label>
+                                                        <textarea class="form-control" id="keterangan" name="keterangan" rows="3" required></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                                                    <button type="submit" name="tolak_laporan" class="btn btn-danger">Tolak</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
                             <?php } ?>
                         <?php else: ?>
                             <tr>

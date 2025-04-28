@@ -44,7 +44,8 @@ try {
             <table class="table table-striped table-bordered">
                 <thead class="table-dark">
                     <tr>
-                        <th>#</th>
+                        <th>No</th>
+                        <th>Title</th>
                         <th>Jenis</th>
                         <th>Caption</th>
                         <th>Konten</th>
@@ -56,6 +57,7 @@ try {
                     <?php $no = 1; foreach ($konten_list as $konten) : ?>
                         <tr>
                             <td><?php echo $no++; ?></td>
+                            <td><?php echo htmlspecialchars($konten['title']); ?></td>
                             <td><?php echo ucfirst($konten['jenis_konten']); ?></td>
                             <td><?php echo htmlspecialchars($konten['caption']); ?></td>
                             <td>
