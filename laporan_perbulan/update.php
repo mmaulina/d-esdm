@@ -171,22 +171,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="row mb-3">
                     <div class="col">
                         <label class="form-label">Latitude</label>
-                        <input type="text" name="latitude" class="form-control" placeholder="Contoh : 3°26&#39;43&quot;LS" value="<?= htmlspecialchars($data['latitude']) ?>" required>
+                        <input type="text" name="latitude" class="form-control"
+                            placeholder="Contoh : 3*26'43&quot;LS"
+                            value="<?= $data['latitude'] ?>"
+                            oninput="replaceAsterisk(this)" required>
                         <small class="text-muted">Gunakan tanda * sebagai pengganti derajat (°). Contoh: 3*26'43"LS</small>
                     </div>
                     <div class="col">
                         <label class="form-label">Longitude</label>
-                        <input type="text" name="longitude" class="form-control" placeholder="Contoh : 114°50&#39;21&quot;BT" value="<?= htmlspecialchars($data['longitude']) ?>" required>
+                        <input type="text" name="longitude" class="form-control"
+                            placeholder="Contoh : 114*50'21&quot;BT"
+                            value="<?= $data['longitude'] ?>"
+                            oninput="replaceAsterisk(this)" required>
                         <small class="text-muted">Gunakan tanda * sebagai pengganti derajat (°). Contoh: 114*50'21"BT</small>
                     </div>
                 </div>
+
+                <script>
+                    function replaceAsterisk(input) {
+                        input.value = input.value.replace(/\*/g, "°");
+                    }
+                </script>
                 <div class="mb-3">
                     <label class="form-label">Jenis Pembangkit</label>
                     <input type="text" name="jenis_pembangkit" class="form-control" placeholder="Masukkan jenis pembangkit" value="<?= htmlspecialchars($data['jenis_pembangkit']) ?>" required>
                 </div>
-                <div class="mb-3">
-                    <label class="form-label">Fungsi</label>
-                    <input type="text" name="fungsi" class="form-control" value="<?= htmlspecialchars($data['fungsi']) ?>" required>
+                <div class="form-group mb-3">
+                    <label>Fungsi</label>
+                    <select class="form-control" name="fungsi" required>
+                        <option value="">-- Pilih Fungsi --</option>
+                        <option value="Utama" <?= isset($data['fungsi']) && $data['fungsi'] == 'Utama' ? 'selected' : '' ?>>Utama</option>
+                        <option value="Darurat" <?= isset($data['fungsi']) && $data['fungsi'] == 'Darurat' ? 'selected' : '' ?>>Darurat</option>
+                        <option value="Cadangan" <?= isset($data['fungsi']) && $data['fungsi'] == 'Cadangan' ? 'selected' : '' ?>>Cadangan</option>
+                    </select>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Kapasitas Terpasang (MW)</label>
@@ -198,7 +215,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Jumlah Unit</label>
-                    <input type="number" name="jumlah_unit" class="form-control" value="<?= htmlspecialchars($data['jumlah_unit']) ?>" required>
+                    <input type="number" name="jumlah_unit" class="form-control" id="jumlahUnitInput" min="1" max="200" value="<?= htmlspecialchars($data['jumlah_unit']) ?>" required>
+                    <small class="text-danger">Catatan : Max. 200 unit</small>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">No. Unit</label>
@@ -228,6 +246,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
     </div>
 </div>
+
+<!-- SCRIPT SIMBOL DERAJAT -->
+<script>
+    function replaceAsterisk(input) {
+        // Ganti semua * dengan °
+        input.value = input.value.replace(/\*/g, "°");
+    }
+</script>
 
 <!-- SCRIPT TAHUN -->
 <script>

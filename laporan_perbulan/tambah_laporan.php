@@ -281,6 +281,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 </div>
 
+<!-- SCRIPT SIMBOL DERAJAT -->
+<script>
+    function replaceAsterisk(input) {
+        input.value = input.value.replace(/\*/g, "°");
+    }
+</script>
+
+<!-- SCRIPT JUMLAH UNIT MAX 200 UNIT -->
+<script>
+    const jumlahUnitInput = document.getElementById('jumlahUnitInput');
+    jumlahUnitInput.addEventListener('input', function() {
+        if (parseInt(this.value) > 200) {
+            this.value = 200;
+        }
+    });
+</script>
+
+<!-- SCRIPT PILIHAN TAHUN OPERASI -->
+<script>
+    const selectTahun = document.querySelector('select[name="tahun_operasi"]');
+    for (let tahun = 2030; tahun >= 2000; tahun--) {
+        const option = document.createElement('option');
+        option.value = tahun;
+        option.textContent = tahun;
+        selectTahun.appendChild(option);
+    }
+</script>
+
 <!-- SCRIPT TAHUN OTOMATIS -->
 <script>
     const tahunSelect = document.getElementById('tahun');
