@@ -123,7 +123,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <div class="container mt-4">
     <h3 class="text-center mb-3">Edit Pelaporan Bulanan</h3>
     <hr>
-    <div class="card shadow">
+    <div class="card shadow" style="overflow-x: auto; max-height: calc(100vh - 150px); overflow-y: auto;">
         <div class="card-body">
             <form method="POST">
                 <div class="mb-3">
@@ -169,58 +169,58 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <input type="text" name="alamat" class="form-control" placeholder="Masukkan alamat lengkap" value="<?= htmlspecialchars($data['alamat']) ?>" required>
                 </div>
                 <div class="row mb-3">
-                    <div class="col-md-6">
+                    <div class="col">
                         <label class="form-label">Latitude</label>
                         <input type="text" name="latitude" class="form-control" placeholder="Contoh : 3°26&#39;43&quot;LS" value="<?= htmlspecialchars($data['latitude']) ?>" required>
                         <small class="text-muted">Gunakan tanda * sebagai pengganti derajat (°). Contoh: 3*26'43"LS</small>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col">
                         <label class="form-label">Longitude</label>
                         <input type="text" name="longitude" class="form-control" placeholder="Contoh : 114°50&#39;21&quot;BT" value="<?= htmlspecialchars($data['longitude']) ?>" required>
                         <small class="text-muted">Gunakan tanda * sebagai pengganti derajat (°). Contoh: 114*50'21"BT</small>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Jenis Pembangkit</label>
-                        <input type="text" name="jenis_pembangkit" class="form-control" placeholder="Masukkan jenis pembangkit" value="<?= htmlspecialchars($data['jenis_pembangkit']) ?>" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Fungsi</label>
-                        <input type="text" name="fungsi" class="form-control" value="<?= htmlspecialchars($data['fungsi']) ?>" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Kapasitas Terpasang (MW)</label>
-                        <input type="text" name="kapasitas_terpasang" class="form-control" value="<?= htmlspecialchars($data['kapasitas_terpasang']) ?>" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Daya Mampu Netto (MW)</label>
-                        <input type="text" name="daya_mampu_netto" class="form-control" value="<?= htmlspecialchars($data['daya_mampu_netto']) ?>" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Jumlah Unit</label>
-                        <input type="number" name="jumlah_unit" class="form-control" value="<?= htmlspecialchars($data['jumlah_unit']) ?>" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">No. Unit</label>
-                        <input type="text" name="no_unit" class="form-control" value="<?= htmlspecialchars($data['no_unit']) ?>" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Tahun Operasi</label>
-                        <input type="number" name="tahun_operasi" class="form-control" value="<?= htmlspecialchars($data['tahun_operasi']) ?>" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Status Operasi</label>
-                        <input type="text" name="status_operasi" class="form-control" value="<?= htmlspecialchars($data['status_operasi']) ?>" required>
-                    </div>
-                    <div class="row">
-                    <div class="col-md-6">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Jenis Pembangkit</label>
+                    <input type="text" name="jenis_pembangkit" class="form-control" placeholder="Masukkan jenis pembangkit" value="<?= htmlspecialchars($data['jenis_pembangkit']) ?>" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Fungsi</label>
+                    <input type="text" name="fungsi" class="form-control" value="<?= htmlspecialchars($data['fungsi']) ?>" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Kapasitas Terpasang (MW)</label>
+                    <input type="text" name="kapasitas_terpasang" class="form-control" value="<?= htmlspecialchars($data['kapasitas_terpasang']) ?>" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Daya Mampu Netto (MW)</label>
+                    <input type="text" name="daya_mampu_netto" class="form-control" value="<?= htmlspecialchars($data['daya_mampu_netto']) ?>" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Jumlah Unit</label>
+                    <input type="number" name="jumlah_unit" class="form-control" value="<?= htmlspecialchars($data['jumlah_unit']) ?>" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">No. Unit</label>
+                    <input type="text" name="no_unit" class="form-control" value="<?= htmlspecialchars($data['no_unit']) ?>" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Tahun Operasi</label>
+                    <input type="number" name="tahun_operasi" class="form-control" value="<?= htmlspecialchars($data['tahun_operasi']) ?>" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Status Operasi</label>
+                    <input type="text" name="status_operasi" class="form-control" value="<?= htmlspecialchars($data['status_operasi']) ?>" required>
+                </div>
+                <div class="row mb-3">
+                    <div class="col">
                         <label class="form-label">Jenis Bahan Bakar</label>
                         <input type="text" name="bahan_bakar_jenis" class="form-control" value="<?= htmlspecialchars($data['bahan_bakar_jenis']) ?>" required>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col">
                         <label class="form-label">Satuan Bahan Bakar</label>
                         <input type="text" name="bahan_bakar_satuan" class="form-control" value="<?= htmlspecialchars($data['bahan_bakar_satuan']) ?>" required>
                     </div>
-                </div>
                 </div>
                 <button type="submit" class="btn btn-warning">Simpan Perubahan</button>
                 <a href="?page=laporan_perbulan" class="btn btn-secondary">Kembali</a>
