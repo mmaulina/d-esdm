@@ -6,7 +6,7 @@ include_once 'koneksi.php';
 
 // Pastikan pengguna sudah login
 if (!isset($_SESSION['id_user'])) {
-    echo "<script>alert('Silakan login terlebih dahulu!'); window.location.href='login.php';</script>";
+    echo "<script>alert('Silakan login terlebih dahulu!'); window.location.href='login/login.php';</script>";
     exit;
 }
 
