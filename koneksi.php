@@ -1,10 +1,18 @@
 <?php
 if (!class_exists('Database')) {
     class Database {
+
+        //hosting
         private $host = "localhost";
         private $db_name = "ewab5183_d-esdm";
         private $username = "ewab5183_root";
         private $password = "d-esdm123*";
+
+        // //hostlaptop
+        // private $host = "localhost";
+        // private $db_name = "d-esdm";
+        // private $username = "root";
+        // private $password = "";
         public $conn;
 
         public function getConnection() {
