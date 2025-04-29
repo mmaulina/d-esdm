@@ -1,30 +1,30 @@
-body {
-    background: linear-gradient(to bottom left, #ffb301 , #bbbd74);
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-body, html {
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    background-color: #f7b91a; /* warna gelap latar belakang */
+body{
+  background: linear-gradient(to bottom left, #ffb301, #bbbd74);
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
 }
 
-.btn-primary {
-    background-color: #f69f1d;
-    border: none;
+.custom-btn {
+  background-color: #f69f1d;
+  color: white;
+  border: none;
 }
-.btn-primary:hover {
-    background-color: #fbb41b;
+
+.custom-btn:hover {
+  background-color: #d98404;
+  color: white;
 }
 
 a {
-    color: #008B47; /* Warna hijau sesuai tombol */
-    text-decoration: none; /* Menghilangkan garis bawah */
+  color: #f69f1d; /* Warna hijau sesuai tombol */
+  text-decoration: none; /* Menghilangkan garis bawah */
 }
 
 a:hover {
-    color: #006F38; /* Warna lebih gelap saat hover */
+  color: #d98404; /* Warna lebih gelap saat hover */
 }

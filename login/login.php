@@ -87,7 +87,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="text-center mb-3">
             <img src="../assets/img/kalsel.png" alt="Logo" style="width: 50px;">
         </div>
-        <h3 class="text-center"><i class="  text-warning me-1">Login E-WASDAL GATRIK</h3>
+        <h3 class="text-center"><i class="me-1">Login E-WASDAL GATRIK</h3>
         <hr>
         <?php if (!empty($error)) : ?>
             <div class="alert alert-danger" role="alert">
@@ -111,30 +111,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </span>
                 </div>
             </div>
-            <button type="submit" class="btn btn-warning w-100">Login</button>
+            <button type="submit" class="btn custom-btn w-100">Login</button>
         </form>
 
         <div class="text-center mt-3">
-            <a href="daftar.php" class="text-warning">Belum punya akun?</a>
+            <a href="daftar.php">Belum punya akun?</a>
         </div>
     </div>
 
     <script>
-function togglePassword() {
-    const passwordField = document.getElementById("password");
-    const toggleIcon = document.getElementById("toggleIcon");
+        function togglePassword() {
+            const passwordField = document.getElementById("password");
+            const toggleIcon = document.getElementById("toggleIcon");
 
-    const type = passwordField.getAttribute("type") === "password" ? "text" : "password";
-    passwordField.setAttribute("type", type);
+            const type = passwordField.getAttribute("type") === "password" ? "text" : "password";
+            passwordField.setAttribute("type", type);
 
-    toggleIcon.classList.toggle("bi-eye");
-    toggleIcon.classList.toggle("bi-eye-slash");
-}
-</script>
+            toggleIcon.classList.toggle("bi-eye");
+            toggleIcon.classList.toggle("bi-eye-slash");
+        }
+    </script>
 
     <script src="../assets/js/bootstrap.bundle.min.js"></script>
 
-</script>
+    </script>
 
 
 </body>

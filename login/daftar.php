@@ -96,10 +96,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div class="text-danger"><?php echo $error_message; ?></div>
                 <?php endif; ?>
             </div>
-            <button type="submit" class="btn btn-warning w-100">Daftar</button>
+            <button type="submit" class="btn custom-btn w-100">Daftar</button>
         </form>
         <div class="text-center mt-3">
-            <a href="login.php" class="text-warning">Sudah punya akun?</a>
+            <a href="login.php">Sudah punya akun?</a>
         </div>
     </div>
     <script src="../assets/js/bootstrap.bundle.min.js"></script>
