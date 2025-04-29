@@ -70,7 +70,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $status = 'diajukan'; // Status diisi otomatis
     $keterangan = '-';    // Keterangan diisi otomatis
 
-    $insertSQL = "INSERT INTO laporan_bulanan (
+    $query = "INSERT INTO laporan_bulanan (
         id_user, nama_perusahaan, tahun, bulan, alamat,
         latitude, longitude, jenis_pembangkit, fungsi,
         kapasitas_terpasang, daya_mampu_netto, jumlah_unit, no_unit,
@@ -87,7 +87,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         :volume_bb, :produksi_sendiri, :pemb_sumber_lain, :susut_jaringan,
         :penj_ke_pelanggan, :penj_ke_pln, :pemakaian_sendiri,
         :status, :keterangan
-    )";    
+    )";
 
     $stmt->bindParam(':id_user', $id_user);
     $stmt->bindParam(':nama_perusahaan', $nama_perusahaan);
@@ -100,9 +100,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bindParam(':fungsi', $fungsi);
     $stmt->bindParam(':kapasitas_terpasang', $kapasitas_terpasang);
     $stmt->bindParam(':daya_mampu_netto', $daya_mampu_netto);
-    $stmt->bindParam(':jumlah_unit', $jumlah_unit,);
+    $stmt->bindParam(':jumlah_unit', $jumlah_unit);
     $stmt->bindParam(':no_unit', $no_unit);
-    $stmt->bindParam(':tahun_operasi', $tahun_operasi,);
+    $stmt->bindParam(':tahun_operasi', $tahun_operasi);
     $stmt->bindParam(':status_operasi', $status_operasi);
     $stmt->bindParam(':bahan_bakar_jenis', $bahan_bakar_jenis);
     $stmt->bindParam(':bahan_bakar_satuan', $bahan_bakar_satuan);
