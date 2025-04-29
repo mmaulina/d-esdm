@@ -86,7 +86,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="text-center mb-3">
             <img src="../assets/img/kalsel.png" alt="Logo" style="width: 50px;">
         </div>
-        <h3 class="text-center">Login E-WASDAL GATRIK</h3>
+        <h3 class="text-center"><i class="  text-warning me-1">Login E-WASDAL GATRIK</h3>
         <hr>
         <?php if (!empty($error)) : ?>
             <div class="alert alert-danger" role="alert">
