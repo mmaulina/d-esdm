@@ -138,132 +138,130 @@ foreach ($daftar_perusahaan as $perusahaan) {
 
 ?>
 <main>
-    <div class="container">
+    <div class="container mt-4">
         <!-- Tambahan Welcome Text -->
-        <div class="row">
-            <div class="col-12">
-                <h2 class="text-center mt-4">Welcome to Dashboard</h2>
-                <hr>
-            </div>
-        </div>
-
-        <!-- Row for Total Perusahaan and Total Kota -->
-        <div class="row">
-            <div class="col-12 col-md-6 mb-3">
-                <div class="card text-black" style="background-color: #FCDC2A;">
-                    <div class="card-body">
-                        <h5 class="card-title">Total Perusahaan</h5>
-                        <p class="card-text"><?php echo $total_perusahaan; ?></p>
+        <h2 class="text-center mb-3">Welcome to Dashboard</h2>
+        <hr>
+        <div class="card shadow" style="overflow-x: auto; max-height: calc(100vh - 150px); overflow-y: auto;">
+            <div class="card-body">
+                <!-- Row for Total Perusahaan and Total Kota -->
+                <div class="row">
+                    <div class="col mb-3">
+                        <div class="card text-black" style="background-color: #FCDC2A;">
+                            <div class="card-body">
+                                <h5 class="card-title">Total Perusahaan</h5>
+                                <p class="card-text"><?php echo $total_perusahaan; ?></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col mb-3">
+                        <div class="card text-black" style="background-color: #008B47;">
+                            <div class="card-body">
+                                <h5 class="card-title">Total Kota dengan Perusahaan</h5>
+                                <p class="card-text"><?php echo $total_kota; ?></p>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-12 col-md-6 mb-3">
-                <div class="card text-black" style="background-color: #008B47;">
-                    <div class="card-body">
-                        <h5 class="card-title">Total Kota dengan Perusahaan</h5>
-                        <p class="card-text"><?php echo $total_kota; ?></p>
+
+                <!-- Row for Perusahaan Belum Upload Laporan -->
+                <div class="row mt-3">
+                    <div class="col">
+                        <h5 class="fw-bold mb-3">Perusahaan Belum Upload Laporan Semester</h5>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped table-sm">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Kabupaten/Kota</th>
+                                        <th>Belum Upload Semester I (<?php echo $tahun; ?>)</th>
+                                        <th>Belum Upload Semester II (<?php echo $tahun; ?>)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    $total_semester1 = 0;
+                                    $total_semester2 = 0;
+                                    foreach ($kota_kabupaten_kalsel as $kota):
+                                        $data = isset($laporan_tidak_upload[$kota]) ? $laporan_tidak_upload[$kota] : ['semester1' => 0, 'semester2' => 0];
+
+                                        $total_semester1 += $data['semester1'];
+                                        $total_semester2 += $data['semester2'];
+                                    ?>
+                                        <tr>
+                                            <td><?php echo htmlspecialchars($kota); ?></td>
+                                            <td><?php echo $data['semester1']; ?></td>
+                                            <td><?php echo $data['semester2']; ?></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+
+                                    <?php if (empty($laporan_tidak_upload)): ?>
+                                        <tr>
+                                            <td colspan="3" class="text-center">Semua perusahaan telah mengunggah laporan semester.</td>
+                                        </tr>
+                                    <?php endif; ?>
+                                </tbody>
+                                <tfoot>
+                                    <tr class="table-dark">
+                                        <td><strong>Total</strong></td>
+                                        <td><strong><?php echo $total_semester1; ?></strong></td>
+                                        <td><strong><?php echo $total_semester2; ?></strong></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <!-- Row for Perusahaan Belum Upload Laporan -->
-        <div class="row mt-3">
-            <div class="col-6">
-                <h5 class="fw-bold mb-3">Perusahaan Belum Upload Laporan Semester</h5>
-                <div class="table-responsive">
-                    <table class="table table-bordered table-striped table-sm">
-                        <thead class="table-dark">
-                            <tr>
-                                <th>Kabupaten/Kota</th>
-                                <th>Belum Upload Semester I (<?php echo $tahun; ?>)</th>
-                                <th>Belum Upload Semester II (<?php echo $tahun; ?>)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                            $total_semester1 = 0;
-                            $total_semester2 = 0;
-                            foreach ($kota_kabupaten_kalsel as $kota):
-                                $data = isset($laporan_tidak_upload[$kota]) ? $laporan_tidak_upload[$kota] : ['semester1' => 0, 'semester2' => 0];
+                <!-- Row for News Content -->
+                <div class="row mt-4">
+                    <div class="col-12 d-flex justify-content-between align-items-center">
+                        <h5 class="fw-bold mb-0">News</h5>
+                        <?php if (isset($_SESSION['role']) && $_SESSION['role'] !== 'umum') : ?>
+                            <div class="btn-group d-inline-flex">
+                                <a href="?page=tabel" class="btn btn-success">Tabel Konten</a>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                </div>
 
-                                $total_semester1 += $data['semester1'];
-                                $total_semester2 += $data['semester2'];
-                            ?>
-                                <tr>
-                                    <td><?php echo htmlspecialchars($kota); ?></td>
-                                    <td><?php echo $data['semester1']; ?></td>
-                                    <td><?php echo $data['semester2']; ?></td>
-                                </tr>
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <div class="timeline position-relative">
+                            <?php foreach ($grouped_konten as $id_title => $kontens) : ?>
+                                <div class="timeline-item d-flex flex-column align-items-center text-center position-relative">
+                                    <div class="circle bg-dark rounded-circle position-absolute" style="width: 15px; height: 15px; left: -10px; top: 50%; transform: translateY(-50%);"></div>
+                                    <div class="content w-75 ms-3">
+
+                                        <!-- Title tampil sekali -->
+                                        <h5 class="card-text mt-3"><?php echo htmlspecialchars($kontens[0]['title']); ?></h5>
+
+                                        <!-- Konten berdampingan -->
+                                        <div class="d-flex flex-wrap justify-content-center gap-3 mt-3">
+                                            <?php foreach ($kontens as $konten) : ?>
+                                                <?php if ($konten['jenis_konten'] === 'gambar') : ?>
+                                                    <img src="<?php echo htmlspecialchars($konten['konten']); ?>" class="img-fluid rounded" style="width: 150px; height: auto;" alt="Konten Gambar">
+                                                <?php elseif ($konten['jenis_konten'] === 'file') : ?>
+                                                    <a href="<?php echo htmlspecialchars($konten['konten']); ?>" class="btn btn-secondary" style="width: 150px;">Download File</a>
+                                                <?php elseif ($konten['jenis_konten'] === 'link') : ?>
+                                                    <a href="<?php echo htmlspecialchars($konten['konten']); ?>" target="_blank" class="btn btn-info" style="width: 150px;">Lihat Link</a>
+                                                <?php endif; ?>
+                                            <?php endforeach; ?>
+                                        </div>
+
+                                        <!-- Caption tampil sekali -->
+                                        <p class="card-text mt-3"><?php echo nl2br(htmlspecialchars($kontens[0]['caption'])); ?></p>
+
+                                        <!-- Tanggal dari konten pertama -->
+                                        <p class="card-text"><small class="text-muted">Diupload pada: <?php echo $kontens[0]['tanggal']; ?></small></p>
+
+                                    </div>
+                                    <div class="line position-absolute bg-dark" style="width: 2px; height: 100%; left: 0px; top: 0;"></div>
+                                </div>
                             <?php endforeach; ?>
-
-                            <?php if (empty($laporan_tidak_upload)): ?>
-                                <tr>
-                                    <td colspan="3" class="text-center">Semua perusahaan telah mengunggah laporan semester.</td>
-                                </tr>
-                            <?php endif; ?>
-                        </tbody>
-                        <tfoot>
-                            <tr class="table-dark">
-                                <td><strong>Total</strong></td>
-                                <td><strong><?php echo $total_semester1; ?></strong></td>
-                                <td><strong><?php echo $total_semester2; ?></strong></td>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- Row for News Content -->
-        <div class="row mt-4">
-            <div class="col-12 d-flex justify-content-between align-items-center">
-                <h5 class="fw-bold mb-0">News</h5>
-                <?php if (isset($_SESSION['role']) && $_SESSION['role'] !== 'umum') : ?>
-                    <div class="btn-group d-inline-flex">
-                        <a href="?page=tabel" class="btn btn-success">Tabel Konten</a>
+                        </div>
                     </div>
-                <?php endif; ?>
-            </div>
-        </div>
-
-        <div class="row mt-3">
-            <div class="col-12">
-            <div class="timeline position-relative">
-        <?php foreach ($grouped_konten as $id_title => $kontens) : ?>
-            <div class="timeline-item d-flex flex-column align-items-center text-center position-relative">
-                <div class="circle bg-dark rounded-circle position-absolute" style="width: 15px; height: 15px; left: -10px; top: 50%; transform: translateY(-50%);"></div>
-                <div class="content w-75 ms-3">
-
-                    <!-- Title tampil sekali -->
-                    <h5 class="card-text mt-3"><?php echo htmlspecialchars($kontens[0]['title']); ?></h5>
-
-                    <!-- Konten berdampingan -->
-                    <div class="d-flex flex-wrap justify-content-center gap-3 mt-3">
-                        <?php foreach ($kontens as $konten) : ?>
-                            <?php if ($konten['jenis_konten'] === 'gambar') : ?>
-                                <img src="<?php echo htmlspecialchars($konten['konten']); ?>" class="img-fluid rounded" style="width: 150px; height: auto;" alt="Konten Gambar">
-                            <?php elseif ($konten['jenis_konten'] === 'file') : ?>
-                                <a href="<?php echo htmlspecialchars($konten['konten']); ?>" class="btn btn-secondary" style="width: 150px;">Download File</a>
-                            <?php elseif ($konten['jenis_konten'] === 'link') : ?>
-                                <a href="<?php echo htmlspecialchars($konten['konten']); ?>" target="_blank" class="btn btn-info" style="width: 150px;">Lihat Link</a>
-                            <?php endif; ?>
-                        <?php endforeach; ?>
-                    </div>
-
-                    <!-- Caption tampil sekali -->
-                    <p class="card-text mt-3"><?php echo htmlspecialchars($kontens[0]['caption']); ?></p>
-
-                    <!-- Tanggal dari konten pertama -->
-                    <p class="card-text"><small class="text-muted">Diupload pada: <?php echo $kontens[0]['tanggal']; ?></small></p>
-
                 </div>
-                <div class="line position-absolute bg-dark" style="width: 2px; height: 100%; left: 0px; top: 0;"></div>
-            </div>
-        <?php endforeach; ?>
-    </div>
             </div>
         </div>
     </div>
 </main>
-

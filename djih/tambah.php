@@ -18,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     {
         return strip_tags(trim($input));
     }
-    
+
 
     // Ambil Title, Caption
     $title = sanitizeInput($_POST['title']);
@@ -78,7 +78,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 // Fungsi untuk upload file
-function uploadFile($input_name) {
+function uploadFile($input_name)
+{
     if (!empty($_FILES[$input_name]['name'])) {
         $target_dir = "uploads/";
         $file_name = basename($_FILES[$input_name]["name"]);
@@ -104,7 +105,7 @@ function uploadFile($input_name) {
 <div class="container mt-4">
     <h3 class="text-center mb-3"><i class="fas fa-bolt" style="color: #ffc107;"></i> Tambah Konten <i class="fas fa-bolt" style="color: #ffc107;"></i></h3>
     <hr>
-    <div class="card shadow">
+    <div class="card shadow" style="overflow-x: auto; max-height: calc(100vh - 150px); overflow-y: auto;">
         <div class="card-body">
             <form method="POST" enctype="multipart/form-data" id="kontenForm">
                 <div class="mb-3">
@@ -126,8 +127,8 @@ function uploadFile($input_name) {
                             <option value="kosong">Kosong</option>
                         </select>
                         <div class="mb-3">
-                        <input type="file" name="konten_0" class="form-control" style="display: none;" accept=".jpg,.jpeg,.png,.gif,.pdf,.doc,.docx,.xls,.xlsx">
-                        <input type="text" name="konten[]" class="form-control" style="display: none;">
+                            <input type="file" name="konten_0" class="form-control" style="display: none;" accept=".jpg,.jpeg,.png,.gif,.pdf,.doc,.docx,.xls,.xlsx">
+                            <input type="text" name="konten[]" class="form-control" style="display: none;">
                         </div>
                     </div>
                 </div>
@@ -140,19 +141,19 @@ function uploadFile($input_name) {
 </div>
 
 <script>
-document.querySelector('select[name="jenis_konten[]"]').addEventListener('change', function() {
-    let jenis = this.value;
-    let kontenGroup = this.closest('.konten-group');
-    kontenGroup.querySelector('input[type="file"]').style.display = (jenis === 'gambar' || jenis === 'file') ? 'block' : 'none';
-    kontenGroup.querySelector('input[type="text"]').style.display = (jenis === 'link') ? 'block' : 'none';
-});
+    document.querySelector('select[name="jenis_konten[]"]').addEventListener('change', function() {
+        let jenis = this.value;
+        let kontenGroup = this.closest('.konten-group');
+        kontenGroup.querySelector('input[type="file"]').style.display = (jenis === 'gambar' || jenis === 'file') ? 'block' : 'none';
+        kontenGroup.querySelector('input[type="text"]').style.display = (jenis === 'link') ? 'block' : 'none';
+    });
 
-document.getElementById('addContent').addEventListener('click', function() {
-    let kontenInputs = document.getElementById('kontenInputs');
-    let index = kontenInputs.children.length;
-    let newGroup = document.createElement('div');
-    newGroup.className = 'form-group mb-3 konten-group';
-    newGroup.innerHTML = `
+    document.getElementById('addContent').addEventListener('click', function() {
+        let kontenInputs = document.getElementById('kontenInputs');
+        let index = kontenInputs.children.length;
+        let newGroup = document.createElement('div');
+        newGroup.className = 'form-group mb-3 konten-group';
+        newGroup.innerHTML = `
         <label>Jenis Konten</label>
         <select class="form-control" name="jenis_konten[]" required>
             <option value="">-- Pilih Jenis Konten --</option>
@@ -163,12 +164,12 @@ document.getElementById('addContent').addEventListener('click', function() {
         <input type="file" name="konten_${index}" class="form-control" style="display: none;" accept=".jpg,.jpeg,.png,.gif,.pdf,.doc,.docx,.xls,.xlsx">
         <input type="text" name="konten[]" class="form-control" style="display: none;">
     `;
-    kontenInputs.appendChild(newGroup);
+        kontenInputs.appendChild(newGroup);
 
-    newGroup.querySelector('select').addEventListener('change', function() {
-        let jenis = this.value;
-        newGroup.querySelector('input[type="file"]').style.display = (jenis === 'gambar' || jenis === 'file') ? 'block' : 'none';
-        newGroup.querySelector('input[type="text"]').style.display = (jenis === 'link') ? 'block' : 'none';
+        newGroup.querySelector('select').addEventListener('change', function() {
+            let jenis = this.value;
+            newGroup.querySelector('input[type="file"]').style.display = (jenis === 'gambar' || jenis === 'file') ? 'block' : 'none';
+            newGroup.querySelector('input[type="text"]').style.display = (jenis === 'link') ? 'block' : 'none';
+        });
     });
-});
 </script>
