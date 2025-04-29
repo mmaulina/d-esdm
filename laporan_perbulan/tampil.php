@@ -99,7 +99,7 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
             <div class="mb-3">
                 <?php if (!$hasprofil && $role == 'umum') : ?>
                     <div class="alert alert-warning text-center" role="alert">
-                        Anda harus melengkapi <strong>Profil Perusahaan</strong> terlebih dahulu sebelum dapat menambahkan Laporan Bulanan.
+                        Anda harus melengkapi <strong>Profil Perusahaan</strong> dan verifikasi terlebih dahulu sebelum dapat menambahkan Laporan Bulanan.
                     </div>
                 <?php endif; ?>
                 <?php if ($hasprofil && $role == 'umum') : ?>
