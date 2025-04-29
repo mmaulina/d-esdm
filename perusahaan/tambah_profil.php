@@ -30,6 +30,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nama = sanitize_input($_POST['nama']);
     $no_hp = sanitize_input($_POST['no_hp']);
     $email = sanitize_input($_POST['email']);
+    $status = 'diajukan'; // Status diisi otomatis
+    $keterangan = '-'; // Keterangan diisi otomatis
 
     // Validasi nomor telepon hanya angka dan tanda +
     if (!preg_match('/^[0-9\+]+$/', $no_telp_kantor) || !preg_match('/^[0-9\+]+$/', $no_hp)) {
@@ -62,8 +64,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $db = new Database();
         $conn = $db->getConnection();
         // Query menggunakan prepared statement dengan PDO
-        $sql = "INSERT INTO profil (id_user, nama_perusahaan, kabupaten, alamat, jenis_usaha, no_telp_kantor, no_fax, tenaga_teknik, nama, no_hp, email) 
-                VALUES (:id_user, :nama_perusahaan, :kabupaten, :alamat, :jenis_usaha, :no_telp_kantor, :no_fax, :tenaga_teknik, :nama, :no_hp, :email)";
+        $sql = "INSERT INTO profil (id_user, nama_perusahaan, kabupaten, alamat, jenis_usaha, no_telp_kantor, no_fax, tenaga_teknik, nama, no_hp, email, status, keterangan) 
+                VALUES (:id_user, :nama_perusahaan, :kabupaten, :alamat, :jenis_usaha, :no_telp_kantor, :no_fax, :tenaga_teknik, :nama, :no_hp, :email, :status, :keterangan)";
         $stmt = $conn->prepare($sql);
 
         // Bind parameter
@@ -78,6 +80,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bindParam(':nama', $nama, PDO::PARAM_STR);
         $stmt->bindParam(':no_hp', $no_hp, PDO::PARAM_STR);
         $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+        $stmt->bindParam(':status', $status);
+        $stmt->bindParam(':keterangan', $keterangan);
 
                     // Eksekusi statement
             if ($stmt->execute()) {

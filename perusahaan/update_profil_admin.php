@@ -45,7 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (!preg_match('/^[0-9\+]+$/', $no_telp_kantor) || !preg_match('/^[0-9\+]+$/', $no_hp)) {
         echo "<script>alert('Kontak hanya boleh berisi angka dan tanda +!');</script>";
     } else {
-        $sql = "UPDATE profil SET nama_perusahaan=?, kabupaten=?, alamat=?, jenis_usaha=?, no_telp_kantor=?, no_fax=?, tenaga_teknik=?, nama=?, no_hp=?, email=? WHERE id_profil=?";
+        $sql = "UPDATE profil SET nama_perusahaan=?, kabupaten=?, alamat=?, jenis_usaha=?, no_telp_kantor=?, no_fax=?, tenaga_teknik=?, nama=?, no_hp=?, email=?, status = 'Diajukan', keterangan = '-' WHERE id_profil=?";
         $stmt = $pdo->prepare($sql);
         $success = $stmt->execute([$nama_perusahaan, $kabupaten, $alamat, $jenis_usaha, $no_telp_kantor, $no_fax, $tenaga_teknik, $nama, $no_hp, $email, $id_profil]);
 
