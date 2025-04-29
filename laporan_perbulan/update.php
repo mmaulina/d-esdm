@@ -43,7 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     function sanitizeInput($input)
     {
         return strip_tags(trim($input));
-    }    
+    }
 
     function checkEmpty($input)
     {
@@ -128,7 +128,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="mb-3">
                     <label class="form-label">Nama Perusahaan</label>
                     <?php if ($role === 'superadmin') : ?>
-                        <input type="text" name="nama_perusahaan" class="form-control" value="<?= htmlspecialchars($data['nama_perusahaan']) ?>" required>
+                        <input type="text" name="nama_perusahaan" class="form-control" placeholder="Masukan nama perusahaan" value="<?= htmlspecialchars($data['nama_perusahaan']) ?>" required>
                     <?php elseif ($role === 'umum') : ?>
                         <input type="text" name="nama_perusahaan" class="form-control" value="<?= htmlspecialchars($data['nama_perusahaan']) ?>" required readonly>
                     <?php endif; ?>
@@ -149,18 +149,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="form-group mb-3">
                     <label>Bulan</label>
                     <select class="form-control" name="bulan" required>
-                        <option value="Januari" <?= $data['bulan'] == 'Januari' ? 'selected' : '' ?>>Januari</option>
-                        <option value="Februari" <?= $data['bulan'] == 'Februari' ? 'selected' : '' ?>>Februari</option>
-                        <option value="Maret" <?= $data['bulan'] == 'Maret' ? 'selected' : '' ?>>Maret</option>
-                        <option value="April" <?= $data['bulan'] == 'April' ? 'selected' : '' ?>>April</option>
-                        <option value="Mei" <?= $data['bulan'] == 'Mei' ? 'selected' : '' ?>>Mei</option>
-                        <option value="Juni" <?= $data['bulan'] == 'Juni' ? 'selected' : '' ?>>Juni</option>
-                        <option value="Juli" <?= $data['bulan'] == 'Juli' ? 'selected' : '' ?>>Juli</option>
-                        <option value="Agustus" <?= $data['bulan'] == 'Agustus' ? 'selected' : '' ?>>Agustus</option>
-                        <option value="September" <?= $data['bulan'] == 'September' ? 'selected' : '' ?>>September</option>
-                        <option value="Oktober" <?= $data['bulan'] == 'Oktober' ? 'selected' : '' ?>>Oktober</option>
-                        <option value="November" <?= $data['bulan'] == 'November' ? 'selected' : '' ?>>November</option>
-                        <option value="Desember" <?= $data['bulan'] == 'Desember' ? 'selected' : '' ?>>Desember</option>
+                        <option value="">-- Pilih Bulan --</option>
+                        <option value="Januari" <?= ($data['bulan'] == 'Januari') ? 'selected' : '' ?>>Januari</option>
+                        <option value="Februari" <?= ($data['bulan'] == 'Februari') ? 'selected' : '' ?>>Februari</option>
+                        <option value="Maret" <?= ($data['bulan'] == 'Maret') ? 'selected' : '' ?>>Maret</option>
+                        <option value="April" <?= ($data['bulan'] == 'April') ? 'selected' : '' ?>>April</option>
+                        <option value="Mei" <?= ($data['bulan'] == 'Mei') ? 'selected' : '' ?>>Mei</option>
+                        <option value="Juni" <?= ($data['bulan'] == 'Juni') ? 'selected' : '' ?>>Juni</option>
+                        <option value="Juli" <?= ($data['bulan'] == 'Juli') ? 'selected' : '' ?>>Juli</option>
+                        <option value="Agustus" <?= ($data['bulan'] == 'Agustus') ? 'selected' : '' ?>>Agustus</option>
+                        <option value="September" <?= ($data['bulan'] == 'September') ? 'selected' : '' ?>>September</option>
+                        <option value="Oktober" <?= ($data['bulan'] == 'Oktober') ? 'selected' : '' ?>>Oktober</option>
+                        <option value="November" <?= ($data['bulan'] == 'November') ? 'selected' : '' ?>>November</option>
+                        <option value="Desember" <?= ($data['bulan'] == 'Desember') ? 'selected' : '' ?>>Desember</option>
                     </select>
                 </div>
                 <div class="mb-3">
@@ -185,12 +186,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <small class="text-muted">Gunakan tanda * sebagai pengganti derajat (°). Contoh: 114*50'21"BT</small>
                     </div>
                 </div>
-
-                <script>
-                    function replaceAsterisk(input) {
-                        input.value = input.value.replace(/\*/g, "°");
-                    }
-                </script>
                 <div class="mb-3">
                     <label class="form-label">Jenis Pembangkit</label>
                     <input type="text" name="jenis_pembangkit" class="form-control" placeholder="Masukkan jenis pembangkit" value="<?= htmlspecialchars($data['jenis_pembangkit']) ?>" required>
@@ -206,38 +201,103 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Kapasitas Terpasang (MW)</label>
-                    <input type="text" name="kapasitas_terpasang" class="form-control" value="<?= htmlspecialchars($data['kapasitas_terpasang']) ?>" required>
+                    <input type="text" name="kapasitas_terpasang" class="form-control" placeholder="Contoh: 1.250,75" value="<?= htmlspecialchars($data['kapasitas_terpasang']) ?>" required>
+                    <small class="text-danger">Catatan : Gunakan titik untuk ribuan dan koma untuk desimal.</small>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Daya Mampu Netto (MW)</label>
-                    <input type="text" name="daya_mampu_netto" class="form-control" value="<?= htmlspecialchars($data['daya_mampu_netto']) ?>" required>
+                    <input type="text" name="daya_mampu_netto" class="form-control" placeholder="Contoh: 1.250,75" value="<?= htmlspecialchars($data['daya_mampu_netto']) ?>" required>
+                    <small class="text-danger">Catatan : Gunakan titik untuk ribuan dan koma untuk desimal.</small>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Jumlah Unit</label>
-                    <input type="number" name="jumlah_unit" class="form-control" id="jumlahUnitInput" min="1" max="200" value="<?= htmlspecialchars($data['jumlah_unit']) ?>" required>
+                    <input type="number" name="jumlah_unit" class="form-control" id="jumlahUnitInput" min="1" max="200" placeholder="Masukkan jumlah unit" value="<?= htmlspecialchars($data['jumlah_unit']) ?>" required>
                     <small class="text-danger">Catatan : Max. 200 unit</small>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">No. Unit</label>
-                    <input type="text" name="no_unit" class="form-control" value="<?= htmlspecialchars($data['no_unit']) ?>" required>
+                    <input type="text" name="no_unit" class="form-control" placeholder="Masukkan nomor unit" value="<?= htmlspecialchars($data['no_unit']) ?>" required>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Tahun Operasi</label>
-                    <input type="number" name="tahun_operasi" class="form-control" value="<?= htmlspecialchars($data['tahun_operasi']) ?>" required>
+                    <select name="tahun_operasi" class="form-select" required>
+                        <option value="">-- Pilih Tahun --</option>
+                        <!-- Tahun dari 2030 ke 2000 -->
+                        <!-- Kode ini akan diisi otomatis dengan JavaScript -->
+                    </select>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Status Operasi</label>
-                    <input type="text" name="status_operasi" class="form-control" value="<?= htmlspecialchars($data['status_operasi']) ?>" required>
+                    <select name="status_operasi" class="form-select" required>
+                        <option value="">-- Pilih Status Operasi --</option>
+                        <option value="Beroperasi" <?= ($data['status_operasi'] == 'Beroperasi') ? 'selected' : '' ?>>Beroperasi</option>
+                        <option value="Maintenance/Perbaikan" <?= ($data['status_operasi'] == 'Maintenance/Perbaikan') ? 'selected' : '' ?>>Maintenance/Perbaikan</option>
+                        <option value="Rusak" <?= ($data['status_operasi'] == 'Rusak') ? 'selected' : '' ?>>Rusak</option>
+                    </select>
                 </div>
                 <div class="row mb-3">
                     <div class="col">
                         <label class="form-label">Jenis Bahan Bakar</label>
-                        <input type="text" name="bahan_bakar_jenis" class="form-control" value="<?= htmlspecialchars($data['bahan_bakar_jenis']) ?>" required>
+                        <select name="bahan_bakar_jenis" class="form-select" required>
+                            <option value="">-- Pilih Jenis Bahan Bakar --</option>
+                            <option value="Solar" <?= ($data['bahan_bakar_jenis'] == 'Solar') ? 'selected' : '' ?>>Solar</option>
+                            <option value="Biomasa" <?= ($data['bahan_bakar_jenis'] == 'Biomasa') ? 'selected' : '' ?>>Biomasa</option>
+                        </select>
+                        <small class="text-danger">
+                            Catatan: <strong>Biomasa</strong> mencakup bahan-bahan organik seperti <em>cangkang sawit</em>, <em>serbuk gergaji</em>, dan <em>sekam padi</em>, dll yang digunakan sebagai bahan bakar alternatif dalam pembangkit listrik.
+                        </small>
                     </div>
                     <div class="col">
                         <label class="form-label">Satuan Bahan Bakar</label>
-                        <input type="text" name="bahan_bakar_satuan" class="form-control" value="<?= htmlspecialchars($data['bahan_bakar_satuan']) ?>" required>
+                        <select name="bahan_bakar_satuan" class="form-select" required>
+                            <option value="">-- Pilih Satuan --</option>
+                            <option value="Liter" <?= ($data['bahan_bakar_satuan'] == 'Liter') ? 'selected' : '' ?>>Liter</option>
+                            <option value="Ton" <?= ($data['bahan_bakar_satuan'] == 'Ton') ? 'selected' : '' ?>>Ton</option>
+                        </select>
                     </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Volume Bahan Bakar</label>
+                    <input type="text" name="volume_bb" class="form-control" placeholder="Masukkan volume bahan bakar" value="<?= htmlspecialchars($data['volume_bb']) ?>" required>
+                    <small class="text-danger">Catatan : Gunakan titik untuk ribuan dan koma untuk desimal.</small>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Produksi Sendiri (kWh)</label>
+                    <input type="text" name="produksi_sendiri" class="form-control" placeholder="Masukkan produksi sendiri" value="<?= htmlspecialchars($data['produksi_sendiri']) ?>" required>
+                    <small class="text-danger">Catatan : Gunakan titik untuk ribuan dan koma untuk desimal.</small>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Pembelian Sumber Lain (kWh)
+                        <small class="text-primary">*bila ada</small>
+                    </label>
+                    <input type="text" name="pemb_sumber_lain" class="form-control" placeholder="Masukkan pembelian sumber lain" value="<?= htmlspecialchars($data['pemb_sumber_lain']) ?>">
+                    <small class="text-danger">Catatan : Gunakan titik untuk ribuan dan koma untuk desimal.</small>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Susut jaringan (kWh)
+                        <small class="text-primary">*bila ada</small>
+                    </label>
+                    <input type="text" name="susut_jaringan" class="form-control" placeholder="Masukkan susut jaringan" value="<?= htmlspecialchars($data['susut_jaringan']) ?>">
+                    <small class="text-danger">Catatan : Gunakan titik untuk ribuan dan koma untuk desimal.</small>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Penjualan ke Pelanggan (kWh)
+                        <small class="text-primary">*bila ada</small>
+                    </label>
+                    <input type="text" name="penj_ke_pelanggan" class="form-control" placeholder="Masukkan penjualan ke pelanggan" value="<?= htmlspecialchars($data['penj_ke_pelanggan']) ?>">
+                    <small class="text-danger">Catatan : Gunakan titik untuk ribuan dan koma untuk desimal.</small>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Penjualan ke PLN (kWh)
+                        <small class="text-primary">*bila ada</small>
+                    </label>
+                    <input type="text" name="penj_ke_pln" class="form-control" placeholder="Masukkan penjualan ke PLN" value="<?= htmlspecialchars($data['penj_ke_pln']) ?>">
+                    <small class="text-danger">Catatan : Gunakan titik untuk ribuan dan koma untuk desimal.</small>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Pemakaian Sendiri (kWh)</label>
+                    <input type="text" name="pemakaian_sendiri" class="form-control" placeholder="Masukkan pemakaian sendiri" value="<?= htmlspecialchars($data['pemakaian_sendiri']) ?>" required>
+                    <small class="text-danger">Catatan : Gunakan titik untuk ribuan dan koma untuk desimal.</small>
                 </div>
                 <button type="submit" class="btn btn-warning">Simpan Perubahan</button>
                 <a href="?page=laporan_perbulan" class="btn btn-secondary">Kembali</a>
@@ -251,6 +311,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     function replaceAsterisk(input) {
         // Ganti semua * dengan °
         input.value = input.value.replace(/\*/g, "°");
+    }
+</script>
+
+<!-- SCRIPT PILIHAN TAHUN OPERASI -->
+<script>
+    const selectTahun = document.querySelector('select[name="tahun_operasi"]');
+    const tahunTerpilih = "<?= $data['tahun_operasi'] ?>"; // ambil dari database
+
+    for (let tahun = 2030; tahun >= 2000; tahun--) {
+        const option = document.createElement('option');
+        option.value = tahun;
+        option.textContent = tahun;
+        if (tahun == tahunTerpilih) {
+            option.selected = true;
+        }
+        selectTahun.appendChild(option);
     }
 </script>
 

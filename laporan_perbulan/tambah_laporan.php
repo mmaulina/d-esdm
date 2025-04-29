@@ -36,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     {
         return strip_tags(trim($input));
     }
-    
+
 
     function checkEmpty($input)
     {
@@ -70,10 +70,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $status = 'diajukan'; // Status diisi otomatis
     $keterangan = '-';    // Keterangan diisi otomatis
 
-
-    $insertSQL = "INSERT INTO laporan_bulanan (id_user, nama_perusahaan, tahun, bulan, alamat, latitude longitude, jenis_pembangkit, fungsi, kapasitas_terpasang, daya_mampu_netto, jumlah_unit, no_unit, tahun_operasi, status_operasi, bahan_bakar_jenis, bahan_bakar_satuan, volume_bb, produksi_sendiri, pemb_sumber_lain, susut_jaringan, penj_ke_pelanggan, penj_ke_pln, pemakaian_sendiri, status, keterangan) 
-                  VALUES (:id_user, :nama_perusahaan, :tahun, :bulan, :alamat, :latitude, :longitude, :jenis_pembangkit, :fungsi, :kapasitas_terpasang, :daya_mampu_netto, :jumlah_unit, :no_unit, :tahun_operasi, :status_operasi, :bahan_bakar_jenis, :bahan_bakar_satuan, :volume_bb, :produksi_sendiri, :pemb_sumber_lain, :susut_jaringan, :penj_ke_pelanggan, :penj_ke_pln, :pemakaian_sendiri, :status, :keterangan)";
-    $stmt = $db->prepare($insertSQL);
+    $insertSQL = "INSERT INTO laporan_bulanan (
+        id_user, nama_perusahaan, tahun, bulan, alamat,
+        latitude, longitude, jenis_pembangkit, fungsi,
+        kapasitas_terpasang, daya_mampu_netto, jumlah_unit, no_unit,
+        tahun_operasi, status_operasi, bahan_bakar_jenis, bahan_bakar_satuan,
+        volume_bb, produksi_sendiri, pemb_sumber_lain, susut_jaringan,
+        penj_ke_pelanggan, penj_ke_pln, pemakaian_sendiri,
+        status, keterangan
+    ) 
+    VALUES (
+        :id_user, :nama_perusahaan, :tahun, :bulan, :alamat,
+        :latitude, :longitude, :jenis_pembangkit, :fungsi,
+        :kapasitas_terpasang, :daya_mampu_netto, :jumlah_unit, :no_unit,
+        :tahun_operasi, :status_operasi, :bahan_bakar_jenis, :bahan_bakar_satuan,
+        :volume_bb, :produksi_sendiri, :pemb_sumber_lain, :susut_jaringan,
+        :penj_ke_pelanggan, :penj_ke_pln, :pemakaian_sendiri,
+        :status, :keterangan
+    )";    
 
     $stmt->bindParam(':id_user', $id_user);
     $stmt->bindParam(':nama_perusahaan', $nama_perusahaan);
@@ -121,7 +135,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="mb-3">
                     <label class="form-label">Nama Perusahaan</label>
                     <?php if ($role === 'superadmin') : ?>
-                        <input type="text" name="nama_perusahaan" class="form-control" value="<?= htmlspecialchars($nama_perusahaan_profil) ?>">
+                        <input type="text" name="nama_perusahaan" class="form-control" placeholder="Masukan nama perusahaan" value="<?= htmlspecialchars($nama_perusahaan_profil) ?>" required>
                     <?php else : ?>
                         <input type="text" name="nama_perusahaan" class="form-control" value="<?= htmlspecialchars($nama_perusahaan_profil) ?>" readonly>
                     <?php endif; ?>
@@ -182,13 +196,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="mb-3">
                     <label class="form-label">Kapasitas Terpasang (MW)</label>
                     <input type="text" name="kapasitas_terpasang" class="form-control"
-                        placeholder="Contoh: 1.250,75" required oninput="formatAngkaIndonesia(this)">
+                        placeholder="Contoh: 1.250,75" required>
                     <small class="text-danger">Catatan : Gunakan titik untuk ribuan dan koma untuk desimal.</small>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Daya Mampu Netto (MW)</label>
                     <input type="text" name="daya_mampu_netto" class="form-control"
-                        placeholder="Contoh: 1.250,75" required oninput="formatAngkaIndonesia(this)">
+                        placeholder="Contoh: 1.250,75" required>
                     <small class="text-danger">Catatan : Gunakan titik untuk ribuan dan koma untuk desimal.</small>
                 </div>
                 <div class="mb-3">
@@ -240,39 +254,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Volume Bahan Bakar</label>
-                    <input type="number" name="volume_bb" class="form-control" placeholder="Masukkan volume bahan bakar" required>
+                    <input type="text" name="volume_bb" class="form-control" placeholder="Masukkan volume bahan bakar" required>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Produksi Sendiri (kWh)</label>
-                    <input type="number" name="produksi_sendiri" class="form-control" placeholder="Masukkan produksi sendiri" required>
+                    <input type="text" name="produksi_sendiri" class="form-control" placeholder="Masukkan produksi sendiri" required>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Pembelian Sumber Lain (kWh)
                         <small class="text-primary">*bila ada</small>
                     </label>
-                    <input type="number" name="pemb_sumber_lain" class="form-control" placeholder="Masukkan pembelian sumber lain">
+                    <input type="text" name="pemb_sumber_lain" class="form-control" placeholder="Masukkan pembelian sumber lain">
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Susut jaringan (kWh)
                         <small class="text-primary">*bila ada</small>
                     </label>
-                    <input type="number" name="susut_jaringan" class="form-control" placeholder="Masukkan susut jaringan">
+                    <input type="text" name="susut_jaringan" class="form-control" placeholder="Masukkan susut jaringan">
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Penjualan ke Pelanggan (kWh)
                         <small class="text-primary">*bila ada</small>
                     </label>
-                    <input type="number" name="penj_ke_pelanggan" class="form-control" placeholder="Masukkan penjualan ke pelanggan">
+                    <input type="text" name="penj_ke_pelanggan" class="form-control" placeholder="Masukkan penjualan ke pelanggan">
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Penjualan ke PLN (kWh)
                         <small class="text-primary">*bila ada</small>
                     </label>
-                    <input type="number" name="penj_ke_pln" class="form-control" placeholder="Masukkan penjualan ke PLN">
+                    <input type="text" name="penj_ke_pln" class="form-control" placeholder="Masukkan penjualan ke PLN">
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Pemakaian Sendiri (kWh)</label>
-                    <input type="number" name="pemakaian_sendiri" class="form-control" placeholder="Masukkan pemakaian sendiri" required>
+                    <input type="text" name="pemakaian_sendiri" class="form-control" placeholder="Masukkan pemakaian sendiri" required>
                 </div>
 
                 <button type="submit" class="btn btn-success">Simpan</button>
