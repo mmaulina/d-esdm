@@ -75,7 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 }
 
 // Cek apakah id_user ada di laporan_bulanan
-$queryCheck = "SELECT COUNT(*) FROM laporan_bulanan WHERE id_user = :id_user";
+$queryCheck = "SELECT COUNT(*) FROM profil WHERE id_user = :id_user AND status = 'diterima'" ;
 $stmtCheck = $conn->prepare($queryCheck);
 $stmtCheck->bindParam(':id_user', $id_user, PDO::PARAM_INT);
 $stmtCheck->execute();
