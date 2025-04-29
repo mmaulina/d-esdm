@@ -3,21 +3,50 @@ try {
     $database = new Database();
     $pdo = $database->getConnection(); // Dapatkan koneksi PDO
 
-    // Query utama
-    $query = "SELECT * FROM profil WHERE 1=1";
+    $query = "SELECT * FROM profil WHERE 1=1"; // supaya WHERE nya fleksibel
     $params = [];
-
-    // Filter pencarian berdasarkan nama perusahaan, kabupaten, jenis usaha
+    
+    if (isset($_GET['id_profil'])) {
+        $query .= " AND id_profil = :id_profil";
+        $params[':id_profil'] = $_GET['id_profil'];
+    }
+    
     if (!empty($_GET['keyword'])) {
         $keyword = "%" . $_GET['keyword'] . "%";
         $query .= " AND (nama_perusahaan LIKE :keyword OR kabupaten LIKE :keyword OR jenis_usaha LIKE :keyword)";
         $params[':keyword'] = $keyword;
     }
+    
+    $query .= " ORDER BY FIELD(status, 'diajukan', 'ditolak', 'diterima')";
+    
 
     // Eksekusi Query
     $stmt = $pdo->prepare($query);
     $stmt->execute($params);
     $profiles = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Proses Persetujuan/Tolak
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    if (isset($_POST['terima_id'])) {
+        $id = $_POST['terima_id'];
+        $updateQuery = "UPDATE profil SET status = 'diterima' WHERE id_profil = :id_profil";
+    } elseif (isset($_POST['tolak_laporan'])) {
+        $id = $_POST['id_profil'];
+        $keterangan = $_POST['keterangan'];
+        $updateQuery = "UPDATE profil SET status = 'ditolak', keterangan = :keterangan WHERE id_profil = :id_profil";
+    }
+
+    if (isset($updateQuery)) {
+        $updateStmt = $pdo->prepare($updateQuery);
+        $updateStmt->bindParam(':id_profil', $id, PDO::PARAM_INT);
+        if (isset($keterangan)) {
+            $updateStmt->bindParam(':keterangan', $keterangan, PDO::PARAM_STR);
+        }
+        $updateStmt->execute();
+        echo "<meta http-equiv='refresh' content='0; url=?page=profil_admin'>";
+        exit;
+    }
+}
 } catch (PDOException $e) {
     die("Error: " . $e->getMessage());
 }
@@ -34,7 +63,7 @@ try {
                 <div class="input-group">
                     <input type="text" name="keyword" class="form-control" placeholder="Cari .." value="<?= isset($_GET['keyword']) ? htmlspecialchars($_GET['keyword']) : '' ?>">
                     <button type="submit" class="btn btn-success">Cari</button>
-                    <a href="?page=profil_perusahaan" class="btn btn-secondary">Reset</a>
+                    <a href="?page=profil_admin" class="btn btn-secondary">Reset</a>
                 </div>
             </form>
             <div class="row mb-3">
@@ -64,12 +93,14 @@ try {
                             <th rowspan="2" onclick="sortTable(6)">No. Fax <i class="fa fa-sort"></i></th>
                             <th rowspan="2" onclick="sortTable(7)">Tenaga Teknik <i class="fa fa-sort"></i></th>
                             <th colspan="3">Kontak Person</th>
+                            <th rowspan="2" onclick="sortTable(8)">Status</th>
+                            <th rowspan="2" onclick="sortTable(9)">Keterangan</th>
                             <th rowspan="2">Aksi</th>
                         </tr>
                         <tr>
-                            <th onclick="sortTable(8)">Nama <i class="fa fa-sort"></i></th>
-                            <th onclick="sortTable(9)">No. HP <i class="fa fa-sort"></i></th>
-                            <th onclick="sortTable(10)">Email <i class="fa fa-sort"></i></th>
+                            <th onclick="sortTable(10)">Nama <i class="fa fa-sort"></i></th>
+                            <th onclick="sortTable(11)">No. HP <i class="fa fa-sort"></i></th>
+                            <th onclick="sortTable(12)">Email <i class="fa fa-sort"></i></th>
                         </tr>
                     </thead>
                     <tbody id="tableBody">
@@ -88,15 +119,64 @@ try {
                                     <td><?= htmlspecialchars($row['nama']); ?></td>
                                     <td><?= htmlspecialchars($row['no_hp']); ?></td>
                                     <td><?= htmlspecialchars($row['email']); ?></td>
-                                    <td>
-                                        <a href="?page=update_profil_admin&id_profil=<?= htmlspecialchars($row['id_profil']); ?>" class="btn btn-warning btn-sm">Edit</a>
-                                        <a href="?page=delete_profil_admin&id_profil=<?= htmlspecialchars($row['id_profil']); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus data ini?')">Hapus</a>
+                                    <td class="text-center">
+                                        <?php
+                                        // Menampilkan status dengan ikon dan warna
+                                        if ($row['status'] == 'diajukan') {
+                                            echo '<i class="fas fa-clock" style="color: yellow;"></i> Diajukan';
+                                        } elseif ($row['status'] == 'diterima') {
+                                            echo '<i class="fas fa-check" style="color: green;"></i> Diterima';
+                                        } elseif ($row['status'] == 'ditolak') {
+                                            echo '<i class="fas fa-times" style="color: red;"></i> Ditolak';
+                                        } else {
+                                            echo '<span class="text-muted">Status tidak diketahui</span>';
+                                        }
+                                        ?>
+                                    </td>
+                                    <td><?php echo htmlspecialchars($row['keterangan']); ?></td>
+                                    <td class="text-center">
+                                        <?php if ( $row['status'] == 'diajukan'): ?>
+                                            <!-- Tombol Terima menggunakan POST -->
+                                            <form method="POST" style="display: inline;">
+                                                <input type="hidden" name="terima_id" value="<?php echo $row['id_profil']; ?>">
+                                                <button type="submit" class="btn btn-success btn-sm">Terima</button>
+                                            </form>
+                                            <!-- Tombol Tolak dengan Modal -->
+                                            <a href="" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modalTolak<?php echo $row['id_profil']; ?>">Tolak</a>
+                                        <?php endif; ?>
+
+                                        <?php if ($row['status'] == 'diterima' || $row['status'] == 'ditolak'): ?>
+                                            <a href="?page=update_profil_admin&id_profil=<?= htmlspecialchars($row['id_profil']); ?>" class="btn btn-warning btn-sm">Edit</a>
+                                            <a href="?page=delete_profil_admin&id_profil=<?= htmlspecialchars($row['id_profil']); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus data ini?')">Hapus</a>
+                                        <?php endif; ?>
                                     </td>
                                 </tr>
+                                <div class="modal fade" id="modalTolak<?php echo $row['id_profil']; ?>" tabindex="-1" role="dialog" aria-labelledby="modalTolakLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="modalTolakLabel">Tolak Laporan</h5>
+                                            </div>
+                                            <form action="" method="POST">
+                                                <div class="modal-body">
+                                                <input type="hidden" name="id_profil" value="<?php echo $row['id_profil']; ?>">
+                                                    <div class="form-group">
+                                                    <label for="keterangan<?php echo $row['id_profil']; ?>">Keterangan Penolakan</label>
+                                                    <textarea class="form-control" id="keterangan<?php echo $row['id_profil']; ?>" name="keterangan" rows="3" required></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                                                    <button type="submit" name="tolak_laporan" class="btn btn-danger">Tolak</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
                             <?php endforeach; ?>
                         <?php else: ?>
                             <tr>
-                                <td colspan="12" class="text-center">Data tidak ditemukan</td>
+                                <td colspan="14" class="text-center">Data tidak ditemukan</td>
                             </tr>
                         <?php endif; ?>
                     </tbody>

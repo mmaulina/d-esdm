@@ -44,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "<script>alert('Kontak hanya boleh berisi angka dan tanda +!');</script>";
     } else {
         // Update data profil
-        $sql = "UPDATE profil SET nama_perusahaan=:nama_perusahaan, kabupaten=:kabupaten, alamat=:alamat, jenis_usaha=:jenis_usaha, no_telp_kantor=:no_telp_kantor, no_fax=:no_fax, tenaga_teknik=:tenaga_teknik, nama=:nama, no_hp=:no_hp, email=:email WHERE id_user=:id_user";
+        $sql = "UPDATE profil SET nama_perusahaan=:nama_perusahaan, kabupaten=:kabupaten, alamat=:alamat, jenis_usaha=:jenis_usaha, no_telp_kantor=:no_telp_kantor, no_fax=:no_fax, tenaga_teknik=:tenaga_teknik, nama=:nama, no_hp=:no_hp, email=:email, status = 'Diajukan', keterangan = '-' WHERE id_user=:id_user";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':nama_perusahaan', $nama_perusahaan);
         $stmt->bindParam(':kabupaten', $kabupaten);

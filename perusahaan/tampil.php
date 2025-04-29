@@ -69,6 +69,27 @@ $profil = $stmt->fetch(PDO::FETCH_ASSOC);
                         <th>Email</th>
                         <td><?php echo htmlspecialchars($profil['email']); ?></td>
                     </tr>
+                    <tr>
+                        <th>Status</th>
+                            <td>
+                                <?php
+                                // Menampilkan status dengan ikon dan warna
+                                    if ($profil['status'] == 'diajukan') {
+                                        echo '<i class="fas fa-clock" style="color: yellow;"></i> Diajukan';
+                                    } elseif ($profil['status'] == 'diterima') {
+                                        echo '<i class="fas fa-check" style="color: green;"></i> Diterima';
+                                    } elseif ($profil['status'] == 'ditolak') {
+                                        echo '<i class="fas fa-times" style="color: red;"></i> Ditolak';
+                                    } else {
+                                        echo '<span class="text-muted">Status tidak diketahui</span>';
+                                    }
+                                    ?>
+                            </td>
+                    </tr>
+                    <tr>
+                        <th>Keterangan</th>
+                        <td><?php echo htmlspecialchars($profil['keterangan']); ?></td>
+                    </tr>
                 </table>
                 <a href="?page=update_profil&id_user=<?php echo $_SESSION['id_user']; ?>" class="btn btn-warning">Update Profil</a>
                 <a href="?page=delete_profil&id_user=<?= $_SESSION['id_user']; ?>"
