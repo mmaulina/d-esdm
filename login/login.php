@@ -111,11 +111,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </span>
                 </div>
             </div>
-            <button type="submit" class="btn btn-primary w-100">Login</button>
+            <button type="submit" class="btn btn-warning w-100">Login</button>
         </form>
 
         <div class="text-center mt-3">
-            <a href="daftar.php">Belum punya akun?</a>
+            <a href="daftar.php" class="text-warning">Belum punya akun?</a>
         </div>
     </div>
 
@@ -133,6 +133,64 @@ function togglePassword() {
 </script>
 
     <script src="../assets/js/bootstrap.bundle.min.js"></script>
+    <canvas id="lightningCanvas" style="position: fixed; top: 0; left: 0; z-index: -1;"></canvas>
+<script>
+const canvas = document.getElementById('lightningCanvas');
+const ctx = canvas.getContext('2d');
+
+function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+function drawLightning() {
+    const startX = Math.random() * canvas.width;
+    const startY = 0;
+    let x = startX;
+    let y = startY;
+
+    ctx.strokeStyle = ['#fff200', '#ffd700', '#ffae00'][Math.floor(Math.random() * 3)];
+    ctx.lineWidth = 2 + Math.random(); // lebih alami
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+
+    while (y < canvas.height) {
+        x += (Math.random() - 0.5) * 30;
+        y += Math.random() * 30;
+        ctx.lineTo(x, y);
+    }
+
+    ctx.stroke();
+}
+
+function flashScreen() {
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+}
+
+function animate() {
+    // Efek latar oren senja
+    ctx.fillStyle = 'rgba(255, 140, 0, 0.05)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    if (Math.random() < 0.04) {
+        for (let i = 0; i < Math.random() * 2 + 1; i++) {
+            drawLightning();
+        }
+        flashScreen();
+    }
+
+    requestAnimationFrame(animate);
+}
+
+animate();
+</script>
+
+</script>
+
+
 </body>
 
 </html>
