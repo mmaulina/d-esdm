@@ -1,5 +1,5 @@
 body {
-    background: linear-gradient(to bottom left, #D4E8A3 , #74B785);
+    background: linear-gradient(to bottom left, #ffb301 , #bbbd74);
     height: 100vh;
     display: flex;
     justify-content: center;
@@ -13,11 +13,11 @@ body, html {
 }
 
 .btn-primary {
-    background-color: #008B47;
+    background-color: #f69f1d;
     border: none;
 }
 .btn-primary:hover {
-    background-color: #006B37;
+    background-color: #fbb41b;
 }
 
 a {

@@ -88,7 +88,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         :penj_ke_pelanggan, :penj_ke_pln, :pemakaian_sendiri,
         :status, :keterangan
     )";
-
+    $stmt = $db->prepare($query);
     $stmt->bindParam(':id_user', $id_user);
     $stmt->bindParam(':nama_perusahaan', $nama_perusahaan);
     $stmt->bindParam(':tahun', $tahun);
@@ -113,6 +113,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bindParam(':penj_ke_pelanggan', $penj_ke_pelanggan);
     $stmt->bindParam(':penj_ke_pln', $penj_ke_pln);
     $stmt->bindParam(':pemakaian_sendiri', $pemakaian_sendiri);
+    $stmt->bindParam(':status', $status);
+    $stmt->bindParam(':keterangan', $keterangan);
 
     if ($stmt->execute()) {
         $_SESSION['hasil'] = true;
