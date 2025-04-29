@@ -19,6 +19,12 @@ $queryLaporan = "SELECT * FROM laporan_semester WHERE status = 'diajukan'";
 $stmtLaporan = $conn->prepare($queryLaporan);
 $stmtLaporan->execute();
 $resultLaporan = $stmtLaporan->fetchAll(PDO::FETCH_ASSOC);
+
+// Ambil laporan semester yang diajukan
+$queryperusahaan = "SELECT * FROM profil WHERE status = 'diajukan'";
+$stmt_perusahaan = $conn->prepare($queryperusahaan);
+$stmt_perusahaan->execute();
+$resultperusahaan = $stmt_perusahaan->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <div class="container mt-4">
@@ -61,6 +67,17 @@ $resultLaporan = $stmtLaporan->fetchAll(PDO::FETCH_ASSOC);
                                 </td>
                             </tr>
                         <?php }
+                        foreach ($resultperusahaan as $perusahaan) {
+                            ?>
+                                <tr>
+                                    <td class="text-center"><?php echo $no++; ?></td>
+                                    <td>Perusahaan di ajukan</td>
+                                    <td><?php echo htmlspecialchars($perusahaan['nama_perusahaan']); ?></td>
+                                    <td class="text-center">
+                                        <a href="?page=profil_admin" class="btn btn-sm btn-info">Lihat <i class="fa-solid fa-eye"></i>
+                                    </td>
+                                </tr>
+                            <?php }
                         ?>
                     </tbody>
                 </table>

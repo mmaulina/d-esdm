@@ -98,8 +98,14 @@ if (session_status() == PHP_SESSION_NONE) {
                         $resultPengguna = $stmtPengguna->fetch(PDO::FETCH_ASSOC);
                         $jumlahPenggunaDiajukan = $resultPengguna['total'];
 
+                        $queryprofil = "SELECT COUNT(*) as total FROM profil WHERE status = 'diajukan'";
+                        $stmtprofil = $conn->prepare($queryprofil);
+                        $stmtprofil->execute();
+                        $resultprofil = $stmtprofil->fetch(PDO::FETCH_ASSOC);
+                        $jumlahprofilDiajukan = $resultprofil['total'];
+
                         // Total notifikasi yang diajukan
-                        $totalNotifikasi = $jumlahLaporanDiajukan + $jumlahPenggunaDiajukan;
+                        $totalNotifikasi = $jumlahLaporanDiajukan + $jumlahPenggunaDiajukan + $jumlahprofilDiajukan;
                         ?>
 
                         <?php if ($_SESSION['role'] == 'superadmin' || $_SESSION['role'] == 'admin') { ?> <!-- hanya superadmin yang bisa mengakses menu ini -->
