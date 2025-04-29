@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.1.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 24 Apr 2025 pada 02.28
--- Versi server: 10.4.28-MariaDB
--- Versi PHP: 8.0.28
+-- Generation Time: Apr 29, 2025 at 02:12 PM
+-- Server version: 10.4.18-MariaDB
+-- PHP Version: 7.4.16
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,28 +24,45 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `djih`
+-- Table structure for table `denda_laporan_semester`
 --
 
-CREATE TABLE `djih` (
+CREATE TABLE `denda_laporan_semester` (
   `id` int(11) NOT NULL,
-  `jenis_konten` enum('gambar','file','link','kosong') NOT NULL,
-  `konten` varchar(225) NOT NULL,
-  `caption` text NOT NULL,
-  `tanggal` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data untuk tabel `djih`
---
-
-INSERT INTO `djih` (`id`, `jenis_konten`, `konten`, `caption`, `tanggal`) VALUES
-(3, 'file', 'uploads/1742616564_MuhammadIrwanFirdaus-TESTPRAKTEKIT2025.pdf', 'Info dari pusat format file terbaru', '2025-03-22 05:09:24');
+  `id_profil_perusahaan` int(11) NOT NULL,
+  `nama_perusahaan` varchar(100) NOT NULL,
+  `denda` varchar(225) NOT NULL,
+  `keterangan` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `djih_dilihat`
+-- Table structure for table `djih`
+--
+
+CREATE TABLE `djih` (
+  `id` int(11) NOT NULL,
+  `id_title` varchar(20) NOT NULL,
+  `title` varchar(100) NOT NULL,
+  `jenis_konten` enum('gambar','file','link','kosong') NOT NULL,
+  `konten` varchar(225) DEFAULT NULL,
+  `caption` text NOT NULL,
+  `tanggal` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `djih`
+--
+
+INSERT INTO `djih` (`id`, `id_title`, `title`, `jenis_konten`, `konten`, `caption`, `tanggal`) VALUES
+(9, 'TTL-001', 'ADEL JKT48 GRAD', 'gambar', 'uploads/1745849267_7fb585eca747547b55563358add80b87.jpg', '\"Congratulations to Adel on her graduation from JKT48! 🎓✨ Wishing you all the best in your next adventure! #AdelJKT48 #Graduation\"', '2025-04-29 01:41:09'),
+(10, 'TTL-001', 'ADEL JKT48 GRAD', 'gambar', 'uploads/1745849267_2a3066213824b688a253585469df73fd.jpg', '\"Congratulations to Adel on her graduation from JKT48! 🎓✨ Wishing you all the best in your next adventure! #AdelJKT48 #Graduation\"', '2025-04-29 01:41:17');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `djih_dilihat`
 --
 
 CREATE TABLE `djih_dilihat` (
@@ -53,10 +70,10 @@ CREATE TABLE `djih_dilihat` (
   `id_user` int(11) NOT NULL,
   `konten_id` int(11) NOT NULL,
   `tanggal` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data untuk tabel `djih_dilihat`
+-- Dumping data for table `djih_dilihat`
 --
 
 INSERT INTO `djih_dilihat` (`id`, `id_user`, `konten_id`, `tanggal`) VALUES
@@ -127,18 +144,54 @@ INSERT INTO `djih_dilihat` (`id`, `id_user`, `konten_id`, `tanggal`) VALUES
 (120, 1, 3, '2025-04-23 03:48:56'),
 (121, 1, 3, '2025-04-23 03:49:04'),
 (122, 5, 3, '2025-04-23 11:44:37'),
-(123, 9, 3, '2025-04-23 12:33:17'),
-(124, 9, 3, '2025-04-23 14:06:01'),
-(125, 9, 3, '2025-04-23 14:38:44'),
-(126, 9, 3, '2025-04-23 14:38:52'),
-(127, 1, 3, '2025-04-23 15:16:27'),
-(128, 5, 3, '2025-04-23 15:20:19'),
-(129, 9, 3, '2025-04-23 15:44:31');
+(123, 9, 3, '2025-04-23 12:45:07'),
+(124, 9, 3, '2025-04-23 12:46:21'),
+(125, 10, 3, '2025-04-24 11:12:39'),
+(126, 5, 3, '2025-04-24 13:47:16'),
+(127, 1, 4, '2025-04-28 13:11:40'),
+(128, 1, 5, '2025-04-28 13:17:55'),
+(129, 1, 6, '2025-04-28 13:17:55'),
+(131, 1, 7, '2025-04-28 13:53:14'),
+(132, 1, 8, '2025-04-28 13:53:14'),
+(134, 1, 7, '2025-04-28 13:53:34'),
+(135, 1, 8, '2025-04-28 13:53:34'),
+(137, 1, 7, '2025-04-28 14:04:13'),
+(138, 1, 8, '2025-04-28 14:04:13'),
+(140, 1, 9, '2025-04-28 14:07:48'),
+(141, 1, 10, '2025-04-28 14:07:48'),
+(143, 1, 9, '2025-04-28 14:10:04'),
+(144, 1, 10, '2025-04-28 14:10:04'),
+(146, 1, 9, '2025-04-28 14:44:18'),
+(147, 1, 10, '2025-04-28 14:44:18'),
+(149, 1, 9, '2025-04-28 14:44:31'),
+(150, 1, 10, '2025-04-28 14:44:31'),
+(151, 1, 9, '2025-04-28 23:40:57'),
+(152, 1, 10, '2025-04-28 23:40:57'),
+(154, 1, 9, '2025-04-28 23:41:09'),
+(155, 1, 10, '2025-04-28 23:41:09'),
+(157, 1, 9, '2025-04-28 23:41:17'),
+(158, 1, 10, '2025-04-28 23:41:17'),
+(160, 1, 9, '2025-04-28 23:44:58'),
+(161, 1, 10, '2025-04-28 23:44:58'),
+(163, 1, 9, '2025-04-29 00:19:54'),
+(164, 1, 10, '2025-04-29 00:19:54'),
+(166, 1, 9, '2025-04-29 00:20:07'),
+(167, 1, 10, '2025-04-29 00:20:07'),
+(169, 1, 9, '2025-04-29 00:22:20'),
+(170, 1, 10, '2025-04-29 00:22:20'),
+(172, 1, 9, '2025-04-29 00:22:32'),
+(173, 1, 10, '2025-04-29 00:22:32'),
+(175, 1, 9, '2025-04-29 00:27:25'),
+(176, 1, 10, '2025-04-29 00:27:25'),
+(178, 1, 9, '2025-04-29 00:27:30'),
+(179, 1, 10, '2025-04-29 00:27:30'),
+(180, 1, 9, '2025-04-29 11:53:04'),
+(181, 1, 10, '2025-04-29 11:53:04');
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `konten_dilihat`
+-- Table structure for table `konten_dilihat`
 --
 
 CREATE TABLE `konten_dilihat` (
@@ -146,10 +199,10 @@ CREATE TABLE `konten_dilihat` (
   `id_user` int(11) NOT NULL,
   `konten_id` int(11) NOT NULL,
   `tanggal` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data untuk tabel `konten_dilihat`
+-- Dumping data for table `konten_dilihat`
 --
 
 INSERT INTO `konten_dilihat` (`id`, `id_user`, `konten_id`, `tanggal`) VALUES
@@ -677,62 +730,91 @@ INSERT INTO `konten_dilihat` (`id`, `id_user`, `konten_id`, `tanggal`) VALUES
 (765, 0, 2, '2025-04-23 11:39:05'),
 (767, 1, 1, '2025-04-23 11:40:23'),
 (768, 1, 2, '2025-04-23 11:40:23'),
-(770, 1, 4, '2025-04-23 15:16:15'),
-(771, 1, 4, '2025-04-23 15:16:33'),
-(772, 1, 4, '2025-04-23 15:18:34'),
-(773, 1, 5, '2025-04-23 15:18:34'),
-(775, 1, 4, '2025-04-23 15:19:09'),
-(776, 1, 5, '2025-04-23 15:19:09'),
-(778, 5, 4, '2025-04-23 15:19:57'),
-(779, 5, 5, '2025-04-23 15:19:57'),
-(781, 5, 4, '2025-04-23 15:20:14'),
-(782, 5, 5, '2025-04-23 15:20:14'),
-(784, 5, 4, '2025-04-23 15:26:05'),
-(785, 5, 5, '2025-04-23 15:26:05'),
-(787, 5, 4, '2025-04-23 15:26:13'),
-(788, 5, 5, '2025-04-23 15:26:13'),
-(790, 5, 4, '2025-04-23 15:27:29'),
-(791, 5, 5, '2025-04-23 15:27:29'),
-(793, 9, 4, '2025-04-23 15:28:25'),
-(794, 9, 5, '2025-04-23 15:28:25'),
-(796, 9, 4, '2025-04-23 15:28:38'),
-(797, 9, 5, '2025-04-23 15:28:38'),
-(799, 9, 4, '2025-04-23 15:35:46'),
-(800, 9, 5, '2025-04-23 15:35:46'),
-(802, 9, 4, '2025-04-23 15:39:31'),
-(803, 9, 5, '2025-04-23 15:39:31');
+(769, 1, 4, '2025-04-29 00:35:47'),
+(770, 1, 5, '2025-04-29 00:35:47'),
+(772, 1, 4, '2025-04-29 00:39:47'),
+(773, 1, 5, '2025-04-29 00:39:47'),
+(775, 1, 4, '2025-04-29 01:03:12'),
+(776, 1, 5, '2025-04-29 01:03:12'),
+(778, 1, 4, '2025-04-29 01:09:50'),
+(779, 1, 5, '2025-04-29 01:09:50'),
+(781, 1, 4, '2025-04-29 01:10:28'),
+(782, 1, 5, '2025-04-29 01:10:28'),
+(784, 1, 4, '2025-04-29 01:10:53'),
+(785, 1, 5, '2025-04-29 01:10:53'),
+(787, 1, 4, '2025-04-29 01:11:09'),
+(788, 1, 5, '2025-04-29 01:11:09'),
+(790, 1, 4, '2025-04-29 01:16:06'),
+(791, 1, 5, '2025-04-29 01:16:06'),
+(793, 1, 4, '2025-04-29 01:16:32'),
+(794, 1, 5, '2025-04-29 01:16:32'),
+(796, 5, 4, '2025-04-29 02:55:35'),
+(797, 5, 5, '2025-04-29 02:55:35'),
+(799, 1, 4, '2025-04-29 03:01:35'),
+(800, 1, 5, '2025-04-29 03:01:35'),
+(801, 0, 4, '2025-04-29 11:00:20'),
+(802, 0, 5, '2025-04-29 11:00:20'),
+(804, 1, 4, '2025-04-29 11:32:00'),
+(805, 1, 5, '2025-04-29 11:32:00'),
+(807, 1, 4, '2025-04-29 11:32:29'),
+(808, 1, 5, '2025-04-29 11:32:29'),
+(810, 1, 4, '2025-04-29 11:32:34'),
+(811, 1, 5, '2025-04-29 11:32:34'),
+(813, 5, 4, '2025-04-29 11:50:04'),
+(814, 5, 5, '2025-04-29 11:50:04'),
+(816, 1, 4, '2025-04-29 11:50:55'),
+(817, 1, 5, '2025-04-29 11:50:55'),
+(819, 1, 4, '2025-04-29 11:53:07'),
+(820, 1, 5, '2025-04-29 11:53:07');
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `laporan_bulanan`
+-- Table structure for table `laporan_bulanan`
 --
 
 CREATE TABLE `laporan_bulanan` (
   `id` int(11) NOT NULL,
   `id_user` int(11) NOT NULL,
+  `tahun` year(4) NOT NULL,
   `bulan` enum('Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember') NOT NULL,
   `nama_perusahaan` varchar(200) NOT NULL,
+  `alamat` varchar(255) NOT NULL,
+  `latitude` varchar(20) NOT NULL,
+  `longitude` varchar(20) NOT NULL,
+  `jenis_pembangkit` int(100) NOT NULL,
+  `fungsi` enum('Utama','Darurat','Cadangan') NOT NULL,
+  `kapasitas_terpasang` varchar(20) NOT NULL,
+  `daya_mampu_netto` varchar(20) NOT NULL,
+  `jumlah_unit` varchar(5) NOT NULL,
+  `no_unit` varchar(20) NOT NULL,
+  `tahun_operasi` varchar(4) NOT NULL,
+  `status_operasi` enum('Beroperasi','Maintenance/Perbaikan','Rusak') NOT NULL,
+  `bahan_bakar_jenis` enum('Solar','Biomasa') NOT NULL,
+  `bahan_bakar_satuan` enum('Liter','Ton') NOT NULL,
   `volume_bb` varchar(200) NOT NULL,
   `produksi_sendiri` varchar(200) NOT NULL,
   `pemb_sumber_lain` varchar(200) NOT NULL,
   `susut_jaringan` varchar(200) NOT NULL,
   `penj_ke_pelanggan` varchar(200) NOT NULL,
   `penj_ke_pln` varchar(200) NOT NULL,
-  `pemakaian_sendiri` varchar(200) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `pemakaian_sendiri` varchar(200) NOT NULL,
+  `status` enum('diajukan','diterima','ditolak') NOT NULL,
+  `keterangan` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data untuk tabel `laporan_bulanan`
+-- Dumping data for table `laporan_bulanan`
 --
 
-INSERT INTO `laporan_bulanan` (`id`, `id_user`, `bulan`, `nama_perusahaan`, `volume_bb`, `produksi_sendiri`, `pemb_sumber_lain`, `susut_jaringan`, `penj_ke_pelanggan`, `penj_ke_pln`, `pemakaian_sendiri`) VALUES
-(3, 1, 'April', 'PT Energi Mandiri', '1200', '75000', '5000', '800', '60000', '10000', '9200');
+INSERT INTO `laporan_bulanan` (`id`, `id_user`, `tahun`, `bulan`, `nama_perusahaan`, `alamat`, `latitude`, `longitude`, `jenis_pembangkit`, `fungsi`, `kapasitas_terpasang`, `daya_mampu_netto`, `jumlah_unit`, `no_unit`, `tahun_operasi`, `status_operasi`, `bahan_bakar_jenis`, `bahan_bakar_satuan`, `volume_bb`, `produksi_sendiri`, `pemb_sumber_lain`, `susut_jaringan`, `penj_ke_pelanggan`, `penj_ke_pln`, `pemakaian_sendiri`, `status`, `keterangan`) VALUES
+(3, 1, 2025, 'April', 'PT Energi Mandiri', 'Jl. Mistar Cokrokusumo Kelurahan Cempaka, Kecamatan Cempaka, No 21 (Seberang Kelurahan Cempaka)', '3°26\'43\"LS', '114°50\'21\"BT', 1, 'Utama', '1.00', '0.58', '1', '1', '2000', 'Beroperasi', 'Solar', 'Liter', '-', '-', '-', '-', '-', '-', '-', 'diajukan', '-'),
+(4, 5, 2025, 'April', 'Perusahaan', 'Jl. Mistar Cokrokusumo Kelurahan Cempaka, Kecamatan Cempaka, No 21 (Seberang Kelurahan Cempaka)', '3°26\'43\"LS', '114°50\'21\"BT', 0, 'Utama', '1.00', '0.58', '1', '1', '2002', 'Beroperasi', 'Solar', 'Liter', '-', '-', '-', '-', '-', '-', '-', 'diajukan', '-');
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `laporan_semester`
+-- Table structure for table `laporan_semester`
 --
 
 CREATE TABLE `laporan_semester` (
@@ -744,43 +826,47 @@ CREATE TABLE `laporan_semester` (
   `hasil` varchar(100) NOT NULL,
   `file_laporan` varchar(225) NOT NULL,
   `file_lhu` varchar(225) NOT NULL,
+  `tahun` year(4) NOT NULL,
+  `semester` varchar(30) NOT NULL,
   `status` enum('diterima','ditolak','diajukan') NOT NULL,
   `keterangan` varchar(225) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data untuk tabel `laporan_semester`
+-- Dumping data for table `laporan_semester`
 --
 
-INSERT INTO `laporan_semester` (`id`, `id_user`, `nama_perusahaan`, `parameter`, `buku_mutu`, `hasil`, `file_laporan`, `file_lhu`, `status`, `keterangan`) VALUES
-(13, 1, 'PT Energi Mandiri', 'TSP/DEBU', '230 µg/Nm³', '180 µg/Nm³', 'uploads/1745420978_LPJANNIVERSARY3RDJABO.pdf', 'uploads/1745420978_LPJANNIVERSARY4THKALSEL.pdf', 'diajukan', '-');
+INSERT INTO `laporan_semester` (`id`, `id_user`, `nama_perusahaan`, `parameter`, `buku_mutu`, `hasil`, `file_laporan`, `file_lhu`, `tahun`, `semester`, `status`, `keterangan`) VALUES
+(17, 5, 'maya group', 'kebisingan', 'aaaaaaaaa', 'bbbbbb', 'uploads/1745756658_ALURLOGISTIKTPSKELURAHANCEMPAKAPSU.pdf', 'uploads/1745756658_ALURLOGISTIKTPSKELURAHANCEMPAKAPSU.pdf', 2025, 'Semester I 2025', 'diajukan', '-');
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `news`
+-- Table structure for table `news`
 --
 
 CREATE TABLE `news` (
   `id` int(11) NOT NULL,
+  `id_title` varchar(20) NOT NULL,
+  `title` varchar(100) NOT NULL,
   `jenis_konten` enum('gambar','file','link','kosong') NOT NULL,
   `konten` varchar(225) NOT NULL,
   `caption` text NOT NULL,
   `tanggal` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data untuk tabel `news`
+-- Dumping data for table `news`
 --
 
-INSERT INTO `news` (`id`, `jenis_konten`, `konten`, `caption`, `tanggal`) VALUES
-(4, 'gambar', 'uploads/1745422118_Screenshot_23-4-2025_231511_www.google.com.jpeg', '🌱 SIP2GATRIK Kini Hadir! Dinas ESDM Kalsel meluncurkan SIP2GATRIK, sistem pelaporan online untuk perusahaan penyedia listrik. Mulai dari data produksi, konsumsi bahan bakar, hingga emisi lingkungan—semua bisa dilaporkan dan dipantau secara real time.  Transparan, efisien, dan mudah diakses! 💻 #SIP2GATRIK #ESDMKalsel #EnergiBersih', '2025-04-23 17:28:38'),
-(5, 'link', 'https://desdm.kalselprov.go.id/page/wa/galeri/49', '🔍 Informasi Terkait SIP2GATRIK Dinas Energi dan Sumber Daya Mineral Provinsi Kalimantan Selatan telah merilis dokumentasi terkait sistem SIP2GATRIK. Silakan kunjungi laman resmi di atas untuk melihat dokumentasi lengkapnya', '2025-04-23 17:19:09');
+INSERT INTO `news` (`id`, `id_title`, `title`, `jenis_konten`, `konten`, `caption`, `tanggal`) VALUES
+(4, 'TTL-001', 'ADEL JKT48 GRAD', 'gambar', 'uploads/1745886934_7fb585eca747547b55563358add80b87.jpg', '\"Congratulations to Adel on her graduation from JKT48! 🎓✨ Wishing you all the best in your next adventure! #AdelJKT48 #Graduation\"', '2025-04-29 02:35:34'),
+(5, 'TTL-001', 'ADEL JKT48 GRAD', 'gambar', 'uploads/1745886934_2a3066213824b688a253585469df73fd.jpg', '\"Congratulations to Adel on her graduation from JKT48! 🎓✨ Wishing you all the best in your next adventure! #AdelJKT48 #Graduation\"', '2025-04-29 02:35:34');
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `pembangkit`
+-- Table structure for table `pembangkit`
 --
 
 CREATE TABLE `pembangkit` (
@@ -800,19 +886,12 @@ CREATE TABLE `pembangkit` (
   `status_operasi` varchar(100) NOT NULL,
   `bahan_bakar_jenis` varchar(100) NOT NULL,
   `bahan_bakar_satuan` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data untuk tabel `pembangkit`
---
-
-INSERT INTO `pembangkit` (`id`, `id_user`, `nama_perusahaan`, `alamat`, `longitude`, `latitude`, `jenis_pembangkit`, `fungsi`, `kapasitas_terpasang`, `daya_mampu_netto`, `jumlah_unit`, `no_unit`, `tahun_operasi`, `status_operasi`, `bahan_bakar_jenis`, `bahan_bakar_satuan`) VALUES
-(11, 1, 'PT Energi Mandiri', 'Jl. Satu, Kota Banjarbaru', '114.757878', '-3.434057', 'PLTD', 'Menyediakan listrik cadangan untuk daerah rawan pemadaman', '15', '12.5', 3, '1', 2021, 'Aktif', 'Solar', 'Liter');
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `profil`
+-- Table structure for table `profil`
 --
 
 CREATE TABLE `profil` (
@@ -827,20 +906,23 @@ CREATE TABLE `profil` (
   `tenaga_teknik` varchar(100) NOT NULL,
   `nama` varchar(100) NOT NULL,
   `no_hp` varchar(15) NOT NULL,
-  `email` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `email` varchar(100) NOT NULL,
+  `status` enum('diajukan','diterima','ditolak') NOT NULL,
+  `keterangan` varchar(225) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data untuk tabel `profil`
+-- Dumping data for table `profil`
 --
 
-INSERT INTO `profil` (`id_profil`, `id_user`, `nama_perusahaan`, `kabupaten`, `alamat`, `jenis_usaha`, `no_telp_kantor`, `no_fax`, `tenaga_teknik`, `nama`, `no_hp`, `email`) VALUES
-(11, 1, 'PT Energi Mandiri', 'Kota Banjarbaru', 'Jl. Satu, Kota Banjarbaru', 'Industri dan Manufaktur', '081234567890', '0', 'Nama', 'Nama', '081234567890', 'energimandiri@gmail.com');
+INSERT INTO `profil` (`id_profil`, `id_user`, `nama_perusahaan`, `kabupaten`, `alamat`, `jenis_usaha`, `no_telp_kantor`, `no_fax`, `tenaga_teknik`, `nama`, `no_hp`, `email`, `status`, `keterangan`) VALUES
+(16, 10, 'irwan group', 'Tanah Laut', 'aa', 'Konstruksi dan Infrastruktur', '088247342027', '2134342124', 'irwan', 'irwan', '081234567890', 'irwan@gmail.com', 'diajukan', '-'),
+(17, 5, 'irwan group', 'Kota Banjarbaru', 'komp.Husindo Raya', 'Jasa', '088247342027', '02134342124', 'irwan', 'MUHAMMAD IRWAN FIRDAUS', '088247342027', 'irwan@gmail.com', 'diajukan', '-');
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `users`
+-- Table structure for table `users`
 --
 
 CREATE TABLE `users` (
@@ -851,132 +933,145 @@ CREATE TABLE `users` (
   `no_hp` varchar(15) NOT NULL,
   `role` enum('superadmin','admin','umum') NOT NULL,
   `status` enum('diajukan','diverifikasi','ditolak') NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data untuk tabel `users`
+-- Dumping data for table `users`
 --
 
 INSERT INTO `users` (`id_user`, `username`, `email`, `password`, `no_hp`, `role`, `status`) VALUES
-(1, 'superadmin', 'admin@gmail.com', '$2y$10$HEht05pyTG8fK1DBgrAS6OBpL0S2fVszD4P9z9Mbi/Ssx39wi9whq', '081234562769', 'superadmin', 'diverifikasi'),
-(5, 'umum', 'irwanfirdaus508@gmail.com', '$2y$10$IfKG0EFwC/grk2sIy8fFzOKQnTgT51tXY5wdJ4IZZVZo5BNVU43HC', '081234567891', 'umum', 'diverifikasi'),
-(9, 'admin', 'yanda@gmail.com', '$2y$10$ue.Tc/.YrGfz0IIi69BuDenBIpBL8.eYEuAmXoy6ulXx4OXRNL8/y', '081234567890', 'admin', 'diverifikasi');
+(1, 'superadmin', 'admin@gmail.com', '$2y$10$HEht05pyTG8fK1DBgrAS6OBpL0S2fVszD4P9z9Mbi/Ssx39wi9whq', '081234567890', 'superadmin', 'diverifikasi'),
+(5, 'umum', 'irwanfirdaus508@gmail.com', '$2y$10$IfKG0EFwC/grk2sIy8fFzOKQnTgT51tXY5wdJ4IZZVZo5BNVU43HC', '', 'umum', 'diverifikasi'),
+(9, 'admin', 'yanda@gmail.com', '$2y$10$ue.Tc/.YrGfz0IIi69BuDenBIpBL8.eYEuAmXoy6ulXx4OXRNL8/y', '', 'admin', 'diverifikasi'),
+(10, 'umum2', 'umum2@gmail.com', '$2y$10$VXbtfcHWz.AYyjG1g1kh/eQIgbEFGyRYUkljqCO7DH1ZeOZUO.qKC', '082716152', 'umum', 'diverifikasi');
 
 --
 -- Indexes for dumped tables
 --
 
 --
--- Indeks untuk tabel `djih`
+-- Indexes for table `denda_laporan_semester`
+--
+ALTER TABLE `denda_laporan_semester`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `djih`
 --
 ALTER TABLE `djih`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `djih_dilihat`
+-- Indexes for table `djih_dilihat`
 --
 ALTER TABLE `djih_dilihat`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `konten_dilihat`
+-- Indexes for table `konten_dilihat`
 --
 ALTER TABLE `konten_dilihat`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `laporan_bulanan`
+-- Indexes for table `laporan_bulanan`
 --
 ALTER TABLE `laporan_bulanan`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `laporan_semester`
+-- Indexes for table `laporan_semester`
 --
 ALTER TABLE `laporan_semester`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `news`
+-- Indexes for table `news`
 --
 ALTER TABLE `news`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `pembangkit`
+-- Indexes for table `pembangkit`
 --
 ALTER TABLE `pembangkit`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `profil`
+-- Indexes for table `profil`
 --
 ALTER TABLE `profil`
   ADD PRIMARY KEY (`id_profil`);
 
 --
--- Indeks untuk tabel `users`
+-- Indexes for table `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id_user`);
 
 --
--- AUTO_INCREMENT untuk tabel yang dibuang
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT untuk tabel `djih`
+-- AUTO_INCREMENT for table `denda_laporan_semester`
+--
+ALTER TABLE `denda_laporan_semester`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=134;
+
+--
+-- AUTO_INCREMENT for table `djih`
 --
 ALTER TABLE `djih`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
--- AUTO_INCREMENT untuk tabel `djih_dilihat`
+-- AUTO_INCREMENT for table `djih_dilihat`
 --
 ALTER TABLE `djih_dilihat`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=130;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=183;
 
 --
--- AUTO_INCREMENT untuk tabel `konten_dilihat`
+-- AUTO_INCREMENT for table `konten_dilihat`
 --
 ALTER TABLE `konten_dilihat`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=804;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=822;
 
 --
--- AUTO_INCREMENT untuk tabel `laporan_bulanan`
+-- AUTO_INCREMENT for table `laporan_bulanan`
 --
 ALTER TABLE `laporan_bulanan`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT untuk tabel `laporan_semester`
+-- AUTO_INCREMENT for table `laporan_semester`
 --
 ALTER TABLE `laporan_semester`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
--- AUTO_INCREMENT untuk tabel `news`
+-- AUTO_INCREMENT for table `news`
 --
 ALTER TABLE `news`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT untuk tabel `pembangkit`
+-- AUTO_INCREMENT for table `pembangkit`
 --
 ALTER TABLE `pembangkit`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
--- AUTO_INCREMENT untuk tabel `profil`
+-- AUTO_INCREMENT for table `profil`
 --
 ALTER TABLE `profil`
-  MODIFY `id_profil` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id_profil` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
--- AUTO_INCREMENT untuk tabel `users`
+-- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

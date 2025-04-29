@@ -25,7 +25,7 @@ $profil = $stmt->fetch(PDO::FETCH_ASSOC);
 <div class="container mt-5">
     <div class="card shadow">
         <div class="card-body">
-            <h2>Informasi Profil Perusahaan</h2>
+            <h2><i class="fas fa-bolt" style="color: #ffc107;"></i> Informasi Profil Perusahaan <i class="fas fa-bolt" style="color: #ffc107;"></i></h2>
 
             <?php if ($profil): ?>
                 <table class="table table-bordered">

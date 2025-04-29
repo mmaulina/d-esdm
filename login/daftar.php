@@ -55,6 +55,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="icon" href="../assets/img/kalsel.png" type="image/png">
     <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/login.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 </head>
 
 <body class="d-flex justify-content-center align-items-center vh-100 bg-light">
@@ -81,7 +82,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
-                <input name="password" type="password" class="form-control" id="password" placeholder="Masukkan password" required>
+                <div class="input-group">
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Masukkan password" required>
+                    <span class="input-group-text" onclick="togglePassword()" style="cursor:pointer;">
+                        <i class="bi bi-eye-slash" id="toggleIcon"></i>
+                    </span>
+                </div>
             </div>
             <div class="mb-3">
                 <label for="no_hp" class="form-label">No. HP</label>
@@ -90,13 +96,79 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div class="text-danger"><?php echo $error_message; ?></div>
                 <?php endif; ?>
             </div>
-            <button type="submit" class="btn btn-primary w-100">Daftar</button>
+            <button type="submit" class="btn btn-warning w-100">Daftar</button>
         </form>
         <div class="text-center mt-3">
-            <a href="login.php">Sudah punya akun?</a>
+            <a href="login.php" class="text-warning">Sudah punya akun?</a>
         </div>
     </div>
     <script src="../assets/js/bootstrap.bundle.min.js"></script>
+    <script>
+function togglePassword() {
+    const passwordField = document.getElementById("password");
+    const toggleIcon = document.getElementById("toggleIcon");
+
+    const type = passwordField.getAttribute("type") === "password" ? "text" : "password";
+    passwordField.setAttribute("type", type);
+
+    toggleIcon.classList.toggle("bi-eye");
+    toggleIcon.classList.toggle("bi-eye-slash");
+}
+</script>
+    <canvas id="lightningCanvas" style="position: fixed; top: 0; left: 0; z-index: -1;"></canvas>
+    <script>
+const canvas = document.getElementById('lightningCanvas');
+const ctx = canvas.getContext('2d');
+
+function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+function drawLightning() {
+    const startX = Math.random() * canvas.width;
+    const startY = 0;
+    let x = startX;
+    let y = startY;
+
+    ctx.strokeStyle = ['#fff200', '#ffd700', '#ffae00'][Math.floor(Math.random() * 3)];
+    ctx.lineWidth = 2 + Math.random(); // lebih alami
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+
+    while (y < canvas.height) {
+        x += (Math.random() - 0.5) * 30;
+        y += Math.random() * 30;
+        ctx.lineTo(x, y);
+    }
+
+    ctx.stroke();
+}
+
+function flashScreen() {
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+}
+
+function animate() {
+    // Efek latar oren senja
+    ctx.fillStyle = 'rgba(255, 140, 0, 0.05)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    if (Math.random() < 0.04) {
+        for (let i = 0; i < Math.random() * 2 + 1; i++) {
+            drawLightning();
+        }
+        flashScreen();
+    }
+
+    requestAnimationFrame(animate);
+}
+
+animate();
+</script>
 </body>
 
 </html>

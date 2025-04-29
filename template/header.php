@@ -19,6 +19,43 @@ if (session_status() == PHP_SESSION_NONE) {
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
+.navbar {
+  background: linear-gradient(90deg, #000000 0%, #1c1c1c 50%, #000000 100%);
+  box-shadow: 0 4px 6px rgba(255, 255, 0, 0.2);
+  border-bottom: 4px solid #ffd700; /* garis bawah kuning listrik */
+}
+
+.navbar-brand strong {
+  font-size: 1.4rem;
+  color:rgb(255, 255, 255); /* Kuning terang */
+  text-shadow: 1px 1px 2px #fff200; /* Efek kilat */
+}
+
+.navbar-brand img {
+  filter: drop-shadow(0 0 4px #ffeb3b); /* Efek neon ringan pada logo */
+}
+
+.navbar .nav-link {
+  color: #f0f0f0 !important; /* Abu terang */
+  font-weight: 500;
+  transition: color 0.3s, text-shadow 0.3s;
+}
+
+.navbar .nav-link:hover {
+  color: #fff700 !important; /* Kuning terang saat hover */
+  text-shadow: 0 0 8px #fff200; /* Efek menyala */
+}
+
+.navbar .fa-bell,
+.navbar .fa-user {
+  color:rgb(255, 255, 255) !important; 
+}
+
+.badge.bg-danger {
+  background-color: #ff3b3b !important;
+  box-shadow: 0 0 5px #ff0000;
+}
+
 .alert {
   padding: 15px;
   border-radius: 8px;

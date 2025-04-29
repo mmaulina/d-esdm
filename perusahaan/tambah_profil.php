@@ -102,7 +102,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <!-- TAMBAH PROFIL PERUSAHAAN -->
 <div class="container mt-4">
-    <h3 class="text-center">Tambah Profil Perusahaan</h3>
+    <h3 class="text-center"><i class="fas fa-bolt" style="color: #ffc107;"></i> Tambah Profil Perusahaan <i class="fas fa-bolt" style="color: #ffc107;"></i></h3>
     <hr>
     <div class="card shadow">
         <div class="card-body">

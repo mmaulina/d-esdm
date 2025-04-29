@@ -92,7 +92,7 @@ function uploadFile($input_name) {
 ?>
 
 <div class="container mt-4">
-    <h3 class="text-center mb-3">Edit Konten</h3>
+    <h3 class="text-center mb-3"><i class="fas fa-bolt" style="color: #ffc107;"></i> Edit Konten <i class="fas fa-bolt" style="color: #ffc107;"></i></h3>
     <hr>
     <div class="card shadow">
         <div class="card-body">
