@@ -31,7 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $query = "SELECT id_title FROM news ORDER BY id_title DESC LIMIT 1";
     $stmt = $db->prepare($query);
     $stmt->execute();
-    $row = $stmt->fetch(PDO::FETCH_ASSOC); 
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($row && isset($row['id_title'])) {
         // Ambil angka terakhir dan increment
@@ -42,31 +42,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
     $id_title = "TTL-" . str_pad($newNumber, 3, "0", STR_PAD_LEFT);
 
-    foreach ($jenis_konten as $index => $jenis){
-                // Handle berbagai jenis konten
-                if ($jenis == 'gambar' || $jenis == 'file') {
-                    $konten_value = uploadFile('konten_' . $index);
-                } elseif ($jenis == 'link') {
-                    $konten_value = sanitizeInput($konten[$index]);
-                }
-        
-                // Simpan ke database
-                $insertSQL = "INSERT INTO news (id_title, title, caption, jenis_konten, konten, tanggal) 
+    foreach ($jenis_konten as $index => $jenis) {
+        // Handle berbagai jenis konten
+        if ($jenis == 'gambar' || $jenis == 'file') {
+            $konten_value = uploadFile('konten_' . $index);
+        } elseif ($jenis == 'link') {
+            $konten_value = sanitizeInput($konten[$index]);
+        }
+
+        // Simpan ke database
+        $insertSQL = "INSERT INTO news (id_title, title, caption, jenis_konten, konten, tanggal) 
                               VALUES (:id_title, :title, :caption, :jenis_konten, :konten, :tanggal)";
-                $stmt = $db->prepare($insertSQL);
-        
-                $stmt->bindParam(':id_title', $id_title);
-                $stmt->bindParam(':title', $title);
-                $stmt->bindParam(':caption', $caption);
-                $stmt->bindParam(':jenis_konten', $jenis);
-                $stmt->bindParam(':konten', $konten_value);
-                $stmt->bindParam(':tanggal', $tanggal);
-        
-                if (!$stmt->execute()) {
-                    $_SESSION['hasil'] = false;
-                    $_SESSION['pesan'] = "Gagal Simpan Data";
-                    break;
-                }
+        $stmt = $db->prepare($insertSQL);
+
+        $stmt->bindParam(':id_title', $id_title);
+        $stmt->bindParam(':title', $title);
+        $stmt->bindParam(':caption', $caption);
+        $stmt->bindParam(':jenis_konten', $jenis);
+        $stmt->bindParam(':konten', $konten_value);
+        $stmt->bindParam(':tanggal', $tanggal);
+
+        if (!$stmt->execute()) {
+            $_SESSION['hasil'] = false;
+            $_SESSION['pesan'] = "Gagal Simpan Data";
+            break;
+        }
     }
     $_SESSION['hasil'] = true;
     $_SESSION['pesan'] = "Berhasil Simpan Data";
@@ -74,7 +74,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 // Fungsi untuk upload file
-function uploadFile($input_name) {
+function uploadFile($input_name)
+{
     if (!empty($_FILES[$input_name]['name'])) {
         $target_dir = "uploads/";
         $file_name = basename($_FILES[$input_name]["name"]);
@@ -99,19 +100,19 @@ function uploadFile($input_name) {
 <div class="container mt-4">
     <h3 class="text-center mb-3">Tambah Konten</h3>
     <hr>
-    <div class="card shadow">
+    <div class="card shadow" style="overflow-x: auto; max-height: calc(100vh - 150px); overflow-y: auto;">
         <div class="card-body">
             <form method="POST" enctype="multipart/form-data">
-            <div class="mb-3">
+                <div class="mb-3">
                     <label class="form-label">Title</label>
                     <input type="text" name="title" class="form-control" required>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Caption</label>
-                    <input type="text" name="caption" class="form-control" required>
+                    <textarea name="caption" class="form-control" rows="4" required></textarea>
                 </div>
                 <div id="kontenInputs">
-                    <div class="form-group mb -3 konten-group">
+                    <div class="form-group mb-3 konten-group">
                         <label>Jenis Konten</label>
                         <select class="form-control" name="jenis_konten[]" required>
                             <option value="">-- Pilih Jenis Konten --</option>
@@ -135,19 +136,19 @@ function uploadFile($input_name) {
 </div>
 
 <script>
-document.querySelector('select[name="jenis_konten[]"]').addEventListener('change', function() {
-    let jenis = this.value;
-    let kontenGroup = this.closest('.konten-group');
-    kontenGroup.querySelector('input[type="file"]').style.display = (jenis === 'gambar' || jenis === 'file') ? 'block' : 'none';
-    kontenGroup.querySelector('input[type="text"]').style.display = (jenis === 'link') ? 'block' : 'none';
-});
+    document.querySelector('select[name="jenis_konten[]"]').addEventListener('change', function() {
+        let jenis = this.value;
+        let kontenGroup = this.closest('.konten-group');
+        kontenGroup.querySelector('input[type="file"]').style.display = (jenis === 'gambar' || jenis === 'file') ? 'block' : 'none';
+        kontenGroup.querySelector('input[type="text"]').style.display = (jenis === 'link') ? 'block' : 'none';
+    });
 
-document.getElementById('addContent').addEventListener('click', function() {
-    let kontenInputs = document.getElementById('kontenInputs');
-    let index = kontenInputs.children.length;
-    let newGroup = document.createElement('div');
-    newGroup.className = 'form-group mb-3 konten-group';
-    newGroup.innerHTML = `
+    document.getElementById('addContent').addEventListener('click', function() {
+        let kontenInputs = document.getElementById('kontenInputs');
+        let index = kontenInputs.children.length;
+        let newGroup = document.createElement('div');
+        newGroup.className = 'form-group mb-3 konten-group';
+        newGroup.innerHTML = `
         <label>Jenis Konten</label>
         <select class="form-control" name="jenis_konten[]" required>
             <option value="">-- Pilih Jenis Konten --</option>
@@ -158,12 +159,12 @@ document.getElementById('addContent').addEventListener('click', function() {
         <input type="file" name="konten_${index}" class="form-control" style="display: none;" accept=".jpg,.jpeg,.png,.gif,.pdf,.doc,.docx,.xls,.xlsx">
         <input type="text" name="konten[]" class="form-control" style="display: none;">
     `;
-    kontenInputs.appendChild(newGroup);
+        kontenInputs.appendChild(newGroup);
 
-    newGroup.querySelector('select').addEventListener('change', function() {
-        let jenis = this.value;
-        newGroup.querySelector('input[type="file"]').style.display = (jenis === 'gambar' || jenis === 'file') ? 'block' : 'none';
-        newGroup.querySelector('input[type="text"]').style.display = (jenis === 'link') ? 'block' : 'none';
+        newGroup.querySelector('select').addEventListener('change', function() {
+            let jenis = this.value;
+            newGroup.querySelector('input[type="file"]').style.display = (jenis === 'gambar' || jenis === 'file') ? 'block' : 'none';
+            newGroup.querySelector('input[type="text"]').style.display = (jenis === 'link') ? 'block' : 'none';
+        });
     });
-});
 </script>

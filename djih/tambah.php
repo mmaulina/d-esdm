@@ -113,7 +113,7 @@ function uploadFile($input_name) {
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Caption</label>
-                    <input type="text" name="caption" class="form-control" required>
+                    <textarea name="caption" class="form-control" rows="4" required></textarea>
                 </div>
                 <div id="kontenInputs">
                     <div class="form-group mb -3 konten-group">

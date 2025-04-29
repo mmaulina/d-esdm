@@ -78,7 +78,7 @@ try {
                     </div>
 
                     <!-- Caption tampil sekali -->
-                    <p class="card-text mt-3"><?php echo htmlspecialchars($kontens[0]['caption']); ?></p>
+                    <p class="card-text mt-3"><?php echo nl2br(htmlspecialchars($kontens[0]['caption'])); ?></p>
 
                     <!-- Tanggal dari konten pertama -->
                     <p class="card-text"><small class="text-muted">Diupload pada: <?php echo $kontens[0]['tanggal']; ?></small></p>
