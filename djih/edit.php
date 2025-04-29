@@ -27,9 +27,11 @@ if (!$konten) {
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    function sanitize_input($input) {
-        return htmlspecialchars(strip_tags(trim($input)));
+    function sanitize_input($input)
+    {
+        return strip_tags(trim($input));
     }
+    
     
     $id_title = sanitize_input($_POST['id_title']);
     $title = sanitize_input($_POST['title']);

@@ -42,8 +42,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     function sanitizeInput($input)
     {
-        return htmlspecialchars(strip_tags(trim($input)));
-    }
+        return strip_tags(trim($input));
+    }    
 
     function checkEmpty($input)
     {
@@ -78,7 +78,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $keterangan = '-';    // Keterangan diisi otomatis
 
 
-    $updateSQL = "UPDATE laporan_bulanan SET nama_perusahaan = :nama_perusahaan, tahun = :tahun, bulan = :bulan, alamat = :alamat, latitude = :latitude, longitude = :longitude, jenis_pembangkit = :jenis_pembangkit, fungsi = :fungsi, kapasitas_terpasang = :kapasitas_terpasang, daya_mampu_netto = :daya_mampu_netto, jumlah_unit = :jumlah_unit, no_unit = :no_unit, tahun_operasi = :tahun_operasi, status_operasi = :status_operasi, bahan_bakar_jenis = :bahan_bakar_jenis, bahan_bakar_satuan = :bahan_bakar_satuan, volume_bb = :volume_bb, produksi_sendiri = :produksi_sendiri, pemb_sumber_lain = :pemb_sumber_lain, susut_jaringan = :susut_jaringan, penj_ke_pelanggan = :penj_ke_pelanggan, penj_ke_pln = :penj_ke_pln, pemakaian_sendiri = :pemakaian_sendiri, status = :status, keterangan = :keterangan WHERE id = :id AND id_user = :id_user";
+    $updateSQL = "UPDATE laporan_bulanan SET nama_perusahaan = :nama_perusahaan, tahun = :tahun, bulan = :bulan, alamat = :alamat, latitude = :latitude, longitude = :longitude, jenis_pembangkit = :jenis_pembangkit, fungsi = :fungsi, kapasitas_terpasang = :kapasitas_terpasang, daya_mampu_netto = :daya_mampu_netto, jumlah_unit = :jumlah_unit, no_unit = :no_unit, tahun_operasi = :tahun_operasi, status_operasi = :status_operasi, bahan_bakar_jenis = :bahan_bakar_jenis, bahan_bakar_satuan = :bahan_bakar_satuan, volume_bb = :volume_bb, produksi_sendiri = :produksi_sendiri, pemb_sumber_lain = :pemb_sumber_lain, susut_jaringan = :susut_jaringan, penj_ke_pelanggan = :penj_ke_pelanggan, penj_ke_pln = :penj_ke_pln, pemakaian_sendiri = :pemakaian_sendiri, status = :status, keterangan = :keterangan WHERE id = :id";
     $stmt = $db->prepare($updateSQL);
 
     $stmt->bindParam(':nama_perusahaan', $nama_perusahaan);
@@ -107,7 +107,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bindParam(':status', $status);
     $stmt->bindParam(':keterangan', $keterangan);
     $stmt->bindParam(':id', $id_laporan);
-    $stmt->bindParam(':id_user', $id_user);
 
     if ($stmt->execute()) {
         $_SESSION['hasil'] = true;

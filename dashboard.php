@@ -67,6 +67,11 @@ try {
     $sql = "SELECT * FROM news ORDER BY tanggal DESC";
     $stmt = $conn->query($sql);
     $konten_list = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $grouped_konten = [];
+    foreach ($konten_list as $konten) {
+        $grouped_konten[$konten['id_title']][] = $konten;
+    }
 } catch (PDOException $e) {
     die("Error: " . $e->getMessage());
 }
@@ -224,25 +229,39 @@ foreach ($daftar_perusahaan as $perusahaan) {
 
         <div class="row mt-3">
             <div class="col-12">
-                <div class="timeline position-relative">
-                    <?php foreach ($konten_list as $konten) : ?>
-                        <div class="timeline-item d-flex flex-column align-items-center text-center position-relative">
-                            <div class="circle bg-dark rounded-circle position-absolute" style="width: 15px; height: 15px; left: 0; top: 50%; transform: translateY(-50%);"></div>
-                            <div class="content w-75 ms-3">
-                                <?php if ($konten['jenis_konten'] === 'gambar') : ?>
-                                    <img src="<?php echo htmlspecialchars($konten['konten']); ?>" class="img-fluid w-50 rounded" alt="Konten Gambar">
-                                <?php elseif ($konten['jenis_konten'] === 'file') : ?>
-                                    <a href="<?php echo htmlspecialchars($konten['konten']); ?>" class="btn btn-secondary" download>Download File</a>
-                                <?php elseif ($konten['jenis_konten'] === 'link') : ?>
-                                    <a href="<?php echo htmlspecialchars($konten['konten']); ?>" target="_blank" class="btn btn-info">Lihat Link</a>
-                                <?php endif; ?>
-                                <p class="card-text mt-3"> <?php echo htmlspecialchars($konten['caption']); ?> </p>
-                                <p class="card-text"><small class="text-muted">Diupload pada: <?php echo $konten['tanggal']; ?></small></p>
-                            </div>
-                            <div class="line position-absolute bg-dark" style="width: 2px; height: 100%; left: 0; top: 0;"></div>
-                        </div>
-                    <?php endforeach; ?>
+            <div class="timeline position-relative">
+        <?php foreach ($grouped_konten as $id_title => $kontens) : ?>
+            <div class="timeline-item d-flex flex-column align-items-center text-center position-relative">
+                <div class="circle bg-dark rounded-circle position-absolute" style="width: 15px; height: 15px; left: -10px; top: 50%; transform: translateY(-50%);"></div>
+                <div class="content w-75 ms-3">
+
+                    <!-- Title tampil sekali -->
+                    <h5 class="card-text mt-3"><?php echo htmlspecialchars($kontens[0]['title']); ?></h5>
+
+                    <!-- Konten berdampingan -->
+                    <div class="d-flex flex-wrap justify-content-center gap-3 mt-3">
+                        <?php foreach ($kontens as $konten) : ?>
+                            <?php if ($konten['jenis_konten'] === 'gambar') : ?>
+                                <img src="<?php echo htmlspecialchars($konten['konten']); ?>" class="img-fluid rounded" style="width: 150px; height: auto;" alt="Konten Gambar">
+                            <?php elseif ($konten['jenis_konten'] === 'file') : ?>
+                                <a href="<?php echo htmlspecialchars($konten['konten']); ?>" class="btn btn-secondary" style="width: 150px;">Download File</a>
+                            <?php elseif ($konten['jenis_konten'] === 'link') : ?>
+                                <a href="<?php echo htmlspecialchars($konten['konten']); ?>" target="_blank" class="btn btn-info" style="width: 150px;">Lihat Link</a>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    </div>
+
+                    <!-- Caption tampil sekali -->
+                    <p class="card-text mt-3"><?php echo htmlspecialchars($kontens[0]['caption']); ?></p>
+
+                    <!-- Tanggal dari konten pertama -->
+                    <p class="card-text"><small class="text-muted">Diupload pada: <?php echo $kontens[0]['tanggal']; ?></small></p>
+
                 </div>
+                <div class="line position-absolute bg-dark" style="width: 2px; height: 100%; left: 0px; top: 0;"></div>
+            </div>
+        <?php endforeach; ?>
+    </div>
             </div>
         </div>
     </div>

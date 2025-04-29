@@ -16,38 +16,60 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $database = new Database();
     $db = $database->getConnection();
 
-    function sanitizeInput($input) {
-        return htmlspecialchars(strip_tags(trim($input)));
+    function sanitizeInput($input)
+    {
+        return strip_tags(trim($input));
     }
 
+    $title = sanitizeInput($_POST['title']);
     $caption = sanitizeInput($_POST['caption']);
-    $jenis_konten = sanitizeInput($_POST['jenis_konten']);
-    $konten = null;
+    $jenis_konten = $_POST['jenis_konten']; // Array
+    $konten = $_POST['konten']; // Array
     $tanggal = date('Y-m-d H:i:s'); // Tambahkan datetime
 
-    // Handle berbagai jenis konten
-    if ($jenis_konten == 'gambar' || $jenis_konten == 'file') {
-        $konten = uploadFile('konten');
-    } elseif ($jenis_konten == 'link') {
-        $konten = sanitizeInput($_POST['konten']);
-    }
+    // Buat ID Title otomatis
+    $query = "SELECT id_title FROM news ORDER BY id_title DESC LIMIT 1";
+    $stmt = $db->prepare($query);
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC); 
 
-    // Simpan data ke database
-    $insertSQL = "INSERT INTO news ( caption, jenis_konten, konten, tanggal) VALUES ( :caption, :jenis_konten, :konten, :tanggal)";
-    $stmt = $db->prepare($insertSQL);
-
-    $stmt->bindParam(':caption', $caption);
-    $stmt->bindParam(':jenis_konten', $jenis_konten);
-    $stmt->bindParam(':konten', $konten);
-    $stmt->bindParam(':tanggal', $tanggal);
-    
-    if ($stmt->execute()) {
-        $_SESSION['hasil'] = true;
-        $_SESSION['pesan'] = "Berhasil Simpan Data";
+    if ($row && isset($row['id_title'])) {
+        // Ambil angka terakhir dan increment
+        $lastNumber = (int)substr($row['id_title'], 4);
+        $newNumber = $lastNumber + 1;
     } else {
-        $_SESSION['hasil'] = false;
-        $_SESSION['pesan'] = "Gagal Simpan Data";
+        $newNumber = 1; // Jika belum ada data
     }
+    $id_title = "TTL-" . str_pad($newNumber, 3, "0", STR_PAD_LEFT);
+
+    foreach ($jenis_konten as $index => $jenis){
+                // Handle berbagai jenis konten
+                if ($jenis == 'gambar' || $jenis == 'file') {
+                    $konten_value = uploadFile('konten_' . $index);
+                } elseif ($jenis == 'link') {
+                    $konten_value = sanitizeInput($konten[$index]);
+                }
+        
+                // Simpan ke database
+                $insertSQL = "INSERT INTO news (id_title, title, caption, jenis_konten, konten, tanggal) 
+                              VALUES (:id_title, :title, :caption, :jenis_konten, :konten, :tanggal)";
+                $stmt = $db->prepare($insertSQL);
+        
+                $stmt->bindParam(':id_title', $id_title);
+                $stmt->bindParam(':title', $title);
+                $stmt->bindParam(':caption', $caption);
+                $stmt->bindParam(':jenis_konten', $jenis);
+                $stmt->bindParam(':konten', $konten_value);
+                $stmt->bindParam(':tanggal', $tanggal);
+        
+                if (!$stmt->execute()) {
+                    $_SESSION['hasil'] = false;
+                    $_SESSION['pesan'] = "Gagal Simpan Data";
+                    break;
+                }
+    }
+    $_SESSION['hasil'] = true;
+    $_SESSION['pesan'] = "Berhasil Simpan Data";
     echo "<meta http-equiv='refresh' content='0; url=?page=konten'>";
 }
 
@@ -80,25 +102,31 @@ function uploadFile($input_name) {
     <div class="card shadow">
         <div class="card-body">
             <form method="POST" enctype="multipart/form-data">
+            <div class="mb-3">
+                    <label class="form-label">Title</label>
+                    <input type="text" name="title" class="form-control" required>
+                </div>
                 <div class="mb-3">
                     <label class="form-label">Caption</label>
                     <input type="text" name="caption" class="form-control" required>
                 </div>
-                <div class="form-group mb-2">
-                    <label>Jenis Konten</label>
-                    <select class="form-control" name="jenis_konten" required>
-                        <option value="">-- Pilih Jenis Konten --</option>
-                        <option value="gambar">Gambar</option>
-                        <option value="file">File</option>
-                        <option value="link">Link</option>
-                        <option value="kosong">Kosong</option>
-                    </select>
+                <div id="kontenInputs">
+                    <div class="form-group mb -3 konten-group">
+                        <label>Jenis Konten</label>
+                        <select class="form-control" name="jenis_konten[]" required>
+                            <option value="">-- Pilih Jenis Konten --</option>
+                            <option value="gambar">Gambar</option>
+                            <option value="file">File</option>
+                            <option value="link">Link</option>
+                            <option value="kosong">Kosong</option>
+                        </select>
+                        <div class="mb-3">
+                            <input type="file" name="konten_0" class="form-control" style="display: none;" accept=".jpg,.jpeg,.png,.gif,.pdf,.doc,.docx,.xls,.xlsx">
+                            <input type="text" name="konten[]" class="form-control" style="display: none;">
+                        </div>
+                    </div>
                 </div>
-                <div class="mb-3" id="konten_input">
-                    <label class="form-label">Konten</label>
-                    <input type="file" name="konten" class="form-control" id="konten_file" style="display: none;" accept=".jpg,.jpeg,.png,.gif,.pdf,.doc,.docx,.xls,.xlsx">
-                    <input type="text" name="konten" class="form-control" id="konten_link" style="display: none;">
-                </div>
+                <button type="button" class="btn btn-secondary" id="addContent">Tambah Konten</button>
                 <button type="submit" class="btn btn-primary">Simpan</button>
                 <a href="?page=dashboard" class="btn btn-secondary">Kembali</a>
             </form>
@@ -107,9 +135,35 @@ function uploadFile($input_name) {
 </div>
 
 <script>
-document.querySelector('select[name="jenis_konten"]').addEventListener('change', function() {
+document.querySelector('select[name="jenis_konten[]"]').addEventListener('change', function() {
     let jenis = this.value;
-    document.getElementById('konten_file').style.display = (jenis === 'gambar' || jenis === 'file') ? 'block' : 'none';
-    document.getElementById('konten_link').style.display = (jenis === 'link') ? 'block' : 'none';
+    let kontenGroup = this.closest('.konten-group');
+    kontenGroup.querySelector('input[type="file"]').style.display = (jenis === 'gambar' || jenis === 'file') ? 'block' : 'none';
+    kontenGroup.querySelector('input[type="text"]').style.display = (jenis === 'link') ? 'block' : 'none';
+});
+
+document.getElementById('addContent').addEventListener('click', function() {
+    let kontenInputs = document.getElementById('kontenInputs');
+    let index = kontenInputs.children.length;
+    let newGroup = document.createElement('div');
+    newGroup.className = 'form-group mb-3 konten-group';
+    newGroup.innerHTML = `
+        <label>Jenis Konten</label>
+        <select class="form-control" name="jenis_konten[]" required>
+            <option value="">-- Pilih Jenis Konten --</option>
+            <option value="gambar">Gambar</option>
+            <option value="file">File</option>
+            <option value="link">Link</option>
+        </select>
+        <input type="file" name="konten_${index}" class="form-control" style="display: none;" accept=".jpg,.jpeg,.png,.gif,.pdf,.doc,.docx,.xls,.xlsx">
+        <input type="text" name="konten[]" class="form-control" style="display: none;">
+    `;
+    kontenInputs.appendChild(newGroup);
+
+    newGroup.querySelector('select').addEventListener('change', function() {
+        let jenis = this.value;
+        newGroup.querySelector('input[type="file"]').style.display = (jenis === 'gambar' || jenis === 'file') ? 'block' : 'none';
+        newGroup.querySelector('input[type="text"]').style.display = (jenis === 'link') ? 'block' : 'none';
+    });
 });
 </script>

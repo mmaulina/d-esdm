@@ -34,8 +34,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     function sanitizeInput($input)
     {
-        return htmlspecialchars(strip_tags(trim($input)));
+        return strip_tags(trim($input));
     }
+    
 
     function checkEmpty($input)
     {

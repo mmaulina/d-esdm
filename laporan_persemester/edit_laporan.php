@@ -18,9 +18,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $database = new Database();
     $db = $database->getConnection();
 
-    function sanitizeInput($input) {
-        return htmlspecialchars(strip_tags(trim($input)));
+    function sanitizeInput($input)
+    {
+        return strip_tags(trim($input));
     }
+    
 
     $nama_perusahaan = sanitizeInput($_POST['nama_perusahaan']);
     $parameter = sanitizeInput($_POST['parameter']);

@@ -14,9 +14,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $database = new Database();
     $db = $database->getConnection();
 
-    function sanitizeInput($input) {
-        return htmlspecialchars(strip_tags(trim($input)));
+    function sanitizeInput($input)
+    {
+        return strip_tags(trim($input));
     }
+    
 
     // Ambil Title, Caption
     $title = sanitizeInput($_POST['title']);
@@ -121,9 +123,12 @@ function uploadFile($input_name) {
                             <option value="gambar">Gambar</option>
                             <option value="file">File</option>
                             <option value="link">Link</option>
+                            <option value="kosong">Kosong</option>
                         </select>
+                        <div class="mb-3">
                         <input type="file" name="konten_0" class="form-control" style="display: none;" accept=".jpg,.jpeg,.png,.gif,.pdf,.doc,.docx,.xls,.xlsx">
                         <input type="text" name="konten[]" class="form-control" style="display: none;">
+                        </div>
                     </div>
                 </div>
                 <button type="button" class="btn btn-secondary" id="addContent">Tambah Konten</button>
