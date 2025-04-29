@@ -19,6 +19,42 @@ if (session_status() == PHP_SESSION_NONE) {
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
+    .navbar {
+  background: linear-gradient(90deg, #f7b500 0%, #ffd700 50%, #ffae00 100%);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  border-bottom: 4px solid #333;
+}
+
+.navbar-brand strong {
+  font-size: 1.4rem;
+  color: #333;
+  text-shadow: 1px 1px 1px #fff000;
+}
+
+.navbar-brand img {
+  filter: drop-shadow(0 0 3px #ffcc00);
+}
+
+.navbar .nav-link {
+  color: #333 !important;
+  font-weight: 500;
+}
+
+.navbar .nav-link:hover {
+  color: #000 !important;
+  text-shadow: 0 0 5px #fff200;
+}
+
+.navbar .fa-bell,
+.navbar .fa-user {
+  color: #333 !important;
+}
+
+.badge.bg-danger {
+  background-color: #ff3b3b !important;
+  box-shadow: 0 0 5px #ff0000;
+}
+
 .alert {
   padding: 15px;
   border-radius: 8px;

@@ -40,7 +40,7 @@ try {
     <!-- Tampilkan Konten -->
     <div class="row">
         <div class="col-12">
-            <h2 class="text-center mt-4">DJIH</h2>
+            <h2 class="text-center mt-4"><i class="fas fa-bolt" style="color: #ffc107;"></i> DJIH <i class="fas fa-bolt" style="color: #ffc107;"></i> </h2>
             <hr>
         </div>
     </div>

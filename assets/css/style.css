@@ -51,7 +51,7 @@ navbar {
 
 /* SIDEBAR */
 .sidebar {
-  background-color: #f7f6bb;
+  background-color: #424242; /* Abu tua */
   transition: width 0.3s; /* Transisi untuk lebar */
   width: 300px; /* Lebar sidebar saat terbuka */
   position: fixed;
@@ -70,8 +70,8 @@ navbar {
 }
 
 .sidebar .nav-link {
-  background-color: #fcdc2a;
-  color: #000 !important; /* Agar teks terlihat */
+  background-color: #76ff03; /* Hijau neon */
+  color: #000 !important;
   padding: 10px;
   border-radius: 5px; /* Opsional: Membuat sudut membulat */
   margin-bottom: 5px; /* Opsional: Jarak antar menu */
@@ -79,7 +79,7 @@ navbar {
 }
 
 .sidebar .nav-link:hover {
-  background-color: #ffe066;
+  background-color: #64dd17;
 }
 
 .sidebar .nav-link.active {

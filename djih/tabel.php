@@ -33,7 +33,7 @@ try {
 </head>
 <body>
     <div class="container mt-5">
-        <h2 class="text-center">Kelola Konten</h2>
+        <h2 class="text-center"><i class="fas fa-bolt" style="color: #ffc107;"></i> Kelola Konten <i class="fas fa-bolt" style="color: #ffc107;"></i></h2>
         <hr>
         <div class="d-flex justify-content-between align-items-center mb-3">
             <a href="?page=tampil_konten_djih" class="btn btn-secondary">Kembali</a>
