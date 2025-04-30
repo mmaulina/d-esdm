@@ -14,13 +14,19 @@ $stmtUser = $conn->prepare($queryUser);
 $stmtUser->execute();
 $resultUser = $stmtUser->fetchAll(PDO::FETCH_ASSOC);
 
-// Ambil laporan semester yang diajukan
-$queryLaporan = "SELECT * FROM laporan_semester WHERE status = 'diajukan'";
-$stmtLaporan = $conn->prepare($queryLaporan);
-$stmtLaporan->execute();
-$resultLaporan = $stmtLaporan->fetchAll(PDO::FETCH_ASSOC);
+// Ambil laporan bulanan yang diajukan
+$queryLapBulanan = "SELECT * FROM laporan_bulanan WHERE status = 'diajukan'";
+$stmtLapBulanan = $conn->prepare($queryLapBulanan);
+$stmtLapBulanan->execute();
+$resultLapBulanan = $stmtLapBulanan->fetchAll(PDO::FETCH_ASSOC);
 
 // Ambil laporan semester yang diajukan
+$queryLapSemester = "SELECT * FROM laporan_semester WHERE status = 'diajukan'";
+$stmtLapSemester = $conn->prepare($queryLapSemester);
+$stmtLapSemester->execute();
+$resultLapSemester = $stmtLapSemester->fetchAll(PDO::FETCH_ASSOC);
+
+// Ambil profil perusahaan yang diajukan
 $queryperusahaan = "SELECT * FROM profil WHERE status = 'diajukan'";
 $stmt_perusahaan = $conn->prepare($queryperusahaan);
 $stmt_perusahaan->execute();
@@ -56,28 +62,39 @@ $resultperusahaan = $stmt_perusahaan->fetchAll(PDO::FETCH_ASSOC);
                                 </td>
                             </tr>
                         <?php }
-                        foreach ($resultLaporan as $laporan) {
+                        foreach ($resultLapBulanan as $lapBulanan) {
                         ?>
                             <tr>
                                 <td class="text-center"><?php echo $no++; ?></td>
-                                <td>Laporan Semester</td>
-                                <td><?php echo htmlspecialchars($laporan['nama_perusahaan']); ?></td>
+                                <td>Pelaporan Bulanan</td>
+                                <td><?php echo htmlspecialchars($lapBulanan['nama_perusahaan']); ?></td>
+                                <td class="text-center">
+                                    <a href="?page=laporan_perbulan" class="btn btn-sm btn-info">Lihat <i class="fa-solid fa-eye"></i>
+                                </td>
+                            </tr>
+                        <?php }
+                        foreach ($resultLapSemester as $lapSemester) {
+                        ?>
+                            <tr>
+                                <td class="text-center"><?php echo $no++; ?></td>
+                                <td>Pelaporan Semester</td>
+                                <td><?php echo htmlspecialchars($lapSemester['nama_perusahaan']); ?></td>
                                 <td class="text-center">
                                     <a href="?page=laporan_persemester" class="btn btn-sm btn-info">Lihat <i class="fa-solid fa-eye"></i>
                                 </td>
                             </tr>
                         <?php }
                         foreach ($resultperusahaan as $perusahaan) {
-                            ?>
-                                <tr>
-                                    <td class="text-center"><?php echo $no++; ?></td>
-                                    <td>Perusahaan di ajukan</td>
-                                    <td><?php echo htmlspecialchars($perusahaan['nama_perusahaan']); ?></td>
-                                    <td class="text-center">
-                                        <a href="?page=profil_admin" class="btn btn-sm btn-info">Lihat <i class="fa-solid fa-eye"></i>
-                                    </td>
-                                </tr>
-                            <?php }
+                        ?>
+                            <tr>
+                                <td class="text-center"><?php echo $no++; ?></td>
+                                <td>Perusahaan di ajukan</td>
+                                <td><?php echo htmlspecialchars($perusahaan['nama_perusahaan']); ?></td>
+                                <td class="text-center">
+                                    <a href="?page=profil_admin" class="btn btn-sm btn-info">Lihat <i class="fa-solid fa-eye"></i>
+                                </td>
+                            </tr>
+                        <?php }
                         ?>
                     </tbody>
                 </table>
