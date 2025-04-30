@@ -181,12 +181,6 @@ foreach ($daftar_perusahaan as $perusahaan) {
         $totalKonsumsi += $konsumsi;
     }
 }
-
-
-// Output atau proses lebih lanjut sesuai kebutuhan
-
-
-
 ?>
 <main>
     <div class="container mt-4">
