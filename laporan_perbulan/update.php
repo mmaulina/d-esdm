@@ -53,6 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nama_perusahaan = checkEmpty(sanitizeInput($_POST['nama_perusahaan'] ?? ''));
     $tahun = checkEmpty(sanitizeInput($_POST['tahun'] ?? ''));
     $bulan = checkEmpty(sanitizeInput($_POST['bulan'] ?? ''));
+    $kabupaten = checkEmpty(sanitizeInput($_POST['kabupaten'] ?? ''));
     $alamat = checkEmpty(sanitizeInput($_POST['alamat'] ?? ''));
     $latitude = checkEmpty(sanitizeInput($_POST['latitude'] ?? ''));
     $longitude = checkEmpty(sanitizeInput($_POST['longitude'] ?? ''));
@@ -78,12 +79,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $keterangan = '-';    // Keterangan diisi otomatis
 
 
-    $updateSQL = "UPDATE laporan_bulanan SET nama_perusahaan = :nama_perusahaan, tahun = :tahun, bulan = :bulan, alamat = :alamat, latitude = :latitude, longitude = :longitude, jenis_pembangkit = :jenis_pembangkit, fungsi = :fungsi, kapasitas_terpasang = :kapasitas_terpasang, daya_mampu_netto = :daya_mampu_netto, jumlah_unit = :jumlah_unit, no_unit = :no_unit, tahun_operasi = :tahun_operasi, status_operasi = :status_operasi, bahan_bakar_jenis = :bahan_bakar_jenis, bahan_bakar_satuan = :bahan_bakar_satuan, volume_bb = :volume_bb, produksi_sendiri = :produksi_sendiri, pemb_sumber_lain = :pemb_sumber_lain, susut_jaringan = :susut_jaringan, penj_ke_pelanggan = :penj_ke_pelanggan, penj_ke_pln = :penj_ke_pln, pemakaian_sendiri = :pemakaian_sendiri, status = :status, keterangan = :keterangan WHERE id = :id";
+    $updateSQL = "UPDATE laporan_bulanan SET nama_perusahaan = :nama_perusahaan, tahun = :tahun, bulan = :bulan, kabupaten = :kabupaten, alamat = :alamat, latitude = :latitude, longitude = :longitude, jenis_pembangkit = :jenis_pembangkit, fungsi = :fungsi, kapasitas_terpasang = :kapasitas_terpasang, daya_mampu_netto = :daya_mampu_netto, jumlah_unit = :jumlah_unit, no_unit = :no_unit, tahun_operasi = :tahun_operasi, status_operasi = :status_operasi, bahan_bakar_jenis = :bahan_bakar_jenis, bahan_bakar_satuan = :bahan_bakar_satuan, volume_bb = :volume_bb, produksi_sendiri = :produksi_sendiri, pemb_sumber_lain = :pemb_sumber_lain, susut_jaringan = :susut_jaringan, penj_ke_pelanggan = :penj_ke_pelanggan, penj_ke_pln = :penj_ke_pln, pemakaian_sendiri = :pemakaian_sendiri, status = :status, keterangan = :keterangan WHERE id = :id";
     $stmt = $db->prepare($updateSQL);
 
     $stmt->bindParam(':nama_perusahaan', $nama_perusahaan);
     $stmt->bindParam(':tahun', $tahun);
     $stmt->bindParam(':bulan', $bulan);
+    $stmt->bindParam(':kabupaten', $kabupaten);
     $stmt->bindParam(':alamat', $alamat);
     $stmt->bindParam(':latitude', $latitude);
     $stmt->bindParam(':longitude', $longitude);
@@ -164,8 +166,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <option value="Desember" <?= ($data['bulan'] == 'Desember') ? 'selected' : '' ?>>Desember</option>
                     </select>
                 </div>
+                <div class="form-group mb-2">
+                    <label>Kabupaten/Kota</label>
+                    <select class="form-control" name="kabupaten" required>
+                        <option value="">-- Pilih Kabupaten/Kota --</option>
+                        <option value="Balangan" <?= ($data['kabupaten'] == 'Balangan') ? 'selected' : '' ?>>Balangan</option>
+                        <option value="Banjar" <?= ($data['kabupaten'] == 'Banjar') ? 'selected' : '' ?>>Banjar</option>
+                        <option value="Barito Kuala" <?= ($data['kabupaten'] == 'Barito Kuala') ? 'selected' : '' ?>>Barito Kuala</option>
+                        <option value="Hulu Sungai Selatan" <?= ($data['kabupaten'] == 'Hulu Sungai Selatan') ? 'selected' : '' ?>>Hulu Sungai Selatan</option>
+                        <option value="Hulu Sungai Tengah" <?= ($data['kabupaten'] == 'Hulu Sungai Tengah') ? 'selected' : '' ?>>Hulu Sungai Tengah</option>
+                        <option value="Hulu Sungai Utara" <?= ($data['kabupaten'] == 'Hulu Sungai Utara') ? 'selected' : '' ?>>Hulu Sungai Utara</option>
+                        <option value="Kotabaru" <?= ($data['kabupaten'] == 'Kotabaru') ? 'selected' : '' ?>>Kotabaru</option>
+                        <option value="Tabalong" <?= ($data['kabupaten'] == 'Tabalong') ? 'selected' : '' ?>>Tabalong</option>
+                        <option value="Tanah Bumbu" <?= ($data['kabupaten'] == 'Tanah Bumbu') ? 'selected' : '' ?>>Tanah Bumbu</option>
+                        <option value="Tanah Laut" <?= ($data['kabupaten'] == 'Tanah Laut') ? 'selected' : '' ?>>Tanah Laut</option>
+                        <option value="Tapin" <?= ($data['kabupaten'] == 'Tapin') ? 'selected' : '' ?>>Tapin</option>
+                        <option value="Kota Banjarmasin" <?= ($data['kabupaten'] == 'Kota Banjarmasin') ? 'selected' : '' ?>>Banjarmasin (Kota)</option>
+                        <option value="Kota Banjarbaru" <?= ($data['kabupaten'] == 'Kota Banjarbaru') ? 'selected' : '' ?>>Banjarbaru (Kota)</option>
+                    </select>
+                </div>
                 <div class="mb-3">
-                    <label class="form-label">Alamat</label>
+                    <label class="form-label">Alamat Pembangkit</label>
                     <input type="text" name="alamat" class="form-control" placeholder="Masukkan alamat lengkap" value="<?= htmlspecialchars($data['alamat']) ?>" required>
                 </div>
                 <div class="row mb-3">

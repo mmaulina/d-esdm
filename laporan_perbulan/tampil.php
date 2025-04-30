@@ -122,6 +122,7 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                             <th rowspan="3">Nama Perusahaan</th>
                             <th rowspan="3">Tahun</th>
                             <th rowspan="3">Bulan</th>
+                            <th rowspan="3">Kabupaten</th>
                             <th colspan="3" style="min-width: 250px;">Data Pembangkit</th>
                             <th colspan="10" style="min-width: 1500px;">Data Teknis Pembangkit</th>
                             <th colspan="7" style="min-width: 250px;">Pelaporan Bulanan</th>
@@ -170,6 +171,7 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                                     <td><?php echo htmlspecialchars($row['nama_perusahaan']); ?> </td>
                                     <td><?php echo htmlspecialchars($row['tahun']); ?> </td>
                                     <td><?php echo htmlspecialchars($row['bulan']); ?> </td>
+                                    <td><?= htmlspecialchars($row['kabupaten']) ?></td>
                                     <td><?= htmlspecialchars($row['alamat']) ?></td>
                                     <td><?= htmlspecialchars($row['latitude']) ?></td>
                                     <td><?= htmlspecialchars($row['longitude']) ?></td>

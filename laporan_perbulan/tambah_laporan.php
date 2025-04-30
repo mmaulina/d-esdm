@@ -46,6 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nama_perusahaan = checkEmpty(sanitizeInput($_POST['nama_perusahaan'] ?? ''));
     $tahun = checkEmpty(sanitizeInput($_POST['tahun'] ?? ''));
     $bulan = checkEmpty(sanitizeInput($_POST['bulan'] ?? ''));
+    $kabupaten = checkEmpty(sanitizeInput($_POST['kabupaten'] ?? ''));
     $alamat = checkEmpty(sanitizeInput($_POST['alamat'] ?? ''));
     $latitude = checkEmpty(sanitizeInput($_POST['latitude'] ?? ''));
     $longitude = checkEmpty(sanitizeInput($_POST['longitude'] ?? ''));
@@ -71,7 +72,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $keterangan = '-';    // Keterangan diisi otomatis
 
     $query = "INSERT INTO laporan_bulanan (
-        id_user, nama_perusahaan, tahun, bulan, alamat,
+        id_user, nama_perusahaan, tahun, bulan, kabupaten, alamat,
         latitude, longitude, jenis_pembangkit, fungsi,
         kapasitas_terpasang, daya_mampu_netto, jumlah_unit, no_unit,
         tahun_operasi, status_operasi, bahan_bakar_jenis, bahan_bakar_satuan,
@@ -80,7 +81,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         status, keterangan
     ) 
     VALUES (
-        :id_user, :nama_perusahaan, :tahun, :bulan, :alamat,
+        :id_user, :nama_perusahaan, :tahun, :bulan, :kabupaten, :alamat,
         :latitude, :longitude, :jenis_pembangkit, :fungsi,
         :kapasitas_terpasang, :daya_mampu_netto, :jumlah_unit, :no_unit,
         :tahun_operasi, :status_operasi, :bahan_bakar_jenis, :bahan_bakar_satuan,
@@ -93,6 +94,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bindParam(':nama_perusahaan', $nama_perusahaan);
     $stmt->bindParam(':tahun', $tahun);
     $stmt->bindParam(':bulan', $bulan);
+    $stmt->bindParam(':kabupaten', $kabupaten);
     $stmt->bindParam(':alamat', $alamat);
     $stmt->bindParam(':latitude', $latitude);
     $stmt->bindParam(':longitude', $longitude);
@@ -166,8 +168,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <option value="Desember">Desember</option>
                     </select>
                 </div>
+                <div class="form-group mb-2">
+                    <label>Kabupaten/Kota</label>
+                    <select class="form-control" name="kabupaten" required>
+                        <option value="">-- Pilih Kabupaten/Kota --</option>
+                        <option value="Balangan">Balangan</option>
+                        <option value="Banjar">Banjar</option>
+                        <option value="Barito Kuala">Barito Kuala</option>
+                        <option value="Hulu Sungai Selatan">Hulu Sungai Selatan</option>
+                        <option value="Hulu Sungai Tengah">Hulu Sungai Tengah</option>
+                        <option value="Hulu Sungai Utara">Hulu Sungai Utara</option>
+                        <option value="Kotabaru">Kotabaru</option>
+                        <option value="Tabalong">Tabalong</option>
+                        <option value="Tanah Bumbu">Tanah Bumbu</option>
+                        <option value="Tanah Laut">Tanah Laut</option>
+                        <option value="Tapin">Tapin</option>
+                        <option value="Kota Banjarmasin">Banjarmasin (Kota)</option>
+                        <option value="Kota Banjarbaru">Banjarbaru (Kota)</option>
+                    </select>
+                </div>
                 <div class="mb-3">
-                    <label class="form-label">Alamat</label>
+                    <label class="form-label">Alamat Pembangkit</label>
                     <input type="text" name="alamat" class="form-control" placeholder="Masukkan alamat lengkap" required>
                 </div>
                 <div class="row mb-3">
