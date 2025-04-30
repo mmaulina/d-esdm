@@ -96,7 +96,7 @@ $laporan_tidak_upload = [];
 $tahun = date('Y'); // Atau sesuaikan dengan tahun yang diinginkan
 
 // Ambil data perusahaan dari tabel profil
-$sql_perusahaan = "SELECT id_user, kabupaten, nama_perusahaan FROM profil";
+$sql_perusahaan = "SELECT id_user, kabupaten, nama_perusahaan FROM laporan_bulanan";
 $stmt_perusahaan = $conn->query($sql_perusahaan);
 $daftar_perusahaan = $stmt_perusahaan->fetchAll(PDO::FETCH_ASSOC);
 
@@ -134,7 +134,8 @@ foreach ($daftar_perusahaan as $perusahaan) {
     if (!$hasSemester2) {
         $laporan_tidak_upload[$kabupaten]['semester2']++;
     }
-}$totalProduksi = 0;
+}
+$totalProduksi = 0;
 $totalKonsumsi = 0;
 
 foreach ($daftar_perusahaan as $perusahaan) {
@@ -151,11 +152,11 @@ foreach ($daftar_perusahaan as $perusahaan) {
     foreach ($stmt_laporan->fetchAll(PDO::FETCH_ASSOC) as $laporan) {
         // Periksa dan ganti nilai yang berisi '-' dengan 0 sebelum dikonversi
         // Periksa dan ganti nilai yang berisi '-' dengan 0 sebelum dikonversi
-$produksiSendiri = ($laporan['produksi_sendiri'] == '-' || empty($laporan['produksi_sendiri'])) ? 0 : (float) str_replace('.', '', str_replace(',', '.', $laporan['produksi_sendiri']));
-$pembSumberLain = ($laporan['pemb_sumber_lain'] == '-' || empty($laporan['pemb_sumber_lain'])) ? 0 : (float) str_replace('.', '', str_replace(',', '.', $laporan['pemb_sumber_lain']));
-$penjKePelanggan = ($laporan['penj_ke_pelanggan'] == '-' || empty($laporan['penj_ke_pelanggan'])) ? 0 : (float) str_replace('.', '', str_replace(',', '.', $laporan['penj_ke_pelanggan']));
-$penjKePln = ($laporan['penj_ke_pln'] == '-' || empty($laporan['penj_ke_pln'])) ? 0 : (float) str_replace('.', '', str_replace(',', '.', $laporan['penj_ke_pln']));
-$pemakaianSendiri = ($laporan['pemakaian_sendiri'] == '-' || empty($laporan['pemakaian_sendiri'])) ? 0 : (float) str_replace('.', '', str_replace(',', '.', $laporan['pemakaian_sendiri']));
+        $produksiSendiri = ($laporan['produksi_sendiri'] == '-' || empty($laporan['produksi_sendiri'])) ? 0 : (float) str_replace('.', '', str_replace(',', '.', $laporan['produksi_sendiri']));
+        $pembSumberLain = ($laporan['pemb_sumber_lain'] == '-' || empty($laporan['pemb_sumber_lain'])) ? 0 : (float) str_replace('.', '', str_replace(',', '.', $laporan['pemb_sumber_lain']));
+        $penjKePelanggan = ($laporan['penj_ke_pelanggan'] == '-' || empty($laporan['penj_ke_pelanggan'])) ? 0 : (float) str_replace('.', '', str_replace(',', '.', $laporan['penj_ke_pelanggan']));
+        $penjKePln = ($laporan['penj_ke_pln'] == '-' || empty($laporan['penj_ke_pln'])) ? 0 : (float) str_replace('.', '', str_replace(',', '.', $laporan['penj_ke_pln']));
+        $pemakaianSendiri = ($laporan['pemakaian_sendiri'] == '-' || empty($laporan['pemakaian_sendiri'])) ? 0 : (float) str_replace('.', '', str_replace(',', '.', $laporan['pemakaian_sendiri']));
 
         // Total produksi = Produksi Sendiri + Pembelian Sumber Lain
         $produksi = $produksiSendiri + $pembSumberLain;
@@ -266,23 +267,24 @@ $pemakaianSendiri = ($laporan['pemakaian_sendiri'] == '-' || empty($laporan['pem
                     </div>
                 </div>
                 <div class="row mt-3">
-                <div class="col mb-3">
-                    <div class="card text-black" style="background-color: #FCDC2A;">
-                        <div class="card-body">
-                            <h5 class="card-title">Total Produksi (kWh)</h5>
-                            <p class="card-text"><?php echo number_format($totalProduksi, 2); ?></p>
+                    <div class="col mb-3">
+                        <div class="card text-black" style="background-color: #FCDC2A;">
+                            <div class="card-body">
+                                <h5 class="card-title">Total Produksi (kWh)</h5>
+                                <p class="card-text"><?php echo number_format($totalProduksi, 2); ?></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col mb-3">
+                        <div class="card text-black" style="background-color: #008B47;">
+                            <div class="card-body">
+                                <h5 class="card-title">Total Konsumsi (kWh)</h5>
+                                <p class="card-text"><?php echo number_format($totalKonsumsi, 2); ?></p>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="col mb-3">
-                    <div class="card text-black" style="background-color: #008B47;">
-                        <div class="card-body">
-                            <h5 class="card-title">Total Konsumsi (kWh)</h5>
-                            <p class="card-text"><?php echo number_format($totalKonsumsi, 2); ?></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                
                 <!-- Row for News Content -->
                 <div class="row mt-4">
                     <div class="col-12 d-flex justify-content-between align-items-center">
