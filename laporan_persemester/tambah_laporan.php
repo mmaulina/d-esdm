@@ -111,13 +111,13 @@ function uploadFile($input_name) {
 <div class="container mt-4">
     <h3 class="text-center mb-3"><i class="fas fa-bolt" style="color: #ffc107;"></i>Tambah Pelaporan Semester<i class="fas fa-bolt" style="color: #ffc107;"></i></h3>
     <hr>
-    <div class="card shadow">
+    <div class="card shadow" style="overflow-x: auto; max-height: calc(100vh - 150px); overflow-y: auto;">
         <div class="card-body">
             <form method="POST" enctype="multipart/form-data">
             <div class="mb-3">
                 <label class="form-label">Nama Perusahaan</label>
                 <?php if ($role === 'superadmin') : ?>
-                    <input type="text" name="nama_perusahaan" class="form-control" value="<?= htmlspecialchars($nama_perusahaan_profil) ?>">
+                    <input type="text" name="nama_perusahaan" class="form-control" placeholder="Masukkan nama perusahaan" value="<?= htmlspecialchars($nama_perusahaan_profil) ?>">
                 <?php else : ?>
                     <input type="text" name="nama_perusahaan" class="form-control" value="<?= htmlspecialchars($nama_perusahaan_profil) ?>" readonly>
                 <?php endif; ?>
@@ -135,11 +135,11 @@ function uploadFile($input_name) {
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Buku Mutu</label>
-                    <input type="text" name="buku_mutu" class="form-control" required>
+                    <input type="text" name="buku_mutu" class="form-control" placeholder="Masukkan buku mutu" required>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Hasil</label>
-                    <input type="text" name="hasil" class="form-control" required>
+                    <input type="text" name="hasil" class="form-control" placeholder="Masukkan hasil" required>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Upload Laporan (PDF, DOC, DOCX, XLS, XLSX)</label>

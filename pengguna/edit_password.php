@@ -48,7 +48,7 @@ if (isset($_POST['btn_simpan'])) {
 <div class="container mt-4">
     <h3 class="text-center">Ganti Password</h3>
     <hr>
-    <div class="card shadow">
+    <div class="card shadow" style="overflow-x: auto; max-height: calc(100vh - 150px); overflow-y: auto;">
         <!-- Form untuk mengganti password -->
         <div class="card-body">
             <form action="" method="post">

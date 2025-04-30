@@ -70,7 +70,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['tolak_id'])) {
 
 
 <div class="container mt-4">
-    <h3 class="text-center mb-3">Data Pengguna</h3>
+    <h3 class="text-center mb-3"><i class="fa fa-sort"></i></th>Data Pengguna<i class="fa fa-sort"></i></th></h3>
     <hr>
     <div class="card shadow">
         <div class="card-body">

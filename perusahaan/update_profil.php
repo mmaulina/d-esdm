@@ -71,7 +71,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <div class="container mt-4">
     <h3 class="text-center mb-3"><i class="fas fa-bolt" style="color: #ffc107;"></i> Update Profil Perusahaan <i class="fas fa-bolt" style="color: #ffc107;"></i></h3>
     <hr>
-    <div class="card shadow">
+    <div class="card shadow" style="overflow-x: auto; max-height: calc(100vh - 150px); overflow-y: auto;">
         <div class="card-body">
             <form method="POST">
                 <div class="form-group mb-2">

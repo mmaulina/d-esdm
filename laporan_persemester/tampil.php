@@ -16,7 +16,7 @@ $db = new Database();
 $conn = $db->getConnection();
 
 // Query berdasarkan role
-    $params = [];
+$params = [];
 if ($role == 'admin' || $role == 'superadmin') {
     $query = "SELECT * FROM laporan_semester ORDER BY FIELD(status, 'diajukan', 'ditolak', 'diterima')";
 } else {
@@ -90,16 +90,16 @@ $hasLaporanBulanan = $stmtCheck->fetchColumn() > 0;
                     Anda harus mengisi <strong>Laporan Bulanan</strong> terlebih dahulu sebelum dapat menambahkan Laporan Semester.
                 </div>
             <?php endif; ?>
-                <?php if ($hasLaporanBulanan && $role == 'umum') : ?>
-                    <a href="?page=tambah_laporan_persemester" class="btn btn-primary mb-3">
-                        <i class="fas fa-plus"></i> Tambah Data
-                    </a>
-                <?php endif; ?>
-                <?php if ($_SESSION['role'] == 'superadmin') { ?> 
-                        <a href="?page=tambah_laporan_persemester" class="btn btn-primary mb-3">
-                            <i class="fas fa-plus"></i> Tambah Data
-                        </a>
-                        <?php } ?>
+            <?php if ($hasLaporanBulanan && $role == 'umum') : ?>
+                <a href="?page=tambah_laporan_persemester" class="btn btn-primary mb-3">
+                    <i class="fas fa-plus"></i> Tambah Data
+                </a>
+            <?php endif; ?>
+            <?php if ($_SESSION['role'] == 'superadmin') { ?>
+                <a href="?page=tambah_laporan_persemester" class="btn btn-primary mb-3">
+                    <i class="fas fa-plus"></i> Tambah Data
+                </a>
+            <?php } ?>
             <div class="table-responsive" style="max-height: 500px; overflow-x: auto; overflow-y: auto;">
                 <table class="table table-bordered" style="min-width: 1200px; white-space: nowrap;">
                     <thead class="table-dark text-center align-middle">
@@ -166,7 +166,7 @@ $hasLaporanBulanan = $stmtCheck->fetchColumn() > 0;
                                     </td>
                                     <td><?php echo htmlspecialchars($row['keterangan']); ?></td>
                                     <td class="text-center">
-                                        <?php if ($role == 'admin'||$role == 'superadmin' && $row['status'] == 'diajukan'): ?>
+                                        <?php if ($role == 'admin' || $role == 'superadmin' && $row['status'] == 'diajukan'): ?>
                                             <!-- Tombol Terima menggunakan POST -->
                                             <form method="POST" style="display: inline;">
                                                 <input type="hidden" name="terima_id" value="<?php echo $row['id']; ?>">
@@ -223,214 +223,214 @@ $hasLaporanBulanan = $stmtCheck->fetchColumn() > 0;
 // Cek apakah user sudah login sebagai admin atau superadmin
 if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'superadmin'):
 
-include_once 'koneksi.php';
-$database = new Database();
-$db = $database->getConnection();
+    include_once 'koneksi.php';
+    $database = new Database();
+    $db = $database->getConnection();
 
-$tahun_sekarang = date("Y");
-$bulan_sekarang = date("n");
+    $tahun_sekarang = date("Y");
+    $bulan_sekarang = date("n");
 
-// Ambil daftar user yang sudah membayar denda
-$querySudahBayar = $db->prepare("
+    // Ambil daftar user yang sudah membayar denda
+    $querySudahBayar = $db->prepare("
     SELECT id_profil_perusahaan 
     FROM denda_laporan_semester 
     WHERE keterangan = 'Sudah Dibayar'
 ");
-$querySudahBayar->execute();
-$dataSudahBayar = $querySudahBayar->fetchAll(PDO::FETCH_COLUMN);
+    $querySudahBayar->execute();
+    $dataSudahBayar = $querySudahBayar->fetchAll(PDO::FETCH_COLUMN);
 
-// Ambil semua data perusahaan
-$query = "SELECT id_user, nama_perusahaan FROM profil";
-$stmt = $db->prepare($query);
-$stmt->execute();
-$data_perusahaan = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    // Ambil semua data perusahaan
+    $query = "SELECT id_user, nama_perusahaan FROM profil";
+    $stmt = $db->prepare($query);
+    $stmt->execute();
+    $data_perusahaan = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$keterangan = [];
+    $keterangan = [];
 
-foreach ($data_perusahaan as $perusahaan) {
-    $id_user = $perusahaan['id_user'];
-    $nama_perusahaan = $perusahaan['nama_perusahaan'];
+    foreach ($data_perusahaan as $perusahaan) {
+        $id_user = $perusahaan['id_user'];
+        $nama_perusahaan = $perusahaan['nama_perusahaan'];
 
-    // Ambil id_profil untuk pengecekan sudah bayar
-    $getProfil = $db->prepare("SELECT id_profil FROM profil WHERE id_user = :id_user");
-    $getProfil->bindParam(':id_user', $id_user);
-    $getProfil->execute();
-    $id_profil = $getProfil->fetchColumn();
+        // Ambil id_profil untuk pengecekan sudah bayar
+        $getProfil = $db->prepare("SELECT id_profil FROM profil WHERE id_user = :id_user");
+        $getProfil->bindParam(':id_user', $id_user);
+        $getProfil->execute();
+        $id_profil = $getProfil->fetchColumn();
 
-    if (in_array($id_profil, $dataSudahBayar)) {
-        continue; // Lewati jika sudah membayar denda
-    }
+        if (in_array($id_profil, $dataSudahBayar)) {
+            continue; // Lewati jika sudah membayar denda
+        }
 
-    // Cek laporan Semester I
-    $cekSemester1 = $db->prepare("
+        // Cek laporan Semester I
+        $cekSemester1 = $db->prepare("
         SELECT COUNT(*) 
         FROM laporan_semester 
         WHERE id_user = :id_user AND semester = 'Semester I' AND tahun = :tahun
     ");
-    $cekSemester1->bindParam(':id_user', $id_user);
-    $cekSemester1->bindParam(':tahun', $tahun_sekarang);
-    $cekSemester1->execute();
-    $adaSemester1 = $cekSemester1->fetchColumn() > 0;
+        $cekSemester1->bindParam(':id_user', $id_user);
+        $cekSemester1->bindParam(':tahun', $tahun_sekarang);
+        $cekSemester1->execute();
+        $adaSemester1 = $cekSemester1->fetchColumn() > 0;
 
-    // Cek laporan Semester II
-    $cekSemester2 = $db->prepare("
+        // Cek laporan Semester II
+        $cekSemester2 = $db->prepare("
         SELECT COUNT(*) 
         FROM laporan_semester 
         WHERE id_user = :id_user AND semester = 'Semester II' AND tahun = :tahun
     ");
-    $cekSemester2->bindParam(':id_user', $id_user);
-    $cekSemester2->bindParam(':tahun', $tahun_sekarang);
-    $cekSemester2->execute();
-    $adaSemester2 = $cekSemester2->fetchColumn() > 0;
+        $cekSemester2->bindParam(':id_user', $id_user);
+        $cekSemester2->bindParam(':tahun', $tahun_sekarang);
+        $cekSemester2->execute();
+        $adaSemester2 = $cekSemester2->fetchColumn() > 0;
 
-    // Menentukan apakah telat
-    $telatSemester1 = (!$adaSemester1 && $bulan_sekarang >= 7);
-    $telatSemester2 = (!$adaSemester2 && $tahun_sekarang > $tahun_sekarang);
+        // Menentukan apakah telat
+        $telatSemester1 = (!$adaSemester1 && $bulan_sekarang >= 7);
+        $telatSemester2 = (!$adaSemester2 && $tahun_sekarang > $tahun_sekarang);
 
-    // Buat keterangan
-    if ($telatSemester1 && $telatSemester2) {
-        $ket = "Belum mengupload Semester I & II (Telat)";
-    } elseif ($telatSemester1) {
-        $ket = "Belum mengupload Semester I (Telat)";
-    } elseif ($telatSemester2) {
-        $ket = "Belum mengupload Semester II (Telat)";
-    } elseif (!$adaSemester1 && !$adaSemester2) {
-        $ket = "Belum mengupload Semester I & II";
-    } elseif (!$adaSemester1) {
-        $ket = "Belum mengupload Semester I";
-    } elseif (!$adaSemester2) {
-        $ket = "Belum mengupload Semester II";
-    } else {
-        $ket = "Sudah mengupload kedua semester";
+        // Buat keterangan
+        if ($telatSemester1 && $telatSemester2) {
+            $ket = "Belum mengupload Semester I & II (Telat)";
+        } elseif ($telatSemester1) {
+            $ket = "Belum mengupload Semester I (Telat)";
+        } elseif ($telatSemester2) {
+            $ket = "Belum mengupload Semester II (Telat)";
+        } elseif (!$adaSemester1 && !$adaSemester2) {
+            $ket = "Belum mengupload Semester I & II";
+        } elseif (!$adaSemester1) {
+            $ket = "Belum mengupload Semester I";
+        } elseif (!$adaSemester2) {
+            $ket = "Belum mengupload Semester II";
+        } else {
+            $ket = "Sudah mengupload kedua semester";
+        }
+
+        $keterangan[] = [
+            'id_user' => $id_user,
+            'nama_perusahaan' => $nama_perusahaan,
+            'keterangan' => $ket,
+            'denda' => ($telatSemester1 || $telatSemester2)
+        ];
     }
 
-    $keterangan[] = [
-        'id_user' => $id_user,
-        'nama_perusahaan' => $nama_perusahaan,
-        'keterangan' => $ket,
-        'denda' => ($telatSemester1 || $telatSemester2)
-    ];
-}
+    // Proses pembayaran denda
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bayar_denda'])) {
+        $id_user = $_POST['id_user'];
+        $nama_perusahaan = $_POST['nama_perusahaan'];
 
-// Proses pembayaran denda
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bayar_denda'])) {
-    $id_user = $_POST['id_user'];
-    $nama_perusahaan = $_POST['nama_perusahaan'];
-
-    // Cek laporan Semester I
-    $cekSemester1 = $db->prepare("
+        // Cek laporan Semester I
+        $cekSemester1 = $db->prepare("
         SELECT COUNT(*) 
         FROM laporan_semester 
         WHERE id_user = :id_user AND semester = 'Semester I' AND tahun = :tahun
     ");
-    $cekSemester1->bindParam(':id_user', $id_user);
-    $cekSemester1->bindParam(':tahun', $tahun_sekarang);
-    $cekSemester1->execute();
-    $adaSemester1 = $cekSemester1->fetchColumn() > 0;
+        $cekSemester1->bindParam(':id_user', $id_user);
+        $cekSemester1->bindParam(':tahun', $tahun_sekarang);
+        $cekSemester1->execute();
+        $adaSemester1 = $cekSemester1->fetchColumn() > 0;
 
-    // Cek laporan Semester II
-    $cekSemester2 = $db->prepare("
+        // Cek laporan Semester II
+        $cekSemester2 = $db->prepare("
         SELECT COUNT(*) 
         FROM laporan_semester 
         WHERE id_user = :id_user AND semester = 'Semester II' AND tahun = :tahun
     ");
-    $cekSemester2->bindParam(':id_user', $id_user);
-    $cekSemester2->bindParam(':tahun', $tahun_sekarang);
-    $cekSemester2->execute();
-    $adaSemester2 = $cekSemester2->fetchColumn() > 0;
+        $cekSemester2->bindParam(':id_user', $id_user);
+        $cekSemester2->bindParam(':tahun', $tahun_sekarang);
+        $cekSemester2->execute();
+        $adaSemester2 = $cekSemester2->fetchColumn() > 0;
 
-    // Menentukan denda yang harus dibayar
-    $denda = [];
+        // Menentukan denda yang harus dibayar
+        $denda = [];
 
-    if (!$adaSemester1 && $bulan_sekarang >= 7) {
-        $denda[] = "Semester I $tahun_sekarang";
-    }
-    if (!$adaSemester2 && $tahun_sekarang > $tahun_sekarang) {
-        $denda[] = "Semester II " . ($tahun_sekarang - 1);
-    }
+        if (!$adaSemester1 && $bulan_sekarang >= 7) {
+            $denda[] = "Semester I $tahun_sekarang";
+        }
+        if (!$adaSemester2 && $tahun_sekarang > $tahun_sekarang) {
+            $denda[] = "Semester II " . ($tahun_sekarang - 1);
+        }
 
-    $denda_text = implode(', ', $denda);
+        $denda_text = implode(', ', $denda);
 
-    // Ambil id_profil
-    $getProfil = $db->prepare("SELECT id_profil FROM profil WHERE id_user = :id_user");
-    $getProfil->bindParam(':id_user', $id_user);
-    $getProfil->execute();
-    $id_profil = $getProfil->fetchColumn();
+        // Ambil id_profil
+        $getProfil = $db->prepare("SELECT id_profil FROM profil WHERE id_user = :id_user");
+        $getProfil->bindParam(':id_user', $id_user);
+        $getProfil->execute();
+        $id_profil = $getProfil->fetchColumn();
 
-    // Insert ke denda_laporan_semester
-    $insert = $db->prepare("
+        // Insert ke denda_laporan_semester
+        $insert = $db->prepare("
         INSERT INTO denda_laporan_semester (id_profil_perusahaan, nama_perusahaan, denda, keterangan)
         VALUES (:id_profil, :nama_perusahaan, :denda, 'Sudah Dibayar')
     ");
-    $insert->bindParam(':id_profil', $id_profil);
-    $insert->bindParam(':nama_perusahaan', $nama_perusahaan);
-    $insert->bindParam(':denda', $denda_text);
-    $insert->execute();
-    
-    echo "<meta http-equiv='refresh' content='0; url=?page=laporan_persemester'>";
+        $insert->bindParam(':id_profil', $id_profil);
+        $insert->bindParam(':nama_perusahaan', $nama_perusahaan);
+        $insert->bindParam(':denda', $denda_text);
+        $insert->execute();
+
+        echo "<meta http-equiv='refresh' content='0; url=?page=laporan_persemester'>";
 
         // Menampilkan alert dan melakukan reload setelah 1 detik
-    echo "<div class='alert alert-success' id='alertDenda'>
+        echo "<div class='alert alert-success' id='alertDenda'>
     Pembayaran Denda berhasil disimpan untuk <b>$nama_perusahaan</b>
     </div>";
 
-    echo "<script type='text/javascript'>
+        echo "<script type='text/javascript'>
     setTimeout(function() {
         document.getElementById('alertDenda').style.display = 'none'; // Menyembunyikan alert setelah 1 detik
     }, 2000); // 1 detik
     </script>";
 
-    exit;
-}
+        exit;
+    }
 
-// Filter hanya data yang telat
-$keterangan = array_filter($keterangan, function ($item) {
-    return $item['denda'];
-});
+    // Filter hanya data yang telat
+    $keterangan = array_filter($keterangan, function ($item) {
+        return $item['denda'];
+    });
 ?>
 
-<div class="container mt-4">
-    <div class="card shadow">
-        <div class="card-body">
-            <h3 class="text-center mb-3">Status Laporan Semester Tahun <?= $tahun_sekarang ?></h3>
-            <hr>
-            <div class="table-responsive" style="max-height: 500px; overflow-x: auto; overflow-y: auto;">
-                <table class="table table-bordered" style="min-width: 1200px; white-space: nowrap;">
-                    <thead class="table-dark">
-                        <tr>
-                            <th>No</th>
-                            <th>Nama Perusahaan</th>
-                            <th>Keterangan</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php if (empty($keterangan)): ?>
+    <div class="container mt-4">
+        <div class="card shadow" style="overflow-x: auto; max-height: calc(100vh - 150px); overflow-y: auto;">
+            <div class="card-body">
+                <h3 class="text-center mb-3">Status Laporan Semester Tahun <?= $tahun_sekarang ?></h3>
+                <hr>
+                <div class="table-responsive" style="max-height: 500px; overflow-x: auto; overflow-y: auto;">
+                    <table class="table table-bordered" style="min-width: 1200px; white-space: nowrap;">
+                        <thead class="table-dark">
                             <tr>
-                                <td colspan="4" class="text-center">Tidak ada perusahaan yang telat mengupload laporan.</td>
+                                <th>No</th>
+                                <th>Nama Perusahaan</th>
+                                <th>Keterangan</th>
+                                <th>Aksi</th>
                             </tr>
-                        <?php else: ?>
-                            <?php foreach ($keterangan as $index => $data): ?>
+                        </thead>
+                        <tbody>
+                            <?php if (empty($keterangan)): ?>
                                 <tr>
-                                    <td><?= $index + 1 ?></td>
-                                    <td><?= htmlspecialchars($data['nama_perusahaan']) ?></td>
-                                    <td><?= htmlspecialchars($data['keterangan']) ?></td>
-                                    <td>
-                                        <form method="post">
-                                            <input type="hidden" name="id_user" value="<?= $data['id_user'] ?>">
-                                            <input type="hidden" name="nama_perusahaan" value="<?= htmlspecialchars($data['nama_perusahaan']) ?>">
-                                            <button type="submit" name="bayar_denda" class="btn btn-success btn-sm">Sudah Bayar</button>
-                                        </form>
-                                    </td>
+                                    <td colspan="4" class="text-center">Tidak ada perusahaan yang telat mengupload laporan.</td>
                                 </tr>
-                            <?php endforeach; ?>
-                        <?php endif; ?>
-                    </tbody>
-                </table>
+                            <?php else: ?>
+                                <?php foreach ($keterangan as $index => $data): ?>
+                                    <tr>
+                                        <td><?= $index + 1 ?></td>
+                                        <td><?= htmlspecialchars($data['nama_perusahaan']) ?></td>
+                                        <td><?= htmlspecialchars($data['keterangan']) ?></td>
+                                        <td>
+                                            <form method="post">
+                                                <input type="hidden" name="id_user" value="<?= $data['id_user'] ?>">
+                                                <input type="hidden" name="nama_perusahaan" value="<?= htmlspecialchars($data['nama_perusahaan']) ?>">
+                                                <button type="submit" name="bayar_denda" class="btn btn-success btn-sm">Sudah Bayar</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 <?php endif; ?>
 

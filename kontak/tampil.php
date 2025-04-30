@@ -22,30 +22,30 @@ $kontak = $stmt->fetch(PDO::FETCH_ASSOC);
 ?>
 
 <div class="container mt-5">
-    <div class="card shadow">
+    <div class="card shadow" style="overflow-x: auto; max-height: calc(100vh - 150px); overflow-y: auto;">
         <div class="card-body">
             <h2>Kontak Admin</h2>
             <table class="table table-bordered">
                 <tr>
                     <th>Email</th>
                     <td>
-                        <?php 
+                        <?php
                         if ($kontak && !empty($kontak['email'])) {
                             $email = htmlspecialchars($kontak['email']);
                             echo '<a href="mailto:' . $email . '" class="btn btn-success">
                                     <i class="fa-solid fa-envelope"></i> ' . $email . '
                                   </a>';
-                        } else { 
-                            echo "Email tidak ditemukan."; 
-                        } 
+                        } else {
+                            echo "Email tidak ditemukan.";
+                        }
                         ?>
                     </td>
                 </tr>
                 <tr>
                     <th>Nomor HP / WhatsApp</th>
                     <td>
-                        <?php 
-                        if ($kontak && !empty($kontak['no_hp'])) { 
+                        <?php
+                        if ($kontak && !empty($kontak['no_hp'])) {
                             // Format nomor HP agar sesuai dengan format internasional (tanpa angka 0 di awal)
                             $nomor_hp = preg_replace('/[^0-9]/', '', $kontak['no_hp']); // Hanya angka
                             if (substr($nomor_hp, 0, 1) == "0") {
@@ -56,15 +56,15 @@ $kontak = $stmt->fetch(PDO::FETCH_ASSOC);
                             echo '<a href="' . htmlspecialchars($wa_link) . '" target="_blank" class="btn btn-success">
                                     <i class="fa-brands fa-whatsapp"></i> ' . htmlspecialchars($kontak['no_hp']) . '
                                   </a>';
-                        } else { 
-                            echo "Nomor HP tidak ditemukan."; 
-                        } 
+                        } else {
+                            echo "Nomor HP tidak ditemukan.";
+                        }
                         ?>
                     </td>
                 </tr>
             </table>
 
-            <?php if (isset($_SESSION['role']) && $_SESSION['role'] == 'superadmin') { ?> 
+            <?php if (isset($_SESSION['role']) && $_SESSION['role'] == 'superadmin') { ?>
                 <a href="?page=update_kontak" class="btn btn-warning">
                     <i class="fa-solid fa-pen-to-square"></i> Update Kontak
                 </a>
