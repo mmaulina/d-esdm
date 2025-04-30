@@ -96,7 +96,7 @@ $laporan_tidak_upload = [];
 $tahun = date('Y'); // Atau sesuaikan dengan tahun yang diinginkan
 
 // Ambil data perusahaan dari tabel profil
-$sql_perusahaan = "SELECT id_user, kabupaten, nama_perusahaan FROM laporan_bulanan";
+$sql_perusahaan = "SELECT id_user, kabupaten, nama_perusahaan FROM profil";
 $stmt_perusahaan = $conn->query($sql_perusahaan);
 $daftar_perusahaan = $stmt_perusahaan->fetchAll(PDO::FETCH_ASSOC);
 
@@ -135,52 +135,63 @@ foreach ($daftar_perusahaan as $perusahaan) {
         $laporan_tidak_upload[$kabupaten]['semester2']++;
     }
 }
+
+$daftarKabupatenKotaKalsel = [
+    'Kabupaten Balangan',
+    'Kabupaten Banjar',
+    'Kabupaten Barito Kuala',
+    'Kabupaten Hulu Sungai Selatan',
+    'Kabupaten Hulu Sungai Tengah',
+    'Kabupaten Hulu Sungai Utara',
+    'Kabupaten Kotabaru',
+    'Kabupaten Tabalong',
+    'Kabupaten Tanah Bumbu',
+    'Kabupaten Tanah Laut',
+    'Kabupaten Tapin',
+    'Kota Banjarbaru',
+    'Kota Banjarmasin'
+];
 $totalProduksi = 0;
 $totalKonsumsi = 0;
+$totalProduksiPerKota = [];
+$totalKonsumsiPerKota = [];
 
-foreach ($daftar_perusahaan as $perusahaan) {
-    $stmt_laporan = $conn->prepare("SELECT produksi_sendiri, pemb_sumber_lain, penj_ke_pelanggan, penj_ke_pln, pemakaian_sendiri FROM laporan_bulanan WHERE id_user = :id_user");
-    $stmt_laporan->execute(['id_user' => $perusahaan['id_user']]);
+// Fungsi parsing angka format IDR
+function parseNumber($val) {
+    if ($val === '-' || trim($val) === '') return 0;
+    $val = str_replace('.', '', $val);     // hapus titik ribuan
+    $val = str_replace(',', '.', $val);    // ubah koma jadi titik (desimal)
+    return (float) $val;
+}
 
-    // Variabel untuk menyimpan total produksi dan konsumsi per kota
-    $totalProduksiPerKota = [];
-    $totalKonsumsiPerKota = [];
+// Ambil data laporan
+$sql = "SELECT kabupaten, produksi_sendiri, pemb_sumber_lain, penj_ke_pelanggan, penj_ke_pln, pemakaian_sendiri FROM laporan_bulanan";
+$stmt = $conn->query($sql);
 
-    // Ambil kabupaten dari perusahaan
-    $kabupaten = $perusahaan['kabupaten'];
+foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $laporan) {
+    $kabupaten = $laporan['kabupaten'];
 
-    foreach ($stmt_laporan->fetchAll(PDO::FETCH_ASSOC) as $laporan) {
-        // Periksa dan ganti nilai yang berisi '-' dengan 0 sebelum dikonversi
-        // Periksa dan ganti nilai yang berisi '-' dengan 0 sebelum dikonversi
-        $produksiSendiri = ($laporan['produksi_sendiri'] == '-' || empty($laporan['produksi_sendiri'])) ? 0 : (float) str_replace('.', '', str_replace(',', '.', $laporan['produksi_sendiri']));
-        $pembSumberLain = ($laporan['pemb_sumber_lain'] == '-' || empty($laporan['pemb_sumber_lain'])) ? 0 : (float) str_replace('.', '', str_replace(',', '.', $laporan['pemb_sumber_lain']));
-        $penjKePelanggan = ($laporan['penj_ke_pelanggan'] == '-' || empty($laporan['penj_ke_pelanggan'])) ? 0 : (float) str_replace('.', '', str_replace(',', '.', $laporan['penj_ke_pelanggan']));
-        $penjKePln = ($laporan['penj_ke_pln'] == '-' || empty($laporan['penj_ke_pln'])) ? 0 : (float) str_replace('.', '', str_replace(',', '.', $laporan['penj_ke_pln']));
-        $pemakaianSendiri = ($laporan['pemakaian_sendiri'] == '-' || empty($laporan['pemakaian_sendiri'])) ? 0 : (float) str_replace('.', '', str_replace(',', '.', $laporan['pemakaian_sendiri']));
+    $produksi = parseNumber($laporan['produksi_sendiri']) + parseNumber($laporan['pemb_sumber_lain']);
+    $konsumsi = parseNumber($laporan['penj_ke_pelanggan']) + parseNumber($laporan['penj_ke_pln']) + parseNumber($laporan['pemakaian_sendiri']);
 
-        // Total produksi = Produksi Sendiri + Pembelian Sumber Lain
-        $produksi = $produksiSendiri + $pembSumberLain;
+    $totalProduksiPerKota[$kabupaten] = ($totalProduksiPerKota[$kabupaten] ?? 0) + $produksi;
+    $totalKonsumsiPerKota[$kabupaten] = ($totalKonsumsiPerKota[$kabupaten] ?? 0) + $konsumsi;
 
-        // Total konsumsi = Penjualan ke Pelanggan + Penjualan ke PLN + Pemakaian Sendiri
-        $konsumsi = $penjKePelanggan + $penjKePln + $pemakaianSendiri;
+    $totalProduksi += $produksi;
+    $totalKonsumsi += $konsumsi;
+}
 
-        // Menyimpan total produksi dan konsumsi per kota
-        if (!isset($totalProduksiPerKota[$kabupaten])) {
-            $totalProduksiPerKota[$kabupaten] = 0;
-        }
-        if (!isset($totalKonsumsiPerKota[$kabupaten])) {
-            $totalKonsumsiPerKota[$kabupaten] = 0;
-        }
-
-        // Tambahkan ke total per kota
-        $totalProduksiPerKota[$kabupaten] += $produksi;
-        $totalKonsumsiPerKota[$kabupaten] += $konsumsi;
-
-        // Total produksi dan konsumsi secara keseluruhan
-        $totalProduksi += $produksi;
-        $totalKonsumsi += $konsumsi;
+// Pastikan semua kabupaten/kota ada
+foreach ($daftarKabupatenKotaKalsel as $kota) {
+    if (!isset($totalProduksiPerKota[$kota])) {
+        $totalProduksiPerKota[$kota] = 0;
+    }
+    if (!isset($totalKonsumsiPerKota[$kota])) {
+        $totalKonsumsiPerKota[$kota] = 0;
     }
 }
+
+
 ?>
 <main>
     <div class="container mt-4">
@@ -220,35 +231,31 @@ foreach ($daftar_perusahaan as $perusahaan) {
                                         <th>Kabupaten/Kota</th>
                                         <th>Belum Upload Semester I (<?php echo $tahun; ?>)</th>
                                         <th>Belum Upload Semester II (<?php echo $tahun; ?>)</th>
-                                        <th>Total Produksi (kWh)</th>
-                                        <th>Total Konsumsi (kWh)</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php
-                                    $total_semester1 = 0;
-                                    $total_semester2 = 0;
-                                    foreach ($kota_kabupaten_kalsel as $kota):
-                                        $data = isset($laporan_tidak_upload[$kota]) ? $laporan_tidak_upload[$kota] : ['semester1' => 0, 'semester2' => 0];
+                                        <?php
+                                        $total_semester1 = 0;
+                                        $total_semester2 = 0;
+                                        foreach ($kota_kabupaten_kalsel as $kota):
+                                            $data = isset($laporan_tidak_upload[$kota]) ? $laporan_tidak_upload[$kota] : ['semester1' => 0, 'semester2' => 0];
 
-                                        $total_semester1 += $data['semester1'];
-                                        $total_semester2 += $data['semester2'];
-                                    ?>
-                                        <tr>
-                                            <td><?php echo htmlspecialchars($kota); ?></td>
-                                            <td><?php echo $data['semester1']; ?></td>
-                                            <td><?php echo $data['semester2']; ?></td>
-                                            <td><?php echo isset($totalProduksiPerKota[$kota]) ? number_format($totalProduksiPerKota[$kota], 2) : '0.00'; ?></td>
-                                            <td><?php echo isset($totalKonsumsiPerKota[$kota]) ? number_format($totalKonsumsiPerKota[$kota], 2) : '0.00'; ?></td>
-                                        </tr>
-                                    <?php endforeach; ?>
+                                            $total_semester1 += $data['semester1'];
+                                            $total_semester2 += $data['semester2'];
+                                        ?>
+                                            <tr>
+                                                <td><?php echo htmlspecialchars($kota); ?></td>
+                                                <td><?php echo $data['semester1']; ?></td>
+                                                <td><?php echo $data['semester2']; ?></td>
+                                            </tr>
+                                        <?php endforeach; ?>
 
-                                    <?php if (empty($laporan_tidak_upload)): ?>
-                                        <tr>
-                                            <td colspan="3" class="text-center">Semua perusahaan telah mengunggah laporan semester.</td>
-                                        </tr>
-                                    <?php endif; ?>
-                                </tbody>
+                                        <?php if (empty($laporan_tidak_upload)): ?>
+                                            <tr>
+                                                <td colspan="3" class="text-center">Semua perusahaan telah mengunggah laporan semester.</td>
+                                            </tr>
+                                        <?php endif; ?>
+                                    </tbody>
                                 <tfoot>
                                     <tr class="table-dark">
                                         <td><strong>Total</strong></td>
@@ -260,25 +267,39 @@ foreach ($daftar_perusahaan as $perusahaan) {
                         </div>
                     </div>
                 </div>
+<!-- Ringkasan Produksi dan Konsumsi per Kota -->
                 <div class="row mt-3">
-                    <div class="col mb-3">
-                        <div class="card text-black" style="background-color: #FCDC2A;">
-                            <div class="card-body">
-                                <h5 class="card-title">Total Produksi (kWh)</h5>
-                                <p class="card-text"><?php echo number_format($totalProduksi, 2); ?></p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col mb-3">
-                        <div class="card text-black" style="background-color: #008B47;">
-                            <div class="card-body">
-                                <h5 class="card-title">Total Konsumsi (kWh)</h5>
-                                <p class="card-text"><?php echo number_format($totalKonsumsi, 2); ?></p>
-                            </div>
+                    <div class="col">
+                        <h5 class="fw-bold mb-3">Total Produksi & Konsumsi per Kabupaten/Kota</h5>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped table-sm">
+                                <thead class="table-dark">
+                                    <tr class="text-center">
+                                        <th>Kabupaten/Kota</th>
+                                        <th>Total Produksi (kWh)</th>
+                                        <th>Total Konsumsi (kWh)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($totalProduksiPerKota as $kota => $produksi): ?>
+                                        <tr>
+                                            <td><?= htmlspecialchars($kota); ?></td>
+                                            <td class="text-end"><?= number_format($produksi, 2, ',', '.'); ?></td>
+                                            <td class="text-end"><?= number_format($totalKonsumsiPerKota[$kota] ?? 0, 2, ',', '.'); ?></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                                <tfoot class="table-light fw-bold">
+                                    <tr>
+                                        <td class="text-end">Total:</td>
+                                        <td class="text-end"><?= number_format($totalProduksi, 2, ',', '.'); ?></td>
+                                        <td class="text-end"><?= number_format($totalKonsumsi, 2, ',', '.'); ?></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
                         </div>
                     </div>
                 </div>
-                
                 <!-- Row for News Content -->
                 <div class="row mt-4">
                     <div class="col-12 d-flex justify-content-between align-items-center">
