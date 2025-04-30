@@ -221,6 +221,7 @@ foreach ($daftarKabupatenKotaKalsel as $kota) {
                 </div>
 
                 <!-- Row for Perusahaan Belum Upload Laporan -->
+                <?php if (isset($_SESSION['role']) && $_SESSION['role'] !== 'umum' && $_SESSION['role'] !== 'kementerian') : ?>
                 <div class="row mt-3">
                     <div class="col">
                         <h5 class="fw-bold mb-3">Perusahaan Belum Upload Laporan Semester</h5>
@@ -267,6 +268,7 @@ foreach ($daftarKabupatenKotaKalsel as $kota) {
                         </div>
                     </div>
                 </div>
+                <?php endif; ?>
 <!-- Ringkasan Produksi dan Konsumsi per Kota -->
                 <div class="row mt-3">
                     <div class="col">
