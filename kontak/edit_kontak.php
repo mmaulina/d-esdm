@@ -59,7 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
 <div class="container mt-5">
-    <div class="card shadow">
+    <div class="card shadow" style="overflow-x: auto; max-height: calc(100vh - 150px); overflow-y: auto;">
         <div class="card-body">
             <h2>Update Kontak Admin</h2>
             <form method="POST">
@@ -83,16 +83,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </div>
 
 <?php if ($alert): ?>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-    Swal.fire({
-        icon: '<?= $alert['icon'] ?>',
-        title: '<?= $alert['title'] ?>',
-        text: '<?= $alert['text'] ?>'
-    }).then(() => {
-        <?php if (isset($alert['redirect'])): ?>
-        window.location.href = '<?= $alert['redirect'] ?>';
-        <?php endif; ?>
-    });
-</script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        Swal.fire({
+            icon: '<?= $alert['icon'] ?>',
+            title: '<?= $alert['title'] ?>',
+            text: '<?= $alert['text'] ?>'
+        }).then(() => {
+            <?php if (isset($alert['redirect'])): ?>
+                window.location.href = '<?= $alert['redirect'] ?>';
+            <?php endif; ?>
+        });
+    </script>
 <?php endif; ?>

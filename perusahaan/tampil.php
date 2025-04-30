@@ -23,7 +23,7 @@ $profil = $stmt->fetch(PDO::FETCH_ASSOC);
 ?>
 
 <div class="container mt-5">
-    <div class="card shadow">
+    <div class="card shadow" style="overflow-x: auto; max-height: calc(100vh - 150px); overflow-y: auto;">
         <div class="card-body">
             <h2><i class="fas fa-bolt" style="color: #ffc107;"></i> Informasi Profil Perusahaan <i class="fas fa-bolt" style="color: #ffc107;"></i></h2>
 
@@ -71,20 +71,20 @@ $profil = $stmt->fetch(PDO::FETCH_ASSOC);
                     </tr>
                     <tr>
                         <th>Status</th>
-                            <td>
-                                <?php
-                                // Menampilkan status dengan ikon dan warna
-                                    if ($profil['status'] == 'diajukan') {
-                                        echo '<i class="fas fa-clock" style="color: yellow;"></i> Diajukan';
-                                    } elseif ($profil['status'] == 'diterima') {
-                                        echo '<i class="fas fa-check" style="color: green;"></i> Diterima';
-                                    } elseif ($profil['status'] == 'ditolak') {
-                                        echo '<i class="fas fa-times" style="color: red;"></i> Ditolak';
-                                    } else {
-                                        echo '<span class="text-muted">Status tidak diketahui</span>';
-                                    }
-                                    ?>
-                            </td>
+                        <td>
+                            <?php
+                            // Menampilkan status dengan ikon dan warna
+                            if ($profil['status'] == 'diajukan') {
+                                echo '<i class="fas fa-clock" style="color: yellow;"></i> Diajukan';
+                            } elseif ($profil['status'] == 'diterima') {
+                                echo '<i class="fas fa-check" style="color: green;"></i> Diterima';
+                            } elseif ($profil['status'] == 'ditolak') {
+                                echo '<i class="fas fa-times" style="color: red;"></i> Ditolak';
+                            } else {
+                                echo '<span class="text-muted">Status tidak diketahui</span>';
+                            }
+                            ?>
+                        </td>
                     </tr>
                     <tr>
                         <th>Keterangan</th>

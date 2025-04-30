@@ -93,7 +93,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                             <th rowspan="2" onclick="sortTable(6)">No. Fax <i class="fa fa-sort"></i></th>
                             <th rowspan="2" onclick="sortTable(7)">Tenaga Teknik <i class="fa fa-sort"></i></th>
                             <th colspan="3">Kontak Person</th>
-                            <th rowspan="2" onclick="sortTable(8)">Status</th>
+                            <th rowspan="2" onclick="sortTable(8)">Status <i class="fa fa-sort"></i></th>
                             <th rowspan="2" onclick="sortTable(9)">Keterangan</th>
                             <th rowspan="2">Aksi</th>
                         </tr>
