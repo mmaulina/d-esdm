@@ -50,7 +50,7 @@ $konten_djih = $stmt->fetch(PDO::FETCH_ASSOC)['jumlah_baru'];
                         </a>
                     </li>
                 <?php } ?>
-                <?php if ($_SESSION['role'] == 'superadmin'|| $_SESSION['role'] == 'admin') { ?> 
+                <?php if ($_SESSION['role'] == 'superadmin'|| $_SESSION['role'] == 'admin'||$_SESSION['role'] == 'adminbulanan'||$_SESSION['role'] == 'adminsemester') { ?> 
                     <li class="nav-item">
                         <a class="nav-link <?= ($currentPage == 'profil_admin') ? 'active' : ''; ?>" href="?page=profil_admin">
                             <i class="fas fa-user-tie me-2"></i> <span class="sidebar-text">Profile Perusahaan</span>
@@ -68,16 +68,20 @@ $konten_djih = $stmt->fetch(PDO::FETCH_ASSOC)['jumlah_baru'];
                     </a>
                     <div class="collapse" id="submenuPelaporan">
                         <ul class="nav flex-column ms-3">
+                        <?php if ($_SESSION['role'] !== 'kementerian'||$_SESSION['role'] !== 'adminsemester') { ?> 
                             <li class="nav-item">
                                 <a class="nav-link <?= ($currentPage == 'laporan_perbulan') ? 'active' : ''; ?>" href="?page=laporan_perbulan">
                                     <i class="fas fa-calendar-alt me-2"></i> <span class="sidebar-text">Pelaporan Bulanan</span>
                                 </a>
                             </li>
+                            <?php } ?>
+                            <?php if ($_SESSION['role'] !== 'kementerian'||$_SESSION['role'] !== 'adminbulanan') { ?>
                             <li class="nav-item">
                                 <a class="nav-link <?= ($currentPage == 'laporan_persemester') ? 'active' : ''; ?>" href="?page=laporan_persemester">
                                     <i class="fas fa-calendar me-2"></i> <span class="sidebar-text">Pelaporan Semester</span>
                                 </a>
                             </li>
+                            <?php } ?>
                         </ul>
                     </div>
                 </li>

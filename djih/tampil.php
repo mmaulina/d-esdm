@@ -44,7 +44,7 @@ try {
             <div class="card-body">
                 <div class="row mt-3">
                     <div class="col-12 d-flex justify-content-between align-items-center">
-                        <?php if (isset($_SESSION['role']) && $_SESSION['role'] !== 'umum') : ?>
+                    <?php if (isset($_SESSION['role']) && $_SESSION['role'] !== 'umum' && $_SESSION['role'] !== 'kementerian') : ?>
                             <div class="btn-group d-inline-flex">
                                 <a href="?page=tabel_djih" class="btn btn-success">Tabel Konten</a>
                             </div>

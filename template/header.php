@@ -152,7 +152,7 @@ if (session_status() == PHP_SESSION_NONE) {
                         $totalNotifikasi = $jumlahLapBulananDiajukan + $jumlahLapSemesterDiajukan + $jumlahPenggunaDiajukan + $jumlahprofilDiajukan;
                         ?>
 
-                        <?php if ($_SESSION['role'] == 'superadmin' || $_SESSION['role'] == 'admin') { ?> <!-- hanya superadmin yang bisa mengakses menu ini -->
+                        <?php if ($_SESSION['role'] == 'superadmin' || $_SESSION['role'] == 'admin'||$_SESSION['role'] == 'adminbulanan'||$_SESSION['role'] == 'adminsemester') { ?> <!-- hanya superadmin yang bisa mengakses menu ini -->
                             <a href="?page=notifikasi" class="nav-link position-relative me-3">
                                 <i class="fas fa-bell fa-lg"></i>
                                 <?php if ($totalNotifikasi > 0): ?>

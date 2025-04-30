@@ -75,10 +75,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Role</label>
-                    <select name="role" class="form-control" required>
-                        <option value="admin">Admin</option>
-                        <option value="umum">Umum</option>
-                    </select>
+                    <div class="mb-3">
+                        <label class="form-label">Role</label>
+                        <select name="role" class="form-control" required>
+                            <?php if ($_SESSION['role'] == 'superadmin') { ?>
+                                <option value="superadmin">SuperAdmin</option>
+                                <option value="kementerian">Kementerian</option>
+                            <?php } ?>
+                            <option value="admin">Admin</option>
+                            <option value="adminbulanan">Admin Bulanan</option>
+                            <option value="adminsemester">Admin Semester</option>
+                            <option value="umum">Umum</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Status</label>

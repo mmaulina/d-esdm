@@ -6,7 +6,7 @@ try {
     $id_user = $_SESSION['id_user'];
     $role = $_SESSION['role'];
 
-    if ($role == 'admin') {
+    if ($role == 'admin'||$role == 'adminbulanan'||$role == 'adminsemester') {
         $sql = "SELECT id_user, username, email, no_hp, role, status 
                 FROM users 
                 WHERE role != 'superadmin'
