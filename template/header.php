@@ -121,12 +121,19 @@ if (session_status() == PHP_SESSION_NONE) {
                         $database = new Database();
                         $conn = $database->getConnection();
 
+                        // Query untuk menghitung jumlah laporan_bulanan yang berstatus 'diajukan'
+                        $queryLapBulanan = "SELECT COUNT(*) as total FROM laporan_bulanan WHERE status = 'diajukan'";
+                        $stmtLapBulanan = $conn->prepare($queryLapBulanan);
+                        $stmtLapBulanan->execute();
+                        $resultLapBulanan = $stmtLapBulanan->fetch(PDO::FETCH_ASSOC);
+                        $jumlahLapBulananDiajukan = $resultLapBulanan['total'];
+
                         // Query untuk menghitung jumlah laporan_semester yang berstatus 'diajukan'
-                        $queryLaporan = "SELECT COUNT(*) as total FROM laporan_semester WHERE status = 'diajukan'";
-                        $stmtLaporan = $conn->prepare($queryLaporan);
-                        $stmtLaporan->execute();
-                        $resultLaporan = $stmtLaporan->fetch(PDO::FETCH_ASSOC);
-                        $jumlahLaporanDiajukan = $resultLaporan['total'];
+                        $queryLapSemester = "SELECT COUNT(*) as total FROM laporan_semester WHERE status = 'diajukan'";
+                        $stmtLapSemester = $conn->prepare($queryLapSemester);
+                        $stmtLapSemester->execute();
+                        $resultLapSemester = $stmtLapSemester->fetch(PDO::FETCH_ASSOC);
+                        $jumlahLapSemesterDiajukan = $resultLapSemester['total'];
 
                         // Query untuk menghitung jumlah pengguna yang berstatus 'diajukan'
                         $queryPengguna = "SELECT COUNT(*) as total FROM users WHERE status = 'diajukan'";
@@ -142,7 +149,7 @@ if (session_status() == PHP_SESSION_NONE) {
                         $jumlahprofilDiajukan = $resultprofil['total'];
 
                         // Total notifikasi yang diajukan
-                        $totalNotifikasi = $jumlahLaporanDiajukan + $jumlahPenggunaDiajukan + $jumlahprofilDiajukan;
+                        $totalNotifikasi = $jumlahLapBulananDiajukan + $jumlahLapSemesterDiajukan + $jumlahPenggunaDiajukan + $jumlahprofilDiajukan;
                         ?>
 
                         <?php if ($_SESSION['role'] == 'superadmin' || $_SESSION['role'] == 'admin') { ?> <!-- hanya superadmin yang bisa mengakses menu ini -->
