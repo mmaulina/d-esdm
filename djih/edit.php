@@ -31,8 +31,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     {
         return strip_tags(trim($input));
     }
-    
-    
+
+
     $id_title = sanitize_input($_POST['id_title']);
     $title = sanitize_input($_POST['title']);
     $caption = sanitize_input($_POST['caption']);
@@ -57,7 +57,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bindParam(':konten', $new_konten);
     $stmt->bindParam(':tanggal', $tanggal);
     $stmt->bindParam(':id', $id);
-    
+
     if ($stmt->execute()) {
         $_SESSION['hasil'] = true;
         $_SESSION['pesan'] = "Berhasil Mengupdate Data";
@@ -69,7 +69,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 // Fungsi untuk upload file
-function uploadFile($input_name) {
+function uploadFile($input_name)
+{
     if (!empty($_FILES[$input_name]['name'])) {
         $target_dir = "uploads/";
         $file_name = basename($_FILES[$input_name]["name"]);
@@ -94,17 +95,17 @@ function uploadFile($input_name) {
 <div class="container mt-4">
     <h3 class="text-center mb-3"><i class="fas fa-bolt" style="color: #ffc107;"></i> Edit Konten <i class="fas fa-bolt" style="color: #ffc107;"></i></h3>
     <hr>
-    <div class="card shadow">
+    <div class="card shadow" style="overflow-x: auto; max-height: calc(100vh - 150px); overflow-y: auto;">
         <div class="card-body">
             <form method="POST" enctype="multipart/form-data">
-            <div class="mb-3">
-                <label class="form-label">Title</label>
-                <input type="hidden" name="id_title" class="form-control" value="<?= htmlspecialchars($konten['id_title']); ?>">
-                <input type="text" name="title" class="form-control" required value="<?= htmlspecialchars($konten['title']); ?>" required>
-            </div>
+                <div class="mb-3">
+                    <label class="form-label">Title</label>
+                    <input type="hidden" name="id_title" class="form-control" value="<?= htmlspecialchars($konten['id_title']); ?>">
+                    <input type="text" name="title" class="form-control" required value="<?= htmlspecialchars($konten['title']); ?>" required>
+                </div>
                 <div class="mb-3">
                     <label class="form-label">Caption</label>
-                    <input type="text" name="caption" class="form-control" required value="<?= $konten['caption']; ?>">
+                    <textarea name="caption" class="form-control" rows="4" required><?= htmlspecialchars($konten['caption']); ?></textarea>
                 </div>
                 <div class="form-group mb-2">
                     <label>Jenis Konten</label>
