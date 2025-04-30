@@ -71,7 +71,7 @@ try {
                                 </td>
                                 <td><?php echo $konten['tanggal']; ?></td>
                                 <td>
-                                    <a href="?page=edit_konten_djih&id=<?php echo $konten['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
+                                    <a href="?page=edit_konten_djih&id=<?php echo $konten['id']; ?>" class="btn btn-warning btn-sm mb-1">Edit</a>
                                     <a href="?page=hapus_konten_djih&id=<?php echo $konten['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus konten ini?');">Hapus</a>
                                 </td>
                             </tr>

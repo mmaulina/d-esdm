@@ -31,10 +31,12 @@ if (isset($_POST['btn_simpan'])) {
             $query = $stmt->execute();
 
             if ($query) {
-                echo "<script>alert('Password berhasil diperbarui!');</script>";
+                $_SESSION['hasil'] = true;
+                $_SESSION['pesan'] = "Berhasil Memperbarui Data";
                 echo "<meta http-equiv='refresh' content='0;url=?page=dashboard'>";
             } else {
-                echo "<script>alert('Password gagal diperbarui!');</script>";
+                $_SESSION['hasil'] = false;
+                $_SESSION['pesan'] = "Gagal Memperbarui Data";
                 echo "<meta http-equiv='refresh' content='0;url=?page=password_edit'>";
             }
         } else {

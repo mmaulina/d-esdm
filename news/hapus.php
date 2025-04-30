@@ -12,7 +12,7 @@ try {
     $db = new Database();
     $conn = $db->getConnection();
     // Periksa apakah data ada dalam database
-    $sql = "SELECT id FROM news WHERE id = :id";
+    $sql = "SELECT konten FROM news WHERE id = :id";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':id', $id, PDO::PARAM_INT);
     $stmt->execute();
@@ -21,17 +21,28 @@ try {
         echo "<script>alert('Data tidak ditemukan!'); window.location='?page=tabel';</script>";
         exit();
     }
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
+    // Hapus file jika ada
+    $filePaths = [$row['konten']];
+    foreach ($filePaths as $file) {
+        if (!empty($file) && file_exists($file)) {
+            unlink($file);
+        }
+    }
     // Hapus data dari database
     $sql = "DELETE FROM news WHERE id = :id";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':id', $id, PDO::PARAM_INT);
     
     if ($stmt->execute()) {
-        echo "<script>alert('konten berhasil dihapus!'); window.location='?page=tabel';</script>";
+        $_SESSION['hasil'] = true;
+        $_SESSION['pesan'] = "Berhasil Menghapus Data";
     } else {
-        echo "<script>alert('Gagal menghapus konten!'); window.location='?page=tabel';</script>";
+        $_SESSION['hasil'] = false;
+        $_SESSION['pesan'] = "Gagal Menghapus Data";
     }
+    echo "<meta http-equiv='refresh' content='0; url=?page=tabel'>";
 } catch (PDOException $e) {
     echo "<script>alert('Kesalahan: " . $e->getMessage() . "'); window.location='?page=tabel';</script>";
 }

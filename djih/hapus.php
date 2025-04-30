@@ -12,7 +12,7 @@ try {
     $db = new Database();
     $conn = $db->getConnection();
     // Periksa apakah data ada dalam database
-    $sql = "SELECT id FROM djih WHERE id = :id";
+    $sql = "SELECT konten FROM djih WHERE id = :id";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':id', $id, PDO::PARAM_INT);
     $stmt->execute();
@@ -20,6 +20,15 @@ try {
     if ($stmt->rowCount() == 0) {
         echo "<script>alert('Data tidak ditemukan!'); window.location='?page=tabel_djih';</script>";
         exit();
+    }
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Hapus file jika ada
+    $filePaths = [$row['konten']];
+    foreach ($filePaths as $file) {
+        if (!empty($file) && file_exists($file)) {
+            unlink($file);
+        }
     }
 
     // Hapus data dari database

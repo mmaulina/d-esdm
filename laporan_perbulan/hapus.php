@@ -28,10 +28,14 @@ try {
     $stmt->bindParam(':id', $id, PDO::PARAM_INT);
     
     if ($stmt->execute()) {
-        echo "<script>alert('Laporan berhasil dihapus!'); window.location='?page=laporan_perbulan';</script>";
+        $_SESSION['hasil'] = true;
+        $_SESSION['pesan'] = "Berhasil Hapus Data";
     } else {
-        echo "<script>alert('Gagal menghapus Laporan!'); window.location='?page=laporan_perbulan';</script>";
+        $_SESSION['hasil'] = false;
+        $_SESSION['pesan'] = "Gagal Hapus Data";
     }
+
+    echo "<meta http-equiv='refresh' content='0; url=?page=laporan_perbulan'>";
 } catch (PDOException $e) {
     echo "<script>alert('Kesalahan: " . $e->getMessage() . "'); window.location='?page=laporan_perbulan';</script>";
 }
