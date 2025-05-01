@@ -72,7 +72,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             <!-- Tombol Tambah & Export Spreadsheet -->
             <div class="mb-3">
-                <?php if ($_SESSION['role'] !== 'admin') { ?> <!-- hanya admin yang tidak bisa mengakses ini -->
+                <?php if ($_SESSION['role'] !== 'admin' && $_SESSION['role'] !== 'adminbulanan' && $_SESSION['role'] !== 'adminsemester') { ?> <!-- hanya admin yang tidak bisa mengakses ini -->
                     <a href="?page=tambah_profil" class="btn btn-primary">
                         <i class="fas fa-plus"></i> Tambah Data
                     </a>
