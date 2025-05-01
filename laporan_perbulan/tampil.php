@@ -18,16 +18,14 @@ $db = new Database();
 $conn = $db->getConnection();
 
 // Query dasar
-$query = "SELECT * FROM laporan_bulanan";
+$query = "SELECT * FROM laporan_bulanan WHERE 1=1";
 $params = [];
 
 
 // Query berdasarkan role
 $params = [];
-if ($role == 'admin' || $role == 'superadmin') {
-    $query = "SELECT * FROM laporan_bulanan ORDER BY FIELD(status, 'diajukan', 'ditolak', 'diterima')";
-} else {
-    $query = "SELECT * FROM laporan_bulanan WHERE id_user = :id_user ORDER BY FIELD(status, 'ditolak', 'diajukan', 'diterima')";
+if ($role != 'admin' && $role != 'superadmin') {
+    $query .= " AND id_user = :id_user";
     $params[':id_user'] = $id_user;
 }
 
@@ -35,13 +33,40 @@ if ($role == 'admin' || $role == 'superadmin') {
 // Cek apakah ada keyword pencarian
 if (!empty($_GET['keyword'])) {
     $keyword = "%" . $_GET['keyword'] . "%";
-
-    // Tambahkan WHERE jika belum ada, atau AND jika sudah ada filter sebelumnya
-    $query .= (strpos($query, 'WHERE') === false) ? " WHERE" : " AND";
-    $query .= " nama_perusahaan LIKE :keyword";
-
+    $query .= " AND nama_perusahaan LIKE :keyword"; //fitur cari berdasarkan nama_perusahaan
     $params[':keyword'] = $keyword;
 }
+
+// Filter
+$tahun = $_GET['tahun'] ?? '';
+if (!empty($tahun)) {
+    $query .= " AND tahun = :tahun";
+    $params[':tahun'] = $tahun;
+}
+
+$bulan = $_GET['bulan'] ?? '';
+if (!empty($bulan)) {
+    $query .= " AND bulan = :bulan";
+    $params[':bulan'] = $bulan;
+}
+
+$kabupaten = $_GET['kabupaten'] ?? '';
+if (!empty($kabupaten)) {
+    $query .= " AND kabupaten = :kabupaten";
+    $params[':kabupaten'] = $kabupaten;
+}
+
+// Ambil daftar jenis usaha dan kabupaten/kota untuk dropdown filter
+$tahunStmt = $conn->query("SELECT DISTINCT tahun FROM laporan_bulanan ORDER BY tahun");
+$tahunList = $tahunStmt->fetchAll(PDO::FETCH_COLUMN);
+
+$bulanStmt = $conn->query("SELECT DISTINCT bulan FROM laporan_bulanan ORDER BY bulan");
+$bulanList = $bulanStmt->fetchAll(PDO::FETCH_COLUMN);
+
+$kabupatenStmt = $conn->query("SELECT DISTINCT kabupaten FROM laporan_bulanan ORDER BY kabupaten");
+$kabupatenList = $kabupatenStmt->fetchAll(PDO::FETCH_COLUMN);
+
+$query .= " ORDER BY FIELD(status, 'diajukan', 'ditolak', 'diterima')";
 
 // Persiapkan dan jalankan query
 $stmt = $conn->prepare($query);
@@ -75,7 +100,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 }
 
 // Cek apakah id_user ada di laporan_bulanan
-$queryCheck = "SELECT COUNT(*) FROM profil WHERE id_user = :id_user AND status = 'diterima'" ;
+$queryCheck = "SELECT COUNT(*) FROM profil WHERE id_user = :id_user AND status = 'diterima'";
 $stmtCheck = $conn->prepare($queryCheck);
 $stmtCheck->bindParam(':id_user', $id_user, PDO::PARAM_INT);
 $stmtCheck->execute();
@@ -85,17 +110,58 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
 <div class="container mt-4">
     <h3 class="text-center mb-3"><i class="fas fa-bolt" style="color: #ffc107;"></i>Pelaporan Bulanan<i class="fas fa-bolt" style="color: #ffc107;"></i></h3>
     <hr>
-    <div class="card shadow">
+    <div class="card shadow" style="overflow-x: auto; max-height: calc(100vh - 150px); overflow-y: auto;">
         <div class="card-body">
-            <!-- Fitur pencarian -->
+            <!-- Fitur pencarian dan filter -->
             <form method="GET" class="mb-3">
-                <input type="hidden" name="page" value="laporan_bulanan">
-                <div class="input-group">
+                <input type="hidden" name="page" value="laporan_perbulan">
+                <div class="input-group mb-2">
                     <input type="text" name="keyword" class="form-control" placeholder="Cari berdasarkan nama perusahaan..." value="<?= isset($_GET['keyword']) ? htmlspecialchars($_GET['keyword']) : '' ?>">
                     <button type="submit" class="btn btn-success">Cari</button>
-                    <a href="?page=laporan_bulanan" class="btn btn-secondary">Reset</a>
+                    <a href="?page=laporan_perbulan" class="btn btn-secondary">Reset</a>
+                </div>
+
+                <div class="row mb-3 align-items-end">
+                    <div class="col">
+                        <label for="tahun" class="form-label">Tahun</label>
+                        <select name="tahun" id="tahun" class="form-select">
+                            <option value="">-- Pilih Tahun --</option>
+                            <?php foreach ($tahunList as $tahun): ?>
+                                <option value="<?= htmlspecialchars($tahun) ?>" <?= (isset($_GET['tahun']) && $_GET['tahun'] == $tahun) ? 'selected' : '' ?>>
+                                    <?= htmlspecialchars($tahun) ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label for="bulan" class="form-label">Bulan</label>
+                        <select name="bulan" id="bulan" class="form-select">
+                            <option value="">-- Pilih Bulan --</option>
+                            <?php foreach ($bulanList as $bulan): ?>
+                                <option value="<?= htmlspecialchars($bulan) ?>" <?= (isset($_GET['bulan']) && $_GET['bulan'] == $bulan) ? 'selected' : '' ?>>
+                                    <?= htmlspecialchars($bulan) ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label for="kabupaten" class="form-label">Kabupaten/Kota</label>
+                        <select name="kabupaten" id="kabupaten" class="form-select">
+                            <option value="">-- Pilih Kabupaten/Kota --</option>
+                            <?php foreach ($kabupatenList as $kab): ?>
+                                <option value="<?= htmlspecialchars($kab) ?>" <?= (isset($_GET['kabupaten']) && $_GET['kabupaten'] == $kab) ? 'selected' : '' ?>>
+                                    <?= htmlspecialchars($kab) ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div class="col d-flex gap-2">
+                        <button type="submit" class="btn btn-success w-100">Filter</button>
+                        <a href="?page=laporan_perbulan" class="btn btn-secondary w-100">Reset</a>
+                    </div>
                 </div>
             </form>
+
             <div class="mb-3">
                 <?php if (!$hasprofil && $role == 'umum') : ?>
                     <div class="alert alert-warning text-center" role="alert">
@@ -208,7 +274,7 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                                     </td>
                                     <td><?php echo htmlspecialchars($row['keterangan']); ?></td>
                                     <td class="text-center">
-                                        <?php if ($role == 'admin'||$role == 'superadmin' && $row['status'] == 'diajukan'): ?>
+                                        <?php if ($role == 'admin' || $role == 'superadmin' && $row['status'] == 'diajukan'): ?>
                                             <!-- Tombol Terima menggunakan POST -->
                                             <form method="POST" style="display: inline;">
                                                 <input type="hidden" name="terima_id" value="<?php echo $row['id']; ?>">
