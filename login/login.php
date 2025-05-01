@@ -48,7 +48,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if ($user) {
                 if ($user['status'] !== 'diverifikasi') {
-                    
                     if ($kontak && !empty($kontak['no_hp'])) {
                         // Format nomor HP agar sesuai dengan format internasional (tanpa angka 0 di awal)
                         $nomor_hp = preg_replace('/[^0-9]/', '', $kontak['no_hp']); // Hanya angka
@@ -57,9 +56,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         }
 
                         $wa_link = "https://wa.me/" . $nomor_hp;
-                        echo '<a href="' . htmlspecialchars($wa_link) . '" target="_blank" class="btn btn-success">
-                                <i class="fa-brands fa-whatsapp"></i> ' . htmlspecialchars($kontak['no_hp']) . '
-                              </a>';
+                        $error = "Akun Anda belum diverifikasi. Silakan hubungi admin di <a href='$wa_link' target='_blank'>WhatsApp</a>.";
                     } else {
                         echo "Nomor HP tidak ditemukan.";
                     }
