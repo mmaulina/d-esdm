@@ -19,6 +19,8 @@ if (!isset($_SESSION['token'])) {
 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+
     if ($_SESSION['login_attempts'] >= 5) {
         $error = "Terlalu banyak percobaan login. Coba lagi nanti.";
     } else {
@@ -38,9 +40,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->execute();
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
+                // Ambil email & nomor HP dari id_user = 1
+            $sqlkontak = "SELECT email, no_hp FROM users WHERE id_user = 1";
+            $stmtkontak = $pdo->prepare($sqlkontak);
+            $stmtkontak->execute();
+            $kontak = $stmtkontak->fetch(PDO::FETCH_ASSOC);
+
             if ($user) {
                 if ($user['status'] !== 'diverifikasi') {
-                    $error = "Akun Anda belum diverifikasi. Silakan hubungi admin di <a href='https://wa.me/628115128607' target='_blank'>WhatsApp</a>.";
+                    
+                    if ($kontak && !empty($kontak['no_hp'])) {
+                        // Format nomor HP agar sesuai dengan format internasional (tanpa angka 0 di awal)
+                        $nomor_hp = preg_replace('/[^0-9]/', '', $kontak['no_hp']); // Hanya angka
+                        if (substr($nomor_hp, 0, 1) == "0") {
+                            $nomor_hp = "62" . substr($nomor_hp, 1); // Ganti "0" di awal dengan "62"
+                        }
+
+                        $wa_link = "https://wa.me/" . $nomor_hp;
+                        echo '<a href="' . htmlspecialchars($wa_link) . '" target="_blank" class="btn btn-success">
+                                <i class="fa-brands fa-whatsapp"></i> ' . htmlspecialchars($kontak['no_hp']) . '
+                              </a>';
+                    } else {
+                        echo "Nomor HP tidak ditemukan.";
+                    }
                 } else {
                     if (password_verify($password, $user['password'])) {
                         session_regenerate_id(true); // Tambahkan keamanan sesi
