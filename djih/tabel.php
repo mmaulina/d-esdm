@@ -5,7 +5,7 @@ if (session_status() == PHP_SESSION_NONE) {
 include "koneksi.php";
 
 // Pastikan hanya 'umum' yang tidak bisa mengakses halaman ini
-if (isset($_SESSION['role']) && $_SESSION['role'] === 'umum') {
+if (isset($_SESSION['role']) && $_SESSION['role'] === 'umum'&& $_SESSION['role'] === 'kementerian') {
     echo "<script>alert('Akses ditolak!'); window.location.href='index.php';</script>";
     exit;
 }
