@@ -15,12 +15,11 @@ $role = $_SESSION['role'];
 $db = new Database();
 $conn = $db->getConnection();
 
+$query = "SELECT * FROM laporan_semester WHERE 1=1";
 // Query berdasarkan role
 $params = [];
-if ($role == 'admin' || $role == 'superadmin') {
-    $query = "SELECT * FROM laporan_semester ORDER BY FIELD(status, 'diajukan', 'ditolak', 'diterima')";
-} else {
-    $query = "SELECT * FROM laporan_semester WHERE id_user = :id_user ORDER BY FIELD(status, 'ditolak', 'diajukan', 'diterima')";
+if ($role != 'admin' && $role != 'superadmin') {
+    $query .= " AND id_user = :id_user";
     $params[':id_user'] = $id_user;
 }
 
@@ -31,6 +30,37 @@ if (!empty($_GET['keyword'])) {
     $query .= " nama_perusahaan LIKE :keyword";
     $params[':keyword'] = $keyword;
 }
+
+// Filter
+$parameter = $_GET['parameter'] ?? '';
+if (!empty($parameter)) {
+    $query .= " AND parameter = :parameter";
+    $params[':parameter'] = $parameter;
+}
+
+$tahun = $_GET['tahun'] ?? '';
+if (!empty($tahun)) {
+    $query .= " AND tahun = :tahun";
+    $params[':tahun'] = $tahun;
+}
+
+$semester = $_GET['semester'] ?? '';
+if (!empty($semester)) {
+    $query .= " AND semester = :semester";
+    $params[':semester'] = $semester;
+}
+
+// Ambil daftar untuk dropdown filter
+$parameterStmt = $conn->query("SELECT DISTINCT parameter FROM laporan_semester ORDER BY parameter");
+$parameterList = $parameterStmt->fetchAll(PDO::FETCH_COLUMN);
+
+$tahunStmt = $conn->query("SELECT DISTINCT tahun FROM laporan_semester ORDER BY tahun");
+$tahunList = $tahunStmt->fetchAll(PDO::FETCH_COLUMN);
+
+$semesterStmt = $conn->query("SELECT DISTINCT semester FROM laporan_semester ORDER BY semester");
+$semesterList = $semesterStmt->fetchAll(PDO::FETCH_COLUMN);
+
+$query .= " ORDER BY FIELD(status, 'diajukan', 'ditolak', 'diterima')";
 
 // Jalankan Query
 $stmt = $conn->prepare($query);
@@ -75,16 +105,57 @@ $hasLaporanBulanan = $stmtCheck->fetchColumn() > 0;
 <div class="container mt-4">
     <h3 class="text-center mb-3"><i class="fas fa-bolt" style="color: #ffc107;"></i> Pelaporan Semester <i class="fas fa-bolt" style="color: #ffc107;"></i></h3>
     <hr>
-    <div class="card shadow">
+    <div class="card shadow" style="overflow-x: auto; max-height: calc(100vh - 150px); overflow-y: auto;">
         <div class="card-body">
-            <form method="GET" class="mb-3">
+            <!-- Fitur pencarian dan filter -->
+            <form method="GET" class="mb-2">
                 <input type="hidden" name="page" value="laporan_persemester">
-                <div class="input-group">
+                <div class="input-group mb-2">
                     <input type="text" name="keyword" class="form-control" placeholder="Cari berdasarkan nama perusahaan..." value="<?= isset($_GET['keyword']) ? htmlspecialchars($_GET['keyword']) : '' ?>">
                     <button type="submit" class="btn btn-success">Cari</button>
                     <a href="?page=laporan_persemester" class="btn btn-secondary">Reset</a>
                 </div>
+                <div class="row mb-3 align-items-end">
+                    <div class="col">
+                        <label for="parameter" class="form-label">Parameter</label>
+                        <select name="parameter" id="parameter" class="form-select">
+                            <option value="">-- Pilih Parameter --</option>
+                            <?php foreach ($parameterList as $parameter): ?>
+                                <option value="<?= htmlspecialchars($parameter) ?>" <?= (isset($_GET['parameter']) && $_GET['parameter'] == $parameter) ? 'selected' : '' ?>>
+                                    <?= htmlspecialchars($parameter) ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label for="tahun" class="form-label">Tahun</label>
+                        <select name="tahun" id="tahun" class="form-select">
+                            <option value="">-- Pilih Tahun --</option>
+                            <?php foreach ($tahunList as $tahun): ?>
+                                <option value="<?= htmlspecialchars($tahun) ?>" <?= (isset($_GET['tahun']) && $_GET['tahun'] == $tahun) ? 'selected' : '' ?>>
+                                    <?= htmlspecialchars($tahun) ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label for="semester" class="form-label">Semester</label>
+                        <select name="semester" id="semester" class="form-select">
+                            <option value="">-- Pilih Semester --</option>
+                            <?php foreach ($semesterList as $semester): ?>
+                                <option value="<?= htmlspecialchars($semester) ?>" <?= (isset($_GET['semester']) && $_GET['semester'] == $semester) ? 'selected' : '' ?>>
+                                    <?= htmlspecialchars($semester) ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div class="col d-flex gap-2">
+                        <button type="submit" class="btn btn-success w-100">Filter</button>
+                        <a href="?page=laporan_persemester" class="btn btn-secondary w-100">Reset</a>
+                    </div>
+                </div>
             </form>
+
             <?php if (!$hasLaporanBulanan && $role == 'umum') : ?>
                 <div class="alert alert-warning text-center" role="alert">
                     Anda harus mengisi <strong>Laporan Bulanan</strong> terlebih dahulu sebelum dapat menambahkan Laporan Semester.
@@ -105,16 +176,16 @@ $hasLaporanBulanan = $stmtCheck->fetchColumn() > 0;
                     <thead class="table-dark text-center align-middle">
                         <tr>
                             <th>No.</th>
-                            <th>Nama Perusahaan</th>
-                            <th>Parameter</th>
-                            <th>Buku Mutu</th>
-                            <th>Hasil</th>
+                            <th onclick="sortTable(1)">Nama Perusahaan <i class="fa fa-sort"></th>
+                            <th onclick="sortTable(2)">Parameter <i class="fa fa-sort"></th>
+                            <th onclick="sortTable(3)">Buku Mutu <i class="fa fa-sort"></th>
+                            <th onclick="sortTable(4)">Hasil <i class="fa fa-sort"></th>
                             <th>Laporan</th>
                             <th>LHU</th>
-                            <th>Tahun</th>
-                            <th>Semester</th>
-                            <th>Status</th>
-                            <th>Keterangan</th>
+                            <th onclick="sortTable(5)">Tahun <i class="fa fa-sort"></th>
+                            <th onclick="sortTable(6)">Semester <i class="fa fa-sort"></th>
+                            <th onclick="sortTable(7)">Status <i class="fa fa-sort"></th>
+                            <th onclick="sortTable(8)">Keterangan <i class="fa fa-sort"></th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -434,7 +505,47 @@ if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'superadmin'):
 
 <?php endif; ?>
 
+<!-- JAVASCRIPT FILTER -->
+<script>
+    function sortTable(columnIndex) {
+        var table = document.querySelector("table tbody");
+        var rows = Array.from(table.querySelectorAll("tr"));
+        var isAscending = table.getAttribute("data-sort-order") === "asc";
 
+        // Sort rows
+        rows.sort((rowA, rowB) => {
+            var cellA = rowA.children[columnIndex].textContent.trim().toLowerCase();
+            var cellB = rowB.children[columnIndex].textContent.trim().toLowerCase();
+
+            if (!isNaN(cellA) && !isNaN(cellB)) {
+                return isAscending ? cellA - cellB : cellB - cellA;
+            }
+            return isAscending ? cellA.localeCompare(cellB) : cellB.localeCompare(cellA);
+        });
+
+        // Remove existing rows
+        table.innerHTML = "";
+
+        // Append sorted rows
+        rows.forEach(row => table.appendChild(row));
+
+        // Toggle sorting order
+        table.setAttribute("data-sort-order", isAscending ? "desc" : "asc");
+
+        // Update icon
+        updateSortIcons(columnIndex, isAscending);
+    }
+
+    function updateSortIcons(columnIndex, isAscending) {
+        var headers = document.querySelectorAll("thead th i");
+        headers.forEach(icon => icon.className = "fa fa-sort"); // Reset semua ikon
+
+        var selectedHeader = document.querySelector(`thead th:nth-child(${columnIndex + 1}) i`);
+        if (selectedHeader) {
+            selectedHeader.className = isAscending ? "fa fa-sort-up" : "fa fa-sort-down";
+        }
+    }
+</script>
 
 
 

@@ -56,7 +56,7 @@ if (!empty($kabupaten)) {
     $params[':kabupaten'] = $kabupaten;
 }
 
-// Ambil daftar jenis usaha dan kabupaten/kota untuk dropdown filter
+// Ambil daftar untuk dropdown filter
 $tahunStmt = $conn->query("SELECT DISTINCT tahun FROM laporan_bulanan ORDER BY tahun");
 $tahunList = $tahunStmt->fetchAll(PDO::FETCH_COLUMN);
 
