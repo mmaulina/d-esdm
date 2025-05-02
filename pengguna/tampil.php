@@ -90,12 +90,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['tolak_id'])) {
                 <table class="table table-bordered" style="table-layout: fixed; min-width: 1800px;">
                     <thead class="table-dark text-center align-middle">
                         <tr>
-                            <th style="width: 5%;">No.</th>
-                            <th style="width: 20%;">Username</th>
-                            <th style="width: 25%;">Email</th>
-                            <th style="width: 15%;">No. HP</th>
-                            <th style="width: 15%;">Role</th>
-                            <th style="width: 15%;">Status</th>
+                            <th style="width: 5%;" onclick="sortTable(0)">No. <i class="fa fa-sort"></th>
+                            <th style="width: 20%;" onclick="sortTable(1)">Username <i class="fa fa-sort"></th>
+                            <th style="width: 25%;" onclick="sortTable(2)">Email <i class="fa fa-sort"></th>
+                            <th style="width: 15%;" onclick="sortTable(3)">No. HP <i class="fa fa-sort"></th>
+                            <th style="width: 15%;" onclick="sortTable(4)">Role <i class="fa fa-sort"></th>
+                            <th style="width: 15%;" onclick="sortTable(5)">Status <i class="fa fa-sort"></th>
                             <th style="width: 20%;">Aksi</th>
                         </tr>
                     </thead>
@@ -145,3 +145,45 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['tolak_id'])) {
         </div>
     </div>
 </div>
+
+<!-- JAVASCRIPT FILTER -->
+<script>
+    function sortTable(columnIndex) {
+        var table = document.querySelector("table tbody");
+        var rows = Array.from(table.querySelectorAll("tr"));
+        var isAscending = table.getAttribute("data-sort-order") === "asc";
+
+        // Sort rows
+        rows.sort((rowA, rowB) => {
+            var cellA = rowA.children[columnIndex].textContent.trim().toLowerCase();
+            var cellB = rowB.children[columnIndex].textContent.trim().toLowerCase();
+
+            if (!isNaN(cellA) && !isNaN(cellB)) {
+                return isAscending ? cellA - cellB : cellB - cellA;
+            }
+            return isAscending ? cellA.localeCompare(cellB) : cellB.localeCompare(cellA);
+        });
+
+        // Remove existing rows
+        table.innerHTML = "";
+
+        // Append sorted rows
+        rows.forEach(row => table.appendChild(row));
+
+        // Toggle sorting order
+        table.setAttribute("data-sort-order", isAscending ? "desc" : "asc");
+
+        // Update icon
+        updateSortIcons(columnIndex, isAscending);
+    }
+
+    function updateSortIcons(columnIndex, isAscending) {
+        var headers = document.querySelectorAll("thead th i");
+        headers.forEach(icon => icon.className = "fa fa-sort"); // Reset semua ikon
+
+        var selectedHeader = document.querySelector(`thead th:nth-child(${columnIndex + 1}) i`);
+        if (selectedHeader) {
+            selectedHeader.className = isAscending ? "fa fa-sort-up" : "fa fa-sort-down";
+        }
+    }
+</script>

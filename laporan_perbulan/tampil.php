@@ -184,7 +184,7 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                 <table class="table table-bordered" style="min-width: 1200px; white-space: nowrap;">
                     <thead class="table-dark text-center align-middle">
                         <tr>
-                            <th rowspan="3" style="width: 3%;">No.</th>
+                            <th rowspan="3" style="width: 3%;" onclick="sortTable(0)">No. <i class="fa fa-sort"></i></th>
                             <th rowspan="3" onclick="sortTable(1)">Nama Perusahaan <i class="fa fa-sort"></th>
                             <th rowspan="3" onclick="sortTable(2)">Tahun <i class="fa fa-sort"></th>
                             <th rowspan="3" onclick="sortTable(3)">Bulan <i class="fa fa-sort"></th>

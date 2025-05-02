@@ -175,7 +175,7 @@ $hasLaporanBulanan = $stmtCheck->fetchColumn() > 0;
                 <table class="table table-bordered" style="min-width: 1200px; white-space: nowrap;">
                     <thead class="table-dark text-center align-middle">
                         <tr>
-                            <th>No.</th>
+                            <th onclick="sortTable(0)">No. <i class="fa fa-sort"></i></th>
                             <th onclick="sortTable(1)">Nama Perusahaan <i class="fa fa-sort"></th>
                             <th onclick="sortTable(2)">Parameter <i class="fa fa-sort"></th>
                             <th onclick="sortTable(3)">Buku Mutu <i class="fa fa-sort"></th>
@@ -469,9 +469,9 @@ if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'superadmin'):
                     <table class="table table-bordered" style="min-width: 1200px; white-space: nowrap;">
                         <thead class="table-dark">
                             <tr>
-                                <th>No</th>
-                                <th>Nama Perusahaan</th>
-                                <th>Keterangan</th>
+                                <th onclick="sortTable(0)">No <i class="fa fa-sort"></i></th>
+                                <th onclick="sortTable(1)">Nama Perusahaan <i class="fa fa-sort"></i></th>
+                                <th onclick="sortTable(2)">Keterangan <i class="fa fa-sort"></i></th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>

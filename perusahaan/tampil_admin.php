@@ -132,7 +132,7 @@ try {
                 <table class="table table-bordered" style="min-width: 1800px; white-space: nowrap;">
                     <thead class="table-dark text-center align-middle">
                         <tr>
-                            <th rowspan="2" style="width: 5%;">No.</th>
+                            <th rowspan="2" style="width: 5%;" onclick="sortTable(0)">No. <i class="fa fa-sort"></i></th>
                             <th rowspan="2" onclick="sortTable(1)">Nama Perusahaan <i class="fa fa-sort"></i></th>
                             <th rowspan="2" onclick="sortTable(2)">Kabupaten/Kota <i class="fa fa-sort"></i></th>
                             <th rowspan="2" onclick="sortTable(3)">Alamat <i class="fa fa-sort"></i></th>
