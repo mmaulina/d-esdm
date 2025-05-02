@@ -6,7 +6,7 @@ try {
     $id_user = $_SESSION['id_user'];
     $role = $_SESSION['role'];
 
-    if ($role == 'admin'||$role == 'adminbulanan'||$role == 'adminsemester') {
+    if ($role == 'admin' || $role == 'adminbulanan' || $role == 'adminsemester') {
         $sql = "SELECT id_user, username, email, no_hp, role, status 
                 FROM users 
                 WHERE role != 'superadmin'
@@ -70,7 +70,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['tolak_id'])) {
 
 
 <div class="container mt-4">
-    <h3 class="text-center mb-3"><i class="fa fa-sort"></i></th>Data Pengguna<i class="fa fa-sort"></i></th></h3>
+    <h3 class="text-center mb-3"><i class="fas fa-bolt" style="color: #ffc107;"></i>Data Pengguna<i class="fas fa-bolt" style="color: #ffc107;"></i></h3>
     <hr>
     <div class="card shadow">
         <div class="card-body">
