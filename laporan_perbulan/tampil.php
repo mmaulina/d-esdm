@@ -185,44 +185,44 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                     <thead class="table-dark text-center align-middle">
                         <tr>
                             <th rowspan="3" style="width: 3%;">No.</th>
-                            <th rowspan="3">Nama Perusahaan</th>
-                            <th rowspan="3">Tahun</th>
-                            <th rowspan="3">Bulan</th>
-                            <th rowspan="3">Kabupaten</th>
+                            <th rowspan="3" onclick="sortTable(1)">Nama Perusahaan <i class="fa fa-sort"></th>
+                            <th rowspan="3" onclick="sortTable(2)">Tahun <i class="fa fa-sort"></th>
+                            <th rowspan="3" onclick="sortTable(3)">Bulan <i class="fa fa-sort"></th>
+                            <th rowspan="3" onclick="sortTable(4)">Kabupaten <i class="fa fa-sort"></th>
                             <th colspan="3" style="min-width: 250px;">Data Pembangkit</th>
                             <th colspan="10" style="min-width: 1500px;">Data Teknis Pembangkit</th>
                             <th colspan="7" style="min-width: 250px;">Pelaporan Bulanan</th>
-                            <th rowspan="3" style="min-width: 150px;">Status</th>
-                            <th rowspan="3" style="min-width: 150px;">Keterangan</th>
+                            <th rowspan="3" style="min-width: 150px;" onclick="sortTable(5)">Status <i class="fa fa-sort"></th>
+                            <th rowspan="3" style="min-width: 150px;" onclick="sortTable(6)">Keterangan <i class="fa fa-sort"></th>
                             <th rowspan="3" style="min-width: 150px;">Aksi</th>
                         </tr>
                         <tr>
-                            <th rowspan="2">Alamat Pembangkit</th>
+                            <th rowspan="2" onclick="sortTable(7)">Alamat Pembangkit <i class="fa fa-sort"></th>
                             <th colspan="2">Koordinat Pembangkit</th>
-                            <th rowspan="2">Jenis Pembangkit</th>
-                            <th rowspan="2">Fungsi</th>
-                            <th rowspan="2">Kapasitas Terpasang (MW)</th>
-                            <th rowspan="2">Daya Mampu Netto (MW)</th>
-                            <th rowspan="2">Jumlah Unit</th>
-                            <th rowspan="2">No. Unit</th>
-                            <th rowspan="2">Tahun Operasi</th>
-                            <th rowspan="2">Status Operasi</th>
+                            <th rowspan="2" onclick="sortTable(8)">Jenis Pembangkit <i class="fa fa-sort"></th>
+                            <th rowspan="2" onclick="sortTable(9)">Fungsi <i class="fa fa-sort"></th>
+                            <th rowspan="2" onclick="sortTable(10)">Kapasitas Terpasang (MW) <i class="fa fa-sort"></th>
+                            <th rowspan="2" onclick="sortTable(11)">Daya Mampu Netto (MW) <i class="fa fa-sort"></th>
+                            <th rowspan="2" onclick="sortTable(12)">Jumlah Unit <i class="fa fa-sort"></th>
+                            <th rowspan="2" onclick="sortTable(13)">No. Unit <i class="fa fa-sort"></th>
+                            <th rowspan="2" onclick="sortTable(14)">Tahun Operasi <i class="fa fa-sort"></th>
+                            <th rowspan="2" onclick="sortTable(15)">Status Operasi <i class="fa fa-sort"></th>
                             <th colspan="2">Bahan Bakar yang Digunakan</th>
-                            <th rowspan="2">Volume Bahan Bakar</th>
+                            <th rowspan="2" onclick="sortTable(16)">Volume Bahan Bakar <i class="fa fa-sort"></th>
                             <th colspan="2">Produksi Listrik</th>
-                            <th rowspan="2">Susut Jaringan (bila ada) (kWh)</th>
+                            <th rowspan="2" onclick="sortTable(17)">Susut Jaringan (bila ada) (kWh) <i class="fa fa-sort"></th>
                             <th colspan="3">Konsumsi Listrik</th>
                         </tr>
                         <tr>
-                            <th>Latitude</th>
-                            <th>Longitude</th>
-                            <th>Jenis</th>
-                            <th>Satuan</th>
-                            <th>Produksi Sendiri (kWh)</th>
-                            <th>Pembelian Sumber Lain (bila ada) (kWh)</th>
-                            <th>Penjualan ke Pelanggan (bila ada) (kWh)</th>
-                            <th>Penjualan ke PLN (bila ada) (kWh)</th>
-                            <th>Pemakaian Sendiri (kWh)</th>
+                            <th onclick="sortTable(18)">Latitude <i class="fa fa-sort"></th>
+                            <th onclick="sortTable(19)">Longitude <i class="fa fa-sort"></th>
+                            <th onclick="sortTable(20)">Jenis <i class="fa fa-sort"></th>
+                            <th onclick="sortTable(21)">Satuan <i class="fa fa-sort"></th>
+                            <th onclick="sortTable(22)">Produksi Sendiri (kWh) <i class="fa fa-sort"></th>
+                            <th onclick="sortTable(23)">Pembelian Sumber Lain (bila ada) (kWh) <i class="fa fa-sort"></th>
+                            <th onclick="sortTable(24)">Penjualan ke Pelanggan (bila ada) (kWh) <i class="fa fa-sort"></th>
+                            <th onclick="sortTable(25)">Penjualan ke PLN (bila ada) (kWh) <i class="fa fa-sort"></th>
+                            <th onclick="sortTable(26)">Pemakaian Sendiri (kWh) <i class="fa fa-sort"></th>
                         </tr>
                     </thead>
 
@@ -325,3 +325,45 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
         </div>
     </div>
 </div>
+
+<!-- JAVASCRIPT FILTER -->
+<script>
+    function sortTable(columnIndex) {
+        var table = document.querySelector("table tbody");
+        var rows = Array.from(table.querySelectorAll("tr"));
+        var isAscending = table.getAttribute("data-sort-order") === "asc";
+
+        // Sort rows
+        rows.sort((rowA, rowB) => {
+            var cellA = rowA.children[columnIndex].textContent.trim().toLowerCase();
+            var cellB = rowB.children[columnIndex].textContent.trim().toLowerCase();
+
+            if (!isNaN(cellA) && !isNaN(cellB)) {
+                return isAscending ? cellA - cellB : cellB - cellA;
+            }
+            return isAscending ? cellA.localeCompare(cellB) : cellB.localeCompare(cellA);
+        });
+
+        // Remove existing rows
+        table.innerHTML = "";
+
+        // Append sorted rows
+        rows.forEach(row => table.appendChild(row));
+
+        // Toggle sorting order
+        table.setAttribute("data-sort-order", isAscending ? "desc" : "asc");
+
+        // Update icon
+        updateSortIcons(columnIndex, isAscending);
+    }
+
+    function updateSortIcons(columnIndex, isAscending) {
+        var headers = document.querySelectorAll("thead th i");
+        headers.forEach(icon => icon.className = "fa fa-sort"); // Reset semua ikon
+
+        var selectedHeader = document.querySelector(`thead th:nth-child(${columnIndex + 1}) i`);
+        if (selectedHeader) {
+            selectedHeader.className = isAscending ? "fa fa-sort-up" : "fa fa-sort-down";
+        }
+    }
+</script>
