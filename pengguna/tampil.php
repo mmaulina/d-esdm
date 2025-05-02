@@ -6,27 +6,29 @@ try {
     $id_user = $_SESSION['id_user'];
     $role = $_SESSION['role'];
 
+    $params = [];
+
     if ($role == 'admin' || $role == 'adminbulanan' || $role == 'adminsemester') {
         $sql = "SELECT id_user, username, email, no_hp, role, status 
                 FROM users 
-                WHERE role != 'superadmin'
-                ORDER BY FIELD(status, 'diajukan') DESC, status ASC";
+                WHERE role != 'superadmin'";
     } else {
         $sql = "SELECT id_user, username, email, no_hp, role, status 
                 FROM users 
-                ORDER BY FIELD(status, 'diajukan') DESC, status ASC";
+                WHERE 1"; // placeholder WHERE agar bisa ditambahkan kondisi AND nanti
     }
-
-
-    // Inisialisasi array parameter
-    $params = [];
-
+    
     // Fitur pencarian
     if (!empty($_GET['keyword'])) {
         $keyword = "%" . $_GET['keyword'] . "%";
         $sql .= " AND username LIKE :keyword";
         $params[':keyword'] = $keyword;
     }
+    
+    // Tambahkan ORDER BY di bagian akhir
+    $sql .= " ORDER BY FIELD(status, 'diajukan') DESC, status ASC";
+    
+
 
     // Persiapkan statement
     $stmt = $conn->prepare($sql);
@@ -76,11 +78,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['tolak_id'])) {
         <div class="card-body">
             <!-- Fitur pencarian -->
             <form method="GET" class="mb-3">
-                <input type="hidden" name="page" value="username">
+            <input type="hidden" name="page" value="pengguna">
                 <div class="input-group">
                     <input type="text" name="keyword" class="form-control" placeholder="Cari berdasarkan username..." value="<?= isset($_GET['keyword']) ? htmlspecialchars($_GET['keyword']) : '' ?>">
                     <button type="submit" class="btn btn-success">Cari</button>
-                    <a href="?page=username" class="btn btn-secondary">Reset</a>
+                    <a href="?page=pengguna" class="btn btn-secondary">Reset</a>
                 </div>
             </form>
             <div class="mt-3 mb-3">

@@ -101,13 +101,21 @@ if (!$laporan) {
     exit;
 }
 
+
 function uploadFile($input_name) {
     if (!empty($_FILES[$input_name]['name'])) {
+        $maxSize = 10 * 1024 * 1024; // 10MB
+        if ($_FILES[$input_name]['size'] > $maxSize) {
+            $_SESSION['pesan'] = "File " . $input_name . " terlalu besar! Maksimal 10MB.";
+            return null;
+        }
+
         $target_dir = "uploads/";
-        $file_name = preg_replace("/[^a-zA-Z0-9.\-_]/", "", basename($_FILES[$input_name]["name"]));
+        $file_name = basename($_FILES[$input_name]["name"]);
+        $file_name = preg_replace("/[^a-zA-Z0-9.\-_]/", "", $file_name);
         $target_file = $target_dir . time() . "_" . $file_name;
         $file_type = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
-        
+
         $allowed_types = ['pdf', 'doc', 'docx', 'xls', 'xlsx'];
         if (!in_array($file_type, $allowed_types)) {
             $_SESSION['pesan'] = "Format file tidak diizinkan!";
@@ -250,4 +258,22 @@ function uploadFile($input_name) {
 
     tahunSelect.addEventListener('change', updateSemesterFinal);
     semesterSelect.addEventListener('change', updateSemesterFinal);
+
+    document.querySelector("form").addEventListener("submit", function(e) {
+    const maxFileSize = 10 * 1024 * 1024; // 10 MB
+    const fileLaporan = document.querySelector('input[name="file_laporan"]');
+    const fileLHU = document.querySelector('input[name="file_lhu"]');
+
+    if (fileLaporan.files[0] && fileLaporan.files[0].size > maxFileSize) {
+        alert("File laporan terlalu besar! Maksimal 10MB.");
+        e.preventDefault();
+        return;
+    }
+
+    if (fileLHU.files[0] && fileLHU.files[0].size > maxFileSize) {
+        alert("File LHU terlalu besar! Maksimal 10MB.");
+        e.preventDefault();
+        return;
+    }
+});
 </script>

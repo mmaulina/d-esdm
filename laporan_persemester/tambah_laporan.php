@@ -87,13 +87,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 // Fungsi untuk upload file dengan validasi format
 function uploadFile($input_name) {
     if (!empty($_FILES[$input_name]['name'])) {
+        $maxSize = 10 * 1024 * 1024; // 10MB
+        if ($_FILES[$input_name]['size'] > $maxSize) {
+            $_SESSION['pesan'] = "File " . $input_name . " terlalu besar! Maksimal 10MB.";
+            return null;
+        }
+
         $target_dir = "uploads/";
         $file_name = basename($_FILES[$input_name]["name"]);
-        $file_name = preg_replace("/[^a-zA-Z0-9.\-_]/", "", $file_name); // Hapus karakter berbahaya
-        $target_file = $target_dir . time() . "_" . $file_name; // Rename file untuk menghindari duplikasi
+        $file_name = preg_replace("/[^a-zA-Z0-9.\-_]/", "", $file_name);
+        $target_file = $target_dir . time() . "_" . $file_name;
         $file_type = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
-        // Format file yang diizinkan (PDF, Word, Excel)
         $allowed_types = ['pdf', 'doc', 'docx', 'xls', 'xlsx'];
         if (!in_array($file_type, $allowed_types)) {
             $_SESSION['pesan'] = "Format file tidak diizinkan!";
@@ -106,6 +111,7 @@ function uploadFile($input_name) {
     }
     return null;
 }
+
 ?>
 
 <div class="container mt-4">
@@ -144,10 +150,12 @@ function uploadFile($input_name) {
                 <div class="mb-3">
                     <label class="form-label">Upload Laporan (PDF, DOC, DOCX, XLS, XLSX)</label>
                     <input type="file" name="file_laporan" class="form-control" accept=".pdf,.doc,.docx,.xls,.xlsx">
+                    <small class="text-danger">Max File 10Mb</small>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Upload LHU (PDF, DOC, DOCX, XLS, XLSX)</label>
                     <input type="file" name="file_lhu" class="form-control" accept=".pdf,.doc,.docx,.xls,.xlsx">
+                    <small class="text-danger">Max File 10Mb</small>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Tahun</label>
@@ -216,4 +224,23 @@ function uploadFile($input_name) {
 
     tahunSelect.addEventListener('change', updateSemesterFinal);
     semesterSelect.addEventListener('change', updateSemesterFinal);
+
+    document.querySelector("form").addEventListener("submit", function(e) {
+    const maxFileSize = 10 * 1024 * 1024; // 10 MB
+    const fileLaporan = document.querySelector('input[name="file_laporan"]');
+    const fileLHU = document.querySelector('input[name="file_lhu"]');
+
+    if (fileLaporan.files[0] && fileLaporan.files[0].size > maxFileSize) {
+        alert("File laporan terlalu besar! Maksimal 10MB.");
+        e.preventDefault();
+        return;
+    }
+
+    if (fileLHU.files[0] && fileLHU.files[0].size > maxFileSize) {
+        alert("File LHU terlalu besar! Maksimal 10MB.");
+        e.preventDefault();
+        return;
+    }
+});
+
 </script>
