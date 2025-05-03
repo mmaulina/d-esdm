@@ -157,7 +157,8 @@ $totalProduksiPerKota = [];
 $totalKonsumsiPerKota = [];
 
 // Fungsi parsing angka format IDR
-function parseNumber($val) {
+function parseNumber($val)
+{
     if ($val === '-' || trim($val) === '') return 0;
     $val = str_replace('.', '', $val);     // hapus titik ribuan
     $val = str_replace(',', '.', $val);    // ubah koma jadi titik (desimal)
@@ -222,19 +223,19 @@ foreach ($daftarKabupatenKotaKalsel as $kota) {
 
                 <!-- Row for Perusahaan Belum Upload Laporan -->
                 <?php if (isset($_SESSION['role']) && $_SESSION['role'] !== 'umum' && $_SESSION['role'] !== 'kementerian') : ?>
-                <div class="row mt-3">
-                    <div class="col">
-                        <h5 class="fw-bold mb-3">Perusahaan Belum Upload Laporan Semester</h5>
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-striped table-sm">
-                                <thead class="table-dark">
-                                    <tr>
-                                        <th>Kabupaten/Kota</th>
-                                        <th>Belum Upload Semester I (<?php echo $tahun; ?>)</th>
-                                        <th>Belum Upload Semester II (<?php echo $tahun; ?>)</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
+                    <div class="row mt-3">
+                        <div class="col">
+                            <h5 class="fw-bold mb-3">Perusahaan Belum Upload Laporan Semester</h5>
+                            <div class="table-responsive" style="max-height: 500px; overflow-x: auto; overflow-y: auto;">
+                            <table class="table table-bordered table-striped table-sm" id="tabel-belum-upload">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th onclick="sortTable('tabel-belum-upload', 0)">Kabupaten/Kota <i class="fa fa-sort"></th></th>
+                                            <th onclick="sortTable('tabel-belum-upload', 1)">Belum Upload Semester I (<?php echo $tahun; ?>) <i class="fa fa-sort"></th></th>
+                                            <th onclick="sortTable('tabel-belum-upload', 2)">Belum Upload Semester II (<?php echo $tahun; ?>) <i class="fa fa-sort"></th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
                                         <?php
                                         $total_semester1 = 0;
                                         $total_semester2 = 0;
@@ -257,29 +258,29 @@ foreach ($daftarKabupatenKotaKalsel as $kota) {
                                             </tr>
                                         <?php endif; ?>
                                     </tbody>
-                                <tfoot>
-                                    <tr class="table-dark">
-                                        <td><strong>Total</strong></td>
-                                        <td><strong><?php echo $total_semester1; ?></strong></td>
-                                        <td><strong><?php echo $total_semester2; ?></strong></td>
-                                    </tr>
-                                </tfoot>
-                            </table>
+                                    <tfoot>
+                                        <tr class="table-dark">
+                                            <td><strong>Total</strong></td>
+                                            <td><strong><?php echo $total_semester1; ?></strong></td>
+                                            <td><strong><?php echo $total_semester2; ?></strong></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
                         </div>
                     </div>
-                </div>
                 <?php endif; ?>
-<!-- Ringkasan Produksi dan Konsumsi per Kota -->
+                <!-- Ringkasan Produksi dan Konsumsi per Kota -->
                 <div class="row mt-3">
                     <div class="col">
                         <h5 class="fw-bold mb-3">Total Produksi & Konsumsi per Kabupaten/Kota</h5>
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-striped table-sm">
+                        <div class="table-responsive" style="max-height: 500px; overflow-x: auto; overflow-y: auto;">
+                            <table class="table table-bordered table-striped table-sm" id="tabel-produksi-konsumsi">
                                 <thead class="table-dark">
                                     <tr class="text-center">
-                                        <th>Kabupaten/Kota</th>
-                                        <th>Total Produksi (kWh)</th>
-                                        <th>Total Konsumsi (kWh)</th>
+                                        <th onclick="sortTable('tabel-produksi-konsumsi', 0)">Kabupaten/Kota <i class="fa fa-sort"></th>
+                                        <th onclick="sortTable('tabel-produksi-konsumsi', 1)">Total Produksi (kWh) <i class="fa fa-sort"></th>
+                                        <th onclick="sortTable('tabel-produksi-konsumsi', 2)">Total Konsumsi (kWh) <i class="fa fa-sort"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -355,3 +356,40 @@ foreach ($daftarKabupatenKotaKalsel as $kota) {
         </div>
     </div>
 </main>
+<!-- JAVASCRIPT FILTER -->
+<script>
+    function sortTable(tableId, columnIndex) {
+    var table = document.querySelector(`#${tableId} tbody`);
+    var rows = Array.from(table.querySelectorAll("tr"));
+    var isAscending = table.getAttribute("data-sort-order") === "asc";
+
+    rows.sort((rowA, rowB) => {
+        var cellA = rowA.children[columnIndex].textContent.trim().toLowerCase();
+        var cellB = rowB.children[columnIndex].textContent.trim().toLowerCase();
+
+        // Jika angka
+        if (!isNaN(cellA) && !isNaN(cellB)) {
+            return isAscending ? cellA - cellB : cellB - cellA;
+        }
+
+        return isAscending ? cellA.localeCompare(cellB) : cellB.localeCompare(cellA);
+    });
+
+    table.innerHTML = "";
+    rows.forEach(row => table.appendChild(row));
+
+    table.setAttribute("data-sort-order", isAscending ? "desc" : "asc");
+
+    updateSortIcons(tableId, columnIndex, isAscending);
+}
+
+function updateSortIcons(tableId, columnIndex, isAscending) {
+    var headers = document.querySelectorAll(`#${tableId} thead th i`);
+    headers.forEach(icon => icon.className = "fa fa-sort");
+
+    var selectedHeader = document.querySelector(`#${tableId} thead th:nth-child(${columnIndex + 1}) i`);
+    if (selectedHeader) {
+        selectedHeader.className = isAscending ? "fa fa-sort-up" : "fa fa-sort-down";
+    }
+}
+</script>
