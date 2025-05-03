@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 29, 2025 at 02:12 PM
+-- Generation Time: May 03, 2025 at 11:20 AM
 -- Server version: 10.4.18-MariaDB
 -- PHP Version: 7.4.16
 
@@ -50,14 +50,6 @@ CREATE TABLE `djih` (
   `caption` text NOT NULL,
   `tanggal` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `djih`
---
-
-INSERT INTO `djih` (`id`, `id_title`, `title`, `jenis_konten`, `konten`, `caption`, `tanggal`) VALUES
-(9, 'TTL-001', 'ADEL JKT48 GRAD', 'gambar', 'uploads/1745849267_7fb585eca747547b55563358add80b87.jpg', '\"Congratulations to Adel on her graduation from JKT48! 🎓✨ Wishing you all the best in your next adventure! #AdelJKT48 #Graduation\"', '2025-04-29 01:41:09'),
-(10, 'TTL-001', 'ADEL JKT48 GRAD', 'gambar', 'uploads/1745849267_2a3066213824b688a253585469df73fd.jpg', '\"Congratulations to Adel on her graduation from JKT48! 🎓✨ Wishing you all the best in your next adventure! #AdelJKT48 #Graduation\"', '2025-04-29 01:41:17');
 
 -- --------------------------------------------------------
 
@@ -186,7 +178,15 @@ INSERT INTO `djih_dilihat` (`id`, `id_user`, `konten_id`, `tanggal`) VALUES
 (178, 1, 9, '2025-04-29 00:27:30'),
 (179, 1, 10, '2025-04-29 00:27:30'),
 (180, 1, 9, '2025-04-29 11:53:04'),
-(181, 1, 10, '2025-04-29 11:53:04');
+(181, 1, 10, '2025-04-29 11:53:04'),
+(183, 1, 9, '2025-04-29 12:45:09'),
+(184, 1, 10, '2025-04-29 12:45:09'),
+(186, 1, 9, '2025-04-29 13:03:17'),
+(187, 1, 10, '2025-04-29 13:03:17'),
+(188, 1, 9, '2025-04-30 04:22:52'),
+(189, 1, 10, '2025-04-30 04:22:52'),
+(190, 1, 9, '2025-04-30 10:18:16'),
+(191, 1, 10, '2025-04-30 10:18:16');
 
 -- --------------------------------------------------------
 
@@ -765,7 +765,109 @@ INSERT INTO `konten_dilihat` (`id`, `id_user`, `konten_id`, `tanggal`) VALUES
 (816, 1, 4, '2025-04-29 11:50:55'),
 (817, 1, 5, '2025-04-29 11:50:55'),
 (819, 1, 4, '2025-04-29 11:53:07'),
-(820, 1, 5, '2025-04-29 11:53:07');
+(820, 1, 5, '2025-04-29 11:53:07'),
+(822, 1, 4, '2025-04-29 12:43:10'),
+(823, 1, 5, '2025-04-29 12:43:10'),
+(825, 1, 4, '2025-04-29 12:45:12'),
+(826, 1, 5, '2025-04-29 12:45:12'),
+(828, 1, 4, '2025-04-29 12:54:22'),
+(829, 1, 5, '2025-04-29 12:54:22'),
+(831, 0, 4, '2025-04-29 13:01:43'),
+(832, 0, 5, '2025-04-29 13:01:43'),
+(834, 1, 4, '2025-04-29 13:02:30'),
+(835, 1, 5, '2025-04-29 13:02:30'),
+(837, 1, 4, '2025-04-29 13:31:51'),
+(838, 1, 5, '2025-04-29 13:31:51'),
+(840, 1, 4, '2025-04-29 13:38:34'),
+(841, 1, 5, '2025-04-29 13:38:34'),
+(843, 1, 4, '2025-04-29 13:41:35'),
+(844, 1, 5, '2025-04-29 13:41:35'),
+(846, 1, 4, '2025-04-29 13:42:35'),
+(847, 1, 5, '2025-04-29 13:42:35'),
+(849, 1, 4, '2025-04-29 13:45:05'),
+(850, 1, 5, '2025-04-29 13:45:05'),
+(852, 1, 4, '2025-04-29 14:16:22'),
+(853, 1, 5, '2025-04-29 14:16:22'),
+(854, 0, 4, '2025-04-29 14:39:37'),
+(855, 0, 5, '2025-04-29 14:39:37'),
+(857, 1, 4, '2025-04-29 14:46:21'),
+(858, 1, 5, '2025-04-29 14:46:21'),
+(860, 5, 4, '2025-04-29 15:12:03'),
+(861, 5, 5, '2025-04-29 15:12:03'),
+(863, 5, 4, '2025-04-29 15:35:49'),
+(864, 5, 5, '2025-04-29 15:35:49'),
+(865, 0, 4, '2025-04-30 02:59:06'),
+(866, 0, 5, '2025-04-30 02:59:06'),
+(868, 0, 4, '2025-04-30 02:59:40'),
+(869, 0, 5, '2025-04-30 02:59:40'),
+(871, 1, 4, '2025-04-30 03:07:42'),
+(872, 1, 5, '2025-04-30 03:07:42'),
+(874, 1, 4, '2025-04-30 03:26:05'),
+(875, 1, 5, '2025-04-30 03:26:05'),
+(877, 1, 4, '2025-04-30 03:26:05'),
+(878, 1, 5, '2025-04-30 03:26:05'),
+(880, 1, 4, '2025-04-30 03:26:09'),
+(881, 1, 5, '2025-04-30 03:26:09'),
+(883, 1, 4, '2025-04-30 03:26:15'),
+(884, 1, 5, '2025-04-30 03:26:15'),
+(886, 1, 4, '2025-04-30 03:26:28'),
+(887, 1, 5, '2025-04-30 03:26:28'),
+(889, 1, 4, '2025-04-30 03:26:59'),
+(890, 1, 5, '2025-04-30 03:26:59'),
+(892, 1, 4, '2025-04-30 03:27:31'),
+(893, 1, 5, '2025-04-30 03:27:31'),
+(895, 1, 4, '2025-04-30 03:32:53'),
+(896, 1, 5, '2025-04-30 03:32:53'),
+(898, 1, 4, '2025-04-30 03:36:50'),
+(899, 1, 5, '2025-04-30 03:36:50'),
+(901, 1, 4, '2025-04-30 03:37:03'),
+(902, 1, 5, '2025-04-30 03:37:03'),
+(904, 1, 4, '2025-04-30 03:37:06'),
+(905, 1, 5, '2025-04-30 03:37:06'),
+(907, 1, 4, '2025-04-30 03:37:33'),
+(908, 1, 5, '2025-04-30 03:37:33'),
+(910, 1, 4, '2025-04-30 03:37:33'),
+(911, 1, 5, '2025-04-30 03:37:33'),
+(913, 1, 4, '2025-04-30 03:37:36'),
+(914, 1, 5, '2025-04-30 03:37:36'),
+(916, 1, 4, '2025-04-30 03:37:36'),
+(917, 1, 5, '2025-04-30 03:37:36'),
+(919, 1, 4, '2025-04-30 03:37:50'),
+(920, 1, 5, '2025-04-30 03:37:50'),
+(922, 1, 4, '2025-04-30 03:42:01'),
+(923, 1, 5, '2025-04-30 03:42:01'),
+(925, 1, 4, '2025-04-30 03:43:17'),
+(926, 1, 5, '2025-04-30 03:43:17'),
+(928, 1, 4, '2025-04-30 04:01:00'),
+(929, 1, 5, '2025-04-30 04:01:00'),
+(931, 1, 4, '2025-04-30 04:03:30'),
+(932, 1, 5, '2025-04-30 04:03:30'),
+(934, 1, 4, '2025-04-30 04:06:38'),
+(935, 1, 5, '2025-04-30 04:06:38'),
+(937, 1, 4, '2025-04-30 04:10:04'),
+(938, 1, 5, '2025-04-30 04:10:04'),
+(940, 1, 4, '2025-04-30 04:10:06'),
+(941, 1, 5, '2025-04-30 04:10:06'),
+(943, 1, 4, '2025-04-30 04:13:18'),
+(944, 1, 5, '2025-04-30 04:13:18'),
+(946, 1, 4, '2025-04-30 04:21:43'),
+(947, 1, 5, '2025-04-30 04:21:43'),
+(949, 1, 4, '2025-04-30 04:21:45'),
+(950, 1, 5, '2025-04-30 04:21:45'),
+(952, 1, 4, '2025-04-30 04:21:46'),
+(953, 1, 5, '2025-04-30 04:21:46'),
+(955, 1, 4, '2025-04-30 04:21:46'),
+(956, 1, 5, '2025-04-30 04:21:46'),
+(958, 1, 4, '2025-04-30 04:21:46'),
+(959, 1, 5, '2025-04-30 04:21:46'),
+(960, 0, 4, '2025-04-30 09:57:15'),
+(961, 0, 5, '2025-04-30 09:57:15'),
+(963, 1, 4, '2025-04-30 10:02:23'),
+(964, 1, 5, '2025-04-30 10:02:23'),
+(966, 1, 4, '2025-04-30 10:16:23'),
+(967, 1, 5, '2025-04-30 10:16:23'),
+(969, 1, 6, '2025-04-30 10:24:44'),
+(970, 1, 7, '2025-04-30 10:24:44');
 
 -- --------------------------------------------------------
 
@@ -779,10 +881,11 @@ CREATE TABLE `laporan_bulanan` (
   `tahun` year(4) NOT NULL,
   `bulan` enum('Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember') NOT NULL,
   `nama_perusahaan` varchar(200) NOT NULL,
+  `kabupaten` enum('Balangan','Banjar','Barito Kuala','Hulu Sungai Selatan','Hulu Sungai Tengah','Hulu Sungai Utara','Kotabaru','Tabalong','Tanah Bumbu','Tanah Laut','Tapin','Kota Banjarbaru','Kota Banjarmasin') NOT NULL,
   `alamat` varchar(255) NOT NULL,
   `latitude` varchar(20) NOT NULL,
   `longitude` varchar(20) NOT NULL,
-  `jenis_pembangkit` int(100) NOT NULL,
+  `jenis_pembangkit` varchar(200) NOT NULL,
   `fungsi` enum('Utama','Darurat','Cadangan') NOT NULL,
   `kapasitas_terpasang` varchar(20) NOT NULL,
   `daya_mampu_netto` varchar(20) NOT NULL,
@@ -807,9 +910,9 @@ CREATE TABLE `laporan_bulanan` (
 -- Dumping data for table `laporan_bulanan`
 --
 
-INSERT INTO `laporan_bulanan` (`id`, `id_user`, `tahun`, `bulan`, `nama_perusahaan`, `alamat`, `latitude`, `longitude`, `jenis_pembangkit`, `fungsi`, `kapasitas_terpasang`, `daya_mampu_netto`, `jumlah_unit`, `no_unit`, `tahun_operasi`, `status_operasi`, `bahan_bakar_jenis`, `bahan_bakar_satuan`, `volume_bb`, `produksi_sendiri`, `pemb_sumber_lain`, `susut_jaringan`, `penj_ke_pelanggan`, `penj_ke_pln`, `pemakaian_sendiri`, `status`, `keterangan`) VALUES
-(3, 1, 2025, 'April', 'PT Energi Mandiri', 'Jl. Mistar Cokrokusumo Kelurahan Cempaka, Kecamatan Cempaka, No 21 (Seberang Kelurahan Cempaka)', '3°26\'43\"LS', '114°50\'21\"BT', 1, 'Utama', '1.00', '0.58', '1', '1', '2000', 'Beroperasi', 'Solar', 'Liter', '-', '-', '-', '-', '-', '-', '-', 'diajukan', '-'),
-(4, 5, 2025, 'April', 'Perusahaan', 'Jl. Mistar Cokrokusumo Kelurahan Cempaka, Kecamatan Cempaka, No 21 (Seberang Kelurahan Cempaka)', '3°26\'43\"LS', '114°50\'21\"BT', 0, 'Utama', '1.00', '0.58', '1', '1', '2002', 'Beroperasi', 'Solar', 'Liter', '-', '-', '-', '-', '-', '-', '-', 'diajukan', '-');
+INSERT INTO `laporan_bulanan` (`id`, `id_user`, `tahun`, `bulan`, `nama_perusahaan`, `kabupaten`, `alamat`, `latitude`, `longitude`, `jenis_pembangkit`, `fungsi`, `kapasitas_terpasang`, `daya_mampu_netto`, `jumlah_unit`, `no_unit`, `tahun_operasi`, `status_operasi`, `bahan_bakar_jenis`, `bahan_bakar_satuan`, `volume_bb`, `produksi_sendiri`, `pemb_sumber_lain`, `susut_jaringan`, `penj_ke_pelanggan`, `penj_ke_pln`, `pemakaian_sendiri`, `status`, `keterangan`) VALUES
+(3, 1, 2025, 'April', 'PT Energi Mandiri', 'Kota Banjarbaru', 'Jl. Mistar Cokrokusumo Kelurahan Cempaka, Kecamatan Cempaka, No 21 (Seberang Kelurahan Cempaka)', '3°26\'43\"LS', '114°50\'21\"BT', '1', 'Utama', '1.00', '0.58', '1', '1', '2000', 'Beroperasi', 'Solar', 'Liter', '2.342,2', '2.341,4', '1.231,5', '1.231,3', '1.132,3', '1.231,2', '19.200', 'diajukan', '-'),
+(8, 10, 2025, 'Mei', 'irwan group', 'Tanah Laut', 'Tanah laut', '3°26\'43\"LS', '114°50\'21\"BT', 'genset', 'Cadangan', '1.500,2', '1.600,8', '1', '1', '2004', 'Beroperasi', 'Solar', 'Liter', '2.500', '2.300,20', '2.700,3', '-', '1.100,5', '1.600,5', '1.300,9', 'diajukan', '-');
 
 -- --------------------------------------------------------
 
@@ -832,13 +935,6 @@ CREATE TABLE `laporan_semester` (
   `keterangan` varchar(225) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `laporan_semester`
---
-
-INSERT INTO `laporan_semester` (`id`, `id_user`, `nama_perusahaan`, `parameter`, `buku_mutu`, `hasil`, `file_laporan`, `file_lhu`, `tahun`, `semester`, `status`, `keterangan`) VALUES
-(17, 5, 'maya group', 'kebisingan', 'aaaaaaaaa', 'bbbbbb', 'uploads/1745756658_ALURLOGISTIKTPSKELURAHANCEMPAKAPSU.pdf', 'uploads/1745756658_ALURLOGISTIKTPSKELURAHANCEMPAKAPSU.pdf', 2025, 'Semester I 2025', 'diajukan', '-');
-
 -- --------------------------------------------------------
 
 --
@@ -850,18 +946,10 @@ CREATE TABLE `news` (
   `id_title` varchar(20) NOT NULL,
   `title` varchar(100) NOT NULL,
   `jenis_konten` enum('gambar','file','link','kosong') NOT NULL,
-  `konten` varchar(225) NOT NULL,
+  `konten` varchar(225) DEFAULT NULL,
   `caption` text NOT NULL,
   `tanggal` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `news`
---
-
-INSERT INTO `news` (`id`, `id_title`, `title`, `jenis_konten`, `konten`, `caption`, `tanggal`) VALUES
-(4, 'TTL-001', 'ADEL JKT48 GRAD', 'gambar', 'uploads/1745886934_7fb585eca747547b55563358add80b87.jpg', '\"Congratulations to Adel on her graduation from JKT48! 🎓✨ Wishing you all the best in your next adventure! #AdelJKT48 #Graduation\"', '2025-04-29 02:35:34'),
-(5, 'TTL-001', 'ADEL JKT48 GRAD', 'gambar', 'uploads/1745886934_2a3066213824b688a253585469df73fd.jpg', '\"Congratulations to Adel on her graduation from JKT48! 🎓✨ Wishing you all the best in your next adventure! #AdelJKT48 #Graduation\"', '2025-04-29 02:35:34');
 
 -- --------------------------------------------------------
 
@@ -916,8 +1004,8 @@ CREATE TABLE `profil` (
 --
 
 INSERT INTO `profil` (`id_profil`, `id_user`, `nama_perusahaan`, `kabupaten`, `alamat`, `jenis_usaha`, `no_telp_kantor`, `no_fax`, `tenaga_teknik`, `nama`, `no_hp`, `email`, `status`, `keterangan`) VALUES
-(16, 10, 'irwan group', 'Tanah Laut', 'aa', 'Konstruksi dan Infrastruktur', '088247342027', '2134342124', 'irwan', 'irwan', '081234567890', 'irwan@gmail.com', 'diajukan', '-'),
-(17, 5, 'irwan group', 'Kota Banjarbaru', 'komp.Husindo Raya', 'Jasa', '088247342027', '02134342124', 'irwan', 'MUHAMMAD IRWAN FIRDAUS', '088247342027', 'irwan@gmail.com', 'diajukan', '-');
+(16, 10, 'irwan group', 'Tanah Laut', 'aa', 'Konstruksi dan Infrastruktur', '088247342027', '2134342124', 'irwan', 'irwan', '081234567890', 'irwan@gmail.com', 'diterima', '-'),
+(17, 5, 'irwan group', 'Kota Banjarbaru', 'komp.Husindo Raya', 'Jasa', '088247342027', '02134342124', 'irwan', 'MUHAMMAD IRWAN FIRDAUS', '088247342027', 'irwan@gmail.com', 'diterima', '-');
 
 -- --------------------------------------------------------
 
@@ -931,7 +1019,7 @@ CREATE TABLE `users` (
   `email` varchar(50) NOT NULL,
   `password` varchar(255) NOT NULL,
   `no_hp` varchar(15) NOT NULL,
-  `role` enum('superadmin','admin','umum') NOT NULL,
+  `role` enum('superadmin','admin','umum','adminbulanan','adminsemester','kementerian') NOT NULL,
   `status` enum('diajukan','diverifikasi','ditolak') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -940,10 +1028,14 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id_user`, `username`, `email`, `password`, `no_hp`, `role`, `status`) VALUES
-(1, 'superadmin', 'admin@gmail.com', '$2y$10$HEht05pyTG8fK1DBgrAS6OBpL0S2fVszD4P9z9Mbi/Ssx39wi9whq', '081234567890', 'superadmin', 'diverifikasi'),
+(1, 'superadmin', 'admin@gmail.com', '$2y$10$C3vLGa6azn7MTl7gBw/PVuSBhFf/yPxaLtFIF.dU8yoBoRpJcGF.m', '081234567890', 'superadmin', 'diverifikasi'),
 (5, 'umum', 'irwanfirdaus508@gmail.com', '$2y$10$IfKG0EFwC/grk2sIy8fFzOKQnTgT51tXY5wdJ4IZZVZo5BNVU43HC', '', 'umum', 'diverifikasi'),
 (9, 'admin', 'yanda@gmail.com', '$2y$10$ue.Tc/.YrGfz0IIi69BuDenBIpBL8.eYEuAmXoy6ulXx4OXRNL8/y', '', 'admin', 'diverifikasi'),
-(10, 'umum2', 'umum2@gmail.com', '$2y$10$VXbtfcHWz.AYyjG1g1kh/eQIgbEFGyRYUkljqCO7DH1ZeOZUO.qKC', '082716152', 'umum', 'diverifikasi');
+(10, 'umum2', 'umum2@gmail.com', '$2y$10$VXbtfcHWz.AYyjG1g1kh/eQIgbEFGyRYUkljqCO7DH1ZeOZUO.qKC', '082716152', 'umum', 'diverifikasi'),
+(11, 'kementerian', 'kementerian@gmail.com', '$2y$10$bBUggvi2SOibYrySP9NeRu7Ib2JY2U8/XHPDi2ATq0Qovtw5ZuExK', '081234567891', 'kementerian', 'diverifikasi'),
+(12, 'adminbulanan', 'adminbulanan@gmail.com', '$2y$10$yT327SSk1nLj41Ywudg1deO9m3X.7Ia.H60eZIXu4SjE7AFavrtha', '088247342026', 'adminbulanan', 'diverifikasi'),
+(13, 'adminsemester', 'adminsemester@gmail.com', '$2y$10$obxzoS0OHIKkfzubZ5pTsO8YD23LB35tVlnF4tLQo.GV4K4WcN3tO', '082134758490', 'adminsemester', 'diverifikasi'),
+(14, 'maya', 'mayamaulina16@gmail.com', '$2y$10$qEcR77W.gFGxhZnWcqTsLeHxdP5wUzaAMsOhvlPYvFoMaGXK1b3eG', '082134758490', 'umum', 'diajukan');
 
 --
 -- Indexes for dumped tables
@@ -1029,19 +1121,19 @@ ALTER TABLE `djih`
 -- AUTO_INCREMENT for table `djih_dilihat`
 --
 ALTER TABLE `djih_dilihat`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=183;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=192;
 
 --
 -- AUTO_INCREMENT for table `konten_dilihat`
 --
 ALTER TABLE `konten_dilihat`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=822;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=971;
 
 --
 -- AUTO_INCREMENT for table `laporan_bulanan`
 --
 ALTER TABLE `laporan_bulanan`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `laporan_semester`
@@ -1053,7 +1145,7 @@ ALTER TABLE `laporan_semester`
 -- AUTO_INCREMENT for table `news`
 --
 ALTER TABLE `news`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `pembangkit`
@@ -1071,7 +1163,7 @@ ALTER TABLE `profil`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
