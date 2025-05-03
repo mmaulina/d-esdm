@@ -13,9 +13,9 @@ if (!isset($_SESSION['token'])) {
     $_SESSION['token'] = bin2hex(random_bytes(32));
 }
 
-// if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on') {
-//     die("Akses hanya diperbolehkan melalui koneksi aman (HTTPS).");
-// }
+if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on') {
+    die("Akses hanya diperbolehkan melalui koneksi aman (HTTPS).");
+}
 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
