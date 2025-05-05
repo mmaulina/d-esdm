@@ -186,11 +186,13 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                         <tr>
                             <th rowspan="3" style="width: 3%;" onclick="sortTable(0)">No. <i class="fa fa-sort"></i></th>
                             <th rowspan="3" onclick="sortTable(1)">Nama Perusahaan <i class="fa fa-sort"></th>
+                            <?php if ($_SESSION['role'] == 'superadmin') { ?>
                             <th rowspan="3" onclick="sortTable(2)">No Hp Pimpinan<i class="fa fa-sort"></i></th>
                             <th rowspan="3" onclick="sortTable(3)">Tenaga Teknik <i class="fa fa-sort"></i></th>
                             <th rowspan="3" onclick="sortTable(4)">No Hp Tenaga Teknik <i class="fa fa-sort"></i></th>
                             <th rowspan="3" onclick="sortTable(5)">Nama Admin <i class="fa fa-sort"></i></th>
                             <th rowspan="3" onclick="sortTable(6)">Nomor Admin <i class="fa fa-sort"></i></th>
+                            <?php } ?>
                             <th rowspan="3" onclick="sortTable(7)">Nomor Telepon Kantor <i class="fa fa-sort"></i></th>
                             <th rowspan="3" onclick="sortTable(8)">Tahun <i class="fa fa-sort"></th>
                             <th rowspan="3" onclick="sortTable(9)">Bulan <i class="fa fa-sort"></th>
@@ -241,11 +243,13 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                                 <tr>
                                     <td class="text-center"><?php echo $no++; ?></td>
                                     <td><?php echo htmlspecialchars($row['nama_perusahaan']); ?> </td>
+                                    <?php if ($_SESSION['role'] == 'superadmin') { ?>
                                     <td><?= htmlspecialchars($row['no_hp_pimpinan']); ?></td>
                                     <td><?= htmlspecialchars($row['tenaga_teknik']); ?></td>
                                     <td><?= htmlspecialchars($row['no_hp_teknik']); ?></td>
                                     <td><?= htmlspecialchars($row['nama']); ?></td>
                                     <td><?= htmlspecialchars($row['no_hp']); ?></td>
+                                    <?php } ?>
                                     <td><?= htmlspecialchars($row['no_telp_kantor']); ?></td>
                                     <td><?php echo htmlspecialchars($row['tahun']); ?> </td>
                                     <td><?php echo htmlspecialchars($row['bulan']); ?> </td>
