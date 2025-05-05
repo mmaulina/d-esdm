@@ -24,7 +24,7 @@ $params = [];
 
 // Query berdasarkan role
 $params = [];
-if ($role != 'admin' && $role != 'superadmin') {
+if ($role != 'adminbulanan' && $role != 'superadmin') {
     $query .= " AND id_user = :id_user";
     $params[':id_user'] = $id_user;
 }
@@ -66,7 +66,7 @@ $bulanList = $bulanStmt->fetchAll(PDO::FETCH_COLUMN);
 $kabupatenStmt = $conn->query("SELECT DISTINCT kabupaten FROM laporan_bulanan ORDER BY kabupaten");
 $kabupatenList = $kabupatenStmt->fetchAll(PDO::FETCH_COLUMN);
 
-$query .= " ORDER BY FIELD(status, 'diajukan', 'ditolak', 'diterima')";
+$query .= " ORDER BY FIELD(status, 'diajukan', 'dikembalikan', 'diterima')";
 
 // Persiapkan dan jalankan query
 $stmt = $conn->prepare($query);
@@ -84,7 +84,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     } elseif (isset($_POST['tolak_laporan'])) {
         $id = $_POST['id'];
         $keterangan = $_POST['keterangan'];
-        $updateQuery = "UPDATE laporan_bulanan SET status = 'ditolak', keterangan = :keterangan WHERE id = :id";
+        $updateQuery = "UPDATE laporan_bulanan SET status = 'dikembalikan', keterangan = :keterangan WHERE id = :id";
     }
 
     if (isset($updateQuery)) {
@@ -186,9 +186,15 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                         <tr>
                             <th rowspan="3" style="width: 3%;" onclick="sortTable(0)">No. <i class="fa fa-sort"></i></th>
                             <th rowspan="3" onclick="sortTable(1)">Nama Perusahaan <i class="fa fa-sort"></th>
-                            <th rowspan="3" onclick="sortTable(2)">Tahun <i class="fa fa-sort"></th>
-                            <th rowspan="3" onclick="sortTable(3)">Bulan <i class="fa fa-sort"></th>
-                            <th rowspan="3" onclick="sortTable(4)">Kabupaten <i class="fa fa-sort"></th>
+                            <th rowspan="3" onclick="sortTable(2)">No Hp Pimpinan<i class="fa fa-sort"></i></th>
+                            <th rowspan="3" onclick="sortTable(3)">Tenaga Teknik <i class="fa fa-sort"></i></th>
+                            <th rowspan="3" onclick="sortTable(4)">No Hp Tenaga Teknik <i class="fa fa-sort"></i></th>
+                            <th rowspan="3" onclick="sortTable(5)">Nama Admin <i class="fa fa-sort"></i></th>
+                            <th rowspan="3" onclick="sortTable(6)">Nomor Admin <i class="fa fa-sort"></i></th>
+                            <th rowspan="3" onclick="sortTable(7)">Nomor Telepon Kantor <i class="fa fa-sort"></i></th>
+                            <th rowspan="3" onclick="sortTable(8)">Tahun <i class="fa fa-sort"></th>
+                            <th rowspan="3" onclick="sortTable(9)">Bulan <i class="fa fa-sort"></th>
+                            <th rowspan="3" onclick="sortTable(10)">Kabupaten <i class="fa fa-sort"></th>
                             <th colspan="3" style="min-width: 250px;">Data Pembangkit</th>
                             <th colspan="10" style="min-width: 1500px;">Data Teknis Pembangkit</th>
                             <th colspan="7" style="min-width: 250px;">Pelaporan Bulanan</th>
@@ -197,32 +203,32 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                             <th rowspan="3" style="min-width: 150px;">Aksi</th>
                         </tr>
                         <tr>
-                            <th rowspan="2" onclick="sortTable(7)">Alamat Pembangkit <i class="fa fa-sort"></th>
+                            <th rowspan="2" onclick="sortTable(11)">Alamat Pembangkit <i class="fa fa-sort"></th>
                             <th colspan="2">Koordinat Pembangkit</th>
-                            <th rowspan="2" onclick="sortTable(8)">Jenis Pembangkit <i class="fa fa-sort"></th>
-                            <th rowspan="2" onclick="sortTable(9)">Fungsi <i class="fa fa-sort"></th>
-                            <th rowspan="2" onclick="sortTable(10)">Kapasitas Terpasang (MW) <i class="fa fa-sort"></th>
-                            <th rowspan="2" onclick="sortTable(11)">Daya Mampu Netto (MW) <i class="fa fa-sort"></th>
-                            <th rowspan="2" onclick="sortTable(12)">Jumlah Unit <i class="fa fa-sort"></th>
-                            <th rowspan="2" onclick="sortTable(13)">No. Unit <i class="fa fa-sort"></th>
-                            <th rowspan="2" onclick="sortTable(14)">Tahun Operasi <i class="fa fa-sort"></th>
-                            <th rowspan="2" onclick="sortTable(15)">Status Operasi <i class="fa fa-sort"></th>
+                            <th rowspan="2" onclick="sortTable(12)">Jenis Pembangkit <i class="fa fa-sort"></th>
+                            <th rowspan="2" onclick="sortTable(13)">Fungsi <i class="fa fa-sort"></th>
+                            <th rowspan="2" onclick="sortTable(14)">Kapasitas Terpasang (MW) <i class="fa fa-sort"></th>
+                            <th rowspan="2" onclick="sortTable(15)">Daya Mampu Netto (MW) <i class="fa fa-sort"></th>
+                            <th rowspan="2" onclick="sortTable(16)">Jumlah Unit <i class="fa fa-sort"></th>
+                            <th rowspan="2" onclick="sortTable(17)">No. Unit <i class="fa fa-sort"></th>
+                            <th rowspan="2" onclick="sortTable(18)">Tahun Operasi <i class="fa fa-sort"></th>
+                            <th rowspan="2" onclick="sortTable(19)">Status Operasi <i class="fa fa-sort"></th>
                             <th colspan="2">Bahan Bakar yang Digunakan</th>
-                            <th rowspan="2" onclick="sortTable(16)">Volume Bahan Bakar <i class="fa fa-sort"></th>
+                            <th rowspan="2" onclick="sortTable(20)">Volume Bahan Bakar <i class="fa fa-sort"></th>
                             <th colspan="2">Produksi Listrik</th>
-                            <th rowspan="2" onclick="sortTable(17)">Susut Jaringan (bila ada) (kWh) <i class="fa fa-sort"></th>
+                            <th rowspan="2" onclick="sortTable(21)">Susut Jaringan (bila ada) (kWh) <i class="fa fa-sort"></th>
                             <th colspan="3">Konsumsi Listrik</th>
                         </tr>
                         <tr>
-                            <th onclick="sortTable(18)">Latitude <i class="fa fa-sort"></th>
-                            <th onclick="sortTable(19)">Longitude <i class="fa fa-sort"></th>
-                            <th onclick="sortTable(20)">Jenis <i class="fa fa-sort"></th>
-                            <th onclick="sortTable(21)">Satuan <i class="fa fa-sort"></th>
-                            <th onclick="sortTable(22)">Produksi Sendiri (kWh) <i class="fa fa-sort"></th>
-                            <th onclick="sortTable(23)">Pembelian Sumber Lain (bila ada) (kWh) <i class="fa fa-sort"></th>
-                            <th onclick="sortTable(24)">Penjualan ke Pelanggan (bila ada) (kWh) <i class="fa fa-sort"></th>
-                            <th onclick="sortTable(25)">Penjualan ke PLN (bila ada) (kWh) <i class="fa fa-sort"></th>
-                            <th onclick="sortTable(26)">Pemakaian Sendiri (kWh) <i class="fa fa-sort"></th>
+                            <th onclick="sortTable(22)">Latitude <i class="fa fa-sort"></th>
+                            <th onclick="sortTable(23)">Longitude <i class="fa fa-sort"></th>
+                            <th onclick="sortTable(24)">Jenis <i class="fa fa-sort"></th>
+                            <th onclick="sortTable(25)">Satuan <i class="fa fa-sort"></th>
+                            <th onclick="sortTable(26)">Produksi Sendiri (kWh) <i class="fa fa-sort"></th>
+                            <th onclick="sortTable(27)">Pembelian Sumber Lain (bila ada) (kWh) <i class="fa fa-sort"></th>
+                            <th onclick="sortTable(28)">Penjualan ke Pelanggan (bila ada) (kWh) <i class="fa fa-sort"></th>
+                            <th onclick="sortTable(29)">Penjualan ke PLN (bila ada) (kWh) <i class="fa fa-sort"></th>
+                            <th onclick="sortTable(30)">Pemakaian Sendiri (kWh) <i class="fa fa-sort"></th>
                         </tr>
                     </thead>
 
@@ -235,6 +241,12 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                                 <tr>
                                     <td class="text-center"><?php echo $no++; ?></td>
                                     <td><?php echo htmlspecialchars($row['nama_perusahaan']); ?> </td>
+                                    <td><?= htmlspecialchars($row['no_hp_pimpinan']); ?></td>
+                                    <td><?= htmlspecialchars($row['tenaga_teknik']); ?></td>
+                                    <td><?= htmlspecialchars($row['no_hp_teknik']); ?></td>
+                                    <td><?= htmlspecialchars($row['nama']); ?></td>
+                                    <td><?= htmlspecialchars($row['no_hp']); ?></td>
+                                    <td><?= htmlspecialchars($row['no_telp_kantor']); ?></td>
                                     <td><?php echo htmlspecialchars($row['tahun']); ?> </td>
                                     <td><?php echo htmlspecialchars($row['bulan']); ?> </td>
                                     <td><?= htmlspecialchars($row['kabupaten']) ?></td>
@@ -265,8 +277,8 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                                             echo '<i class="fas fa-clock" style="color: yellow;"></i> Diajukan';
                                         } elseif ($row['status'] == 'diterima') {
                                             echo '<i class="fas fa-check" style="color: green;"></i> Diterima';
-                                        } elseif ($row['status'] == 'ditolak') {
-                                            echo '<i class="fas fa-times" style="color: red;"></i> Ditolak';
+                                        } elseif ($row['status'] == 'dikembalikan') {
+                                            echo '<i class="fas fa-times" style="color: red;"></i> dikembalikan';
                                         } else {
                                             echo '<span class="text-muted">Status tidak diketahui</span>';
                                         }
@@ -274,7 +286,7 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                                     </td>
                                     <td><?php echo htmlspecialchars($row['keterangan']); ?></td>
                                     <td class="text-center">
-                                        <?php if ($role == 'admin' || $role == 'superadmin' && $row['status'] == 'diajukan'): ?>
+                                        <?php if (($role == 'adminbulanan' || $role == 'superadmin') && $row['status'] == 'diajukan'): ?>
                                             <!-- Tombol Terima menggunakan POST -->
                                             <form method="POST" style="display: inline;">
                                                 <input type="hidden" name="terima_id" value="<?php echo $row['id']; ?>">
@@ -284,7 +296,7 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                                             <a href="" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modalTolak<?php echo $row['id']; ?>">Tolak</a>
                                         <?php endif; ?>
 
-                                        <?php if ($row['status'] == 'diterima' || $row['status'] == 'ditolak'): ?>
+                                        <?php if ($role == 'superadmin' && $row['status'] == 'dikembalikan' && $row['status'] == 'diterima'): ?>
                                             <a href="?page=edit_laporan_perbulan&id=<?php echo $row['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
                                             <a href="?page=hapus_laporan_perbulan&id=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus?');">Hapus</a>
                                         <?php endif; ?>
@@ -295,19 +307,19 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h5 class="modal-title" id="modalTolakLabel">Tolak Laporan</h5>
+                                                <h5 class="modal-title" id="modalTolakLabel">Kembalikan Laporan</h5>
                                             </div>
                                             <form action="" method="POST">
                                                 <div class="modal-body">
                                                     <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
                                                     <div class="form-group">
-                                                        <label for="keterangan<?php echo $row['id']; ?>">Keterangan Penolakan</label>
+                                                        <label for="keterangan<?php echo $row['id']; ?>">Keterangan di Kembalikan</label>
                                                         <textarea class="form-control" id="keterangan" name="keterangan" rows="3" required></textarea>
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                                                    <button type="submit" name="tolak_laporan" class="btn btn-danger">Tolak</button>
+                                                    <button type="submit" name="tolak_laporan" class="btn btn-danger">Kembalikan</button>
                                                 </div>
                                             </form>
                                         </div>

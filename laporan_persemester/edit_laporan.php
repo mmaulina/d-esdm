@@ -25,8 +25,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
 
     $nama_perusahaan = sanitizeInput($_POST['nama_perusahaan']);
+    $no_hp_pimpinan =sanitizeInput($_POST['no_hp_pimpinan']);
+    $tenaga_teknik =sanitizeInput($_POST['tenaga_teknik']);
+    $no_hp_teknik = sanitizeInput($_POST['no_hp_teknik']);
+    $nama = sanitizeInput($_POST['nama']);
+    $no_hp = sanitizeInput($_POST['no_hp']);
+    $no_telp_kantor = sanitizeInput($_POST['no_telp_kantor']);
     $parameter = sanitizeInput($_POST['parameter']);
-    $buku_mutu = sanitizeInput($_POST['buku_mutu']);
+    $baku_mutu = sanitizeInput($_POST['baku_mutu']);
     $hasil = sanitizeInput($_POST['hasil']);
 
     $file_laporan = uploadFile('file_laporan');
@@ -35,9 +41,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $semester_final = sanitizeInput($_POST['semester_final']);
 
     $updateSQL = "UPDATE laporan_semester SET 
-    nama_perusahaan = :nama_perusahaan, 
+    nama_perusahaan = :nama_perusahaan,
+    no_hp_pimpinan=:no_hp_pimpinan, 
+    tenaga_teknik=:tenaga_teknik,
+    no_hp_teknik=:no_hp_teknik,
+    nama=:nama, 
+    no_hp=:no_hp, 
+    no_telp_kantor=:no_telp_kantor, 
     parameter = :parameter, 
-    buku_mutu = :buku_mutu, 
+    baku_mutu = :baku_mutu, 
     hasil = :hasil,
     tahun = :tahun,
     semester = :semester_final,
@@ -61,8 +73,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Bind parameter yang wajib
     $stmt->bindParam(':id', $id_laporan);
     $stmt->bindParam(':nama_perusahaan', $nama_perusahaan);
+    $stmt->bindParam(':no_hp_pimpinan', $no_hp_pimpinan);
+    $stmt->bindParam(':tenaga_teknik', $tenaga_teknik);
+    $stmt->bindParam(':no_hp_teknik', $no_hp_teknik);
+    $stmt->bindParam(':nama', $nama);
+    $stmt->bindParam(':no_hp', $no_hp);
+    $stmt->bindParam(':no_telp_kantor', $no_telp_kantor);
     $stmt->bindParam(':parameter', $parameter);
-    $stmt->bindParam(':buku_mutu', $buku_mutu);
+    $stmt->bindParam(':baku_mutu', $baku_mutu);
     $stmt->bindParam(':hasil', $hasil);
 
     // Bind parameter hanya jika file diunggah
@@ -141,9 +159,33 @@ function uploadFile($input_name) {
                 <?php if ($role === 'superadmin') : ?>
                     <input type="text" name="nama_perusahaan" class="form-control" placeholder="Masukkan nama perusahaan" value="<?= htmlspecialchars($laporan['nama_perusahaan']) ?>" required>
                 <?php elseif ($role === 'umum') : ?>
-                    <input type="text" name="nama_perusahaan" class="form-control" value="<?= htmlspecialchars($laporan['nama_perusahaan']) ?>" required readonly>
+                    <input type="text" name="nama_perusahaan" class="form-control" value="<?= htmlspecialchars($laporan['nama_perusahaan']) ?>" readonly>
                 <?php endif; ?>
             </div>
+            <div class="mb-3">
+                    <label class="form-label">No Hp Pimpinan</label>
+                    <input type="text" name="no_hp_pimpinan" class="form-control" value="<?= htmlspecialchars($no_hp_pimpinan) ?>" readonly>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Tenaga Teknik</label>
+                    <input type="text" name="tenaga_teknik" class="form-control" value="<?= htmlspecialchars($tenaga_teknik) ?>" readonly>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">No Hp Tenaga Teknik</label>
+                    <input type="text" name="no_hp_teknik" class="form-control" value="<?= htmlspecialchars($no_hp_teknik) ?>" readonly>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Nama Admin</label>
+                    <input type="text" name="nama" class="form-control" value="<?= htmlspecialchars($nama) ?>" readonly>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">No Hp Admin</label>
+                    <input type="text" name="no_hp" class="form-control" value="<?= htmlspecialchars($no_hp) ?>" readonly>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">No Telpon Kantor</label>
+                    <input type="text" name="no_telp_kantor" class="form-control" value="<?= htmlspecialchars($no_telp_kantor) ?>" readonly>
+                </div>
                 <div class="form-group mb-2">
                     <label>parameter</label>
                     <select class="form-control" name="parameter" required>
@@ -156,8 +198,8 @@ function uploadFile($input_name) {
                     </select>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Buku Mutu</label>
-                    <input type="text" name="buku_mutu" class="form-control" placeholder="Masukkan buku mutu" value="<?= htmlspecialchars($laporan['buku_mutu']) ?>" required>
+                    <label class="form-label">baku Mutu</label>
+                    <input type="text" name="baku_mutu" class="form-control" placeholder="Masukkan baku mutu" value="<?= htmlspecialchars($laporan['baku_mutu']) ?>" required>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Hasil</label>

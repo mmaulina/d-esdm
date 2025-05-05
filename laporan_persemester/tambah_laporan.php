@@ -14,11 +14,18 @@ $id_user = $_SESSION['id_user'];
 $role = $_SESSION['role'] ?? '';
 
 $nama_perusahaan_profil = '';
+$no_hp_pimpinan = '';
+$tenaga_teknik = '';
+$no_hp_teknik = '';
+$nama = '';
+$no_hp = '';
+$no_telp_kantor = '';
 
-// Ambil nama_perusahaan berdasarkan id_user
+// Ambil data profil berdasarkan id_user
 $database = new Database();
 $db = $database->getConnection();
-$query = "SELECT nama_perusahaan FROM profil WHERE id_user = :id_user";
+$query = "SELECT nama_perusahaan, no_hp_pimpinan, tenaga_teknik, no_hp_teknik, nama, no_hp, no_telp_kantor 
+          FROM profil WHERE id_user = :id_user";
 $stmt = $db->prepare($query);
 $stmt->bindParam(':id_user', $id_user);
 $stmt->execute();
@@ -26,6 +33,12 @@ $stmt->execute();
 if ($stmt->rowCount() > 0) {
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     $nama_perusahaan_profil = $result['nama_perusahaan'];
+    $no_hp_pimpinan = $result['no_hp_pimpinan'];
+    $tenaga_teknik = $result['tenaga_teknik'];
+    $no_hp_teknik = $result['no_hp_teknik'];
+    $nama = $result['nama'];
+    $no_hp = $result['no_hp'];
+    $no_telp_kantor = $result['no_telp_kantor'];
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -37,49 +50,70 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         return strip_tags(trim($input));
     }
     
-
+    $no_hp_pimpinan = sanitizeInput($_POST['no_hp_pimpinan'] ?? '');
+    $tenaga_teknik = sanitizeInput($_POST['tenaga_teknik'] ?? '');
+    $no_hp_teknik = sanitizeInput($_POST['no_hp_teknik'] ?? '');
+    $nama = sanitizeInput($_POST['nama'] ?? '');
+    $no_hp = sanitizeInput($_POST['no_hp'] ?? '');
+    $no_telp_kantor = sanitizeInput($_POST['no_telp_kantor'] ?? '');
     $nama_perusahaan = sanitizeInput($_POST['nama_perusahaan']);
-    $parameter = sanitizeInput($_POST['parameter']);
-    $buku_mutu = sanitizeInput($_POST['buku_mutu']);
-    $hasil = sanitizeInput($_POST['hasil']);
-    $status = 'diajukan'; // Status diisi otomatis
-    $keterangan = '-'; // Keterangan diisi otomatis
-
-    // Ambil id_user dari session
-    $id_user = $_SESSION['id_user'];
+    $tahun = sanitizeInput($_POST['tahun']);
+    $semester_final = sanitizeInput($_POST['semester_final']);
 
     // Handle file upload
     $file_laporan = uploadFile('file_laporan');
     $file_lhu = uploadFile('file_lhu');
-    $tahun = sanitizeInput($_POST['tahun']);
-    $semester_final = sanitizeInput($_POST['semester_final']);
 
-
-    // Simpan data ke database dengan id_user
-    $insertSQL = "INSERT INTO laporan_semester (id_user, nama_perusahaan, parameter, buku_mutu, hasil, status, keterangan, file_laporan, file_lhu, tahun, semester) 
-                  VALUES (:id_user, :nama_perusahaan, :parameter, :buku_mutu, :hasil, :status, :keterangan, :file_laporan, :file_lhu, :tahun, :semester)";
+    // Prepare the insert statement
+    $insertSQL = "INSERT INTO laporan_semester (id_user, nama_perusahaan, no_hp_pimpinan, tenaga_teknik, no_hp_teknik, nama, no_hp, no_telp_kantor, parameter, baku_mutu, hasil, status, keterangan, file_laporan, file_lhu, tahun, semester) 
+                  VALUES (:id_user, :nama_perusahaan, :no_hp_pimpinan, :tenaga_teknik, :no_hp_teknik, :nama, :no_hp, :no_telp_kantor, :parameter, :baku_mutu, :hasil, :status, :keterangan, :file_laporan, :file_lhu, :tahun, :semester)";
+    
     $stmt = $db->prepare($insertSQL);
 
-    $stmt->bindParam(':id_user', $id_user);
-    $stmt->bindParam(':nama_perusahaan', $nama_perusahaan);
-    $stmt->bindParam(':parameter', $parameter);
-    $stmt->bindParam(':buku_mutu', $buku_mutu);
-    $stmt->bindParam(':hasil', $hasil);
-    $stmt->bindParam(':status', $status);
-    $stmt->bindParam(':keterangan', $keterangan);
-    $stmt->bindParam(':file_laporan', $file_laporan);
-    $stmt->bindParam(':file_lhu', $file_lhu);
-    $stmt->bindParam(':tahun', $tahun);
-    $stmt->bindParam(':semester', $semester_final);
+    // Ambil id_user dari session
+    $id_user = $_SESSION['id_user'];
+    $status = 'diajukan'; // Status diisi otomatis
+    $keterangan = '-'; // Keterangan diisi otomatis
 
-    
-    if ($stmt->execute()) {
-        $_SESSION['hasil'] = true;
-        $_SESSION['pesan'] = "Berhasil Simpan Data";
-    } else {
-        $_SESSION['hasil'] = false;
-        $_SESSION['pesan'] = "Gagal Simpan Data";
+    // Loop through the parameters, baku_mutu, and hasil
+    $parameters = $_POST['parameter'] ?? [];
+    $baku_mutus = $_POST['baku_mutu'] ?? [];
+    $hasils = $_POST['hasil'] ?? [];
+
+    foreach ($parameters as $index => $parameter) {
+        // Sanitize each input
+        $baku_mutu = sanitizeInput($baku_mutus[$index] ?? '');
+        $hasil = sanitizeInput($hasils[$index] ?? '');
+
+        // Bind parameters
+        $stmt->bindParam(':id_user', $id_user);
+        $stmt->bindParam(':nama_perusahaan', $nama_perusahaan);
+        $stmt->bindParam(':no_hp_pimpinan', $no_hp_pimpinan);
+        $stmt->bindParam(':tenaga_teknik', $tenaga_teknik);
+        $stmt->bindParam(':no_hp_teknik', $no_hp_teknik);
+        $stmt->bindParam(':nama', $nama);
+        $stmt->bindParam(':no_hp', $no_hp);
+        $stmt->bindParam(':no_telp_kantor', $no_telp_kantor);
+        $stmt->bindParam(':parameter', $parameter);
+        $stmt->bindParam(':baku_mutu', $baku_mutu);
+        $stmt->bindParam(':hasil', $hasil);
+        $stmt->bindParam(':status', $status);
+        $stmt->bindParam(':keterangan', $keterangan);
+        $stmt->bindParam(':file_laporan', $file_laporan);
+        $stmt->bindParam(':file_lhu', $file_lhu);
+        $stmt->bindParam(':tahun', $tahun);
+        $stmt->bindParam(':semester', $semester_final);
+
+        // Execute the statement
+        if (!$stmt->execute()) {
+            $_SESSION['hasil'] = false ;
+            $_SESSION['pesan'] = "Gagal Simpan Data untuk parameter: $parameter";
+            break; // Stop the loop if there's an error
+        }
     }
+
+    $_SESSION['hasil'] = true;
+    $_SESSION['pesan'] = "Berhasil Simpan Data";
     echo "<meta http-equiv='refresh' content='0; url=?page=laporan_persemester'>";
 }
 
@@ -113,47 +147,76 @@ function uploadFile($input_name) {
 }
 
 ?>
-
 <div class="container mt-4">
     <h3 class="text-center mb-3"><i class="fas fa-bolt" style="color: #ffc107;"></i>Tambah Pelaporan Semester<i class="fas fa-bolt" style="color: #ffc107;"></i></h3>
     <hr>
     <div class="card shadow" style="overflow-x: auto; max-height: calc(100vh - 150px); overflow-y: auto;">
         <div class="card-body">
             <form method="POST" enctype="multipart/form-data">
-            <div class="mb-3">
-                <label class="form-label">Nama Perusahaan</label>
-                <?php if ($role === 'superadmin') : ?>
-                    <input type="text" name="nama_perusahaan" class="form-control" placeholder="Masukkan nama perusahaan" value="<?= htmlspecialchars($nama_perusahaan_profil) ?>">
-                <?php else : ?>
-                    <input type="text" name="nama_perusahaan" class="form-control" value="<?= htmlspecialchars($nama_perusahaan_profil) ?>" readonly>
-                <?php endif; ?>
-            </div>
-                <div class="form-group mb-2">
-                    <label>Parameter</label>
-                    <select class="form-control" name="parameter" required>
-                        <option value="">-- Pilih Parameter --</option>
-                        <option value="SO2">SO2</option>
-                        <option value="HO2">HO2</option>
-                        <option value="TSP/DEBU">TSP/DEBU</option>
-                        <option value="CO">CO</option>
-                        <option value="kebisingan">Kebisingan</option>
-                    </select>
+                <div class="mb-3">
+                    <label class="form-label">Nama Perusahaan</label>
+                    <?php if ($role === 'superadmin') : ?>
+                        <input type="text" name="nama_perusahaan" class="form-control" placeholder="Masukkan nama perusahaan" value="<?= htmlspecialchars($nama_perusahaan_profil) ?>">
+                    <?php else : ?>
+                        <input type="text" name="nama_perusahaan" class="form-control" value="<?= htmlspecialchars($nama_perusahaan_profil) ?>" readonly>
+                    <?php endif; ?>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Buku Mutu</label>
-                    <input type="text" name="buku_mutu" class="form-control" placeholder="Masukkan buku mutu" required>
+                    <label class="form-label">No Hp Pimpinan</label>
+                    <input type="text" name="no_hp_pimpinan" class="form-control" value="<?= htmlspecialchars($no_hp_pimpinan) ?>" readonly>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Hasil</label>
-                    <input type="text" name="hasil" class="form-control" placeholder="Masukkan hasil" required>
+                    <label class="form-label">Tenaga Teknik</label>
+                    <input type="text" name="tenaga_teknik" class="form-control" value="<?= htmlspecialchars($tenaga_teknik) ?>" readonly>
                 </div>
+                <div class="mb-3">
+                    <label class="form-label">No Hp Tenaga Teknik</label>
+                    <input type="text" name="no_hp_teknik" class="form-control" value="<?= htmlspecialchars($no_hp_teknik) ?>" readonly>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Nama Admin</label>
+                    <input type="text" name="nama" class="form-control" value="<?= htmlspecialchars($nama) ?>" readonly>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">No Hp Admin</label>
+                    <input type="text" name="no_hp" class="form-control" value="<?= htmlspecialchars($no_hp) ?>" readonly>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">No Telpon Kantor</label>
+                    <input type="text" name="no_telp_kantor" class="form-control" value="<?= htmlspecialchars($no_telp_kantor) ?>" readonly>
+                </div>
+
+                <div id="dynamicFields">
+                    <div class="mb-3">
+                        <label class="form-label">Parameter</label>
+                        <select class="form-control" name="parameter[]" required>
+                            <option value="">-- Pilih Parameter --</option>
+                            <option value="SO2">SO2</option>
+                            <option value="HO2">HO2</option>
+                            <option value="TSP/DEBU">TSP/DEBU</option>
+                            <option value="CO">CO</option>
+                            <option value="kebisingan">Kebisingan</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">baku Mutu</label>
+                        <input type="text" name="baku_mutu[]" class="form-control" placeholder="Masukkan baku mutu" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Hasil</label>
+                        <input type="text" name="hasil[]" class="form-control" placeholder="Masukkan hasil" required>
+                    </div>
+                </div>
+
+                <button type="button" class="btn btn-primary mb-3" id="addFields">Tambah Parameter</button>
+
                 <div class="mb-3">
                     <label class="form-label">Upload Laporan (PDF, DOC, DOCX, XLS, XLSX)</label>
                     <input type="file" name="file_laporan" class="form-control" accept=".pdf,.doc,.docx,.xls,.xlsx">
                     <small class="text-danger">Max File 10Mb</small>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Upload LHU (PDF, DOC, DOCX, XLS, XLSX)</label>
+                    <label class="form-label">Upload LHU (PDF, DOC , DOCX, XLS, XLSX)</label>
                     <input type="file" name="file_lhu" class="form-control" accept=".pdf,.doc,.docx,.xls,.xlsx">
                     <small class="text-danger">Max File 10Mb</small>
                 </div>
@@ -184,16 +247,38 @@ function uploadFile($input_name) {
 </div>
 
 <script>
+    document.getElementById('addFields').addEventListener('click', function() {
+        const dynamicFields = document.getElementById('dynamicFields');
+        const newFields = `
+            <div class="mb-3">
+                <label class="form-label">Parameter</label>
+                            <select class="form-control" name="parameter[]" required>
+                            <option value="">-- Pilih Parameter --</option>
+                            <option value="SO2">SO2</option>
+                            <option value="HO2">HO2</option>
+                            <option value="TSP/DEBU">TSP/DEBU</option>
+                            <option value="CO">CO</option>
+                            <option value="kebisingan">Kebisingan</option>
+                        </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">baku Mutu</label>
+                <input type="text" name="baku_mutu[]" class="form-control" placeholder="Masukkan baku mutu" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Hasil</label>
+                <input type="text" name="hasil[]" class="form-control" placeholder="Masukkan hasil" required>
+            </div>`;
+        dynamicFields.insertAdjacentHTML('beforeend', newFields);
+    });
+
     const monthNow = new Date().getMonth() + 1; // getMonth() = 0 (Jan) s.d. 11 (Des)
     const semester1 = document.getElementById('semester1');
     const semester2 = document.getElementById('semester2');
 
-    // Jika bulan sekarang Januari - Juni (1-6), Semester II dikunci
     if (monthNow >= 1 && monthNow <= 6) {
         semester2.disabled = true;
-    }
-    // Jika bulan sekarang Juli - Desember (7-12), Semester I dikunci
-    else {
+    } else {
         semester1.disabled = true;
     }
 
@@ -201,10 +286,9 @@ function uploadFile($input_name) {
     const semesterSelect = document.getElementById('semester');
     const semesterFinal = document.getElementById('semester_final');
 
-    const currentYear = new Date().getFullYear();  // Tahun sekarang (otomatis)
+    const currentYear = new Date().getFullYear();
     const endYear = currentYear + 10;
 
-    // Isi dropdown tahun dari currentYear sampai endYear
     for (let year = currentYear; year <= endYear; year++) {
         const option = document.createElement("option");
         option.value = year;
@@ -226,21 +310,20 @@ function uploadFile($input_name) {
     semesterSelect.addEventListener('change', updateSemesterFinal);
 
     document.querySelector("form").addEventListener("submit", function(e) {
-    const maxFileSize = 10 * 1024 * 1024; // 10 MB
-    const fileLaporan = document.querySelector('input[name="file_laporan"]');
-    const fileLHU = document.querySelector('input[name="file_lhu"]');
+        const maxFileSize = 10 * 1024 * 1024; // 10 MB
+        const fileLaporan = document.querySelector('input[name="file_laporan"]');
+        const fileLHU = document.querySelector('input[name="file_lhu"]');
 
-    if (fileLaporan.files[0] && fileLaporan.files[0].size > maxFileSize) {
-        alert("File laporan terlalu besar! Maksimal 10MB.");
-        e.preventDefault();
-        return;
-    }
+        if (fileLaporan.files[0] && fileLaporan.files[0].size > maxFileSize) {
+            alert("File laporan terlalu besar! Maksimal 10MB.");
+            e.preventDefault();
+            return;
+        }
 
-    if (fileLHU.files[0] && fileLHU.files[0].size > maxFileSize) {
-        alert("File LHU terlalu besar! Maksimal 10MB.");
-        e.preventDefault();
-        return;
-    }
-});
-
+        if (fileLHU.files[0] && fileLHU.files[0].size > maxFileSize) {
+            alert("File LHU terlalu besar! Maksimal 10MB.");
+            e.preventDefault();
+            return;
+        }
+    });
 </script>
