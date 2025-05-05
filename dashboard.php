@@ -214,8 +214,18 @@ foreach ($daftarKabupatenKotaKalsel as $kota) {
                     <div class="col mb-3">
                         <div class="card text-black" style="background-color: #008B47;">
                             <div class="card-body">
-                                <h5 class="card-title">Total Kota dengan Perusahaan</h5>
-                                <p class="card-text"><?php echo $total_kota; ?></p>
+                                <h5 class="card-title">Total Produksi</h5>
+                                <p class="card-text"><?php echo number_format($totalProduksi, 2, ',', '.'); ?></p>
+                                <!-- <td class="text-end"><?= number_format($totalProduksi, 2, ',', '.'); ?></td> -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col mb-3">
+                        <div class="card text-black" style="background-color: #E68A00;">
+                            <div class="card-body">
+                                <h5 class="card-title">Total Konsumsi</h5>
+                                <p class="card-text"><?php echo number_format($totalKonsumsi, 2, ',', '.'); ?></p>
+                                <!-- <td class="text-end"><?= number_format($totalKonsumsi, 2, ',', '.'); ?></td> -->
                             </div>
                         </div>
                     </div>
@@ -227,12 +237,15 @@ foreach ($daftarKabupatenKotaKalsel as $kota) {
                         <div class="col">
                             <h5 class="fw-bold mb-3">Perusahaan Belum Upload Laporan Semester</h5>
                             <div class="table-responsive" style="max-height: 500px; overflow-x: auto; overflow-y: auto;">
-                            <table class="table table-bordered table-striped table-sm" id="tabel-belum-upload">
+                                <table class="table table-bordered table-striped table-sm" id="tabel-belum-upload">
                                     <thead class="table-dark">
                                         <tr>
-                                            <th onclick="sortTable('tabel-belum-upload', 0)">Kabupaten/Kota <i class="fa fa-sort"></th></th>
-                                            <th onclick="sortTable('tabel-belum-upload', 1)">Belum Upload Semester I (<?php echo $tahun; ?>) <i class="fa fa-sort"></th></th>
-                                            <th onclick="sortTable('tabel-belum-upload', 2)">Belum Upload Semester II (<?php echo $tahun; ?>) <i class="fa fa-sort"></th></th>
+                                            <th onclick="sortTable('tabel-belum-upload', 0)">Kabupaten/Kota <i class="fa fa-sort"></th>
+                                            </th>
+                                            <th onclick="sortTable('tabel-belum-upload', 1)">Belum Upload Semester I (<?php echo $tahun; ?>) <i class="fa fa-sort"></th>
+                                            </th>
+                                            <th onclick="sortTable('tabel-belum-upload', 2)">Belum Upload Semester II (<?php echo $tahun; ?>) <i class="fa fa-sort"></th>
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -359,37 +372,37 @@ foreach ($daftarKabupatenKotaKalsel as $kota) {
 <!-- JAVASCRIPT FILTER -->
 <script>
     function sortTable(tableId, columnIndex) {
-    var table = document.querySelector(`#${tableId} tbody`);
-    var rows = Array.from(table.querySelectorAll("tr"));
-    var isAscending = table.getAttribute("data-sort-order") === "asc";
+        var table = document.querySelector(`#${tableId} tbody`);
+        var rows = Array.from(table.querySelectorAll("tr"));
+        var isAscending = table.getAttribute("data-sort-order") === "asc";
 
-    rows.sort((rowA, rowB) => {
-        var cellA = rowA.children[columnIndex].textContent.trim().toLowerCase();
-        var cellB = rowB.children[columnIndex].textContent.trim().toLowerCase();
+        rows.sort((rowA, rowB) => {
+            var cellA = rowA.children[columnIndex].textContent.trim().toLowerCase();
+            var cellB = rowB.children[columnIndex].textContent.trim().toLowerCase();
 
-        // Jika angka
-        if (!isNaN(cellA) && !isNaN(cellB)) {
-            return isAscending ? cellA - cellB : cellB - cellA;
-        }
+            // Jika angka
+            if (!isNaN(cellA) && !isNaN(cellB)) {
+                return isAscending ? cellA - cellB : cellB - cellA;
+            }
 
-        return isAscending ? cellA.localeCompare(cellB) : cellB.localeCompare(cellA);
-    });
+            return isAscending ? cellA.localeCompare(cellB) : cellB.localeCompare(cellA);
+        });
 
-    table.innerHTML = "";
-    rows.forEach(row => table.appendChild(row));
+        table.innerHTML = "";
+        rows.forEach(row => table.appendChild(row));
 
-    table.setAttribute("data-sort-order", isAscending ? "desc" : "asc");
+        table.setAttribute("data-sort-order", isAscending ? "desc" : "asc");
 
-    updateSortIcons(tableId, columnIndex, isAscending);
-}
-
-function updateSortIcons(tableId, columnIndex, isAscending) {
-    var headers = document.querySelectorAll(`#${tableId} thead th i`);
-    headers.forEach(icon => icon.className = "fa fa-sort");
-
-    var selectedHeader = document.querySelector(`#${tableId} thead th:nth-child(${columnIndex + 1}) i`);
-    if (selectedHeader) {
-        selectedHeader.className = isAscending ? "fa fa-sort-up" : "fa fa-sort-down";
+        updateSortIcons(tableId, columnIndex, isAscending);
     }
-}
+
+    function updateSortIcons(tableId, columnIndex, isAscending) {
+        var headers = document.querySelectorAll(`#${tableId} thead th i`);
+        headers.forEach(icon => icon.className = "fa fa-sort");
+
+        var selectedHeader = document.querySelector(`#${tableId} thead th:nth-child(${columnIndex + 1}) i`);
+        if (selectedHeader) {
+            selectedHeader.className = isAscending ? "fa fa-sort-up" : "fa fa-sort-down";
+        }
+    }
 </script>
