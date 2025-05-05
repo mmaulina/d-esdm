@@ -38,13 +38,13 @@ try {
 <div>
     <!-- Tampilkan Konten -->
     <div class="container mt-4">
-        <h2 class="text-center mt-4"><i class="fas fa-bolt" style="color: #ffc107;"></i> DJIH <i class="fas fa-bolt" style="color: #ffc107;"></i> </h2>
+        <h2 class="text-center mt-4"><i class="fas fa-bolt" style="color: #ffc107;"></i> Jaringan Dokumentasi dan Informasi Hukum <i class="fas fa-bolt" style="color: #ffc107;"></i> </h2>
         <hr>
         <div class="card shadow" style="overflow-x: auto; max-height: calc(100vh - 150px); overflow-y: auto;">
             <div class="card-body">
                 <div class="row mt-3">
                     <div class="col-12 d-flex justify-content-between align-items-center">
-                    <?php if (isset($_SESSION['role']) && $_SESSION['role'] !== 'umum' && $_SESSION['role'] !== 'kementerian') : ?>
+                        <?php if (isset($_SESSION['role']) && $_SESSION['role'] == 'superadmin') : ?>
                             <div class="btn-group d-inline-flex">
                                 <a href="?page=tabel_djih" class="btn btn-success">Tabel Konten</a>
                             </div>
@@ -76,7 +76,7 @@ try {
                                     </div>
 
                                     <p class="card-text mt-3"><?php echo nl2br(htmlspecialchars($kontens[0]['caption'])); ?></p>
-            
+
                                     <!-- Tanggal dari konten pertama -->
                                     <p class="card-text"><small class="text-muted">Diupload pada: <?php echo $kontens[0]['tanggal']; ?></small></p>
 

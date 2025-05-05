@@ -90,7 +90,7 @@ $konten_djih = $stmt->fetch(PDO::FETCH_ASSOC)['jumlah_baru'];
                 <li class="nav-item">
                     <a class="nav-link <?= ($currentPage == 'tampil_konten_djih') ? 'active' : ''; ?>" href="?page=tampil_konten_djih">
                         <i class="fas fa-earth-americas me-2"></i>
-                        <span class="sidebar-text">DJIH</span>
+                        <span class="sidebar-text">JDIH</span>
                         <?php if ($konten_djih > 0) : ?>
                             <span class="badge bg-danger ms-2"><?= $konten_djih; ?></span>
                         <?php endif; ?>
