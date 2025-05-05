@@ -59,7 +59,7 @@ $profil = $stmt->fetch(PDO::FETCH_ASSOC);
                     </tr>
                     <tr>
                     <tr>
-                        <th>Tenaga Teknik</th>
+                        <th>No Hp Tenaga Teknik</th>
                         <td><?php echo htmlspecialchars($profil['no_hp_teknik']); ?></td>
                     </tr>
                     <tr>
