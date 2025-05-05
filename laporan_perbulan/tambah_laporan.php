@@ -14,11 +14,18 @@ $id_user = $_SESSION['id_user'];
 $role = $_SESSION['role'] ?? '';
 
 $nama_perusahaan_profil = '';
+$no_hp_pimpinan = '';
+$tenaga_teknik = '';
+$no_hp_teknik = '';
+$nama = '';
+$no_hp = '';
+$no_telp_kantor = '';
 
-// Ambil nama_perusahaan berdasarkan id_user
+// Ambil data profil berdasarkan id_user
 $database = new Database();
 $db = $database->getConnection();
-$query = "SELECT nama_perusahaan FROM profil WHERE id_user = :id_user";
+$query = "SELECT nama_perusahaan, no_hp_pimpinan, tenaga_teknik, no_hp_teknik, nama, no_hp, no_telp_kantor 
+          FROM profil WHERE id_user = :id_user";
 $stmt = $db->prepare($query);
 $stmt->bindParam(':id_user', $id_user);
 $stmt->execute();
@@ -26,7 +33,14 @@ $stmt->execute();
 if ($stmt->rowCount() > 0) {
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     $nama_perusahaan_profil = $result['nama_perusahaan'];
+    $no_hp_pimpinan = $result['no_hp_pimpinan'];
+    $tenaga_teknik = $result['tenaga_teknik'];
+    $no_hp_teknik = $result['no_hp_teknik'];
+    $nama = $result['nama'];
+    $no_hp = $result['no_hp'];
+    $no_telp_kantor = $result['no_telp_kantor'];
 }
+
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $database = new Database();
@@ -44,6 +58,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     $nama_perusahaan = checkEmpty(sanitizeInput($_POST['nama_perusahaan'] ?? ''));
+    $no_hp_pimpinan = checkEmpty(sanitizeInput($_POST['no_hp_pimpinan'] ?? ''));
+    $tenaga_teknik = checkEmpty(sanitizeInput($_POST['tenaga_teknik'] ?? ''));
+    $no_hp_teknik = checkEmpty(sanitizeInput($_POST['no_hp_teknik'] ?? ''));
+    $nama = checkEmpty(sanitizeInput($_POST['nama'] ?? ''));
+    $no_hp = checkEmpty(sanitizeInput($_POST['no_hp'] ?? ''));
+    $no_telp_kantor = checkEmpty(sanitizeInput($_POST['no_telp_kantor'] ?? ''));
     $tahun = checkEmpty(sanitizeInput($_POST['tahun'] ?? ''));
     $bulan = checkEmpty(sanitizeInput($_POST['bulan'] ?? ''));
     $kabupaten = checkEmpty(sanitizeInput($_POST['kabupaten'] ?? ''));
@@ -72,7 +92,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $keterangan = '-';    // Keterangan diisi otomatis
 
     $query = "INSERT INTO laporan_bulanan (
-        id_user, nama_perusahaan, tahun, bulan, kabupaten, alamat,
+        id_user, nama_perusahaan, no_hp_pimpinan, tenaga_teknik, no_hp_teknik, nama, no_hp, no_telp_kantor, tahun, bulan, kabupaten, alamat,
         latitude, longitude, jenis_pembangkit, fungsi,
         kapasitas_terpasang, daya_mampu_netto, jumlah_unit, no_unit,
         tahun_operasi, status_operasi, bahan_bakar_jenis, bahan_bakar_satuan,
@@ -81,7 +101,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         status, keterangan
     ) 
     VALUES (
-        :id_user, :nama_perusahaan, :tahun, :bulan, :kabupaten, :alamat,
+        :id_user, :nama_perusahaan, :no_hp_pimpinan, :tenaga_teknik, :no_hp_teknik, :nama, :no_hp, :no_telp_kantor, :tahun, :bulan, :kabupaten, :alamat,
         :latitude, :longitude, :jenis_pembangkit, :fungsi,
         :kapasitas_terpasang, :daya_mampu_netto, :jumlah_unit, :no_unit,
         :tahun_operasi, :status_operasi, :bahan_bakar_jenis, :bahan_bakar_satuan,
@@ -92,6 +112,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt = $db->prepare($query);
     $stmt->bindParam(':id_user', $id_user);
     $stmt->bindParam(':nama_perusahaan', $nama_perusahaan);
+    $stmt->bindParam(':no_hp_pimpinan', $no_hp_pimpinan);
+    $stmt->bindParam(':tenaga_teknik', $tenaga_teknik);
+    $stmt->bindParam(':no_hp_teknik', $no_hp_teknik);
+    $stmt->bindParam(':nama', $nama);
+    $stmt->bindParam(':no_hp', $no_hp);
+    $stmt->bindParam(':no_telp_kantor', $no_telp_kantor);
     $stmt->bindParam(':tahun', $tahun);
     $stmt->bindParam(':bulan', $bulan);
     $stmt->bindParam(':kabupaten', $kabupaten);
@@ -143,6 +169,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <?php else : ?>
                         <input type="text" name="nama_perusahaan" class="form-control" value="<?= htmlspecialchars($nama_perusahaan_profil) ?>" readonly>
                     <?php endif; ?>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">No Hp Pimpinan</label>
+                    <input type="text" name="no_hp_pimpinan" class="form-control" value="<?= htmlspecialchars($no_hp_pimpinan) ?>" readonly>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Tenaga Teknik</label>
+                    <input type="text" name="tenaga_teknik" class="form-control" value="<?= htmlspecialchars($tenaga_teknik) ?>" readonly>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">No Hp Tenaga Teknik</label>
+                    <input type="text" name="no_hp_teknik" class="form-control" value="<?= htmlspecialchars($no_hp_teknik) ?>" readonly>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Nama Admin</label>
+                    <input type="text" name="nama" class="form-control" value="<?= htmlspecialchars($nama) ?>" readonly>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">No Hp Admin</label>
+                    <input type="text" name="no_hp" class="form-control" value="<?= htmlspecialchars($no_hp) ?>" readonly>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">No Telpon Kantor</label>
+                    <input type="text" name="no_telp_kantor" class="form-control" value="<?= htmlspecialchars($no_telp_kantor) ?>" readonly>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Tahun</label>
@@ -205,7 +255,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Jenis Pembangkit</label>
-                    <input type="text" name="jenis_pembangkit" class="form-control" placeholder="Masukkan jenis pembangkit" required>
+                    <select name="jenis_pembangkit" class="form-select">
+                        <option value="">-- Pilih Jenis Pembangkit --</option>
+                        <option value="pltd">PLTD</option>
+                        <option value="plts">PLTS</option>
+                    </select>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Fungsi</label>
@@ -311,8 +365,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <label class="form-label">Pemakaian Sendiri (kWh)</label>
                     <input type="text" name="pemakaian_sendiri" class="form-control" placeholder="Masukkan pemakaian sendiri" required>
                 </div>
-
-                <button type="submit" class="btn btn-success">Simpan</button>
+                <div class="mb-3 form-check">
+                    <input type="checkbox" class="form-check-input" id="dataCheck" />
+                    <label class="form-check-label" for="dataCheck">Saya pastikan semua data terisi dengan benar</label>
+                </div>
+                <button type="submit" class="btn btn-success" id="submitBtn" disabled>Simpan</button>
                 <a href="?page=laporan_perbulan" class="btn btn-secondary">Kembali</a>
             </form>
         </div>
@@ -333,6 +390,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (parseInt(this.value) > 200) {
             this.value = 200;
         }
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const checkbox = document.getElementById('dataCheck');
+        const submitBtn = document.getElementById('submitBtn');
+        checkbox.addEventListener('change', function() {
+            submitBtn.disabled = !checkbox.checked;
+        });
     });
 </script>
 

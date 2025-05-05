@@ -25,8 +25,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $alamat = sanitize_input($_POST['alamat']);
     $jenis_usaha = sanitize_input($_POST['jenis_usaha']);
     $no_telp_kantor = sanitize_input($_POST['no_telp_kantor']);
-    $no_fax = sanitize_input($_POST['no_fax']);
+    $no_hp_pimpinan = sanitize_input($_POST['no_hp_pimpinan']);
     $tenaga_teknik = sanitize_input($_POST['tenaga_teknik']);
+    $no_hp_teknik = sanitize_input($_POST['no_hp_tenik']);
     $nama = sanitize_input($_POST['nama']);
     $no_hp = sanitize_input($_POST['no_hp']);
     $email = sanitize_input($_POST['email']);
@@ -64,8 +65,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $db = new Database();
         $conn = $db->getConnection();
         // Query menggunakan prepared statement dengan PDO
-        $sql = "INSERT INTO profil (id_user, nama_perusahaan, kabupaten, alamat, jenis_usaha, no_telp_kantor, no_fax, tenaga_teknik, nama, no_hp, email, status, keterangan) 
-                VALUES (:id_user, :nama_perusahaan, :kabupaten, :alamat, :jenis_usaha, :no_telp_kantor, :no_fax, :tenaga_teknik, :nama, :no_hp, :email, :status, :keterangan)";
+        $sql = "INSERT INTO profil (id_user, nama_perusahaan, kabupaten, alamat, jenis_usaha, no_telp_kantor, no_hp_pimpinan, tenaga_teknik, no_hp_teknik, nama, no_hp, email, status, keterangan) 
+                VALUES (:id_user, :nama_perusahaan, :kabupaten, :alamat, :jenis_usaha, :no_telp_kantor, :no_hp_pimpinan, :tenaga_teknik, :no_hp_tenik, :nama, :no_hp, :email, :status, :keterangan)";
         $stmt = $conn->prepare($sql);
 
         // Bind parameter
@@ -75,8 +76,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bindParam(':alamat', $alamat, PDO::PARAM_STR);
         $stmt->bindParam(':jenis_usaha', $jenis_usaha, PDO::PARAM_STR);
         $stmt->bindParam(':no_telp_kantor', $no_telp_kantor, PDO::PARAM_STR);
-        $stmt->bindParam(':no_fax', $no_fax, PDO::PARAM_STR);
+        $stmt->bindParam(':no_hp_pimpinan', $no_hp_pimpinan, PDO::PARAM_STR);
         $stmt->bindParam(':tenaga_teknik', $tenaga_teknik, PDO::PARAM_STR);
+        $stmt->bindParam(':no_hp_teknik', $no_hp_teknik, PDO::PARAM_STR);
         $stmt->bindParam(':nama', $nama, PDO::PARAM_STR);
         $stmt->bindParam(':no_hp', $no_hp, PDO::PARAM_STR);
         $stmt->bindParam(':email', $email, PDO::PARAM_STR);
@@ -166,36 +168,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <label>Nomor Telepon Kantor</label>
                     <input type="text" class="form-control" name="no_telp_kantor" placeholder="Contoh : 081234567890" maxlength="15" pattern="[0-9]+">
                 </div>
-
                 <div class="form-group mb-2">
-                    <label>No. Fax</label>
-                    <input type="text" class="form-control" name="no_fax" placeholder="Contoh : (021) 1234567" maxlength="15" pattern="[0-9]+">
+                    <label>Nomor Hp Pimpinan</label>
+                    <input type="text" class="form-control" name="no_hp_pimpinan" placeholder="Contoh : 081234567890" maxlength="15" pattern="[0-9]+">
+                </div>
+                <div class="form-group mb-2">
+                    <label>Email</label>
+                    <input type="text" class="form-control" name="email" placeholder="Masukkan email" required maxlength="100">
                 </div>
 
                 <div class="form-group mb-2">
                     <label>Tenaga Teknik</label>
                     <input type="text" class="form-control" name="tenaga_teknik" placeholder="Masukkan nama tenaga teknik" required maxlength="100">
                 </div>
-
-                <div class="card-header mt-4">
-                    <h6>Kontak Person</h6>
+                <div class="form-group mb-2">
+                    <label>Nomor HP Tenaga Tenik</label>
+                    <input type="text" class="form-control" name="no_hp_teknik" placeholder="Masukkan nomor handphone/whatsapp" required maxlength="15" pattern="[0-9]+">
                 </div>
-
+                <div class="card-header mt-4">
+                    <h6>Kontak Person Admin</h6>
+                </div>
                 <div class="form-group mb-2">
                     <label>Nama</label>
                     <input type="text" class="form-control" name="nama" placeholder="Masukkan nama" required maxlength="100">
                 </div>
-
                 <div class="form-group mb-2">
                     <label>Nomor HP</label>
                     <input type="text" class="form-control" name="no_hp" placeholder="Masukkan nomor handphone/whatsapp" required maxlength="15" pattern="[0-9]+">
                 </div>
-
-                <div class="form-group mb-2">
-                    <label>Email</label>
-                    <input type="text" class="form-control" name="email" placeholder="Masukkan email" required maxlength="100">
-                </div>
-
                 <div class="mt-3">
                     <button type="submit" class="btn btn-success">Simpan</button>
                     <a href="?page=<?= ($role === 'superadmin') ? 'profil_admin' : 'profil_perusahaan'; ?>" class="btn btn-secondary">Batal</a>

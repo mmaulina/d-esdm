@@ -36,8 +36,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $alamat = sanitize_input($_POST['alamat']);
     $jenis_usaha = sanitize_input($_POST['jenis_usaha']);
     $no_telp_kantor = sanitize_input($_POST['no_telp_kantor']);
-    $no_fax = sanitize_input($_POST['no_fax']);
+    $no_hp_pimpinan = sanitize_input($_POST['no_hp_pimpinan']);
     $tenaga_teknik = sanitize_input($_POST['tenaga_teknik']);
+    $no_hp_teknik = sanitize_input($_POST['no_hp_teknik']);
     $nama = sanitize_input($_POST['nama']);
     $no_hp = sanitize_input($_POST['no_hp']);
     $email = sanitize_input($_POST['email']);
@@ -45,9 +46,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (!preg_match('/^[0-9\+]+$/', $no_telp_kantor) || !preg_match('/^[0-9\+]+$/', $no_hp)) {
         echo "<script>alert('Kontak hanya boleh berisi angka dan tanda +!');</script>";
     } else {
-        $sql = "UPDATE profil SET nama_perusahaan=?, kabupaten=?, alamat=?, jenis_usaha=?, no_telp_kantor=?, no_fax=?, tenaga_teknik=?, nama=?, no_hp=?, email=?, status = 'Diajukan', keterangan = '-' WHERE id_profil=?";
+        $sql = "UPDATE profil SET nama_perusahaan=?, kabupaten=?, alamat=?, jenis_usaha=?, no_telp_kantor=?, no_hp_pimpinan=?, tenaga_teknik=?, no_hp_teknik=? nama=?, no_hp=?, email=?, status = 'Diajukan', keterangan = '-' WHERE id_profil=?";
         $stmt = $pdo->prepare($sql);
-        $success = $stmt->execute([$nama_perusahaan, $kabupaten, $alamat, $jenis_usaha, $no_telp_kantor, $no_fax, $tenaga_teknik, $nama, $no_hp, $email, $id_profil]);
+        $success = $stmt->execute([$nama_perusahaan, $kabupaten, $alamat, $jenis_usaha, $no_telp_kantor, $no_hp_pimpinan, $tenaga_teknik, $no_hp_teknik, $nama, $no_hp, $email, $id_profil]);
 
         if ($success) {
             echo "<script>alert('Profil berhasil diperbarui!'); window.location.href='?page=profil_admin';</script>";
@@ -125,13 +126,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
 
                 <div class="form-group mb-2">
-                    <label>No. Fax</label>
-                    <input type="text" class="form-control" name="no_fax" placeholder="Contoh : (021) 1234567" maxlength="15" pattern="[0-9]+" required value="<?php echo $profil['no_fax']; ?>">
+                    <label>No HP Pimpinan</label>
+                    <input type="text" class="form-control" name="no_hp_pimpinan" placeholder="Contoh : 081234567890" maxlength="15" pattern="[0-9]+" required value="<?php echo $profil['no_hp_pimpinan']; ?>">
                 </div>
 
                 <div class="form-group mb-2">
                     <label>Tenaga Teknik</label>
                     <input type="text" class="form-control" name="tenaga_teknik" placeholder="Masukkan nama tenaga teknik" required value="<?php echo $profil['tenaga_teknik']; ?>">
+                </div>
+                <div class="form-group mb-2">
+                    <label>No HP Tenaga Teknik</label>
+                    <input type="text" class="form-control" name="no_hp_teknik" placeholder="Contoh : 081234567890" maxlength="15" pattern="[0-9]+" required value="<?php echo $profil['no_hp_teknik']; ?>">
                 </div>
 
                 <div class="card-header mt-4">

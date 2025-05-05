@@ -51,6 +51,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     $nama_perusahaan = checkEmpty(sanitizeInput($_POST['nama_perusahaan'] ?? ''));
+    $no_hp_pimpinan = checkEmpty(sanitizeInput($_POST['no_hp_pimpinan'] ?? ''));
+    $tenaga_teknik = checkEmpty(sanitizeInput($_POST['tenaga_teknik'] ?? ''));
+    $no_hp_teknik = checkEmpty(sanitizeInput($_POST['no_hp_teknik'] ?? ''));
+    $nama = checkEmpty(sanitizeInput($_POST['nama'] ?? ''));
+    $no_hp = checkEmpty(sanitizeInput($_POST['no_hp'] ?? ''));
+    $no_telp_kantor = checkEmpty(sanitizeInput($_POST['no_telp_kantor'] ?? ''));
     $tahun = checkEmpty(sanitizeInput($_POST['tahun'] ?? ''));
     $bulan = checkEmpty(sanitizeInput($_POST['bulan'] ?? ''));
     $kabupaten = checkEmpty(sanitizeInput($_POST['kabupaten'] ?? ''));
@@ -79,10 +85,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $keterangan = '-';    // Keterangan diisi otomatis
 
 
-    $updateSQL = "UPDATE laporan_bulanan SET nama_perusahaan = :nama_perusahaan, tahun = :tahun, bulan = :bulan, kabupaten = :kabupaten, alamat = :alamat, latitude = :latitude, longitude = :longitude, jenis_pembangkit = :jenis_pembangkit, fungsi = :fungsi, kapasitas_terpasang = :kapasitas_terpasang, daya_mampu_netto = :daya_mampu_netto, jumlah_unit = :jumlah_unit, no_unit = :no_unit, tahun_operasi = :tahun_operasi, status_operasi = :status_operasi, bahan_bakar_jenis = :bahan_bakar_jenis, bahan_bakar_satuan = :bahan_bakar_satuan, volume_bb = :volume_bb, produksi_sendiri = :produksi_sendiri, pemb_sumber_lain = :pemb_sumber_lain, susut_jaringan = :susut_jaringan, penj_ke_pelanggan = :penj_ke_pelanggan, penj_ke_pln = :penj_ke_pln, pemakaian_sendiri = :pemakaian_sendiri, status = :status, keterangan = :keterangan WHERE id = :id";
+    $updateSQL = "UPDATE laporan_bulanan SET nama_perusahaan = :nama_perusahaan,no_hp_pimpinan=:no_hp_pimpinan, tenaga_teknik=:tenaga_teknik, no_hp_teknik=:no_hp_teknik, nama=:nama, no_hp=:no_hp, no_telp_kantor=:no_telp_kantor, tahun = :tahun, bulan = :bulan, kabupaten = :kabupaten, alamat = :alamat, latitude = :latitude, longitude = :longitude, jenis_pembangkit = :jenis_pembangkit, fungsi = :fungsi, kapasitas_terpasang = :kapasitas_terpasang, daya_mampu_netto = :daya_mampu_netto, jumlah_unit = :jumlah_unit, no_unit = :no_unit, tahun_operasi = :tahun_operasi, status_operasi = :status_operasi, bahan_bakar_jenis = :bahan_bakar_jenis, bahan_bakar_satuan = :bahan_bakar_satuan, volume_bb = :volume_bb, produksi_sendiri = :produksi_sendiri, pemb_sumber_lain = :pemb_sumber_lain, susut_jaringan = :susut_jaringan, penj_ke_pelanggan = :penj_ke_pelanggan, penj_ke_pln = :penj_ke_pln, pemakaian_sendiri = :pemakaian_sendiri, status = :status, keterangan = :keterangan WHERE id = :id";
     $stmt = $db->prepare($updateSQL);
 
     $stmt->bindParam(':nama_perusahaan', $nama_perusahaan);
+    $stmt->bindParam(':no_hp_pimpinan', $no_hp_pimpinan);
+    $stmt->bindParam(':tenaga_teknik', $tenaga_teknik);
+    $stmt->bindParam(':no_hp_teknik', $no_hp_teknik);
+    $stmt->bindParam(':nama', $nama);
+    $stmt->bindParam(':no_hp', $no_hp);
+    $stmt->bindParam(':no_telp_kantor', $no_telp_kantor);
     $stmt->bindParam(':tahun', $tahun);
     $stmt->bindParam(':bulan', $bulan);
     $stmt->bindParam(':kabupaten', $kabupaten);
@@ -132,8 +144,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <?php if ($role === 'superadmin') : ?>
                         <input type="text" name="nama_perusahaan" class="form-control" placeholder="Masukan nama perusahaan" value="<?= htmlspecialchars($data['nama_perusahaan']) ?>" required>
                     <?php elseif ($role === 'umum') : ?>
-                        <input type="text" name="nama_perusahaan" class="form-control" value="<?= htmlspecialchars($data['nama_perusahaan']) ?>" required readonly>
+                        <input type="text" name="nama_perusahaan" class="form-control" value="<?= htmlspecialchars($data['nama_perusahaan']) ?>" readonly>
                     <?php endif; ?>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">No Hp Pimpinan</label>
+                    <input type="text" name="no_hp_pimpinan" class="form-control" value="<?= htmlspecialchars($no_hp_pimpinan) ?>" readonly>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Tenaga Teknik</label>
+                    <input type="text" name="tenaga_teknik" class="form-control" value="<?= htmlspecialchars($tenaga_teknik) ?>" readonly>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">No Hp Tenaga Teknik</label>
+                    <input type="text" name="no_hp_teknik" class="form-control" value="<?= htmlspecialchars($no_hp_teknik) ?>" readonly>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Nama Admin</label>
+                    <input type="text" name="nama" class="form-control" value="<?= htmlspecialchars($nama) ?>" readonly>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">No Hp Admin</label>
+                    <input type="text" name="no_hp" class="form-control" value="<?= htmlspecialchars($no_hp) ?>" readonly>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">No Telpon Kantor</label>
+                    <input type="text" name="no_telp_kantor" class="form-control" value="<?= htmlspecialchars($no_telp_kantor) ?>" readonly>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Tahun</label>

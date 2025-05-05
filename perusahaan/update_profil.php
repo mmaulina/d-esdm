@@ -33,8 +33,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $alamat = sanitize_input($_POST['alamat']);
     $jenis_usaha = sanitize_input($_POST['jenis_usaha']);
     $no_telp_kantor = sanitize_input($_POST['no_telp_kantor']);
-    $no_fax = sanitize_input($_POST['no_fax']);
+    $no_hp_pimpinan = sanitize_input($_POST['no_hp_pimpinan']);
     $tenaga_teknik = sanitize_input($_POST['tenaga_teknik']);
+    $no_hp_teknik = sanitize_input($_POST['no_hp_teknik']);
     $nama = sanitize_input($_POST['nama']);
     $no_hp = sanitize_input($_POST['no_hp']);
     $email = sanitize_input($_POST['email']);
@@ -44,15 +45,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "<script>alert('Kontak hanya boleh berisi angka dan tanda +!');</script>";
     } else {
         // Update data profil
-        $sql = "UPDATE profil SET nama_perusahaan=:nama_perusahaan, kabupaten=:kabupaten, alamat=:alamat, jenis_usaha=:jenis_usaha, no_telp_kantor=:no_telp_kantor, no_fax=:no_fax, tenaga_teknik=:tenaga_teknik, nama=:nama, no_hp=:no_hp, email=:email, status = 'Diajukan', keterangan = '-' WHERE id_user=:id_user";
+        $sql = "UPDATE profil SET nama_perusahaan=:nama_perusahaan, kabupaten=:kabupaten, alamat=:alamat, jenis_usaha=:jenis_usaha, no_telp_kantor=:no_telp_kantor, no_hp_pimpinan=:no_hp_pimpinan, tenaga_teknik=:tenaga_teknik, no_hp_teknik=:no_hp_teknik, nama=:nama, no_hp=:no_hp, email=:email, status = 'Diajukan', keterangan = '-' WHERE id_user=:id_user";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':nama_perusahaan', $nama_perusahaan);
         $stmt->bindParam(':kabupaten', $kabupaten);
         $stmt->bindParam(':alamat', $alamat);
         $stmt->bindParam(':jenis_usaha', $jenis_usaha);
         $stmt->bindParam(':no_telp_kantor', $no_telp_kantor);
-        $stmt->bindParam(':no_fax', $no_fax);
+        $stmt->bindParam(':no_hp_pimpinan', $no_hp_pimpinan);
         $stmt->bindParam(':tenaga_teknik', $tenaga_teknik);
+        $stmt->bindParam(':no_hp_teknik', $no_hp_teknik);
         $stmt->bindParam(':nama', $nama);
         $stmt->bindParam(':no_hp', $no_hp);
         $stmt->bindParam(':email', $email);
@@ -74,7 +76,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="card shadow" style="overflow-x: auto; max-height: calc(100vh - 150px); overflow-y: auto;">
         <div class="card-body">
             <form method="POST">
-                <div class="form-group mb-2">
+            <div class="form-group mb-2">
                     <label>Nama Perusahaan</label>
                     <input type="text" class="form-control" name="nama_perusahaan" placeholder="Masukkan nama perusahaan" required value="<?php echo $profil['nama_perusahaan']; ?>">
                 </div>
@@ -107,7 +109,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="form-group mb-2">
                     <label>Jenis Usaha</label>
                     <select class="form-control" name="jenis_usaha" required>
-                        <option value="<?php echo $profil['jenis_usaha']; ?>" selected><?php echo $profil['jenis_usaha']; ?></option>                        <option value="Perkantoran">Perkantoran</option>
+                        <option value="<?php echo $profil['jenis_usaha']; ?>" selected><?php echo $profil['jenis_usaha']; ?></option>
                         <option value="Kesehatan dan Rumah Sakit">Kesehatan dan Rumah Sakit</option>
                         <option value="Industri dan Manufaktur">Industri dan Manufaktur</option>
                         <option value="Restoran">Restoran</option>
@@ -130,17 +132,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 <div class="form-group mb-2">
                     <label>Nomor Telepon Kantor</label>
-                    <input type="text" class="form-control" name="no_telp_kantor" placeholder="Contoh : 081234567890" maxlength="15" pattern="[0-9]+" required value="<?php echo $profil['no_telp_kantor']; ?>">
+                    <input type="text" class="form-control" name="no_telp_kantor" placeholder="Contoh : 081234567890" required value="<?php echo $profil['no_telp_kantor']; ?>">
                 </div>
 
                 <div class="form-group mb-2">
-                    <label>No. Fax</label>
-                    <input type="text" class="form-control" name="no_fax" placeholder="Contoh : (021) 1234567" maxlength="15" pattern="[0-9]+" required value="<?php echo $profil['no_fax']; ?>">
+                    <label>No HP Pimpinan</label>
+                    <input type="text" class="form-control" name="no_hp_pimpinan" placeholder="Contoh : 081234567890" maxlength="15" pattern="[0-9]+" required value="<?php echo $profil['no_hp_pimpinan']; ?>">
                 </div>
 
                 <div class="form-group mb-2">
                     <label>Tenaga Teknik</label>
                     <input type="text" class="form-control" name="tenaga_teknik" placeholder="Masukkan nama tenaga teknik" required value="<?php echo $profil['tenaga_teknik']; ?>">
+                </div>
+                <div class="form-group mb-2">
+                    <label>No HP Tenaga Teknik</label>
+                    <input type="text" class="form-control" name="no_hp_teknik" placeholder="Contoh : 081234567890" maxlength="15" pattern="[0-9]+" required value="<?php echo $profil['no_hp_teknik']; ?>">
                 </div>
 
                 <div class="card-header mt-4">
@@ -153,7 +159,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 <div class="form-group mb-2">
                     <label>Nomor HP</label>
-                    <input type="text" class="form-control" name="no_hp" placeholder="Masukkan nomor handphone/whatsapp" required maxlength="15" pattern="[0-9]+" value="<?php echo $profil['no_hp']; ?>">
+                    <input type="text" class="form-control" name="no_hp" placeholder="Masukkan nomor handphone/whatsapp" required maxlength="15" pattern="[0-9]+" required value="<?php echo $profil['no_hp']; ?>">
                 </div>
 
                 <div class="form-group mb-2">

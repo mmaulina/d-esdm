@@ -18,7 +18,7 @@ $conn = $db->getConnection();
 $query = "SELECT * FROM laporan_semester WHERE 1=1";
 // Query berdasarkan role
 $params = [];
-if ($role != 'admin' && $role != 'superadmin') {
+if ($role != 'adminsemester' && $role != 'superadmin') {
     $query .= " AND id_user = :id_user";
     $params[':id_user'] = $id_user;
 }
@@ -60,7 +60,7 @@ $tahunList = $tahunStmt->fetchAll(PDO::FETCH_COLUMN);
 $semesterStmt = $conn->query("SELECT DISTINCT semester FROM laporan_semester ORDER BY semester");
 $semesterList = $semesterStmt->fetchAll(PDO::FETCH_COLUMN);
 
-$query .= " ORDER BY FIELD(status, 'diajukan', 'ditolak', 'diterima')";
+$query .= " ORDER BY FIELD(status, 'diajukan', 'dikembalikan', 'diterima')";
 
 // Jalankan Query
 $stmt = $conn->prepare($query);
@@ -78,7 +78,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     } elseif (isset($_POST['tolak_laporan'])) {
         $id = $_POST['id'];
         $keterangan = $_POST['keterangan'];
-        $updateQuery = "UPDATE laporan_semester SET status = 'ditolak', keterangan = :keterangan WHERE id = :id";
+        $updateQuery = "UPDATE laporan_semester SET status = 'dikembalikan', keterangan = :keterangan WHERE id = :id";
     }
 
     if (isset($updateQuery)) {
@@ -178,7 +178,7 @@ $hasLaporanBulanan = $stmtCheck->fetchColumn() > 0;
                             <th onclick="sortTable(0)">No. <i class="fa fa-sort"></i></th>
                             <th onclick="sortTable(1)">Nama Perusahaan <i class="fa fa-sort"></th>
                             <th onclick="sortTable(2)">Parameter <i class="fa fa-sort"></th>
-                            <th onclick="sortTable(3)">Buku Mutu <i class="fa fa-sort"></th>
+                            <th onclick="sortTable(3)">Baku Mutu <i class="fa fa-sort"></th>
                             <th onclick="sortTable(4)">Hasil <i class="fa fa-sort"></th>
                             <th>Laporan</th>
                             <th>LHU</th>
@@ -199,7 +199,7 @@ $hasLaporanBulanan = $stmtCheck->fetchColumn() > 0;
                                     <td class="text-center"><?php echo $no++; ?></td>
                                     <td><?php echo htmlspecialchars($row['nama_perusahaan']); ?></td>
                                     <td><?php echo htmlspecialchars($row['parameter']); ?></td>
-                                    <td><?php echo htmlspecialchars($row['buku_mutu']); ?></td>
+                                    <td><?php echo htmlspecialchars($row['baku_mutu']); ?></td>
                                     <td><?php echo htmlspecialchars($row['hasil']); ?></td>
                                     <td class="text-center">
                                         <?php if (!empty($row['file_laporan'])) : ?>
@@ -228,8 +228,8 @@ $hasLaporanBulanan = $stmtCheck->fetchColumn() > 0;
                                             echo '<i class="fas fa-clock" style="color: yellow;"></i> Diajukan';
                                         } elseif ($row['status'] == 'diterima') {
                                             echo '<i class="fas fa-check" style="color: green;"></i> Diterima';
-                                        } elseif ($row['status'] == 'ditolak') {
-                                            echo '<i class="fas fa-times" style="color: red;"></i> Ditolak';
+                                        } elseif ($row['status'] == 'dikembalikan') {
+                                            echo '<i class="fas fa-times" style="color: red;"></i> dikembalikan';
                                         } else {
                                             echo '<span class="text-muted">Status tidak diketahui</span>';
                                         }
@@ -237,7 +237,7 @@ $hasLaporanBulanan = $stmtCheck->fetchColumn() > 0;
                                     </td>
                                     <td><?php echo htmlspecialchars($row['keterangan']); ?></td>
                                     <td class="text-center">
-                                        <?php if ($role == 'admin' || $role == 'superadmin' && $row['status'] == 'diajukan'): ?>
+                                        <?php if (($role == 'adminsemester' || $role == 'superadmin') && $row['status'] == 'diajukan'): ?>
                                             <!-- Tombol Terima menggunakan POST -->
                                             <form method="POST" style="display: inline;">
                                                 <input type="hidden" name="terima_id" value="<?php echo $row['id']; ?>">
@@ -247,7 +247,7 @@ $hasLaporanBulanan = $stmtCheck->fetchColumn() > 0;
                                             <a href="" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modalTolak<?php echo $row['id']; ?>">Tolak</a>
                                         <?php endif; ?>
 
-                                        <?php if ($row['status'] == 'diterima' || $row['status'] == 'ditolak'): ?>
+                                        <?php if ($row['status'] == 'diterima' && $row['status'] == 'dikembalikan'&& $role == 'superadmin'): ?>
                                             <a href="?page=edit_laporan_persemester&id=<?php echo $row['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
                                             <a href="?page=hapus_laporan_persemester&id=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus?');">Hapus</a>
                                         <?php endif; ?>
@@ -258,19 +258,19 @@ $hasLaporanBulanan = $stmtCheck->fetchColumn() > 0;
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h5 class="modal-title" id="modalTolakLabel">Tolak Laporan</h5>
+                                                <h5 class="modal-title" id="modalTolakLabel">Kembalikan Laporan</h5>
                                             </div>
                                             <form action="" method="POST">
                                                 <div class="modal-body">
                                                     <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
                                                     <div class="form-group">
-                                                        <label for="keterangan<?php echo $row['id']; ?>">Keterangan Penolakan</label>
+                                                        <label for="keterangan<?php echo $row['id']; ?>">Keterangan di Kembalikan</label>
                                                         <textarea class="form-control" id="keterangan" name="keterangan" rows="3" required></textarea>
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                                                    <button type="submit" name="tolak_laporan" class="btn btn-danger">Tolak</button>
+                                                    <button type="submit" name="tolak_laporan" class="btn btn-danger">Kembalikan</button>
                                                 </div>
                                             </form>
                                         </div>
