@@ -127,7 +127,7 @@ function uploadFile($input_name)
                     <!-- Input konten -->
                     <div class="mb-2">
                         <input type="file" name="konten_0" class="form-control file-input" style="display: none;" accept=".jpg,.jpeg,.png,.gif,.pdf,.doc,.docx,.xls,.xlsx">
-                        <input type="text" name="konten[]" class="form-control link-input" style="display: none;" placeholder="Masukkan link">
+                        <input type="text" name="konten[]" class="form-control link-input" style="display: none;" placeholder="Masukkan link di sini, contoh: https://desdm.kalselprov.go.id/">
                     </div>
 
                     <!-- Caption per konten -->
@@ -171,7 +171,7 @@ document.getElementById('addContent').addEventListener('click', function () {
         
         <div class="mb-2">
             <input type="file" name="konten_${index}" class="form-control file-input" style="display: none;" accept=".jpg,.jpeg,.png,.gif,.pdf,.doc,.docx,.xls,.xlsx">
-            <input type="text" name="konten[]" class="form-control link-input" style="display: none;" placeholder="Masukkan link">
+            <input type="text" name="konten[]" class="form-control link-input" style="display: none;" placeholder="Masukkan link di sini, contoh: https://desdm.kalselprov.go.id/">
         </div>
 
         <div class="mb-2">

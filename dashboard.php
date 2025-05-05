@@ -252,7 +252,7 @@ foreach ($daftarKabupatenKotaKalsel as $kota) {
                 <div class="row mt-3">
                     <div class="col">
                         <h5 class="fw-bold mb-3">Total Produksi & Konsumsi per Kabupaten/Kota</h5>
-                        <div class="table-responsive" style="max-height: 500px; overflow-x: auto; overflow-y: auto;">
+                        <div class="table-responsive">
                             <table class="table table-bordered table-striped table-sm" id="tabel-produksi-konsumsi">
                                 <thead class="table-dark">
                                     <tr class="text-center">
