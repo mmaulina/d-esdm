@@ -36,7 +36,7 @@ try {
     $kabupatenStmt = $pdo->query("SELECT DISTINCT kabupaten FROM profil ORDER BY kabupaten");
     $kabupatenList = $kabupatenStmt->fetchAll(PDO::FETCH_COLUMN);
 
-    $query .= " ORDER BY FIELD(status, 'diajukan', 'ditolak', 'diterima')";
+    $query .= " ORDER BY FIELD(status, 'diajukan', 'dikembalikan', 'diterima')";
 
     // Eksekusi Query
     $stmt = $pdo->prepare($query);
@@ -51,7 +51,7 @@ try {
         } elseif (isset($_POST['tolak_laporan'])) {
             $id = $_POST['id_profil'];
             $keterangan = $_POST['keterangan'];
-            $updateQuery = "UPDATE profil SET status = 'ditolak', keterangan = :keterangan WHERE id_profil = :id_profil";
+            $updateQuery = "UPDATE profil SET status = 'dikembalikan', keterangan = :keterangan WHERE id_profil = :id_profil";
         }
 
         if (isset($updateQuery)) {
@@ -176,8 +176,8 @@ try {
                                             echo '<i class="fas fa-clock" style="color: yellow;"></i> Diajukan';
                                         } elseif ($row['status'] == 'diterima') {
                                             echo '<i class="fas fa-check" style="color: green;"></i> Diterima';
-                                        } elseif ($row['status'] == 'ditolak') {
-                                            echo '<i class="fas fa-times" style="color: red;"></i> Ditolak';
+                                        } elseif ($row['status'] == 'dikembalikan') {
+                                            echo '<i class="fas fa-times" style="color: red;"></i> dikembalikan';
                                         } else {
                                             echo '<span class="text-muted">Status tidak diketahui</span>';
                                         }
@@ -192,10 +192,10 @@ try {
                                                 <button type="submit" class="btn btn-success btn-sm">Terima</button>
                                             </form>
                                             <!-- Tombol Tolak dengan Modal -->
-                                            <a href="" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modalTolak<?php echo $row['id_profil']; ?>">Tolak</a>
+                                            <a href="" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modalTolak<?php echo $row['id_profil']; ?>">Kembalikan</a>
                                         <?php endif; ?>
 
-                                        <?php if ($row['status'] == 'diterima' || $row['status'] == 'ditolak'): ?>
+                                        <?php if (($row['status'] == 'diterima' || $row['status'] == 'dikembalikan')&& $role=='superadmin'): ?>
                                             <a href="?page=update_profil_admin&id_profil=<?= htmlspecialchars($row['id_profil']); ?>" class="btn btn-warning btn-sm">Edit</a>
                                             <a href="?page=delete_profil_admin&id_profil=<?= htmlspecialchars($row['id_profil']); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus data ini?')">Hapus</a>
                                         <?php endif; ?>
@@ -205,13 +205,13 @@ try {
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h5 class="modal-title" id="modalTolakLabel">Tolak Laporan</h5>
+                                                <h5 class="modal-title" id="modalTolakLabel">Kembalikan</h5>
                                             </div>
                                             <form action="" method="POST">
                                                 <div class="modal-body">
                                                     <input type="hidden" name="id_profil" value="<?php echo $row['id_profil']; ?>">
                                                     <div class="form-group">
-                                                        <label for="keterangan<?php echo $row['id_profil']; ?>">Keterangan Penolakan</label>
+                                                        <label for="keterangan<?php echo $row['id_profil']; ?>">Keterangan di kembalikan</label>
                                                         <textarea class="form-control" id="keterangan<?php echo $row['id_profil']; ?>" name="keterangan" rows="3" required></textarea>
                                                     </div>
                                                 </div>
