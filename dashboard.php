@@ -339,26 +339,29 @@ foreach ($daftarKabupatenKotaKalsel as $kota) {
                                         <!-- Title tampil sekali -->
                                         <h5 class="card-text mt-3"><?php echo htmlspecialchars($kontens[0]['title']); ?></h5>
 
-                                        <!-- Konten berdampingan -->
-                                        <div class="d-flex flex-wrap justify-content-center gap-3 mt-3">
+                                        <!-- Konten berdampingan dengan caption masing-masing -->
+                                        <div class="d-flex flex-wrap justify-content-center gap-4 mt-3">
                                             <?php foreach ($kontens as $konten) : ?>
-                                                <?php if ($konten['jenis_konten'] === 'gambar') : ?>
-                                                    <img src="<?php echo htmlspecialchars($konten['konten']); ?>" class="img-fluid rounded" style="width: 150px; height: auto;" alt="Konten Gambar">
-                                                <?php elseif ($konten['jenis_konten'] === 'file') : ?>
-                                                    <a href="<?php echo htmlspecialchars($konten['konten']); ?>" class="btn btn-secondary" style="width: 150px;">Download File</a>
-                                                <?php elseif ($konten['jenis_konten'] === 'link') : ?>
-                                                    <a href="<?php echo htmlspecialchars($konten['konten']); ?>" target="_blank" class="btn btn-info" style="width: 150px;">Lihat Link</a>
-                                                <?php endif; ?>
+                                                <div class="text-center" style="max-width: 160px;">
+                                                    <?php if ($konten['jenis_konten'] === 'gambar') : ?>
+                                                        <img src="<?php echo htmlspecialchars($konten['konten']); ?>" class="img-fluid rounded" style="width: 150px; height: auto;" alt="Konten Gambar">
+                                                    <?php elseif ($konten['jenis_konten'] === 'file') : ?>
+                                                        <a href="<?php echo htmlspecialchars($konten['konten']); ?>" class="btn btn-secondary" style="width: 150px;">Download File</a>
+                                                    <?php elseif ($konten['jenis_konten'] === 'link') : ?>
+                                                        <a href="<?php echo htmlspecialchars($konten['konten']); ?>" target="_blank" class="btn btn-info" style="width: 150px;">Lihat Link</a>
+                                                    <?php endif; ?>
+
+                                                    <!-- Caption per konten -->
+                                                    <p class="mt-2 small"><?php echo nl2br(htmlspecialchars($konten['caption'])); ?></p>
+                                                </div>
                                             <?php endforeach; ?>
                                         </div>
 
-                                        <!-- Caption tampil sekali -->
-                                        <p class="card-text mt-3"><?php echo nl2br(htmlspecialchars($kontens[0]['caption'])); ?></p>
-
                                         <!-- Tanggal dari konten pertama -->
-                                        <p class="card-text"><small class="text-muted">Diupload pada: <?php echo $kontens[0]['tanggal']; ?></small></p>
+                                        <p class="card-text mt-3"><small class="text-muted">Diupload pada: <?php echo $kontens[0]['tanggal']; ?></small></p>
 
-                                    </div>
+                                        </div>
+
                                     <div class="line position-absolute bg-dark" style="width: 2px; height: 100%; left: 0px; top: 0;"></div>
                                 </div>
                             <?php endforeach; ?>
