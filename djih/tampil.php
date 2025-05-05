@@ -53,21 +53,12 @@ try {
                 </div>
 
                 <div class="container">
-                    <div class="timeline position-relative">
-                        <?php foreach ($grouped_konten as $id_title => $kontens) : ?>
-                            <div class="timeline-item d-flex flex-column align-items-center text-center position-relative">
-                                <div class="circle bg-dark rounded-circle position-absolute" style="width: 15px; height: 15px; left: -10px; top: 50%; transform: translateY(-50%);"></div>
-                                <div class="content w-75 ms-3">
-
-                                    <!-- Title tampil sekali -->
-                                    <h5 class="card-text mt-3"><?php echo htmlspecialchars($kontens[0]['title']); ?></h5>
-
+                <div class="timeline position-relative">
+                            <?php foreach ($grouped_konten as $id_title => $kontens) : ?>
+                                <div class="timeline-item d-flex flex-column align-items-center text-center position-relative">
+                                    <div class="circle bg-dark rounded-circle position-absolute" style="width: 15px; height: 15px; left: -10px; top: 50%; transform: translateY(-50%);"></div>
                                     <div class="content w-75 ms-3">
-
-                                        <!-- Title tampil sekali -->
                                         <h5 class="card-text mt-3"><?php echo htmlspecialchars($kontens[0]['title']); ?></h5>
-
-                                        <!-- Konten berdampingan dengan caption masing-masing -->
                                         <div class="d-flex flex-wrap justify-content-center gap-4 mt-3">
                                             <?php foreach ($kontens as $konten) : ?>
                                                 <div class="text-center" style="max-width: 160px;">
@@ -78,27 +69,17 @@ try {
                                                     <?php elseif ($konten['jenis_konten'] === 'link') : ?>
                                                         <a href="<?php echo htmlspecialchars($konten['konten']); ?>" target="_blank" class="btn btn-info" style="width: 150px;">Lihat Link</a>
                                                     <?php endif; ?>
-
-                                                    <!-- Caption per konten -->
                                                     <p class="mt-2 small"><?php echo nl2br(htmlspecialchars($konten['caption'])); ?></p>
                                                 </div>
                                             <?php endforeach; ?>
                                         </div>
-
-                                        <!-- Tanggal dari konten pertama -->
                                         <p class="card-text mt-3"><small class="text-muted">Diupload pada: <?php echo $kontens[0]['tanggal']; ?></small></p>
-
-                                        </div>
-
-                                    <!-- Tanggal dari konten pertama -->
-                                    <p class="card-text"><small class="text-muted">Diupload pada: <?php echo $kontens[0]['tanggal']; ?></small></p>
-
+                                    </div>
+                                    <div class="line position-absolute bg-dark" style="width: 2px; height: 100%; left: 0px; top: 0;"></div>
                                 </div>
-                                <div class="line position-absolute bg-dark" style="width: 2px; height: 100%; left: 0px; top: 0;"></div>
-                            </div>
-                        <?php endforeach; ?>
-                    </div>
-                </div>
+                            <?php endforeach; ?>
+                        </div>
+                        </div>
             </div>
         </div>
     </div>
