@@ -116,18 +116,48 @@ function uploadFile($input_name)
                         <option value="kosong" <?= ($konten['jenis_konten'] == 'kosong') ? 'selected' : ''; ?>>Kosong</option>
                     </select>
                 </div>
-                <div class="mb-3" id="konten_input">
-                    <label class="form-label">Konten</label>
-                    <?php if ($konten['jenis_konten'] == 'gambar' || $konten['jenis_konten'] == 'file') : ?>
-                        <input type="file" name="konten" class="form-control" accept=".jpg,.jpeg,.png,.gif,.pdf,.doc,.docx,.xls,.xlsx">
-                        <p class="mt-2">File saat ini: <a href="<?= $konten['konten']; ?>" target="_blank">Lihat</a></p>
-                    <?php elseif ($konten['jenis_konten'] == 'link') : ?>
-                        <input type="text" name="konten" class="form-control" value="<?= $konten['konten']; ?>">
-                    <?php endif; ?>
-                </div>
+                <div class="mb-3" id="konten_input"
+                        data-gambar="<?= ($konten['jenis_konten'] == 'gambar' || $konten['jenis_konten'] == 'file') ? htmlspecialchars($konten['konten']) : ''; ?>"
+                        data-link="<?= ($konten['jenis_konten'] == 'link') ? htmlspecialchars($konten['konten']) : ''; ?>"
+                        data-jenis="<?= htmlspecialchars($konten['jenis_konten']) ?>">
+                        <label class="form-label">Konten</label>
+                        <?php if ($konten['jenis_konten'] == 'gambar' || $konten['jenis_konten'] == 'file') : ?>
+                            <input type="file" name="konten" class="form-control" accept=".jpg,.jpeg,.png,.gif,.pdf,.doc,.docx,.xls,.xlsx">
+                            <p class="mt-2">File saat ini: <a href="<?= $konten['konten']; ?>" target="_blank">Lihat</a></p>
+                        <?php elseif ($konten['jenis_konten'] == 'link') : ?>
+                            <input type="text" name="konten" class="form-control" value="<?= htmlspecialchars($konten['konten']); ?>">
+                        <?php else: ?>
+                            <p class="text-muted">Tidak ada konten yang ditampilkan.</p>
+                        <?php endif; ?>
+                    </div>
                 <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
                 <a href="?page=tabel_djih" class="btn btn-secondary">Kembali</a>
             </form>
         </div>
     </div>
 </div>
+
+<script>
+document.getElementById('jenis_konten').addEventListener('change', function () {
+    const jenis = this.value;
+    const kontenInput = document.getElementById('konten_input');
+
+    const kontenGambar = kontenInput.getAttribute('data-gambar');
+    const kontenLink = kontenInput.getAttribute('data-link');
+
+    let html = '<label class="form-label">Konten</label>';
+
+    if (jenis === 'gambar' || jenis === 'file') {
+        html += '<input type="file" name="konten" class="form-control" accept=".jpg,.jpeg,.png,.gif,.pdf,.doc,.docx,.xls,.xlsx">';
+        if (kontenGambar) {
+            html += '<p class="mt-2">File saat ini: <a href="' + kontenGambar + '" target="_blank">Lihat</a></p>';
+        }
+    } else if (jenis === 'link') {
+        html += '<input type="text" name="konten" class="form-control" value="' + kontenLink + '" placeholder="Masukkan URL">';
+    } else if (jenis === 'kosong') {
+        html += '<p class="text-muted">Tidak ada konten yang perlu diinput.</p>';
+    }
+
+    kontenInput.innerHTML = html;
+});
+</script>
