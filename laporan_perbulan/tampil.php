@@ -278,7 +278,7 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                                         } elseif ($row['status'] == 'diterima') {
                                             echo '<i class="fas fa-check" style="color: green;"></i> Diterima';
                                         } elseif ($row['status'] == 'dikembalikan') {
-                                            echo '<i class="fas fa-times" style="color: red;"></i> dikembalikan';
+                                            echo '<i class="fas fa-times" style="color: red;"></i> Dikembalikan';
                                         } else {
                                             echo '<span class="text-muted">Status tidak diketahui</span>';
                                         }
