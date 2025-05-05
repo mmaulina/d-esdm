@@ -198,7 +198,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
                 <div class="mt-3">
                     <button type="submit" class="btn btn-success">Simpan</button>
-                    <a href="?page=<?= ($role === 'superadmin') ? 'profil_admin' : 'profil_perusahaan'; ?>" class="btn btn-secondary">Batal</a>
+                    <?php
+                    $role = $_SESSION['role'];
+                    $page = ($role === 'superadmin') ? 'profil_admin' : 'profil_perusahaan';
+                    ?>
+                    <a href="?page=<?php echo htmlspecialchars($page); ?>" class="btn btn-secondary">Batal</a>
                 </div>
             </form>
         </div>
