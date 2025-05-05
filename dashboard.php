@@ -214,7 +214,7 @@ foreach ($daftarKabupatenKotaKalsel as $kota) {
                     <div class="col mb-3">
                         <div class="card text-black" style="background-color: #008B47;">
                             <div class="card-body">
-                                <h5 class="card-title">Total Produksi</h5>
+                                <h5 class="card-title">Total Produksi (kWh)</h5>
                                 <p class="card-text"><?php echo number_format($totalProduksi, 2, ',', '.'); ?></p>
                                 <!-- <td class="text-end"><?= number_format($totalProduksi, 2, ',', '.'); ?></td> -->
                             </div>
@@ -223,7 +223,7 @@ foreach ($daftarKabupatenKotaKalsel as $kota) {
                     <div class="col mb-3">
                         <div class="card text-black" style="background-color: #E68A00;">
                             <div class="card-body">
-                                <h5 class="card-title">Total Konsumsi</h5>
+                                <h5 class="card-title">Total Konsumsi (kWh)</h5>
                                 <p class="card-text"><?php echo number_format($totalKonsumsi, 2, ',', '.'); ?></p>
                                 <!-- <td class="text-end"><?= number_format($totalKonsumsi, 2, ',', '.'); ?></td> -->
                             </div>
@@ -236,7 +236,7 @@ foreach ($daftarKabupatenKotaKalsel as $kota) {
                     <div class="row mt-3">
                         <div class="col">
                             <h5 class="fw-bold mb-3">Perusahaan Belum Upload Laporan Semester</h5>
-                            <div class="table-responsive" style="max-height: 500px; overflow-x: auto; overflow-y: auto;">
+                            <div class="table-responsive">
                                 <table class="table table-bordered table-striped table-sm" id="tabel-belum-upload">
                                     <thead class="table-dark">
                                         <tr>
@@ -287,7 +287,7 @@ foreach ($daftarKabupatenKotaKalsel as $kota) {
                 <div class="row mt-3">
                     <div class="col">
                         <h5 class="fw-bold mb-3">Total Produksi & Konsumsi per Kabupaten/Kota</h5>
-                        <div class="table-responsive" style="max-height: 500px; overflow-x: auto; overflow-y: auto;">
+                        <div class="table-responsive">
                             <table class="table table-bordered table-striped table-sm" id="tabel-produksi-konsumsi">
                                 <thead class="table-dark">
                                     <tr class="text-center">
