@@ -62,7 +62,6 @@ try {
     $stmt = $conn->prepare($query);
     $stmt->execute(['id_user' => $_SESSION['id_user']]);
 
-
     // Ambil semua konten
     $sql = "SELECT * FROM news ORDER BY tanggal DESC";
     $stmt = $conn->query($sql);
@@ -75,6 +74,7 @@ try {
 } catch (PDOException $e) {
     die("Error: " . $e->getMessage());
 }
+
 $kota_kabupaten_kalsel = [
     'Kota Banjarbaru',
     'Kota Banjarmasin',
@@ -97,7 +97,7 @@ $tahun = date('Y'); // Atau sesuaikan dengan tahun yang diinginkan
 
 // Ambil data perusahaan dari tabel profil
 $sql_perusahaan = "SELECT id_user, kabupaten, nama_perusahaan FROM profil";
-$stmt_perusahaan = $conn->query($sql_perusahaan);
+$stmt_perusahaan = $conn->query($sql_perusahaan );
 $daftar_perusahaan = $stmt_perusahaan->fetchAll(PDO::FETCH_ASSOC);
 
 foreach ($daftar_perusahaan as $perusahaan) {
@@ -151,10 +151,12 @@ $daftarKabupatenKotaKalsel = [
     'Kota Banjarbaru',
     'Kota Banjarmasin'
 ];
+
 $totalProduksi = 0;
 $totalKonsumsi = 0;
 $totalProduksiPerKota = [];
 $totalKonsumsiPerKota = [];
+$totalVolumeBBPerKota = []; // Array untuk menyimpan volume bahan bakar per kota
 
 // Fungsi parsing angka format IDR
 function parseNumber($val)
@@ -166,17 +168,31 @@ function parseNumber($val)
 }
 
 // Ambil data laporan
-$sql = "SELECT kabupaten, produksi_sendiri, pemb_sumber_lain, penj_ke_pelanggan, penj_ke_pln, pemakaian_sendiri FROM laporan_bulanan";
+$sql = "SELECT kabupaten, produksi_sendiri, pemb_sumber_lain, penj_ke_pelanggan, penj_ke_pln, pemakaian_sendiri, bahan_bakar_jenis, volume_bb FROM laporan_bulanan";
 $stmt = $conn->query($sql);
 
 foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $laporan) {
-    $kabupaten = $laporan['kabupaten'];
-
+    $kabupaten = trim($laporan['kabupaten']);
     $produksi = parseNumber($laporan['produksi_sendiri']) + parseNumber($laporan['pemb_sumber_lain']);
     $konsumsi = parseNumber($laporan['penj_ke_pelanggan']) + parseNumber($laporan['penj_ke_pln']) + parseNumber($laporan['pemakaian_sendiri']);
+    $bahanBakarJenis = strtolower(trim($laporan['bahan_bakar_jenis']));
+    $volumeBB = parseNumber($laporan['volume_bb']);
 
     $totalProduksiPerKota[$kabupaten] = ($totalProduksiPerKota[$kabupaten] ?? 0) + $produksi;
     $totalKonsumsiPerKota[$kabupaten] = ($totalKonsumsiPerKota[$kabupaten] ?? 0) + $konsumsi;
+
+    // Hitung volume bahan bakar berdasarkan jenis
+    if (!isset($totalVolumeBBPerKota[$kabupaten])) {
+        $totalVolumeBBPerKota[$kabupaten] = [
+            'solar' => 0,
+            'biomasa' => 0
+        ];
+    }
+    if ($bahanBakarJenis === 'solar') {
+        $totalVolumeBBPerKota[$kabupaten]['solar'] += $volumeBB;
+    } elseif ($bahanBakarJenis === 'biomasa') {
+        $totalVolumeBBPerKota[$kabupaten]['biomasa'] += $volumeBB;
+    }
 
     $totalProduksi += $produksi;
     $totalKonsumsi += $konsumsi;
@@ -190,23 +206,27 @@ foreach ($daftarKabupatenKotaKalsel as $kota) {
     if (!isset($totalKonsumsiPerKota[$kota])) {
         $totalKonsumsiPerKota[$kota] = 0;
     }
+    if (!isset($totalVolumeBBPerKota[$kota])) {
+        $totalVolumeBBPerKota[$kota] = [
+            'solar' => 0,
+            'biomasa' => 0
+        ];
+    }
 }
 
-
+// Sekarang Anda dapat menggunakan $totalVolumeBBPerKota untuk mendapatkan volume bahan bakar per kota
 ?>
 <main>
     <div class="container mt-4">
-        <!-- Tambahan Welcome Text -->
         <h2 class="text-center mb-3">Welcome to Dashboard</h2>
         <hr>
         <div class="card shadow" style="overflow-x: auto; max-height: calc(100vh - 150px); overflow-y: auto;">
             <div class="card-body">
-                <!-- Row for Total Perusahaan and Total Kota -->
                 <div class="row">
                     <div class="col mb-3">
                         <div class="card text-black" style="background-color: #FCDC2A;">
                             <div class="card-body">
-                                <h5 class="card-title">Total Perusahaan</h5>
+                                <h5 class="card-title">Total Perusahaan yang terdaftar di website</h5>
                                 <p class="card-text"><?php echo $total_perusahaan; ?></p>
                             </div>
                         </div>
@@ -214,29 +234,27 @@ foreach ($daftarKabupatenKotaKalsel as $kota) {
                     <div class="col mb-3">
                         <div class="card text-black" style="background-color: #008B47;">
                             <div class="card-body">
-                                <h5 class="card-title">Total Produksi (kWh)</h5>
+                                <h5 class="card-title">Total Produksi Listrik(kwh)</h5>
                                 <p class="card-text"><?php echo number_format($totalProduksi, 2, ',', '.'); ?></p>
-                                <!-- <td class="text-end"><?= number_format($totalProduksi, 2, ',', '.'); ?></td> -->
                             </div>
                         </div>
                     </div>
                     <div class="col mb-3">
                         <div class="card text-black" style="background-color: #E68A00;">
                             <div class="card-body">
-                                <h5 class="card-title">Total Konsumsi (kWh)</h5>
+                                <h5 class="card-title">Total Konsumsi Listrik(kWh)</h5>
                                 <p class="card-text"><?php echo number_format($totalKonsumsi, 2, ',', '.'); ?></p>
-                                <!-- <td class="text-end"><?= number_format($totalKonsumsi, 2, ',', '.'); ?></td> -->
                             </div>
                         </div>
                     </div>
                 </div>
-
+                
                 <!-- Row for Perusahaan Belum Upload Laporan -->
                 <?php if (isset($_SESSION['role']) && $_SESSION['role'] !== 'umum' && $_SESSION['role'] !== 'kementerian') : ?>
                     <div class="row mt-3">
                         <div class="col">
                             <h5 class="fw-bold mb-3">Perusahaan Belum Upload Laporan Semester</h5>
-                            <div class="table-responsive">
+                            <div class="table-responsive" style="max-height: 500px; overflow-x: auto; overflow-y: auto;">
                                 <table class="table table-bordered table-striped table-sm" id="tabel-belum-upload">
                                     <thead class="table-dark">
                                         <tr>
@@ -283,7 +301,6 @@ foreach ($daftarKabupatenKotaKalsel as $kota) {
                         </div>
                     </div>
                 <?php endif; ?>
-                <!-- Ringkasan Produksi dan Konsumsi per Kota -->
                 <div class="row mt-3">
                     <div class="col">
                         <h5 class="fw-bold mb-3">Total Produksi & Konsumsi per Kabupaten/Kota</h5>
@@ -291,9 +308,11 @@ foreach ($daftarKabupatenKotaKalsel as $kota) {
                             <table class="table table-bordered table-striped table-sm" id="tabel-produksi-konsumsi">
                                 <thead class="table-dark">
                                     <tr class="text-center">
-                                        <th onclick="sortTable('tabel-produksi-konsumsi', 0)">Kabupaten/Kota <i class="fa fa-sort"></th>
-                                        <th onclick="sortTable('tabel-produksi-konsumsi', 1)">Total Produksi (kWh) <i class="fa fa-sort"></th>
-                                        <th onclick="sortTable('tabel-produksi-konsumsi', 2)">Total Konsumsi (kWh) <i class="fa fa-sort"></th>
+                                        <th onclick="sortTable('tabel-produksi-konsumsi', 0)">Kabupaten/Kota <i class="fa fa-sort "></i></th>
+                                        <th onclick="sortTable('tabel-produksi-konsumsi', 1)">Total Produksi Listrik (kWh) <i class="fa fa-sort"></i></th>
+                                        <th onclick="sortTable('tabel-produksi-konsumsi', 2)">Total Konsumsi Listrik (kWh) <i class="fa fa-sort"></i></th>
+                                        <th onclick="sortTable('tabel-produksi-konsumsi', 3)">Total Konsumsi BBM Solar (L) <i class="fa fa-sort"></i></th>
+                                        <th onclick="sortTable('tabel-produksi-konsumsi', 4)">Total Konsumsi BBM Biomasa (Ton) <i class="fa fa-sort"></i></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -302,6 +321,8 @@ foreach ($daftarKabupatenKotaKalsel as $kota) {
                                             <td><?= htmlspecialchars($kota); ?></td>
                                             <td class="text-end"><?= number_format($produksi, 2, ',', '.'); ?></td>
                                             <td class="text-end"><?= number_format($totalKonsumsiPerKota[$kota] ?? 0, 2, ',', '.'); ?></td>
+                                            <td class="text-end"><?= number_format($totalVolumeBBPerKota[$kota]['solar'] ?? 0, 2, ',', '.'); ?></td>
+                                            <td class="text-end"><?= number_format($totalVolumeBBPerKota[$kota]['biomasa'] ?? 0, 2, ',', '.'); ?></td>
                                         </tr>
                                     <?php endforeach; ?>
                                 </tbody>
@@ -310,13 +331,15 @@ foreach ($daftarKabupatenKotaKalsel as $kota) {
                                         <td class="text-end">Total:</td>
                                         <td class="text-end"><?= number_format($totalProduksi, 2, ',', '.'); ?></td>
                                         <td class="text-end"><?= number_format($totalKonsumsi, 2, ',', '.'); ?></td>
+                                        <td class="text-end"><?= number_format(array_sum(array_column($totalVolumeBBPerKota, 'solar')), 2, ',', '.'); ?></td>
+                                        <td class="text-end"><?= number_format(array_sum(array_column($totalVolumeBBPerKota, 'biomasa')), 2, ',', '.'); ?></td>
                                     </tr>
                                 </tfoot>
                             </table>
                         </div>
                     </div>
                 </div>
-                <!-- Row for News Content -->
+
                 <div class="row mt-4">
                     <div class="col-12 d-flex justify-content-between align-items-center">
                         <h5 class="fw-bold mb-0">News</h5>
@@ -329,50 +352,39 @@ foreach ($daftarKabupatenKotaKalsel as $kota) {
                 </div>
 
                 <div class="row mt-3">
-                    <div class="col-12">
-                        <div class="timeline position-relative">
-                            <?php foreach ($grouped_konten as $id_title => $kontens) : ?>
-                                <div class="timeline-item d-flex flex-column align-items-center text-center position-relative">
-                                    <div class="circle bg-dark rounded-circle position-absolute" style="width: 15px; height: 15px; left: -10px; top: 50%; transform: translateY(-50%);"></div>
-                                    <div class="content w-75 ms-3">
-
-                                        <!-- Title tampil sekali -->
-                                        <h5 class="card-text mt-3"><?php echo htmlspecialchars($kontens[0]['title']); ?></h5>
-
-                                        <!-- Konten berdampingan dengan caption masing-masing -->
-                                        <div class="d-flex flex-wrap justify-content-center gap-4 mt-3">
-                                            <?php foreach ($kontens as $konten) : ?>
-                                                <div class="text-center" style="max-width: 160px;">
-                                                    <?php if ($konten['jenis_konten'] === 'gambar') : ?>
-                                                        <img src="<?php echo htmlspecialchars($konten['konten']); ?>" class="img-fluid rounded" style="width: 150px; height: auto;" alt="Konten Gambar">
-                                                    <?php elseif ($konten['jenis_konten'] === 'file') : ?>
-                                                        <a href="<?php echo htmlspecialchars($konten['konten']); ?>" class="btn btn-secondary" style="width: 150px;">Download File</a>
-                                                    <?php elseif ($konten['jenis_konten'] === 'link') : ?>
-                                                        <a href="<?php echo htmlspecialchars($konten['konten']); ?>" target="_blank" class="btn btn-info" style="width: 150px;">Lihat Link</a>
-                                                    <?php endif; ?>
-
-                                                    <!-- Caption per konten -->
-                                                    <p class="mt-2 small"><?php echo nl2br(htmlspecialchars($konten['caption'])); ?></p>
-                                                </div>
-                                            <?php endforeach; ?>
-                                        </div>
-
-                                        <!-- Tanggal dari konten pertama -->
-                                        <p class="card-text mt-3"><small class="text-muted">Diupload pada: <?php echo $kontens[0]['tanggal']; ?></small></p>
-
-                                        </div>
-
-                                    <div class="line position-absolute bg-dark" style="width: 2px; height: 100%; left: 0px; top: 0;"></div>
+    <div class="col-12">
+        <div class="timeline position-relative">
+            <?php foreach ($grouped_konten as $id_title => $kontens) : ?>
+                <div class="timeline-item d-flex flex-column align-items-center text-center position-relative">
+                    <div class="circle bg-dark rounded-circle position-absolute" style="width: 15px; height: 15px; left: -10px; top: 50%; transform: translateY(-50%);"></div>
+                    <div class="content w-75 ms-3">
+                        <h5 class="card-text mt-3"><?php echo htmlspecialchars($kontens[0]['title']); ?></h5>
+                        <div class="d-flex flex-column align-items-center mt-3">
+                            <?php foreach ($kontens as $konten) : ?>
+                                <div class="text-center" style="max-width: 160px;">
+                                    <?php if ($konten['jenis_konten'] === 'gambar') : ?>
+                                        <img src="<?php echo htmlspecialchars($konten['konten']); ?>" class="img-fluid rounded" style="width: 150px; height: auto;" alt="Konten Gambar">
+                                    <?php elseif ($konten['jenis_konten'] === 'file') : ?>
+                                        <a href="<?php echo htmlspecialchars($konten['konten']); ?>" class="btn btn-secondary" style="width: 150px;">Download File</a>
+                                    <?php elseif ($konten['jenis_konten'] === 'link') : ?>
+                                        <a href="<?php echo htmlspecialchars($konten['konten']); ?>" target="_blank" class="btn btn-info" style="width: 150px;">Lihat Link</a>
+                                    <?php endif; ?>
+                                    <p class="mt-2 small"><?php echo nl2br(htmlspecialchars($konten['caption'])); ?></p>
                                 </div>
                             <?php endforeach; ?>
                         </div>
+                        <p class="card-text mt-3"><small class="text-muted">Diupload pada: <?php echo $kontens[0]['tanggal']; ?></small></p>
                     </div>
+                    <div class="line position-absolute bg-dark" style="width: 2px; height: 100%; left: 0px; top: 0;"></div>
                 </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+</div>  
             </div>
         </div>
     </div>
 </main>
-<!-- JAVASCRIPT FILTER -->
 <script>
     function sortTable(tableId, columnIndex) {
         var table = document.querySelector(`#${tableId} tbody`);
@@ -383,7 +395,6 @@ foreach ($daftarKabupatenKotaKalsel as $kota) {
             var cellA = rowA.children[columnIndex].textContent.trim().toLowerCase();
             var cellB = rowB.children[columnIndex].textContent.trim().toLowerCase();
 
-            // Jika angka
             if (!isNaN(cellA) && !isNaN(cellB)) {
                 return isAscending ? cellA - cellB : cellB - cellA;
             }
