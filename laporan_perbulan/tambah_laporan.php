@@ -172,7 +172,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
                 <div class="mb-3">
                     <label class="form-label">No Hp Pimpinan</label>
-                    <input type="text" name="no_hp_pimpinan" class="form-control" value="<?= htmlspecialchars($no_hp_pimpinan) ?>" readonly>
+                    <?php if ($role === 'superadmin') : ?>
+                        <input type="text" name="no_hp_pimpinan" class="form-control" placeholder="Masukan nomor HP pimpinan" value="<?= htmlspecialchars($no_hp_pimpinan) ?>" required>
+                    <?php else : ?>
+                        <input type="text" name="no_hp_pimpinan" class="form-control" value="<?= htmlspecialchars($no_hp_pimpinan) ?>" readonly>
+                    <?php endif; ?>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Tenaga Teknik</label>
@@ -245,12 +249,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div class="col">
                         <label class="form-label">Latitude</label>
                         <input type="text" name="latitude" class="form-control" placeholder="Contoh : 3°26&#39;43&quot;LS" required>
-                        <small class="text-danger">Catatan : Gunakan tanda * sebagai pengganti derajat (°). Contoh: 3*26'43,25"LS</small>
+                        <small class="text-danger">Catatan : Gunakan tanda * sebagai pengganti derajat (°). Contoh: 3*26'43"LS</small>
                     </div>
                     <div class="col">
                         <label class="form-label">Longitude</label>
                         <input type="text" name="longitude" class="form-control" placeholder="Contoh : 114°50&#39;21&quot;BT" required>
-                        <small class="text-danger">Catatan : Gunakan tanda * sebagai pengganti derajat (°). Contoh: 114*50'21,15"BT</small>
+                        <small class="text-danger">Catatan : Gunakan tanda * sebagai pengganti derajat (°). Contoh: 114*50'21"BT</small>
                     </div>
                 </div>
                 <div class="mb-3">
@@ -391,7 +395,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             this.value = 200;
         }
     });
+</script>
 
+<!-- SCRIPT CHECKBOX PENGISIAN DATA-->
+<script>
     document.addEventListener('DOMContentLoaded', function() {
         const checkbox = document.getElementById('dataCheck');
         const submitBtn = document.getElementById('submitBtn');

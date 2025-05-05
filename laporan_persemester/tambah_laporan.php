@@ -49,7 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     {
         return strip_tags(trim($input));
     }
-    
+
     $no_hp_pimpinan = sanitizeInput($_POST['no_hp_pimpinan'] ?? '');
     $tenaga_teknik = sanitizeInput($_POST['tenaga_teknik'] ?? '');
     $no_hp_teknik = sanitizeInput($_POST['no_hp_teknik'] ?? '');
@@ -67,7 +67,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Prepare the insert statement
     $insertSQL = "INSERT INTO laporan_semester (id_user, nama_perusahaan, no_hp_pimpinan, tenaga_teknik, no_hp_teknik, nama, no_hp, no_telp_kantor, parameter, baku_mutu, hasil, status, keterangan, file_laporan, file_lhu, tahun, semester) 
                   VALUES (:id_user, :nama_perusahaan, :no_hp_pimpinan, :tenaga_teknik, :no_hp_teknik, :nama, :no_hp, :no_telp_kantor, :parameter, :baku_mutu, :hasil, :status, :keterangan, :file_laporan, :file_lhu, :tahun, :semester)";
-    
+
     $stmt = $db->prepare($insertSQL);
 
     // Ambil id_user dari session
@@ -106,7 +106,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Execute the statement
         if (!$stmt->execute()) {
-            $_SESSION['hasil'] = false ;
+            $_SESSION['hasil'] = false;
             $_SESSION['pesan'] = "Gagal Simpan Data untuk parameter: $parameter";
             break; // Stop the loop if there's an error
         }
@@ -119,7 +119,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
 // Fungsi untuk upload file dengan validasi format
-function uploadFile($input_name) {
+function uploadFile($input_name)
+{
     if (!empty($_FILES[$input_name]['name'])) {
         $maxSize = 10 * 1024 * 1024; // 10MB
         if ($_FILES[$input_name]['size'] > $maxSize) {
@@ -163,27 +164,51 @@ function uploadFile($input_name) {
                 </div>
                 <div class="mb-3">
                     <label class="form-label">No Hp Pimpinan</label>
-                    <input type="text" name="no_hp_pimpinan" class="form-control" value="<?= htmlspecialchars($no_hp_pimpinan) ?>" readonly>
+                    <?php if ($role === 'superadmin') : ?>
+                        <input type="text" name="no_hp_pimpinan" class="form-control" placeholder="Masukkan nomor HP pimpinan" value="<?= htmlspecialchars($no_hp_pimpinan) ?>">
+                    <?php else : ?>
+                        <input type="text" name="no_hp_pimpinan" class="form-control" value="<?= htmlspecialchars($no_hp_pimpinan) ?>" readonly>
+                    <?php endif; ?>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Tenaga Teknik</label>
-                    <input type="text" name="tenaga_teknik" class="form-control" value="<?= htmlspecialchars($tenaga_teknik) ?>" readonly>
+                    <?php if ($role === 'superadmin') : ?>
+                        <input type="text" name="tenaga_teknik" class="form-control" placeholder="Masukkan nama tenaga teknik" value="<?= htmlspecialchars($tenaga_teknik) ?>">
+                    <?php else : ?>
+                        <input type="text" name="tenaga_teknik" class="form-control" value="<?= htmlspecialchars($tenaga_teknik) ?>" readonly>
+                    <?php endif; ?>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">No Hp Tenaga Teknik</label>
-                    <input type="text" name="no_hp_teknik" class="form-control" value="<?= htmlspecialchars($no_hp_teknik) ?>" readonly>
+                    <?php if ($role === 'superadmin') : ?>
+                        <input type="text" name="no_hp_teknik" class="form-control" placeholder="Masukkan nomor HP tenaga teknik" value="<?= htmlspecialchars($no_hp_teknik) ?>">
+                    <?php else : ?>
+                        <input type="text" name="no_hp_teknik" class="form-control" value="<?= htmlspecialchars($no_hp_teknik) ?>" readonly>
+                    <?php endif; ?>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Nama Admin</label>
-                    <input type="text" name="nama" class="form-control" value="<?= htmlspecialchars($nama) ?>" readonly>
+                    <?php if ($role === 'superadmin') : ?>
+                        <input type="text" name="nama" class="form-control" placeholder="Masukkan nama admin" value="<?= htmlspecialchars($nama) ?>">
+                    <?php else : ?>
+                        <input type="text" name="nama" class="form-control" value="<?= htmlspecialchars($nama) ?>" readonly>
+                    <?php endif; ?>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">No Hp Admin</label>
-                    <input type="text" name="no_hp" class="form-control" value="<?= htmlspecialchars($no_hp) ?>" readonly>
+                    <?php if ($role === 'superadmin') : ?>
+                        <input type="text" name="no_hp" class="form-control" placeholder="Masukkan nomor HP admin" value="<?= htmlspecialchars($no_hp) ?>">
+                    <?php else : ?>
+                        <input type="text" name="no_hp" class="form-control" value="<?= htmlspecialchars($no_hp) ?>" readonly>
+                    <?php endif; ?>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">No Telpon Kantor</label>
-                    <input type="text" name="no_telp_kantor" class="form-control" value="<?= htmlspecialchars($no_telp_kantor) ?>" readonly>
+                    <?php if ($role === 'superadmin') : ?>
+                        <input type="text" name="no_telp_kantor" class="form-control" placeholder="Masukkan nomor telepon kantor/perusahaan" value="<?= htmlspecialchars($no_telp_kantor) ?>">
+                    <?php else : ?>
+                        <input type="text" name="no_telp_kantor" class="form-control" value="<?= htmlspecialchars($no_telp_kantor) ?>" readonly>
+                    <?php endif; ?>
                 </div>
 
                 <div id="dynamicFields">
@@ -199,7 +224,7 @@ function uploadFile($input_name) {
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">baku Mutu</label>
+                        <label class="form-label">Baku Mutu</label>
                         <input type="text" name="baku_mutu[]" class="form-control" placeholder="Masukkan baku mutu" required>
                     </div>
                     <div class="mb-3">
@@ -218,7 +243,7 @@ function uploadFile($input_name) {
                 <div class="mb-3">
                     <label class="form-label">Upload LHU (PDF, DOC , DOCX, XLS, XLSX)</label>
                     <input type="file" name="file_lhu" class="form-control" accept=".pdf,.doc,.docx,.xls,.xlsx">
-                    <small class="text-danger">Max File 10Mb</small>
+                    <small class="text-danger">Max File 5Mb</small>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Tahun</label>
@@ -238,13 +263,28 @@ function uploadFile($input_name) {
                         * Untuk semester yang sudah terlewat, pengisian tidak dapat dilakukan
                     </p>
                 </div>
+                <div class="mb-3 form-check">
+                    <input type="checkbox" class="form-check-input" id="dataCheck" />
+                    <label class="form-check-label" for="dataCheck">Saya pastikan semua data terisi dengan benar</label>
+                </div>
                 <input type="hidden" name="semester_final" id="semester_final">
-                <button type="submit" class="btn btn-success">Simpan</button>
+                <button type="submit" class="btn btn-success" id="submitBtn" disabled>Simpan</button>
                 <a href="?page=laporan_persemester" class="btn btn-secondary">Kembali</a>
             </form>
         </div>
     </div>
 </div>
+
+<!-- SCRIPT CHECKBOX PENGISIAN DATA -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const checkbox = document.getElementById('dataCheck');
+        const submitBtn = document.getElementById('submitBtn');
+        checkbox.addEventListener('change', function() {
+            submitBtn.disabled = !checkbox.checked;
+        });
+    });
+</script>
 
 <script>
     document.getElementById('addFields').addEventListener('click', function() {
@@ -262,7 +302,7 @@ function uploadFile($input_name) {
                         </select>
             </div>
             <div class="mb-3">
-                <label class="form-label">baku Mutu</label>
+                <label class="form-label">Baku Mutu</label>
                 <input type="text" name="baku_mutu[]" class="form-control" placeholder="Masukkan baku mutu" required>
             </div>
             <div class="mb-3">
@@ -310,7 +350,8 @@ function uploadFile($input_name) {
     semesterSelect.addEventListener('change', updateSemesterFinal);
 
     document.querySelector("form").addEventListener("submit", function(e) {
-        const maxFileSize = 10 * 1024 * 1024; // 10 MB
+        const maxFileSizeLaporan = 10 * 1024 * 1024; // 10 MB
+        const maxFileSizeLHU = 5 * 1024 * 1024; // 5 MB
         const fileLaporan = document.querySelector('input[name="file_laporan"]');
         const fileLHU = document.querySelector('input[name="file_lhu"]');
 
@@ -321,7 +362,7 @@ function uploadFile($input_name) {
         }
 
         if (fileLHU.files[0] && fileLHU.files[0].size > maxFileSize) {
-            alert("File LHU terlalu besar! Maksimal 10MB.");
+            alert("File LHU terlalu besar! Maksimal 5MB.");
             e.preventDefault();
             return;
         }
