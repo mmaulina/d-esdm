@@ -36,7 +36,7 @@ try {
                 <table class="table table-striped table-bordered">
                     <thead class="table-dark">
                         <tr>
-                            <th>No</th>
+                            <th>No.</th>
                             <th>Title</th>
                             <th>Jenis</th>
                             <th>Caption</th>

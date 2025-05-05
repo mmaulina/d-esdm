@@ -37,7 +37,7 @@ try {
                     <table class="table table-striped table-bordered">
                         <thead class="table-dark">
                             <tr>
-                                <th>#</th>
+                                <th>No.</th>
                                 <th>Jenis</th>
                                 <th>Caption</th>
                                 <th>Konten</th>
