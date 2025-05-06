@@ -137,19 +137,19 @@ try {
                             <th rowspan="2" onclick="sortTable(2)">Kabupaten/Kota <i class="fa fa-sort"></i></th>
                             <th rowspan="2" onclick="sortTable(3)">Alamat <i class="fa fa-sort"></i></th>
                             <th rowspan="2" onclick="sortTable(4)">Jenis Usaha <i class="fa fa-sort"></i></th>
-                            <th rowspan="2" onclick="sortTable(5)">Nomor Telepon Kantor <i class="fa fa-sort"></i></th>
-                            <th rowspan="2" onclick="sortTable(6)">No Hp Pimpinan<i class="fa fa-sort">/i></th>
-                            <th rowspan="2" onclick="sortTable(7)">Tenaga Teknik <i class="fa fa-sort"></i></th>
-                            <th rowspan="2" onclick="sortTable(8)">No Hp Tenaga Teknik <i class="fa fa-sort"></i></th>
-                            <th colspan="3">Kontak Person</th>
-                            <th rowspan="2" onclick="sortTable(9)">Status <i class="fa fa-sort"></i></th>
-                            <th rowspan="2" onclick="sortTable(10)">Keterangan</th>
+                            <th rowspan="2" onclick="sortTable(5)">Email Kantor<i class="fa fa-sort"></i></th>
+                            <th rowspan="2" onclick="sortTable(6)">Nomor Telepon Kantor <i class="fa fa-sort"></i></th>
+                            <th rowspan="2" onclick="sortTable(7)">No. Hp. Pimpinan<i class="fa fa-sort"></th>
+                            <th rowspan="2" onclick="sortTable(8)">Tenaga Teknik <i class="fa fa-sort"></i></th>
+                            <th rowspan="2" onclick="sortTable(9)">No Hp. Tenaga Teknik <i class="fa fa-sort"></i></th>
+                            <th colspan="2">Kontak Person</th>
+                            <th rowspan="2" onclick="sortTable(10)">Status <i class="fa fa-sort"></i></th>
+                            <th rowspan="2" onclick="sortTable(11)">Keterangan</th>
                             <th rowspan="2">Aksi</th>
                         </tr>
                         <tr>
-                            <th onclick="sortTable(11)">Nama <i class="fa fa-sort"></i></th>
-                            <th onclick="sortTable(12)">No. HP <i class="fa fa-sort"></i></th>
-                            <th onclick="sortTable(13)">Email <i class="fa fa-sort"></i></th>
+                            <th onclick="sortTable(12)">Nama <i class="fa fa-sort"></i></th>
+                            <th onclick="sortTable(13)">No. HP <i class="fa fa-sort"></i></th>
                         </tr>
                     </thead>
                     <tbody id="tableBody">
@@ -162,13 +162,13 @@ try {
                                     <td><?= htmlspecialchars($row['kabupaten']); ?></td>
                                     <td><?= htmlspecialchars($row['alamat']); ?></td>
                                     <td><?= htmlspecialchars($row['jenis_usaha']); ?></td>
+                                    <td><?= htmlspecialchars($row['email']); ?></td>
                                     <td><?= htmlspecialchars($row['no_telp_kantor']); ?></td>
                                     <td><?= htmlspecialchars($row['no_hp_pimpinan']); ?></td>
                                     <td><?= htmlspecialchars($row['tenaga_teknik']); ?></td>
                                     <td><?= htmlspecialchars($row['no_hp_teknik']); ?></td>
                                     <td><?= htmlspecialchars($row['nama']); ?></td>
                                     <td><?= htmlspecialchars($row['no_hp']); ?></td>
-                                    <td><?= htmlspecialchars($row['email']); ?></td>
                                     <td class="text-center">
                                         <?php
                                         // Menampilkan status dengan ikon dan warna

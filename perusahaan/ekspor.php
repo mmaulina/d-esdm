@@ -3,14 +3,12 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-// Pastikan pengguna sudah login
 if (!isset($_SESSION['id_user']) || !isset($_SESSION['role'])) {
     echo "<script>alert('Silakan login terlebih dahulu!'); window.location.href='login.php';</script>";
     exit;
 }
 
-require 'vendor/autoload.php'; // Load PHPSpreadsheet
-
+require 'vendor/autoload.php';
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
@@ -27,7 +25,6 @@ try {
     $conn = $db->getConnection();
 
     $stmt = $conn->prepare("SELECT * FROM profil");
-
     $stmt->execute();
     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -36,82 +33,109 @@ try {
 
     // Judul
     $sheet->setCellValue('A1', 'DATA PERUSAHAAN LIST');
-    $sheet->mergeCells('A1:K1'); // Gabungkan sel untuk judul
+    $sheet->mergeCells('A1:L1');
     $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(14);
     $sheet->getStyle('A1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-    
+
     // Header
     $headers = [
-        'No.', 'Nama Perusahaan', 'Kabupaten/Kota', 'Alamat', 'Jenis Usaha', 'No_telp_kantor', 'No_fax',
-        'Tenaga Teknik', 'Nama', 'Nomor Hp', 'Email'
+        'No.',
+        'Nama Perusahaan',
+        'Kabupaten/Kota',
+        'Alamat',
+        'Jenis Usaha',
+        'Email'
     ];
-    
+
+    if ($role === 'superadmin') {
+        $headers[] = 'No. Telp. Kantor';
+        $headers[] = 'No. HP Pimpinan';
+    }
+
+    $headers[] = 'Tenaga Teknik';
+
+    if ($role === 'superadmin') {
+        $headers[] = 'No. HP Tenaga Teknik';
+        $headers[] = 'Nomor HP Admin';
+    }
+
+    $headers[] = 'Nama Admin';
+
+    // Tulis header
     $column = 'A';
     foreach ($headers as $header) {
         $sheet->setCellValue($column . '3', $header);
+        $sheet->getStyle($column . '3')->getFont()->setBold(true);
         $column++;
     }
 
-    // Style Header
-    $headerStyle = [
-        'font' => ['bold' => true, 'color' => ['rgb' => 'FFFFFF']],
-        'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => '4F81BD']],
-        'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
-        'borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]]
-    ];
-    $sheet->getStyle('A3:K3')->applyFromArray($headerStyle);
+    // Terapkan style header hanya jika ada data
+    if (!empty($data)) {
+        $lastCol = chr(ord('A') + count($headers) - 1);
+        $sheet->getStyle("A3:{$lastCol}3")->applyFromArray([
+            'font' => ['bold' => true, 'color' => ['rgb' => 'FFFFFF']],
+            'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => '4F81BD']],
+            'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
+            'borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]]
+        ]);
+    }
 
-    // Isi Data
+    // Tulis data
     $rowNum = 4;
     $no = 1;
     foreach ($data as $row) {
-        $sheet->setCellValue('A' . $rowNum, $no++);
-        $sheet->setCellValue('B' . $rowNum, $row['nama_perusahaan']);
-        $sheet->setCellValue('C' . $rowNum, $row['kabupaten']);
-        $sheet->setCellValue('D' . $rowNum, $row['alamat']);
-        $sheet->setCellValue('E' . $rowNum, $row['jenis_usaha']);
-        $sheet->setCellValue('F' . $rowNum, $row['no_telp_kantor']);
-        $sheet->setCellValue('G' . $rowNum, $row['no_fax']);
-        $sheet->setCellValue('H' . $rowNum, $row['tenaga_teknik']);
-        $sheet->setCellValue('I' . $rowNum, $row['nama']);
-        $sheet->setCellValue('J' . $rowNum, $row['no_hp']);
-        $sheet->setCellValue('K' . $rowNum, $row['email']);
+        $col = 'A';
+        $sheet->setCellValue($col++ . $rowNum, $no++);
+        $sheet->setCellValue($col++ . $rowNum, $row['nama_perusahaan']);
+        $sheet->setCellValue($col++ . $rowNum, $row['kabupaten']);
+        $sheet->setCellValue($col++ . $rowNum, $row['alamat']);
+        $sheet->setCellValue($col++ . $rowNum, $row['jenis_usaha']);
+        $sheet->setCellValue($col++ . $rowNum, $row['email']);
 
+        if ($role === 'superadmin') {
+            $sheet->setCellValue($col++ . $rowNum, $row['no_telp_kantor']);
+            $sheet->setCellValue($col++ . $rowNum, $row['no_hp_pimpinan']);
+        }
+
+        $sheet->setCellValue($col++ . $rowNum, $row['tenaga_teknik']);
+
+        if ($role === 'superadmin') {
+            $sheet->setCellValue($col++ . $rowNum, $row['no_hp_teknik']);
+            $sheet->setCellValue($col++ . $rowNum, $row['no_hp']);
+        }
+
+        $sheet->setCellValue($col++ . $rowNum, $row['nama']);
         $rowNum++;
     }
 
-    // Border untuk seluruh data
-    $sheet->getStyle('A3:K' . ($rowNum - 1))->applyFromArray([
-        'borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]]
-    ]);
+    // Border & Auto Size jika ada data
+    if (!empty($data)) {
+        $lastCol = chr(ord('A') + count($headers) - 1);
+        $sheet->getStyle("A3:{$lastCol}" . ($rowNum - 1))->applyFromArray([
+            'borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]]
+        ]);
 
-    // Auto-fit kolom
-    foreach (range('A', 'K') as $col) {
-        $sheet->getColumnDimension($col)->setAutoSize(true);
+        foreach (range('A', $lastCol) as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
     }
 
-    // Nama file
     $fileName = 'data_perusahaan_' . time() . '.xlsx';
     $filePath = 'exports/' . $fileName;
 
-    // Pastikan folder exports ada
     if (!file_exists('exports')) {
         mkdir('exports', 0777, true);
     }
 
-    // Hapus file lama (lebih dari 24 jam)
     foreach (glob('exports/*.xlsx') as $file) {
-        if (filemtime($file) < time() - 30) { // 86400 detik = 24 jam
+        if (filemtime($file) < time() - 86400) {
             unlink($file);
         }
     }
-    
-    // Simpan file
+
     $writer = new Xlsx($spreadsheet);
     $writer->save($filePath);
 
-    
-    // Tampilkan loading dan mulai pengunduhan
     echo "
     <html>
     <head>
@@ -153,5 +177,3 @@ try {
 } catch (PDOException $e) {
     die("Error: " . $e->getMessage());
 }
-
-?>
