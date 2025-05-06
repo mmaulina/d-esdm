@@ -149,27 +149,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
                 <div class="mb-3">
                     <label class="form-label">No Hp Pimpinan</label>
-                    <input type="text" name="no_hp_pimpinan" class="form-control" value="<?= htmlspecialchars($no_hp_pimpinan) ?>" readonly>
+                    <input type="text" name="no_hp_pimpinan" class="form-control" value="<?= htmlspecialchars($data[$no_hp_pimpinan]) ?>" readonly>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Tenaga Teknik</label>
-                    <input type="text" name="tenaga_teknik" class="form-control" value="<?= htmlspecialchars($tenaga_teknik) ?>" readonly>
+                    <input type="text" name="tenaga_teknik" class="form-control" value="<?= htmlspecialchars($data[$tenaga_teknik]) ?>" readonly>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">No Hp Tenaga Teknik</label>
-                    <input type="text" name="no_hp_teknik" class="form-control" value="<?= htmlspecialchars($no_hp_teknik) ?>" readonly>
+                    <input type="text" name="no_hp_teknik" class="form-control" value="<?= htmlspecialchars($data[$no_hp_teknik]) ?>" readonly>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Nama Admin</label>
-                    <input type="text" name="nama" class="form-control" value="<?= htmlspecialchars($nama) ?>" readonly>
+                    <input type="text" name="nama" class="form-control" value="<?= htmlspecialchars($data[$nama]) ?>" readonly>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">No Hp Admin</label>
-                    <input type="text" name="no_hp" class="form-control" value="<?= htmlspecialchars($no_hp) ?>" readonly>
+                    <input type="text" name="no_hp" class="form-control" value="<?= htmlspecialchars($data[$no_hp]) ?>" readonly>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">No Telpon Kantor</label>
-                    <input type="text" name="no_telp_kantor" class="form-control" value="<?= htmlspecialchars($no_telp_kantor) ?>" readonly>
+                    <input type="text" name="no_telp_kantor" class="form-control" value="<?= htmlspecialchars($data[$no_telp_kantor]) ?>" readonly>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Tahun</label>
