@@ -54,25 +54,25 @@ $profil = $stmt->fetch(PDO::FETCH_ASSOC);
                         <td><?php echo htmlspecialchars($profil['no_hp_pimpinan']); ?></td>
                     </tr>
                     <tr>
+                        <th>Email</th>
+                        <td><?php echo htmlspecialchars($profil['email']); ?></td>
+                    </tr>
+                    <tr>
                         <th>Tenaga Teknik</th>
                         <td><?php echo htmlspecialchars($profil['tenaga_teknik']); ?></td>
                     </tr>
                     <tr>
                     <tr>
-                        <th>Tenaga Teknik</th>
+                        <th>No Hp Tenaga Teknik</th>
                         <td><?php echo htmlspecialchars($profil['no_hp_teknik']); ?></td>
                     </tr>
                     <tr>
-                        <th>Nama</th>
+                        <th>Nama Admin</th>
                         <td><?php echo htmlspecialchars($profil['nama']); ?></td>
                     </tr>
                     <tr>
                         <th>Nomor HP</th>
                         <td><?php echo htmlspecialchars($profil['no_hp']); ?></td>
-                    </tr>
-                    <tr>
-                        <th>Email</th>
-                        <td><?php echo htmlspecialchars($profil['email']); ?></td>
                     </tr>
                     <tr>
                         <th>Status</th>

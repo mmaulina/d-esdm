@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $no_telp_kantor = sanitize_input($_POST['no_telp_kantor']);
     $no_hp_pimpinan = sanitize_input($_POST['no_hp_pimpinan']);
     $tenaga_teknik = sanitize_input($_POST['tenaga_teknik']);
-    $no_hp_teknik = sanitize_input($_POST['no_hp_tenik']);
+    $no_hp_teknik = sanitize_input($_POST['no_hp_teknik']);
     $nama = sanitize_input($_POST['nama']);
     $no_hp = sanitize_input($_POST['no_hp']);
     $email = sanitize_input($_POST['email']);
@@ -66,7 +66,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $conn = $db->getConnection();
         // Query menggunakan prepared statement dengan PDO
         $sql = "INSERT INTO profil (id_user, nama_perusahaan, kabupaten, alamat, jenis_usaha, no_telp_kantor, no_hp_pimpinan, tenaga_teknik, no_hp_teknik, nama, no_hp, email, status, keterangan) 
-                VALUES (:id_user, :nama_perusahaan, :kabupaten, :alamat, :jenis_usaha, :no_telp_kantor, :no_hp_pimpinan, :tenaga_teknik, :no_hp_tenik, :nama, :no_hp, :email, :status, :keterangan)";
+                VALUES (:id_user, :nama_perusahaan, :kabupaten, :alamat, :jenis_usaha, :no_telp_kantor, :no_hp_pimpinan, :tenaga_teknik, :no_hp_teknik, :nama, :no_hp, :email, :status, :keterangan)";
         $stmt = $conn->prepare($sql);
 
         // Bind parameter
@@ -198,7 +198,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
                 <div class="mt-3">
                     <button type="submit" class="btn btn-success">Simpan</button>
-                    <a href="?page=<?= ($role === 'superadmin') ? 'profil_admin' : 'profil_perusahaan'; ?>" class="btn btn-secondary">Batal</a>
+                    <?php
+                    $role = $_SESSION['role'];
+                    $page = ($role === 'superadmin') ? 'profil_admin' : 'profil_perusahaan';
+                    ?>
+                    <a href="?page=<?php echo htmlspecialchars($page); ?>" class="btn btn-secondary">Batal</a>
                 </div>
             </form>
         </div>
