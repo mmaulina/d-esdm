@@ -67,20 +67,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $tahun = checkEmpty(sanitizeInput($_POST['tahun'] ?? ''));
     $bulan = checkEmpty(sanitizeInput($_POST['bulan'] ?? ''));
     $kabupaten = checkEmpty(sanitizeInput($_POST['kabupaten'] ?? ''));
-    $alamat = checkEmpty(sanitizeInput($_POST['alamat'] ?? ''));
-    $latitude = checkEmpty(sanitizeInput($_POST['latitude'] ?? ''));
-    $longitude = checkEmpty(sanitizeInput($_POST['longitude'] ?? ''));
-    $jenis_pembangkit = checkEmpty(sanitizeInput($_POST['jenis_pembangkit'] ?? ''));
-    $fungsi = checkEmpty(sanitizeInput($_POST['fungsi'] ?? ''));
-    $kapasitas_terpasang = checkEmpty(sanitizeInput($_POST['kapasitas_terpasang'] ?? ''));
-    $daya_mampu_netto = checkEmpty(sanitizeInput($_POST['daya_mampu_netto'] ?? ''));
-    $jumlah_unit = checkEmpty(sanitizeInput($_POST['jumlah_unit'] ?? ''));
-    $no_unit = checkEmpty(sanitizeInput($_POST['no_unit'] ?? ''));
-    $tahun_operasi = checkEmpty(sanitizeInput($_POST['tahun_operasi'] ?? ''));
-    $status_operasi = checkEmpty(sanitizeInput($_POST['status_operasi'] ?? ''));
-    $bahan_bakar_jenis = checkEmpty(sanitizeInput($_POST['bahan_bakar_jenis'] ?? ''));
-    $bahan_bakar_satuan = checkEmpty(sanitizeInput($_POST['bahan_bakar_satuan'] ?? ''));
-    $volume_bb = checkEmpty(sanitizeInput($_POST['volume_bb'] ?? ''));
+
+    $alamat_arr = $_POST['alamat'] ?? [];
+    $latitude_arr = $_POST['latitude'] ?? [];
+    $longitude_arr = $_POST['longitude'] ?? [];
+    $jenis_pembangkit_arr = $_POST['jenis_pembangkit'] ?? [];
+    $fungsi_arr = $_POST['fungsi'] ?? [];
+    $kapasitas_terpasang_arr = $_POST['kapasitas_terpasang'] ?? [];
+    $daya_mampu_netto_arr = $_POST['daya_mampu_netto'] ?? [];
+    $jumlah_unit_arr = $_POST['jumlah_unit'] ?? [];
+    $no_unit_arr = $_POST['no_unit'] ?? [];
+    $tahun_operasi_arr = $_POST['tahun_operasi'] ?? [];
+    $status_operasi_arr = $_POST['status_operasi'] ?? [];
+    $bahan_bakar_jenis_arr = $_POST['bahan_bakar_jenis'] ?? [];
+    $bahan_bakar_satuan_arr = $_POST['bahan_bakar_satuan'] ?? [];
+    $volume_bb_arr = $_POST['volume_bb'] ?? [];
+
     $produksi_sendiri = checkEmpty(sanitizeInput($_POST['produksi_sendiri'] ?? ''));
     $pemb_sumber_lain = checkEmpty(sanitizeInput($_POST['pemb_sumber_lain'] ?? ''));
     $susut_jaringan = checkEmpty(sanitizeInput($_POST['susut_jaringan'] ?? ''));
@@ -92,23 +94,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $keterangan = '-';    // Keterangan diisi otomatis
 
     $query = "INSERT INTO laporan_bulanan (
-        id_user, nama_perusahaan, no_hp_pimpinan, tenaga_teknik, no_hp_teknik, nama, no_hp, no_telp_kantor, tahun, bulan, kabupaten, alamat,
-        latitude, longitude, jenis_pembangkit, fungsi,
-        kapasitas_terpasang, daya_mampu_netto, jumlah_unit, no_unit,
-        tahun_operasi, status_operasi, bahan_bakar_jenis, bahan_bakar_satuan,
-        volume_bb, produksi_sendiri, pemb_sumber_lain, susut_jaringan,
+        id_user, nama_perusahaan, no_hp_pimpinan, tenaga_teknik, no_hp_teknik, nama, no_hp, no_telp_kantor, tahun, bulan, kabupaten, produksi_sendiri, pemb_sumber_lain, susut_jaringan,
         penj_ke_pelanggan, penj_ke_pln, pemakaian_sendiri,
         status, keterangan
     ) 
     VALUES (
-        :id_user, :nama_perusahaan, :no_hp_pimpinan, :tenaga_teknik, :no_hp_teknik, :nama, :no_hp, :no_telp_kantor, :tahun, :bulan, :kabupaten, :alamat,
-        :latitude, :longitude, :jenis_pembangkit, :fungsi,
-        :kapasitas_terpasang, :daya_mampu_netto, :jumlah_unit, :no_unit,
-        :tahun_operasi, :status_operasi, :bahan_bakar_jenis, :bahan_bakar_satuan,
-        :volume_bb, :produksi_sendiri, :pemb_sumber_lain, :susut_jaringan,
+        :id_user, :nama_perusahaan, :no_hp_pimpinan, :tenaga_teknik, :no_hp_teknik, :nama, :no_hp, :no_telp_kantor, :tahun, :bulan, :kabupaten, :produksi_sendiri, :pemb_sumber_lain, :susut_jaringan,
         :penj_ke_pelanggan, :penj_ke_pln, :pemakaian_sendiri,
         :status, :keterangan
     )";
+
+    $querypembangkit = "INSERT INTO pembangkit (
+        id_user, nama_perusahaan, alamat, longitude, latitude, jenis_pembangkit, fungsi, kapasitas_terpasang, 
+        daya_mampu_netto, jumlah_unit, no_unit, tahun_operasi, status_operasi, bahan_bakar_jenis, bahan_bakar_satuan, volume_bb) 
+    VALUES (
+        :id_user, :nama_perusahaan, :alamat, :longitude, :latitude, :jenis_pembangkit, :fungsi, :kapasitas_terpasang, 
+        :daya_mampu_netto, :jumlah_unit, :no_unit, :tahun_operasi, :status_operasi, :bahan_bakar_jenis, :bahan_bakar_satuan, :volume_bb
+    )";
+
     $stmt = $db->prepare($query);
     $stmt->bindParam(':id_user', $id_user);
     $stmt->bindParam(':nama_perusahaan', $nama_perusahaan);
@@ -121,20 +124,51 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bindParam(':tahun', $tahun);
     $stmt->bindParam(':bulan', $bulan);
     $stmt->bindParam(':kabupaten', $kabupaten);
-    $stmt->bindParam(':alamat', $alamat);
-    $stmt->bindParam(':latitude', $latitude);
-    $stmt->bindParam(':longitude', $longitude);
-    $stmt->bindParam(':jenis_pembangkit', $jenis_pembangkit);
-    $stmt->bindParam(':fungsi', $fungsi);
-    $stmt->bindParam(':kapasitas_terpasang', $kapasitas_terpasang);
-    $stmt->bindParam(':daya_mampu_netto', $daya_mampu_netto);
-    $stmt->bindParam(':jumlah_unit', $jumlah_unit);
-    $stmt->bindParam(':no_unit', $no_unit);
-    $stmt->bindParam(':tahun_operasi', $tahun_operasi);
-    $stmt->bindParam(':status_operasi', $status_operasi);
-    $stmt->bindParam(':bahan_bakar_jenis', $bahan_bakar_jenis);
-    $stmt->bindParam(':bahan_bakar_satuan', $bahan_bakar_satuan);
-    $stmt->bindParam(':volume_bb', $volume_bb);
+
+    $allPembangkitSaved = true; // Tambahkan di awal sebelum for
+
+    for ($i = 0; $i < count($alamat_arr); $i++) {
+        $alamat = $alamat_arr[$i];
+        $latitude = $latitude_arr[$i];
+        $longitude = $longitude_arr[$i];
+        $jenis_pembangkit = $jenis_pembangkit_arr[$i];
+        $fungsi = $fungsi_arr[$i];
+        $kapasitas_terpasang = $kapasitas_terpasang_arr[$i];
+        $daya_mampu_netto = $daya_mampu_netto_arr[$i];
+        $jumlah_unit = $jumlah_unit_arr[$i];
+        $no_unit = $no_unit_arr[$i];
+        $tahun_operasi = $tahun_operasi_arr[$i];
+        $status_operasi = $status_operasi_arr[$i];
+        $bahan_bakar_jenis = $bahan_bakar_jenis_arr[$i];
+        $bahan_bakar_satuan = $bahan_bakar_satuan_arr[$i];
+        $volume_bb = $volume_bb_arr[$i];
+    
+        $stmt2 = $db->prepare($querypembangkit);
+        $stmt2->bindParam(':nama_perusahaan', $nama_perusahaan);
+        $stmt2->bindParam(':id_user', $id_user);
+        $stmt2->bindParam(':alamat', $alamat);
+        $stmt2->bindParam(':latitude', $latitude);
+        $stmt2->bindParam(':longitude', $longitude);
+        $stmt2->bindParam(':jenis_pembangkit', $jenis_pembangkit);
+        $stmt2->bindParam(':fungsi', $fungsi);
+        $stmt2->bindParam(':kapasitas_terpasang', $kapasitas_terpasang);
+        $stmt2->bindParam(':daya_mampu_netto', $daya_mampu_netto);
+        $stmt2->bindParam(':jumlah_unit', $jumlah_unit);
+        $stmt2->bindParam(':no_unit', $no_unit);
+        $stmt2->bindParam(':tahun_operasi', $tahun_operasi);
+        $stmt2->bindParam(':status_operasi', $status_operasi);
+        $stmt2->bindParam(':bahan_bakar_jenis', $bahan_bakar_jenis);
+        $stmt2->bindParam(':bahan_bakar_satuan', $bahan_bakar_satuan);
+        $stmt2->bindParam(':volume_bb', $volume_bb);
+    
+        if (!$stmt2->execute()) {
+            $allPembangkitSaved = false;
+            $_SESSION['pesan'] = "Gagal Simpan Data";
+            // Tangani kesalahan jika diperlukan
+        }
+    }
+    
+
     $stmt->bindParam(':produksi_sendiri', $produksi_sendiri);
     $stmt->bindParam(':pemb_sumber_lain', $pemb_sumber_lain);
     $stmt->bindParam(':susut_jaringan', $susut_jaringan);
@@ -144,13 +178,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bindParam(':status', $status);
     $stmt->bindParam(':keterangan', $keterangan);
 
-    if ($stmt->execute()) {
+    $success = $stmt->execute();
+    if ($success && $allPembangkitSaved) {
         $_SESSION['hasil'] = true;
         $_SESSION['pesan'] = "Berhasil Simpan Data";
     } else {
         $_SESSION['hasil'] = false;
         $_SESSION['pesan'] = "Gagal Simpan Data";
-    }
+    }    
+    
     echo "<meta http-equiv='refresh' content='0; url=?page=laporan_perbulan'>";
 }
 ?>
@@ -242,101 +278,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </select>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Alamat Pembangkit</label>
-                    <input type="text" name="alamat" class="form-control" placeholder="Masukkan alamat lengkap" required>
-                </div>
-                <div class="row mb-3">
-                    <div class="col">
-                        <label class="form-label">Latitude</label>
-                        <input type="text" name="latitude" class="form-control" placeholder="Contoh : 3°26&#39;43&quot;LS" required>
-                        <small class="text-danger">Catatan : Gunakan tanda * sebagai pengganti derajat (°). Contoh: 3*26'43"LS</small>
-                    </div>
-                    <div class="col">
-                        <label class="form-label">Longitude</label>
-                        <input type="text" name="longitude" class="form-control" placeholder="Contoh : 114°50&#39;21&quot;BT" required>
-                        <small class="text-danger">Catatan : Gunakan tanda * sebagai pengganti derajat (°). Contoh: 114*50'21"BT</small>
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Jenis Pembangkit</label>
-                    <select name="jenis_pembangkit" class="form-select">
-                        <option value="">-- Pilih Jenis Pembangkit --</option>
-                        <option value="pltd">PLTD</option>
-                        <option value="plts">PLTS</option>
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Fungsi</label>
-                    <select name="fungsi" class="form-select" required>
-                        <option value="">-- Pilih Fungsi --</option>
-                        <option value="Utama">Utama</option>
-                        <option value="Darurat">Darurat</option>
-                        <option value="Cadangan">Cadangan</option>
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Kapasitas Terpasang (MW)</label>
-                    <input type="text" name="kapasitas_terpasang" class="form-control"
-                        placeholder="Contoh: 1.250,75" required>
-                    <small class="text-danger">Catatan : Gunakan titik untuk ribuan dan koma untuk desimal.</small>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Daya Mampu Netto (MW)</label>
-                    <input type="text" name="daya_mampu_netto" class="form-control"
-                        placeholder="Contoh: 1.250,75" required>
-                    <small class="text-danger">Catatan : Gunakan titik untuk ribuan dan koma untuk desimal.</small>
-                </div>
-                <div class="mb-3">
                     <label class="form-label">Jumlah Unit</label>
-                    <input type="number" name="jumlah_unit" class="form-control" id="jumlahUnitInput" placeholder="Masukkan jumlah unit" required min="1" max="200">
-                    <small class="text-danger">Catatan : Max. 200 unit</small>
+                    <input type="number" name="jumlah_unit" class="form-control" placeholder="Masukkan jumlah unit (1-200)" min="1" max="200">
                 </div>
+
                 <div class="mb-3">
-                    <label class="form-label">No. Unit</label>
-                    <input type="text" name="no_unit" class="form-control" placeholder="Masukkan nomor unit" required>
+                    <button type="button" class="btn btn-primary" onclick="tambahUnit()">Tambah Unit</button>
+                    <button type="button" class="btn btn-danger ms-2" onclick="resetSemua()">Reset Semua</button>
                 </div>
-                <div class="mb-3">
-                    <label class="form-label">Tahun Operasi</label>
-                    <select name="tahun_operasi" class="form-select" required>
-                        <option value="">-- Pilih Tahun --</option>
-                        <!-- Tahun dari 2030 ke 2000 -->
-                        <!-- Kode ini akan diisi otomatis dengan JavaScript -->
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Status Operasi</label>
-                    <select name="status_operasi" class="form-select" required>
-                        <option value="">-- Pilih Status Operasi --</option>
-                        <option value="Beroperasi">Beroperasi</option>
-                        <option value="Maintenance/Perbaikan">Maintenance/Perbaikan</option>
-                        <option value="Rusak">Rusak</option>
-                    </select>
-                </div>
-                <div class="row mb-3">
-                    <div class="col">
-                        <label class="form-label">Jenis Bahan Bakar</label>
-                        <select name="bahan_bakar_jenis" class="form-select" required>
-                            <option value="">-- Pilih Jenis Bahan Bakar --</option>
-                            <option value="Solar">Solar</option>
-                            <option value="Biomasa">Biomasa</option>
-                        </select>
-                        <small class="text-danger">
-                            Catatan: <strong>Biomasa</strong> mencakup bahan-bahan organik seperti <em>cangkang sawit</em>, <em>serbuk gergaji</em>, dan <em>sekam padi</em>, dll yang digunakan sebagai bahan bakar alternatif dalam pembangkit listrik.
-                        </small>
-                    </div>
-                    <div class="col">
-                        <label class="form-label">Satuan Bahan Bakar</label>
-                        <select name="bahan_bakar_satuan" class="form-select" required>
-                            <option value="">-- Pilih Satuan --</option>
-                            <option value="Liter">Liter</option>
-                            <option value="Ton">Ton</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Volume Bahan Bakar</label>
-                    <input type="text" name="volume_bb" class="form-control" placeholder="Masukkan volume bahan bakar" required>
-                </div>
+
+                <div id="formContainer"></div>
                 <div class="mb-3">
                     <label class="form-label">Produksi Sendiri (kWh)</label>
                     <input type="text" name="produksi_sendiri" class="form-control" placeholder="Masukkan produksi sendiri" required>
@@ -409,7 +360,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </script>
 
 <!-- SCRIPT PILIHAN TAHUN OPERASI -->
-<script>
+<!-- <script>
     const selectTahun = document.querySelector('select[name="tahun_operasi"]');
     for (let tahun = 2030; tahun >= 2000; tahun--) {
         const option = document.createElement('option');
@@ -417,7 +368,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         option.textContent = tahun;
         selectTahun.appendChild(option);
     }
-</script>
+</script> -->
 
 <!-- SCRIPT TAHUN OTOMATIS -->
 <script>
@@ -433,4 +384,134 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         option.text = year;
         tahunSelect.appendChild(option);
     }
+
 </script>
+<script>
+let unitCounter = 0;
+
+function generateYearsOptions() {
+    let options = "";
+    for (let year = 2030; year >= 2000; year--) {
+        options += `<option value="${year}">${year}</option>`;
+    }
+    return options;
+}
+
+function tambahUnit() {
+    unitCounter++;
+    const i = unitCounter;
+    const tahunOptions = generateYearsOptions();
+    const formHTML = `
+    <div class="unit-form border rounded p-3 mb-4" id="unit_${i}">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <h5>Unit ${i}</h5>
+            <button type="button" class="btn btn-sm btn-outline-danger" onclick="hapusUnit(${i})">Hapus</button>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Alamat Pembangkit</label>
+            <input type="text" name="alamat[]" class="form-control" placeholder="Masukkan Alamat" required>
+        </div>
+        <div class="row mb-3">
+            <div class="col">
+                <label class="form-label">Latitude</label>
+                <input type="text" name="latitude[]" class="form-control" placeholder="Contoh: 3*26'43&quot;LS" required>
+                <small class="text-danger">Gunakan tanda * untuk derajat.</small>
+            </div>
+            <div class="col">
+                <label class="form-label">Longitude</label>
+                <input type="text" name="longitude[]" class="form-control" placeholder="Contoh: 114*50'21&quot;BT" required>
+                <small class="text-danger">Gunakan tanda * untuk derajat.</small>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Jenis Pembangkit</label>
+            <select name="jenis_pembangkit[]" class="form-select">
+                <option value="">-- Pilih Jenis Pembangkit --</option>
+                <option value="pltd">PLTD</option>
+                <option value="plts">PLTS</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Fungsi</label>
+            <select name="fungsi[]" class="form-select" required>
+                <option value="">-- Pilih Fungsi --</option>
+                <option value="Utama">Utama</option>
+                <option value="Darurat">Darurat</option>
+                <option value="Cadangan">Cadangan</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Kapasitas Terpasang (MW)</label>
+            <input type="text" name="kapasitas_terpasang[]" class="form-control" placeholder="Contoh: 1.250,75" required>
+            <small class="text-danger">Titik = ribuan, koma = desimal.</small>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Daya Mampu Netto (MW)"</label>
+            <input type="text" name="daya_mampu_netto[]" class="form-control" placeholder="Contoh: 1.250,75" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">No. Unit</label>
+            <input type="text" name="no_unit[]" class="form-control" placeholder="Masukkan nomor unit" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Tahun Operasi</label>
+            <select name="tahun_operasi[]" class="form-select" required>
+                <option value="">-- Pilih Tahun --</option>
+                ${tahunOptions}
+            </select>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Status Operasi</label>
+            <select name="status_operasi[]" class="form-select" required>
+                <option value="">-- Pilih Status Operasi --</option>
+                <option value="Beroperasi">Beroperasi</option>
+                <option value="Maintenance/Perbaikan">Maintenance/Perbaikan</option>
+                <option value="Rusak">Rusak</option>
+            </select>
+        </div>
+        <div class="row mb-3">
+            <div class="col">
+                <label class="form-label">Jenis Bahan Bakar</label>
+                <select name="bahan_bakar_jenis[]" class="form-select" required>
+                    <option value="">-- Pilih Jenis Bahan Bakar --</option>
+                    <option value="Solar">Solar</option>
+                    <option value="Biomasa">Biomasa</option>
+                </select>
+            </div>
+            <div class="col">
+                <label class="form-label">Satuan Bahan Bakar</label>
+                <select name="bahan_bakar_satuan[]" class="form-select" required>
+                    <option value="">-- Pilih Satuan --</option>
+                    <option value="Liter">Liter</option>
+                    <option value="Ton">Ton</option>
+                </select>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Volume Bahan Bakar</label>
+            <input type="text" name="volume_bb[]" class="form-control" placeholder="Masukkan volume bahan bakar" required>
+        </div>
+    </div>`;
+
+    document.getElementById('formContainer').insertAdjacentHTML('beforeend', formHTML);
+    alert(`Unit ${i} berhasil ditambahkan!`); // Umpan balik kepada pengguna
+}
+
+function hapusUnit(id) {
+    const unitElement = document.getElementById(`unit_${id}`);
+    if (unitElement) {
+        unitElement.remove();
+        alert(`Unit ${id} berhasil dihapus!`); // Umpan balik kepada pengguna
+    }
+}
+
+function resetSemua() {
+    if (confirm("Yakin ingin menghapus semua unit?")) {
+        document.getElementById('formContainer').innerHTML = "";
+        unitCounter = 0;
+        alert("Semua unit berhasil direset!"); // Umpan balik kepada pengguna
+    }
+}
+
+</script>
+

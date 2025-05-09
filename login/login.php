@@ -4,10 +4,6 @@ include '../koneksi.php';
 
 $error = '';
 
-if (!isset($_SESSION['login_attempts'])) {
-    $_SESSION['login_attempts'] = 0;
-}
-
 // Proteksi CSRF
 if (!isset($_SESSION['token'])) {
     $_SESSION['token'] = bin2hex(random_bytes(32));
@@ -20,12 +16,26 @@ if (!isset($_SESSION['token'])) {
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
+    // Inisialisasi login_attempts dan last_login_attempt
+    if (!isset($_SESSION['login_attempts'])) {
+        $_SESSION['login_attempts'] = 0;
+    }
 
-    if ($_SESSION['login_attempts'] >= 5) {
-        $error = "Terlalu banyak percobaan login. Coba lagi nanti.";
+    if (!isset($_SESSION['last_login_attempt'])) {
+        $_SESSION['last_login_attempt'] = time();
+    }
+
+    $wait_time = 15 * 60; // 15 menit
+    $elapsed = time() - $_SESSION['last_login_attempt'];
+
+    // Cek apakah harus diblokir sementara
+    if ($_SESSION['login_attempts'] >= 5 && $elapsed < $wait_time) {
+        $error = "Terlalu banyak percobaan login. Coba lagi dalam " . ceil(($wait_time - $elapsed) / 60) . " menit.";
     } else {
-        if (!isset($_POST['token']) || $_POST['token'] !== $_SESSION['token']) {
-            die("CSRF Detected!");
+        // Jika waktu blokir sudah lewat, reset attempts
+        if ($elapsed >= $wait_time) {
+            $_SESSION['login_attempts'] = 0;
+            $_SESSION['last_login_attempt'] = time();
         }
 
         $username = trim($_POST['username']);
@@ -40,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->execute();
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-                // Ambil email & nomor HP dari id_user = 1
+            // Ambil kontak admin
             $sqlkontak = "SELECT email, no_hp FROM users WHERE id_user = 1";
             $stmtkontak = $pdo->prepare($sqlkontak);
             $stmtkontak->execute();
@@ -49,20 +59,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($user) {
                 if ($user['status'] !== 'diverifikasi') {
                     if ($kontak && !empty($kontak['no_hp'])) {
-                        // Format nomor HP agar sesuai dengan format internasional (tanpa angka 0 di awal)
-                        $nomor_hp = preg_replace('/[^0-9]/', '', $kontak['no_hp']); // Hanya angka
+                        $nomor_hp = preg_replace('/[^0-9]/', '', $kontak['no_hp']);
                         if (substr($nomor_hp, 0, 1) == "0") {
-                            $nomor_hp = "62" . substr($nomor_hp, 1); // Ganti "0" di awal dengan "62"
+                            $nomor_hp = "62" . substr($nomor_hp, 1);
                         }
-
                         $wa_link = "https://wa.me/" . $nomor_hp;
                         $error = "Akun Anda belum diverifikasi. Silakan hubungi admin di <a href='$wa_link' target='_blank'>WhatsApp</a>.";
                     } else {
-                        echo "Nomor HP tidak ditemukan.";
+                        $error = "Nomor HP admin tidak ditemukan.";
                     }
                 } else {
                     if (password_verify($password, $user['password'])) {
-                        session_regenerate_id(true); // Tambahkan keamanan sesi
+                        session_regenerate_id(true);
                         $_SESSION['id_user'] = $user['id_user'];
                         $_SESSION['username'] = $user['username'];
                         $_SESSION['role'] = $user['role'];
@@ -72,12 +80,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         exit();
                     } else {
                         $_SESSION['login_attempts'] += 1;
+                        $_SESSION['last_login_attempt'] = time();
                         $error = "Username atau password salah!";
                         file_put_contents("log_login.txt", date('Y-m-d H:i:s') . " - Gagal login: $username\n", FILE_APPEND);
                     }
                 }
             } else {
                 $_SESSION['login_attempts'] += 1;
+                $_SESSION['last_login_attempt'] = time();
                 $error = "Username atau password salah!";
             }
         } else {
