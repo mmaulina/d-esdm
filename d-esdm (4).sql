@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 05, 2025 at 03:14 PM
+-- Generation Time: May 09, 2025 at 05:26 PM
 -- Server version: 10.4.18-MariaDB
 -- PHP Version: 7.4.16
 
@@ -888,20 +888,6 @@ CREATE TABLE `laporan_bulanan` (
   `no_hp` varchar(15) NOT NULL,
   `no_telp_kantor` varchar(15) NOT NULL,
   `kabupaten` enum('Balangan','Banjar','Barito Kuala','Hulu Sungai Selatan','Hulu Sungai Tengah','Hulu Sungai Utara','Kotabaru','Tabalong','Tanah Bumbu','Tanah Laut','Tapin','Kota Banjarbaru','Kota Banjarmasin') NOT NULL,
-  `alamat` varchar(255) NOT NULL,
-  `latitude` varchar(20) NOT NULL,
-  `longitude` varchar(20) NOT NULL,
-  `jenis_pembangkit` varchar(200) NOT NULL,
-  `fungsi` enum('Utama','Darurat','Cadangan') NOT NULL,
-  `kapasitas_terpasang` varchar(20) NOT NULL,
-  `daya_mampu_netto` varchar(20) NOT NULL,
-  `jumlah_unit` varchar(5) NOT NULL,
-  `no_unit` varchar(20) NOT NULL,
-  `tahun_operasi` varchar(4) NOT NULL,
-  `status_operasi` enum('Beroperasi','Maintenance/Perbaikan','Rusak') NOT NULL,
-  `bahan_bakar_jenis` enum('Solar','Biomasa') NOT NULL,
-  `bahan_bakar_satuan` enum('Liter','Ton') NOT NULL,
-  `volume_bb` varchar(200) NOT NULL,
   `produksi_sendiri` varchar(200) NOT NULL,
   `pemb_sumber_lain` varchar(200) NOT NULL,
   `susut_jaringan` varchar(200) NOT NULL,
@@ -916,8 +902,8 @@ CREATE TABLE `laporan_bulanan` (
 -- Dumping data for table `laporan_bulanan`
 --
 
-INSERT INTO `laporan_bulanan` (`id`, `id_user`, `tahun`, `bulan`, `nama_perusahaan`, `no_hp_pimpinan`, `tenaga_teknik`, `no_hp_teknik`, `nama`, `no_hp`, `no_telp_kantor`, `kabupaten`, `alamat`, `latitude`, `longitude`, `jenis_pembangkit`, `fungsi`, `kapasitas_terpasang`, `daya_mampu_netto`, `jumlah_unit`, `no_unit`, `tahun_operasi`, `status_operasi`, `bahan_bakar_jenis`, `bahan_bakar_satuan`, `volume_bb`, `produksi_sendiri`, `pemb_sumber_lain`, `susut_jaringan`, `penj_ke_pelanggan`, `penj_ke_pln`, `pemakaian_sendiri`, `status`, `keterangan`) VALUES
-(9, 5, 2025, 'September', 'PT Energi Mandiri', '0881810000', 'Nama Tenaga Teknik Anda', '00000000', 'MUHAMMAD IRWAN FIRDAUS', '00000000000', '088247342027', 'Kota Banjarbaru', 'CEMPAKA', '3°26\'43\"LS', '114°50\'21\"BT', 'pltd', 'Utama', '1.235,5', '1.230', '1', '1', '2008', 'Beroperasi', 'Solar', 'Liter', '2.342,2', '23000', '-', '-', '-', '-', '1.300,9', 'dikembalikan', 'salah');
+INSERT INTO `laporan_bulanan` (`id`, `id_user`, `tahun`, `bulan`, `nama_perusahaan`, `no_hp_pimpinan`, `tenaga_teknik`, `no_hp_teknik`, `nama`, `no_hp`, `no_telp_kantor`, `kabupaten`, `produksi_sendiri`, `pemb_sumber_lain`, `susut_jaringan`, `penj_ke_pelanggan`, `penj_ke_pln`, `pemakaian_sendiri`, `status`, `keterangan`) VALUES
+(21, 5, 2025, 'Januari', 'PT Energi Mandiri', '0881810000', 'Nama Tenaga Teknik Anda', '00000000', 'MUHAMMAD IRWAN FIRDAUS', '00000000000', '088247342027', 'Kota Banjarbaru', '2.341,4', '-', '-', '-', '-', '19.200', 'diajukan', '-');
 
 -- --------------------------------------------------------
 
@@ -951,11 +937,9 @@ CREATE TABLE `laporan_semester` (
 --
 
 INSERT INTO `laporan_semester` (`id`, `id_user`, `nama_perusahaan`, `no_hp_pimpinan`, `tenaga_teknik`, `no_hp_teknik`, `nama`, `no_hp`, `no_telp_kantor`, `parameter`, `baku_mutu`, `hasil`, `file_laporan`, `file_lhu`, `tahun`, `semester`, `status`, `keterangan`) VALUES
-(21, 5, 'PT Energi Mandiri', '0881810000', 'Nama Tenaga Teknik Anda', '00000000', 'MUHAMMAD IRWAN FIRDAUS', '00000000000', '088247342027', 'SO2', 'a', 'a', 'uploads/1746449307_ALURLOGISTIKTPSKELURAHANCEMPAKAPSU.pdf', 'uploads/1746449307_ALURLOGISTIKTPSKELURAHANCEMPAKAPSU.pdf', 2025, 'Semester I 2025', 'diajukan', '-'),
-(22, 5, 'PT Energi Mandiri', '0881810000', 'Nama Tenaga Teknik Anda', '00000000', 'MUHAMMAD IRWAN FIRDAUS', '00000000000', '088247342027', 'HO2', 'b', 'b', 'uploads/1746449307_ALURLOGISTIKTPSKELURAHANCEMPAKAPSU.pdf', 'uploads/1746449307_ALURLOGISTIKTPSKELURAHANCEMPAKAPSU.pdf', 2025, 'Semester I 2025', 'diajukan', '-'),
-(23, 5, 'PT Energi Mandiri', '0881810000', 'Nama Tenaga Teknik Anda', '00000000', 'MUHAMMAD IRWAN FIRDAUS', '00000000000', '088247342027', 'TSP/DEBU', 'c', 'c', 'uploads/1746449307_ALURLOGISTIKTPSKELURAHANCEMPAKAPSU.pdf', 'uploads/1746449307_ALURLOGISTIKTPSKELURAHANCEMPAKAPSU.pdf', 2025, 'Semester I 2025', 'diajukan', '-'),
-(24, 5, 'PT Energi Mandiri', '0881810000', 'Nama Tenaga Teknik Anda', '00000000', 'MUHAMMAD IRWAN FIRDAUS', '00000000000', '088247342027', 'CO', 'd', 'd', 'uploads/1746449307_ALURLOGISTIKTPSKELURAHANCEMPAKAPSU.pdf', 'uploads/1746449307_ALURLOGISTIKTPSKELURAHANCEMPAKAPSU.pdf', 2025, 'Semester I 2025', 'diajukan', '-'),
-(25, 5, 'PT Energi Mandiri', '0881810000', 'Nama Tenaga Teknik Anda', '00000000', 'MUHAMMAD IRWAN FIRDAUS', '00000000000', '088247342027', 'kebisingan', 'e', 'e', 'uploads/1746449307_ALURLOGISTIKTPSKELURAHANCEMPAKAPSU.pdf', 'uploads/1746449307_ALURLOGISTIKTPSKELURAHANCEMPAKAPSU.pdf', 2025, 'Semester I 2025', 'diajukan', '-');
+(23, 5, 'PT Energi Mandiri', '0881810000', 'Nama Tenaga Teknik Anda', '00000000', 'MUHAMMAD IRWAN FIRDAUS', '00000000000', '088247342027', 'TSP/DEBU', 'c', 'c', 'uploads/1746449307_ALURLOGISTIKTPSKELURAHANCEMPAKAPSU.pdf', 'uploads/1746449307_ALURLOGISTIKTPSKELURAHANCEMPAKAPSU.pdf', 2025, 'Semester I 2025', 'dikembalikan', 's'),
+(24, 5, 'PT Energi Mandiri', '0881810000', 'Nama Tenaga Teknik Anda', '00000000', 'MUHAMMAD IRWAN FIRDAUS', '00000000000', '088247342027', 'CO', 'd', 'd', 'uploads/1746449307_ALURLOGISTIKTPSKELURAHANCEMPAKAPSU.pdf', 'uploads/1746449307_ALURLOGISTIKTPSKELURAHANCEMPAKAPSU.pdf', 2025, 'Semester I 2025', 'dikembalikan', 's'),
+(25, 5, 'PT Energi Mandiri', '0881810000', 'Nama Tenaga Teknik Anda', '00000000', 'MUHAMMAD IRWAN FIRDAUS', '00000000000', '088247342027', 'kebisingan', 'e', 'e', 'uploads/1746449307_ALURLOGISTIKTPSKELURAHANCEMPAKAPSU.pdf', 'uploads/1746449307_ALURLOGISTIKTPSKELURAHANCEMPAKAPSU.pdf', 2025, 'Semester I 2025', 'dikembalikan', 's');
 
 -- --------------------------------------------------------
 
@@ -984,19 +968,27 @@ CREATE TABLE `pembangkit` (
   `id_user` int(11) NOT NULL,
   `nama_perusahaan` varchar(225) NOT NULL,
   `alamat` varchar(225) NOT NULL,
-  `longitude` varchar(225) NOT NULL,
-  `latitude` varchar(225) NOT NULL,
-  `jenis_pembangkit` varchar(100) NOT NULL,
-  `fungsi` varchar(100) NOT NULL,
-  `kapasitas_terpasang` varchar(100) NOT NULL,
-  `daya_mampu_netto` varchar(100) NOT NULL,
-  `jumlah_unit` int(100) NOT NULL,
-  `no_unit` varchar(100) NOT NULL,
-  `tahun_operasi` int(11) NOT NULL,
-  `status_operasi` varchar(100) NOT NULL,
-  `bahan_bakar_jenis` varchar(100) NOT NULL,
-  `bahan_bakar_satuan` varchar(100) NOT NULL
+  `longitude` varchar(20) NOT NULL,
+  `latitude` varchar(20) NOT NULL,
+  `jenis_pembangkit` varchar(200) NOT NULL,
+  `fungsi` enum('Utama','Darurat','Cadangan') NOT NULL,
+  `kapasitas_terpasang` varchar(20) NOT NULL,
+  `daya_mampu_netto` varchar(20) NOT NULL,
+  `jumlah_unit` varchar(5) NOT NULL,
+  `no_unit` varchar(20) NOT NULL,
+  `tahun_operasi` varchar(4) NOT NULL,
+  `status_operasi` enum('Beroperasi','Maintenance/Perbaikan','Rusak','Rusak Total') NOT NULL,
+  `bahan_bakar_jenis` enum('Solar','Biomasa') NOT NULL,
+  `bahan_bakar_satuan` enum('Liter','Ton') NOT NULL,
+  `volume_bb` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `pembangkit`
+--
+
+INSERT INTO `pembangkit` (`id`, `id_user`, `nama_perusahaan`, `alamat`, `longitude`, `latitude`, `jenis_pembangkit`, `fungsi`, `kapasitas_terpasang`, `daya_mampu_netto`, `jumlah_unit`, `no_unit`, `tahun_operasi`, `status_operasi`, `bahan_bakar_jenis`, `bahan_bakar_satuan`, `volume_bb`) VALUES
+(12, 5, 'PT Energi Mandiri', 'Komp.Husindo Raya', '114*5\'12\"BT', '3*26\'12\"LS', 'pltd', 'Darurat', '1.259,8', '1.259,7', '1', '1', '2016', 'Beroperasi', 'Solar', 'Liter', '11.000');
 
 -- --------------------------------------------------------
 
@@ -1155,7 +1147,7 @@ ALTER TABLE `konten_dilihat`
 -- AUTO_INCREMENT for table `laporan_bulanan`
 --
 ALTER TABLE `laporan_bulanan`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `laporan_semester`
@@ -1173,7 +1165,7 @@ ALTER TABLE `news`
 -- AUTO_INCREMENT for table `pembangkit`
 --
 ALTER TABLE `pembangkit`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `profil`
