@@ -17,18 +17,15 @@ $role = $_SESSION['role']; // Pastikan role sudah tersimpan di session
 $db = new Database();
 $conn = $db->getConnection();
 
-// Query dasar
+// Query dasar untuk laporan bulanan
 $query = "SELECT * FROM laporan_bulanan WHERE 1=1";
 $params = [];
 
-
 // Query berdasarkan role
-$params = [];
 if ($role != 'adminbulanan' && $role != 'superadmin') {
     $query .= " AND id_user = :id_user";
     $params[':id_user'] = $id_user;
 }
-
 
 // Cek apakah ada keyword pencarian
 if (!empty($_GET['keyword'])) {
@@ -75,6 +72,26 @@ foreach ($params as $key => $value) {
 }
 $stmt->execute();
 $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Ambil data pembangkit berdasarkan nama_perusahaan
+$pembangkitData = [];
+if (count($result) > 0) {
+    $namaPerusahaanList = array_unique(array_column($result, 'nama_perusahaan'));
+    $placeholders = implode(',', array_fill(0, count($namaPerusahaanList), '?'));
+    $queryPembangkit = "SELECT * FROM pembangkit WHERE nama_perusahaan IN ($placeholders)";
+    $stmtPembangkit = $conn->prepare($queryPembangkit);
+    foreach ($namaPerusahaanList as $index => $np) {
+        $stmtPembangkit->bindValue($index + 1, $np, PDO::PARAM_STR);
+    }
+    $stmtPembangkit->execute();
+    $pembangkitData = $stmtPembangkit->fetchAll(PDO::FETCH_ASSOC);
+}
+
+// Kelompokkan data pembangkit berdasarkan nama_perusahaan
+$pembangkitGrouped = [];
+foreach ($pembangkitData as $pembangkit) {
+    $pembangkitGrouped[$pembangkit['nama_perusahaan']][] = $pembangkit;
+}
 
 // Proses Persetujuan/Tolak
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -213,7 +230,7 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                             <th rowspan="2" onclick="sortTable(15)">Daya Mampu Netto (MW) <i class="fa fa-sort"></th>
                             <th rowspan="2" onclick="sortTable(16)">Jumlah Unit <i class="fa fa-sort"></th>
                             <th rowspan="2" onclick="sortTable(17)">No. Unit <i class="fa fa-sort"></th>
-                            <th rowspan="2" onclick="sortTable(18)">Tahun Operasi <i class="fa fa-sort"></th>
+                            <th rowspan="2" onclick="sortTable(18)"> Tahun Operasi <i class="fa fa-sort"></th>
                             <th rowspan="2" onclick="sortTable(19)">Status Operasi <i class="fa fa-sort"></th>
                             <th colspan="2">Bahan Bakar yang Digunakan</th>
                             <th rowspan="2" onclick="sortTable(20)">Volume Bahan Bakar <i class="fa fa-sort"></th>
@@ -228,7 +245,7 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                             <th onclick="sortTable(25)">Satuan <i class="fa fa-sort"></th>
                             <th onclick="sortTable(26)">Produksi Sendiri (kWh) <i class="fa fa-sort"></th>
                             <th onclick="sortTable(27)">Pembelian Sumber Lain (bila ada) (kWh) <i class="fa fa-sort"></th>
-                            <th onclick="sortTable(28)">Penjualan ke Pelanggan (bila ada) (kWh) <i class="fa fa-sort"></th>
+                            <th onclick="sortTable(28)">Penjualan ke Pelanggan (bila ada) (kWh) <i class="fa sort"></th>
                             <th onclick="sortTable(29)">Penjualan ke PLN (bila ada) (kWh) <i class="fa fa-sort"></th>
                             <th onclick="sortTable(30)">Pemakaian Sendiri (kWh) <i class="fa fa-sort"></th>
                         </tr>
@@ -254,29 +271,210 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                                     <td><?php echo htmlspecialchars($row['tahun']); ?> </td>
                                     <td><?php echo htmlspecialchars($row['bulan']); ?> </td>
                                     <td><?= htmlspecialchars($row['kabupaten']) ?></td>
-                                    <td><?= htmlspecialchars($row['alamat']) ?></td>
-                                    <td><?= htmlspecialchars($row['latitude']) ?></td>
-                                    <td><?= htmlspecialchars($row['longitude']) ?></td>
-                                    <td><?= htmlspecialchars($row['jenis_pembangkit']) ?></td>
-                                    <td><?= htmlspecialchars($row['fungsi']) ?></td>
-                                    <td><?= htmlspecialchars($row['kapasitas_terpasang']) ?></td>
-                                    <td><?= htmlspecialchars($row['daya_mampu_netto']) ?></td>
-                                    <td><?= htmlspecialchars($row['jumlah_unit']) ?></td>
-                                    <td><?= htmlspecialchars($row['no_unit']) ?></td>
-                                    <td><?= htmlspecialchars($row['tahun_operasi']) ?></td>
-                                    <td><?= htmlspecialchars($row['status_operasi']) ?></td>
-                                    <td><?= htmlspecialchars($row['bahan_bakar_jenis']) ?></td>
-                                    <td><?= htmlspecialchars($row['bahan_bakar_satuan']) ?></td>
-                                    <td><?php echo htmlspecialchars($row['volume_bb']); ?> </td>
-                                    <td><?php echo htmlspecialchars($row['produksi_sendiri']); ?> </td>
-                                    <td><?php echo htmlspecialchars($row['pemb_sumber_lain']); ?> </td>
-                                    <td><?php echo htmlspecialchars($row['susut_jaringan']); ?> </td>
-                                    <td><?php echo htmlspecialchars($row['penj_ke_pelanggan']); ?> </td>
-                                    <td><?php echo htmlspecialchars($row['penj_ke_pln']); ?> </td>
-                                    <td><?php echo htmlspecialchars($row['pemakaian_sendiri']); ?> </td>
+                                    <td>
+                                        <?php
+                                        $namaPerusahaan = $row['nama_perusahaan'];
+                                        if (isset($pembangkitGrouped[$namaPerusahaan])) {
+                                                $noPembangkit = 1;
+                                            foreach ($pembangkitGrouped[$namaPerusahaan] as $pembangkit) {
+                                                echo htmlspecialchars($pembangkit['alamat']) . " <br> " ;
+                                                $noPembangkit++;
+                                            }
+                                        } else {
+                                            echo "-";
+                                        }
+                                        ?>
+                                    </td>
+                                        <td>
+                                        <?php
+                                        $namaPerusahaan = $row['nama_perusahaan'];
+                                        if (isset($pembangkitGrouped[$namaPerusahaan])) {
+                                            $noPembangkit = 1; // Inisialisasi penghitung untuk pembangkit
+                                            foreach ($pembangkitGrouped[$namaPerusahaan] as $pembangkit) {
+                                                echo htmlspecialchars($pembangkit['latitude']) . " <br> " ;
+                                                $noPembangkit++;
+                                            }
+                                        } else {
+                                            echo "-";
+                                        }
+                                        ?>
+                                    </td>
+                                    <td>
+                                        <?php
+                                        $namaPerusahaan = $row['nama_perusahaan'];
+                                        if (isset($pembangkitGrouped[$namaPerusahaan])) {
+                                            $noPembangkit = 1; // Inisialisasi penghitung untuk pembangkit
+                                            foreach ($pembangkitGrouped[$namaPerusahaan] as $pembangkit) {
+                                                echo htmlspecialchars($pembangkit['longitude']) . " <br> " ;
+                                                $noPembangkit++;
+                                            }
+                                        } else {
+                                            echo "-";
+                                        }
+                                        ?>
+                                    </td>
+                                    <td>
+                                        <?php
+                                        $namaPerusahaan = $row['nama_perusahaan'];
+                                        if (isset($pembangkitGrouped[$namaPerusahaan])) {
+                                            $noPembangkit = 1; // Inisialisasi penghitung untuk pembangkit
+                                            foreach ($pembangkitGrouped[$namaPerusahaan] as $pembangkit) {
+                                                echo htmlspecialchars($pembangkit['jenis_pembangkit']) . " <br> " ;
+                                                $noPembangkit++;
+                                            }
+                                        } else {
+                                            echo "-";
+                                        }
+                                        ?>
+                                    </td>
+                                    <td>
+                                        <?php
+                                        $namaPerusahaan = $row['nama_perusahaan'];
+                                        if (isset($pembangkitGrouped[$namaPerusahaan])) {
+                                            $noPembangkit = 1; // Inisialisasi penghitung untuk pembangkit
+                                            foreach ($pembangkitGrouped[$namaPerusahaan] as $pembangkit) {
+                                                echo htmlspecialchars($pembangkit['fungsi']) . " <br> " ;
+                                                $noPembangkit++;
+                                            }
+                                        } else {
+                                            echo "-";
+                                        }
+                                        ?>
+                                    </td>
+                                    <td>
+                                        <?php
+                                        $namaPerusahaan = $row['nama_perusahaan'];
+                                        if (isset($pembangkitGrouped[$namaPerusahaan])) {
+                                            $noPembangkit = 1; // Inisialisasi penghitung untuk pembangkit
+                                            foreach ($pembangkitGrouped[$namaPerusahaan] as $pembangkit) {
+                                                echo htmlspecialchars($pembangkit['kapasitas_terpasang']) . " <br> " ;
+                                                $noPembangkit++;
+                                            }
+                                        } else {
+                                            echo "-";
+                                        }
+                                        ?>
+                                    </td>
+                                    <td>
+                                        <?php
+                                        $namaPerusahaan = $row['nama_perusahaan'];
+                                        if (isset($pembangkitGrouped[$namaPerusahaan])) {
+                                            $noPembangkit = 1; // Inisialisasi penghitung untuk pembangkit
+                                            foreach ($pembangkitGrouped[$namaPerusahaan] as $pembangkit) {
+                                                echo htmlspecialchars($pembangkit['daya_mampu_netto']) . " <br> " ;
+                                                $noPembangkit++;
+                                            }
+                                        } else {
+                                            echo "-";
+                                        }
+                                        ?>
+                                    </td>
+                                    <td>
+                                        <?php
+                                        $namaPerusahaan = $row['nama_perusahaan'];
+                                        if (isset($pembangkitGrouped[$namaPerusahaan])) {
+                                            $noPembangkit = 1; // Inisialisasi penghitung untuk pembangkit
+                                            foreach ($pembangkitGrouped[$namaPerusahaan] as $pembangkit) {
+                                                echo htmlspecialchars($pembangkit['jumlah_unit']) . " <br> " ;
+                                                $noPembangkit++;
+                                            }
+                                        } else {
+                                            echo "-";
+                                        }
+                                        ?>
+                                    </td>
+                                    <td>
+                                        <?php
+                                        $namaPerusahaan = $row['nama_perusahaan'];
+                                        if (isset($pembangkitGrouped[$namaPerusahaan])) {
+                                            $noPembangkit = 1; // Inisialisasi penghitung untuk pembangkit
+                                            foreach ($pembangkitGrouped[$namaPerusahaan] as $pembangkit) {
+                                                echo htmlspecialchars($pembangkit['no_unit']) . " <br> " ;
+                                                $noPembangkit++;
+                                            }
+                                        } else {
+                                            echo "-";
+                                        }
+                                        ?>
+                                    </td>
+                                    <td>
+                                        <?php
+                                        $namaPerusahaan = $row['nama_perusahaan'];
+                                        if (isset($pembangkitGrouped[$namaPerusahaan])) {
+                                            $noPembangkit = 1; // Inisialisasi penghitung untuk pembangkit
+                                            foreach ($pembangkitGrouped[$namaPerusahaan] as $pembangkit) {
+                                                echo htmlspecialchars($pembangkit['tahun_operasi']) . " <br> " ;
+                                                $noPembangkit++;
+                                            }
+                                        } else {
+                                            echo "-";
+                                        }
+                                        ?>
+                                    </td>
+                                    <td>
+                                        <?php
+                                        $namaPerusahaan = $row['nama_perusahaan'];
+                                        if (isset($pembangkitGrouped[$namaPerusahaan])) {
+                                            $noPembangkit = 1; // Inisialisasi penghitung untuk pembangkit
+                                            foreach ($pembangkitGrouped[$namaPerusahaan] as $pembangkit) {
+                                                echo htmlspecialchars($pembangkit['status_operasi']) . " <br> " ;
+                                                $noPembangkit++;
+                                            }
+                                        } else {
+                                            echo "-";
+                                        }
+                                        ?>
+                                    </td>
+                                    <td>
+                                        <?php
+                                        $namaPerusahaan = $row['nama_perusahaan'];
+                                        if (isset($pembangkitGrouped[$namaPerusahaan])) {
+                                            $noPembangkit = 1; // Inisialisasi penghitung untuk pembangkit
+                                            foreach ($pembangkitGrouped[$namaPerusahaan] as $pembangkit) {
+                                                echo htmlspecialchars($pembangkit['bahan_bakar_jenis']) . " <br> " ;
+                                                $noPembangkit++;
+                                            }
+                                        } else {
+                                            echo "-";
+                                        }
+                                        ?>
+                                    </td>
+                                    <td>
+                                        <?php
+                                        $namaPerusahaan = $row['nama_perusahaan'];
+                                        if (isset($pembangkitGrouped[$namaPerusahaan])) {
+                                            $noPembangkit = 1; // Inisialisasi penghitung untuk pembangkit
+                                            foreach ($pembangkitGrouped[$namaPerusahaan] as $pembangkit) {
+                                                echo htmlspecialchars($pembangkit['bahan_bakar_satuan']) . " <br> " ;
+                                                $noPembangkit++;
+                                            }
+                                        } else {
+                                            echo "-";
+                                        }
+                                        ?>
+                                    </td>
+                                    <td>
+                                        <?php
+                                        $namaPerusahaan = $row['nama_perusahaan'];
+                                        if (isset($pembangkitGrouped[$namaPerusahaan])) {
+                                            $noPembangkit = 1; // Inisialisasi penghitung untuk pembangkit
+                                            foreach ($pembangkitGrouped[$namaPerusahaan] as $pembangkit) {
+                                                echo htmlspecialchars($pembangkit['volume_bb']) . " <br> " ;
+                                                $noPembangkit++;
+                                            }
+                                        } else {
+                                            echo "-";
+                                        }
+                                        ?>
+                                    </td>
+                                    <td><?= htmlspecialchars($row['produksi_sendiri']); ?></td>
+                                    <td><?= htmlspecialchars($row['pemb_sumber_lain']); ?></td>
+                                    <td><?= htmlspecialchars($row['susut_jaringan']); ?></td>
+                                    <td><?= htmlspecialchars($row['penj_ke_pelanggan']); ?></td>
+                                    <td><?= htmlspecialchars($row['penj_ke_pln']); ?></td>
+                                    <td><?= htmlspecialchars($row['pemakaian_sendiri']); ?></td>
                                     <td class="text-center">
                                         <?php
-                                        // Menampilkan status dengan ikon dan warna
                                         if ($row['status'] == 'diajukan') {
                                             echo '<i class="fas fa-clock" style="color: yellow;"></i> Diajukan';
                                         } elseif ($row['status'] == 'diterima') {
@@ -284,27 +482,21 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                                         } elseif ($row['status'] == 'dikembalikan') {
                                             echo '<i class="fas fa-times" style="color: red;"></i> Dikembalikan';
                                         } else {
-                                            echo '<span class="text-muted">Status tidak diketahui</span>';
+                                            echo '<span class="text-muted">Status tidak diketahui</ span>';
                                         }
                                         ?>
                                     </td>
                                     <td><?php echo htmlspecialchars($row['keterangan']); ?></td>
                                     <td class="text-center">
                                         <?php if (($role == 'adminbulanan' || $role == 'superadmin') && $row['status'] == 'diajukan'): ?>
-                                            <!-- Tombol Terima menggunakan POST -->
                                             <form method="POST" style="display: inline;">
                                                 <input type="hidden" name="terima_id" value="<?php echo $row['id']; ?>">
                                                 <button type="submit" class="btn btn-success btn-sm">Terima</button>
                                             </form>
-                                            <!-- Tombol Tolak dengan Modal -->
                                             <a href="" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modalTolak<?php echo $row['id']; ?>">Tolak</a>
                                         <?php endif; ?>
 
-                                        <?php if ($role == 'superadmin' && $row['status'] == 'dikembalikan' && $row['status'] == 'diterima'): ?>
-                                            <a href="?page=edit_laporan_perbulan&id=<?php echo $row['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
-                                            <a href="?page=hapus_laporan_perbulan&id=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus?');">Hapus</a>
-                                        <?php endif; ?>
-                                        <?php if ($role == 'umum' && $row['status'] == 'dikembalikan'): ?>
+                                        <?php if ($role == 'superadmin' && in_array($row['status'], ['dikembalikan', 'diterima'])): ?>
                                             <a href="?page=edit_laporan_perbulan&id=<?php echo $row['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
                                             <a href="?page=hapus_laporan_perbulan&id=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus?');">Hapus</a>
                                         <?php endif; ?>
@@ -346,40 +538,27 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
     </div>
 </div>
 
-<!-- JAVASCRIPT FILTER -->
 <script>
     function sortTable(columnIndex) {
         var table = document.querySelector("table tbody");
         var rows = Array.from(table.querySelectorAll("tr"));
         var isAscending = table.getAttribute("data-sort-order") === "asc";
 
-        // Sort rows
         rows.sort((rowA, rowB) => {
             var cellA = rowA.children[columnIndex].textContent.trim().toLowerCase();
             var cellB = rowB.children[columnIndex].textContent.trim().toLowerCase();
-
             if (!isNaN(cellA) && !isNaN(cellB)) {
                 return isAscending ? cellA - cellB : cellB - cellA;
             }
             return isAscending ? cellA.localeCompare(cellB) : cellB.localeCompare(cellA);
         });
 
-        // Remove existing rows
         table.innerHTML = "";
-
-        // Append sorted rows
         rows.forEach(row => table.appendChild(row));
-
-        // Toggle sorting order
         table.setAttribute("data-sort-order", isAscending ? "desc" : "asc");
 
-        // Update icon
-        updateSortIcons(columnIndex, isAscending);
-    }
-
-    function updateSortIcons(columnIndex, isAscending) {
         var headers = document.querySelectorAll("thead th i");
-        headers.forEach(icon => icon.className = "fa fa-sort"); // Reset semua ikon
+        headers.forEach(icon => icon.className = "fa fa-sort");
 
         var selectedHeader = document.querySelector(`thead th:nth-child(${columnIndex + 1}) i`);
         if (selectedHeader) {

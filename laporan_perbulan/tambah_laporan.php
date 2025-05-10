@@ -75,7 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $fungsi_arr = $_POST['fungsi'] ?? [];
     $kapasitas_terpasang_arr = $_POST['kapasitas_terpasang'] ?? [];
     $daya_mampu_netto_arr = $_POST['daya_mampu_netto'] ?? [];
-    $jumlah_unit_arr = $_POST['jumlah_unit'] ?? [];
+    $jumlah_unit = checkEmpty(sanitizeInput($_POST['jumlah_unit'] ?? ''));
     $no_unit_arr = $_POST['no_unit'] ?? [];
     $tahun_operasi_arr = $_POST['tahun_operasi'] ?? [];
     $status_operasi_arr = $_POST['status_operasi'] ?? [];
@@ -93,7 +93,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $status = 'diajukan'; // Status diisi otomatis
     $keterangan = '-';    // Keterangan diisi otomatis
 
-    $query = "INSERT INTO laporan_bulanan (
+        $laporan_bulanan = isset($_POST['laporan_bulanan']);
+        $data_pembangkit = isset($_POST['data_pembangkit']);
+
+        if ($laporan_bulanan) {
+                $query = "INSERT INTO laporan_bulanan (
         id_user, nama_perusahaan, no_hp_pimpinan, tenaga_teknik, no_hp_teknik, nama, no_hp, no_telp_kantor, tahun, bulan, kabupaten, produksi_sendiri, pemb_sumber_lain, susut_jaringan,
         penj_ke_pelanggan, penj_ke_pln, pemakaian_sendiri,
         status, keterangan
@@ -103,16 +107,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         :penj_ke_pelanggan, :penj_ke_pln, :pemakaian_sendiri,
         :status, :keterangan
     )";
-
-    $querypembangkit = "INSERT INTO pembangkit (
-        id_user, nama_perusahaan, alamat, longitude, latitude, jenis_pembangkit, fungsi, kapasitas_terpasang, 
-        daya_mampu_netto, jumlah_unit, no_unit, tahun_operasi, status_operasi, bahan_bakar_jenis, bahan_bakar_satuan, volume_bb) 
-    VALUES (
-        :id_user, :nama_perusahaan, :alamat, :longitude, :latitude, :jenis_pembangkit, :fungsi, :kapasitas_terpasang, 
-        :daya_mampu_netto, :jumlah_unit, :no_unit, :tahun_operasi, :status_operasi, :bahan_bakar_jenis, :bahan_bakar_satuan, :volume_bb
-    )";
-
-    $stmt = $db->prepare($query);
+        $stmt = $db->prepare($query);
     $stmt->bindParam(':id_user', $id_user);
     $stmt->bindParam(':nama_perusahaan', $nama_perusahaan);
     $stmt->bindParam(':no_hp_pimpinan', $no_hp_pimpinan);
@@ -124,51 +119,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bindParam(':tahun', $tahun);
     $stmt->bindParam(':bulan', $bulan);
     $stmt->bindParam(':kabupaten', $kabupaten);
-
-    $allPembangkitSaved = true; // Tambahkan di awal sebelum for
-
-    for ($i = 0; $i < count($alamat_arr); $i++) {
-        $alamat = $alamat_arr[$i];
-        $latitude = $latitude_arr[$i];
-        $longitude = $longitude_arr[$i];
-        $jenis_pembangkit = $jenis_pembangkit_arr[$i];
-        $fungsi = $fungsi_arr[$i];
-        $kapasitas_terpasang = $kapasitas_terpasang_arr[$i];
-        $daya_mampu_netto = $daya_mampu_netto_arr[$i];
-        $jumlah_unit = $jumlah_unit_arr[$i];
-        $no_unit = $no_unit_arr[$i];
-        $tahun_operasi = $tahun_operasi_arr[$i];
-        $status_operasi = $status_operasi_arr[$i];
-        $bahan_bakar_jenis = $bahan_bakar_jenis_arr[$i];
-        $bahan_bakar_satuan = $bahan_bakar_satuan_arr[$i];
-        $volume_bb = $volume_bb_arr[$i];
     
-        $stmt2 = $db->prepare($querypembangkit);
-        $stmt2->bindParam(':nama_perusahaan', $nama_perusahaan);
-        $stmt2->bindParam(':id_user', $id_user);
-        $stmt2->bindParam(':alamat', $alamat);
-        $stmt2->bindParam(':latitude', $latitude);
-        $stmt2->bindParam(':longitude', $longitude);
-        $stmt2->bindParam(':jenis_pembangkit', $jenis_pembangkit);
-        $stmt2->bindParam(':fungsi', $fungsi);
-        $stmt2->bindParam(':kapasitas_terpasang', $kapasitas_terpasang);
-        $stmt2->bindParam(':daya_mampu_netto', $daya_mampu_netto);
-        $stmt2->bindParam(':jumlah_unit', $jumlah_unit);
-        $stmt2->bindParam(':no_unit', $no_unit);
-        $stmt2->bindParam(':tahun_operasi', $tahun_operasi);
-        $stmt2->bindParam(':status_operasi', $status_operasi);
-        $stmt2->bindParam(':bahan_bakar_jenis', $bahan_bakar_jenis);
-        $stmt2->bindParam(':bahan_bakar_satuan', $bahan_bakar_satuan);
-        $stmt2->bindParam(':volume_bb', $volume_bb);
-    
-        if (!$stmt2->execute()) {
-            $allPembangkitSaved = false;
-            $_SESSION['pesan'] = "Gagal Simpan Data";
-            // Tangani kesalahan jika diperlukan
-        }
-    }
-    
-
     $stmt->bindParam(':produksi_sendiri', $produksi_sendiri);
     $stmt->bindParam(':pemb_sumber_lain', $pemb_sumber_lain);
     $stmt->bindParam(':susut_jaringan', $susut_jaringan);
@@ -177,16 +128,66 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bindParam(':pemakaian_sendiri', $pemakaian_sendiri);
     $stmt->bindParam(':status', $status);
     $stmt->bindParam(':keterangan', $keterangan);
+        }
 
-    $success = $stmt->execute();
-    if ($success && $allPembangkitSaved) {
+        if ($data_pembangkit) {
+            $querypembangkit = "INSERT INTO pembangkit (
+                id_user, nama_perusahaan, alamat, longitude, latitude, jenis_pembangkit, fungsi, kapasitas_terpasang, 
+                daya_mampu_netto, jumlah_unit, no_unit, tahun_operasi, status_operasi, bahan_bakar_jenis, bahan_bakar_satuan, volume_bb) 
+            VALUES (
+                :id_user, :nama_perusahaan, :alamat, :longitude, :latitude, :jenis_pembangkit, :fungsi, :kapasitas_terpasang, 
+                :daya_mampu_netto, :jumlah_unit, :no_unit, :tahun_operasi, :status_operasi, :bahan_bakar_jenis, :bahan_bakar_satuan, :volume_bb
+            )";
+
+            $allPembangkitSaved = true; // Tambahkan di awal sebelum for
+            for ($i = 0; $i < count($alamat_arr); $i++) {
+                $alamat = $alamat_arr[$i];
+                $latitude = $latitude_arr[$i];
+                $longitude = $longitude_arr[$i];
+                $jenis_pembangkit = $jenis_pembangkit_arr[$i];
+                $fungsi = $fungsi_arr[$i];
+                $kapasitas_terpasang = $kapasitas_terpasang_arr[$i];
+                $daya_mampu_netto = $daya_mampu_netto_arr[$i];
+                $no_unit = $no_unit_arr[$i];
+                $tahun_operasi = $tahun_operasi_arr[$i];
+                $status_operasi = $status_operasi_arr[$i];
+                $bahan_bakar_jenis = $bahan_bakar_jenis_arr[$i];
+                $bahan_bakar_satuan = $bahan_bakar_satuan_arr[$i];
+                $volume_bb = $volume_bb_arr[$i];
+            
+                $stmt2 = $db->prepare($querypembangkit);
+                $stmt2->bindParam(':nama_perusahaan', $nama_perusahaan);
+                $stmt2->bindParam(':id_user', $id_user);
+                $stmt2->bindParam(':alamat', $alamat);
+                $stmt2->bindParam(':latitude', $latitude);
+                $stmt2->bindParam(':longitude', $longitude);
+                $stmt2->bindParam(':jenis_pembangkit', $jenis_pembangkit);
+                $stmt2->bindParam(':fungsi', $fungsi);
+                $stmt2->bindParam(':kapasitas_terpasang', $kapasitas_terpasang);
+                $stmt2->bindParam(':daya_mampu_netto', $daya_mampu_netto);
+                $stmt2->bindParam(':jumlah_unit', $jumlah_unit);
+                $stmt2->bindParam(':no_unit', $no_unit);
+                $stmt2->bindParam(':tahun_operasi', $tahun_operasi);
+                $stmt2->bindParam(':status_operasi', $status_operasi);
+                $stmt2->bindParam(':bahan_bakar_jenis', $bahan_bakar_jenis);
+                $stmt2->bindParam(':bahan_bakar_satuan', $bahan_bakar_satuan);
+                $stmt2->bindParam(':volume_bb', $volume_bb);
+            
+                if (!$stmt2->execute()) {
+                    $allPembangkitSaved = false;
+                }
+            }
+    }
+
+
+
+    if (($laporan_bulanan && $stmt->execute()) || ($data_pembangkit && $allPembangkitSaved)) {
         $_SESSION['hasil'] = true;
         $_SESSION['pesan'] = "Berhasil Simpan Data";
     } else {
         $_SESSION['hasil'] = false;
         $_SESSION['pesan'] = "Gagal Simpan Data";
-    }    
-    
+    }
     echo "<meta http-equiv='refresh' content='0; url=?page=laporan_perbulan'>";
 }
 ?>
@@ -278,6 +279,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </select>
                 </div>
                 <div class="mb-3">
+                    <small class="text-danger">Kosongan Jika Mau Mengisi Laporan Bulanan Saja, Langsung isi Produksi Sendiri</small><br>
                     <label class="form-label">Jumlah Unit</label>
                     <input type="number" name="jumlah_unit" class="form-control" placeholder="Masukkan jumlah unit (1-200)" min="1" max="200">
                 </div>
@@ -319,6 +321,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="mb-3">
                     <label class="form-label">Pemakaian Sendiri (kWh)</label>
                     <input type="text" name="pemakaian_sendiri" class="form-control" placeholder="Masukkan pemakaian sendiri" required>
+                </div>
+                <div>
+                    <label>
+                        <input type="checkbox" name="laporan_bulanan" value="1"> Laporan Bulanan
+                    </label>
+                    <label>
+                        <input type="checkbox" name="data_pembangkit" value="1"> Data Pembangkit
+                    </label>
                 </div>
                 <div class="mb-3 form-check">
                     <input type="checkbox" class="form-check-input" id="dataCheck" />
