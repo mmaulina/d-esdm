@@ -168,7 +168,17 @@ function parseNumber($val)
 }
 
 // Ambil data laporan
-$sql = "SELECT kabupaten, produksi_sendiri, pemb_sumber_lain, penj_ke_pelanggan, penj_ke_pln, pemakaian_sendiri, bahan_bakar_jenis, volume_bb FROM laporan_bulanan";
+$sql = "SELECT 
+            lb.kabupaten, 
+            lb.produksi_sendiri, 
+            lb.pemb_sumber_lain, 
+            lb.penj_ke_pelanggan, 
+            lb.penj_ke_pln, 
+            lb.pemakaian_sendiri, 
+            pb.bahan_bakar_jenis, 
+            pb.volume_bb 
+        FROM laporan_bulanan lb
+        JOIN pembangkit pb ON lb.id = pb.id";
 $stmt = $conn->query($sql);
 
 foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $laporan) {
