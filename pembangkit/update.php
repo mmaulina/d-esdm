@@ -24,7 +24,7 @@ $stmt->execute([$id_pembangkit]);
 $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$data) {
-    echo "<script>alert('Data tidak ditemukan!'); window.location.href='?page=pembangkit';</script>";
+    echo "<script>alert('Data tidak ditemukan!'); window.location.href='?page=laporan_perbulan';</script>";
     exit;
 }
 
@@ -44,14 +44,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $status_operasi = trim($_POST['status_operasi']);
     $bahan_bakar_jenis = trim($_POST['bahan_bakar_jenis']);
     $bahan_bakar_satuan = trim($_POST['bahan_bakar_satuan']);
+    $volume_bb = trim($_POST['volume_bb']);
 
     // Query update
-    $query = "UPDATE pembangkit SET nama_perusahaan=?, alamat=?, longitude=?, latitude=?, jenis_pembangkit=?, fungsi=?, kapasitas_terpasang=?, daya_mampu_netto=?, jumlah_unit=?, no_unit=?, tahun_operasi=?, status_operasi=?, bahan_bakar_jenis=?, bahan_bakar_satuan=? WHERE id =?";
+    $query = "UPDATE pembangkit SET nama_perusahaan=?, alamat=?, longitude=?, latitude=?, jenis_pembangkit=?, fungsi=?, kapasitas_terpasang=?, daya_mampu_netto=?, jumlah_unit=?, no_unit=?, tahun_operasi=?, status_operasi=?, bahan_bakar_jenis=?, bahan_bakar_satuan=?, volume_bb=? WHERE id =?";
     $stmt = $conn->prepare($query);
-    $success = $stmt->execute([$nama_perusahaan, $alamat, $longitude, $latitude, $jenis_pembangkit, $fungsi, $kapasitas_terpasang, $daya_mampu_netto, $jumlah_unit, $no_unit, $tahun_operasi, $status_operasi, $bahan_bakar_jenis, $bahan_bakar_satuan, $id_pembangkit]);
+    $success = $stmt->execute([$nama_perusahaan, $alamat, $longitude, $latitude, $jenis_pembangkit, $fungsi, $kapasitas_terpasang, $daya_mampu_netto, $jumlah_unit, $no_unit, $tahun_operasi, $status_operasi, $bahan_bakar_jenis, $bahan_bakar_satuan, $volume_bb, $id_pembangkit]);
 
     if ($success) {
-        echo "<script>alert('Data berhasil diperbarui!'); window.location.href='?page=pembangkit';</script>";
+        echo "<script>alert('Data berhasil diperbarui!'); window.location.href='?page=laporan_perbulan';</script>";
     } else {
         echo "<script>alert('Gagal memperbarui data!');</script>";
     }
@@ -75,22 +76,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <label class="form-label">Latitude</label>
-                        <input type="text" name="latitude" class="form-control" placeholder="Contoh : 3°26&#39;43&quot;LS" value="<?= $data['latitude'] ?>" required>
+                        <input type="text" name="latitude" class="form-control" placeholder="Contoh : 3°26&#39;43&quot;LS" value="<?= $data['latitude'] ?>" required oninput="replaceAsterisk(this)">
                         <small class="text-muted">Gunakan tanda * sebagai pengganti derajat (°). Contoh: 3*26'43"LS</small>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">Longitude</label>
-                        <input type="text" name="longitude" class="form-control" placeholder="Contoh : 114°50&#39;21&quot;BT" value="<?= $data['longitude'] ?>" required>
+                        <input type="text" name="longitude" class="form-control" placeholder="Contoh : 114°50&#39;21&quot;BT" value="<?= $data['longitude'] ?>" required oninput="replaceAsterisk(this)">
                         <small class="text-muted">Gunakan tanda * sebagai pengganti derajat (°). Contoh: 114*50'21"BT</small>
                     </div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Jenis Pembangkit</label>
-                    <input type="text" name="jenis_pembangkit" class="form-control" placeholder="Masukkan jenis pembangkit" value="<?= $data['jenis_pembangkit'] ?>" required>
+                    <select class="form-control" name="jenis_pembangkit" required>
+                        <option value="<?php echo $data['jenis_pembangkit']; ?>" selected><?php echo $data['jenis_pembangkit']; ?></option>
+                        <option value="PLTD">PLTD</option>
+                        <option value="PLTS">PLTS</option>
+                    </select>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Fungsi</label>
-                    <input type="text" name="fungsi" class="form-control" value="<?= $data['fungsi'] ?>" required>
+                    <select class="form-control" name="fungsi" required>
+                        <option value="<?php echo $data['fungsi']; ?>" selected><?php echo $data['fungsi']; ?></option>
+                        <option value="Utama">Utama</option>
+                        <option value="Darurat">Darurat</option>
+                        <option value="Cadangan">Cadangan</option>
+                    </select>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Kapasitas Terpasang (MW)</label>
@@ -110,25 +120,51 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Tahun Operasi</label>
-                    <input type="number" name="tahun_operasi" class="form-control" value="<?= $data['tahun_operasi'] ?>" required>
+                    <select class="form-control" name="tahun_operasi" required>
+                        <option value="<?= $data['tahun_operasi']; ?>" selected><?= $data['tahun_operasi']; ?></option>
+                        <?php
+                        // Menambahkan opsi tahun dari 2000 hingga 2030
+                        for ($tahun = 2030; $tahun >= 2000; $tahun--) {
+                            echo '<option value="' . $tahun . '">' . $tahun . '</option>';
+                        }
+                        ?>
+                    </select>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Status Operasi</label>
-                    <input type="text" name="status_operasi" class="form-control" value="<?= $data['status_operasi'] ?>" required>
+                    <select class="form-control" name="status_operasi" required>
+                        <option value="<?php echo $data['status_operasi']; ?>" selected><?php echo $data['status_operasi']; ?></option>
+                        <option value="Beroperasi">Beroperasi</option>
+                        <option value="Maintenance/Perbaikan">Maintenance/Perbaikan</option>
+                        <option value="Rusak">Rusak</option>
+                    </select>
                 </div>
                 <div class="row">
                     <div class="col-md-6">
                         <label class="form-label">Jenis Bahan Bakar</label>
-                        <input type="text" name="bahan_bakar_jenis" class="form-control" value="<?= $data['bahan_bakar_jenis'] ?>" required>
+                    <select class="form-control" name="bahan_bakar_jenis" required>
+                        <option value="<?php echo $data['bahan_bakar_jenis']; ?>" selected><?php echo $data['bahan_bakar_jenis']; ?></option>
+                        <option value="Solar">Solar</option>
+                        <option value="Biomasa">Biomasa</option>
+                    </select>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">Satuan Bahan Bakar</label>
-                        <input type="text" name="bahan_bakar_satuan" class="form-control" value="<?= $data['bahan_bakar_satuan'] ?>" required>
+                    <select class="form-control" name="bahan_bakar_satuan" required>
+                        <option value="<?php echo $data['bahan_bakar_satuan']; ?>" selected><?php echo $data['bahan_bakar_satuan']; ?></option>
+                        <option value="Liter">Liter</option>
+                        <option value="Ton">Ton</option>
+                    </select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                        <label class="form-label">Volume Bahan Bakar</label>
+                        <input type="text" name="volume_bb" class="form-control" value="<?= $data['volume_bb'] ?>" required>
                     </div>
                 </div>
                 <div class="mt-3">
                     <button type="submit" class="btn btn-warning">Simpan Perubahan</button>
-                    <a href="?page=pembangkit" class="btn btn-secondary">Batal</a>
+                    <a href="?page=laporan_perbulan" class="btn btn-secondary">Batal</a>
                 </div>
             </form>
         </div>

@@ -18,7 +18,7 @@ try {
     $stmt->execute();
     
     if ($stmt->rowCount() == 0) {
-        echo "<script>alert('Data tidak ditemukan!'); window.location='?page=pembangkit';</script>";
+        echo "<script>alert('Data tidak ditemukan!'); window.location='?page=laporan_perbulan';</script>";
         exit();
     }
 
@@ -28,11 +28,11 @@ try {
     $stmt->bindParam(':id', $id, PDO::PARAM_INT);
     
     if ($stmt->execute()) {
-        echo "<script>alert('Pembangkit berhasil dihapus!'); window.location='?page=pembangkit';</script>";
+        echo "<script>alert('Pembangkit berhasil dihapus!'); window.location='?page=laporan_perbulan';</script>";
     } else {
-        echo "<script>alert('Gagal menghapus pembangkit!'); window.location='?page=pembangkit';</script>";
+        echo "<script>alert('Gagal menghapus pembangkit!'); window.location='?page=laporan_perbulan';</script>";
     }
 } catch (PDOException $e) {
-    echo "<script>alert('Kesalahan: " . $e->getMessage() . "'); window.location='?page=pembangkit';</script>";
+    echo "<script>alert('Kesalahan: " . $e->getMessage() . "'); window.location='?page=laporan_perbulan';</script>";
 }
 ?>

@@ -216,7 +216,7 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                             <th rowspan="3" onclick="sortTable(10)">Kabupaten <i class="fa fa-sort"></th>
                             <th colspan="3" style="min-width: 250px;">Data Pembangkit</th>
                             <th colspan="10" style="min-width: 1500px;">Data Teknis Pembangkit</th>
-                            <th colspan="7" style="min-width: 250px;">Pelaporan Bulanan</th>
+                            <th colspan="8" style="min-width: 250px;">Pelaporan Bulanan</th>
                             <th rowspan="3" style="min-width: 150px;" onclick="sortTable(5)">Status <i class="fa fa-sort"></th>
                             <th rowspan="3" style="min-width: 150px;" onclick="sortTable(6)">Keterangan <i class="fa fa-sort"></th>
                             <th rowspan="3" style="min-width: 150px;">Aksi</th>
@@ -234,6 +234,7 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                             <th rowspan="2" onclick="sortTable(19)">Status Operasi <i class="fa fa-sort"></th>
                             <th colspan="2">Bahan Bakar yang Digunakan</th>
                             <th rowspan="2" onclick="sortTable(20)">Volume Bahan Bakar <i class="fa fa-sort"></th>
+                            <th rowspan="3" style="min-width: 150px;" onclick="sortTable(6)">Aksi Pembangkit <i class="fa fa-sort"></th>
                             <th colspan="2">Produksi Listrik</th>
                             <th rowspan="2" onclick="sortTable(21)">Susut Jaringan (bila ada) (kWh) <i class="fa fa-sort"></th>
                             <th colspan="3">Konsumsi Listrik</th>
@@ -277,7 +278,7 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                                         if (isset($pembangkitGrouped[$namaPerusahaan])) {
                                                 $noPembangkit = 1;
                                             foreach ($pembangkitGrouped[$namaPerusahaan] as $pembangkit) {
-                                                echo htmlspecialchars($pembangkit['alamat']) . " <br> " ;
+                                                echo $noPembangkit . ". " . htmlspecialchars($pembangkit['alamat']) . " <br> " ;
                                                 $noPembangkit++;
                                             }
                                         } else {
@@ -291,7 +292,7 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                                         if (isset($pembangkitGrouped[$namaPerusahaan])) {
                                             $noPembangkit = 1; // Inisialisasi penghitung untuk pembangkit
                                             foreach ($pembangkitGrouped[$namaPerusahaan] as $pembangkit) {
-                                                echo htmlspecialchars($pembangkit['latitude']) . " <br> " ;
+                                                echo $noPembangkit . ". " . htmlspecialchars($pembangkit['latitude']) . " <br> " ;
                                                 $noPembangkit++;
                                             }
                                         } else {
@@ -305,7 +306,7 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                                         if (isset($pembangkitGrouped[$namaPerusahaan])) {
                                             $noPembangkit = 1; // Inisialisasi penghitung untuk pembangkit
                                             foreach ($pembangkitGrouped[$namaPerusahaan] as $pembangkit) {
-                                                echo htmlspecialchars($pembangkit['longitude']) . " <br> " ;
+                                                echo $noPembangkit . ". " . htmlspecialchars($pembangkit['longitude']) . " <br> " ;
                                                 $noPembangkit++;
                                             }
                                         } else {
@@ -319,7 +320,7 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                                         if (isset($pembangkitGrouped[$namaPerusahaan])) {
                                             $noPembangkit = 1; // Inisialisasi penghitung untuk pembangkit
                                             foreach ($pembangkitGrouped[$namaPerusahaan] as $pembangkit) {
-                                                echo htmlspecialchars($pembangkit['jenis_pembangkit']) . " <br> " ;
+                                                echo $noPembangkit . ". " . htmlspecialchars($pembangkit['jenis_pembangkit']) . " <br> " ;
                                                 $noPembangkit++;
                                             }
                                         } else {
@@ -333,7 +334,7 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                                         if (isset($pembangkitGrouped[$namaPerusahaan])) {
                                             $noPembangkit = 1; // Inisialisasi penghitung untuk pembangkit
                                             foreach ($pembangkitGrouped[$namaPerusahaan] as $pembangkit) {
-                                                echo htmlspecialchars($pembangkit['fungsi']) . " <br> " ;
+                                                echo $noPembangkit . ". " . htmlspecialchars($pembangkit['fungsi']) . " <br> " ;
                                                 $noPembangkit++;
                                             }
                                         } else {
@@ -347,7 +348,7 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                                         if (isset($pembangkitGrouped[$namaPerusahaan])) {
                                             $noPembangkit = 1; // Inisialisasi penghitung untuk pembangkit
                                             foreach ($pembangkitGrouped[$namaPerusahaan] as $pembangkit) {
-                                                echo htmlspecialchars($pembangkit['kapasitas_terpasang']) . " <br> " ;
+                                                echo $noPembangkit . ". " . htmlspecialchars($pembangkit['kapasitas_terpasang']) . " <br> " ;
                                                 $noPembangkit++;
                                             }
                                         } else {
@@ -361,7 +362,7 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                                         if (isset($pembangkitGrouped[$namaPerusahaan])) {
                                             $noPembangkit = 1; // Inisialisasi penghitung untuk pembangkit
                                             foreach ($pembangkitGrouped[$namaPerusahaan] as $pembangkit) {
-                                                echo htmlspecialchars($pembangkit['daya_mampu_netto']) . " <br> " ;
+                                                echo $noPembangkit . ". " . htmlspecialchars($pembangkit['daya_mampu_netto']) . " <br> " ;
                                                 $noPembangkit++;
                                             }
                                         } else {
@@ -375,7 +376,7 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                                         if (isset($pembangkitGrouped[$namaPerusahaan])) {
                                             $noPembangkit = 1; // Inisialisasi penghitung untuk pembangkit
                                             foreach ($pembangkitGrouped[$namaPerusahaan] as $pembangkit) {
-                                                echo htmlspecialchars($pembangkit['jumlah_unit']) . " <br> " ;
+                                                echo $noPembangkit . ". " . htmlspecialchars($pembangkit['jumlah_unit']) . " <br> " ;
                                                 $noPembangkit++;
                                             }
                                         } else {
@@ -389,7 +390,7 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                                         if (isset($pembangkitGrouped[$namaPerusahaan])) {
                                             $noPembangkit = 1; // Inisialisasi penghitung untuk pembangkit
                                             foreach ($pembangkitGrouped[$namaPerusahaan] as $pembangkit) {
-                                                echo htmlspecialchars($pembangkit['no_unit']) . " <br> " ;
+                                                echo $noPembangkit . ". " . htmlspecialchars($pembangkit['no_unit']) . " <br> " ;
                                                 $noPembangkit++;
                                             }
                                         } else {
@@ -403,7 +404,7 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                                         if (isset($pembangkitGrouped[$namaPerusahaan])) {
                                             $noPembangkit = 1; // Inisialisasi penghitung untuk pembangkit
                                             foreach ($pembangkitGrouped[$namaPerusahaan] as $pembangkit) {
-                                                echo htmlspecialchars($pembangkit['tahun_operasi']) . " <br> " ;
+                                                echo $noPembangkit . ". " . htmlspecialchars($pembangkit['tahun_operasi']) . " <br> " ;
                                                 $noPembangkit++;
                                             }
                                         } else {
@@ -417,7 +418,7 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                                         if (isset($pembangkitGrouped[$namaPerusahaan])) {
                                             $noPembangkit = 1; // Inisialisasi penghitung untuk pembangkit
                                             foreach ($pembangkitGrouped[$namaPerusahaan] as $pembangkit) {
-                                                echo htmlspecialchars($pembangkit['status_operasi']) . " <br> " ;
+                                                echo $noPembangkit . ". " . htmlspecialchars($pembangkit['status_operasi']) . " <br> " ;
                                                 $noPembangkit++;
                                             }
                                         } else {
@@ -431,7 +432,7 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                                         if (isset($pembangkitGrouped[$namaPerusahaan])) {
                                             $noPembangkit = 1; // Inisialisasi penghitung untuk pembangkit
                                             foreach ($pembangkitGrouped[$namaPerusahaan] as $pembangkit) {
-                                                echo htmlspecialchars($pembangkit['bahan_bakar_jenis']) . " <br> " ;
+                                                echo $noPembangkit . ". " . htmlspecialchars($pembangkit['bahan_bakar_jenis']) . " <br> " ;
                                                 $noPembangkit++;
                                             }
                                         } else {
@@ -445,7 +446,7 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                                         if (isset($pembangkitGrouped[$namaPerusahaan])) {
                                             $noPembangkit = 1; // Inisialisasi penghitung untuk pembangkit
                                             foreach ($pembangkitGrouped[$namaPerusahaan] as $pembangkit) {
-                                                echo htmlspecialchars($pembangkit['bahan_bakar_satuan']) . " <br> " ;
+                                                echo $noPembangkit . ". " . htmlspecialchars($pembangkit['bahan_bakar_satuan']) . " <br> " ;
                                                 $noPembangkit++;
                                             }
                                         } else {
@@ -459,7 +460,23 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                                         if (isset($pembangkitGrouped[$namaPerusahaan])) {
                                             $noPembangkit = 1; // Inisialisasi penghitung untuk pembangkit
                                             foreach ($pembangkitGrouped[$namaPerusahaan] as $pembangkit) {
-                                                echo htmlspecialchars($pembangkit['volume_bb']) . " <br> " ;
+                                                echo $noPembangkit . ". " . htmlspecialchars($pembangkit['volume_bb']) . " <br> " ;
+                                                $noPembangkit++;
+                                            }
+                                        } else {
+                                            echo "-";
+                                        }
+                                        ?>
+                                    </td>
+                                        <td>
+                                        <?php
+                                        $namaPerusahaan = $row['nama_perusahaan'];
+                                        if (isset($pembangkitGrouped[$namaPerusahaan])) {
+                                            $noPembangkit = 1; // Initialize counter for pembangkit
+                                            foreach ($pembangkitGrouped[$namaPerusahaan] as $pembangkit) {
+                                                // Add Edit and Hapus buttons for each pembangkit
+                                                echo $noPembangkit . '. <a href="?page=pembangkit_edit&id=' . htmlspecialchars($pembangkit['id']) . '" class="btn btn-warning btn-sm" title="Edit Pembangkit"><i class="fas fa-pencil-alt "></i></a>';
+                                                echo '<a href="?page=pembangkit_hapus&id=' . htmlspecialchars($pembangkit['id']) . '" class="btn btn-danger btn-sm" onclick="return confirm(\'Yakin ingin menghapus?\');" title="Hapus Pembangkit"><i class="fas fa-trash"></i></a><br>';
                                                 $noPembangkit++;
                                             }
                                         } else {

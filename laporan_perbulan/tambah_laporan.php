@@ -237,13 +237,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Tahun</label>
-                    <select class="form-control" name="tahun" id="tahun" required>
+                    <select class="form-control" name="tahun" id="tahun" >
                         <option value="">-- Pilih Tahun --</option>
                     </select>
                 </div>
                 <div class="form-group mb-3">
                     <label>Bulan</label>
-                    <select class="form-control" name="bulan" required>
+                    <select class="form-control" name="bulan" >
                         <option value="">-- Pilih Bulan --</option>
                         <option value="Januari">Januari</option>
                         <option value="Februari">Februari</option>
@@ -261,7 +261,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
                 <div class="form-group mb-2">
                     <label>Kabupaten/Kota</label>
-                    <select class="form-control" name="kabupaten" required>
+                    <select class="form-control" name="kabupaten" >
                         <option value="">-- Pilih Kabupaten/Kota --</option>
                         <option value="Balangan">Balangan</option>
                         <option value="Banjar">Banjar</option>
@@ -292,7 +292,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div id="formContainer"></div>
                 <div class="mb-3">
                     <label class="form-label">Produksi Sendiri (kWh)</label>
-                    <input type="text" name="produksi_sendiri" class="form-control" placeholder="Masukkan produksi sendiri" required>
+                    <input type="text" name="produksi_sendiri" class="form-control" placeholder="Masukkan produksi sendiri" >
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Pembelian Sumber Lain (kWh)
@@ -320,7 +320,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Pemakaian Sendiri (kWh)</label>
-                    <input type="text" name="pemakaian_sendiri" class="form-control" placeholder="Masukkan pemakaian sendiri" required>
+                    <input type="text" name="pemakaian_sendiri" class="form-control" placeholder="Masukkan pemakaian sendiri" >
                 </div>
                 <div>
                     <label>
@@ -454,8 +454,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <label class="form-label">Jenis Pembangkit</label>
                 <select name="jenis_pembangkit[]" class="form-select">
                     <option value="">-- Pilih Jenis Pembangkit --</option>
-                    <option value="pltd">PLTD</option>
-                    <option value="plts">PLTS</option>
+                    <option value="PLTD">PLTD</option>
+                    <option value="PLTS">PLTS</option>
                 </select>
             </div>
             <div class="mb-3">
