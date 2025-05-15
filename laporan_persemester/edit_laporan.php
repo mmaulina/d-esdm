@@ -205,6 +205,82 @@ function uploadFile($input_name) {
                     <label class="form-label">Hasil</label>
                     <input type="text" name="hasil" class="form-control" placeholder="Masukkan hasil" value="<?= htmlspecialchars($laporan['hasil']) ?>" required>
                 </div>
+                <div class="form-group mb-2">
+                    <label>parameter 2</label>
+                    <select class="form-control" name="parameter2" required>
+                        <option value="<?php echo $laporan['parameter2']; ?>" selected><?php echo $laporan['parameter2']; ?></option>
+                        <option value="SO2">SO2</option>
+                        <option value="HO2">HO2</option>
+                        <option value="TSP/DEBU">TSP/DEBU</option>
+                        <option value="CO">CO</option>
+                        <option value="kebisingan">Kebisingan</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">baku Mutu 2</label>
+                    <input type="text" name="baku_mutu2" class="form-control" placeholder="Masukkan baku mutu" value="<?= htmlspecialchars($laporan['baku_mutu2']) ?>" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Hasil 2</label>
+                    <input type="text" name="hasil2" class="form-control" placeholder="Masukkan hasil" value="<?= htmlspecialchars($laporan['hasil2']) ?>" required>
+                </div>
+                <div class="form-group mb-2">
+                    <label>parameter 3</label>
+                    <select class="form-control" name="parameter3" required>
+                        <option value="<?php echo $laporan['parameter3']; ?>" selected><?php echo $laporan['parameter3']; ?></option>
+                        <option value="SO2">SO2</option>
+                        <option value="HO2">HO2</option>
+                        <option value="TSP/DEBU">TSP/DEBU</option>
+                        <option value="CO">CO</option>
+                        <option value="kebisingan">Kebisingan</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">baku Mutu 3</label>
+                    <input type="text" name="baku_mutu3" class="form-control" placeholder="Masukkan baku mutu" value="<?= htmlspecialchars($laporan['baku_mutu3']) ?>" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Hasil 3</label>
+                    <input type="text" name="hasil3" class="form-control" placeholder="Masukkan hasil" value="<?= htmlspecialchars($laporan['hasil3']) ?>" required>
+                </div>
+                <div class="form-group mb-2">
+                    <label>parameter 4</label>
+                    <select class="form-control" name="parameter4" required>
+                        <option value="<?php echo $laporan['parameter4']; ?>" selected><?php echo $laporan['parameter4']; ?></option>
+                        <option value="SO2">SO2</option>
+                        <option value="HO2">HO2</option>
+                        <option value="TSP/DEBU">TSP/DEBU</option>
+                        <option value="CO">CO</option>
+                        <option value="kebisingan">Kebisingan</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">baku Mutu 4</label>
+                    <input type="text" name="baku_mutu4" class="form-control" placeholder="Masukkan baku mutu" value="<?= htmlspecialchars($laporan['baku_mutu4']) ?>" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Hasil 4</label>
+                    <input type="text" name="hasil4" class="form-control" placeholder="Masukkan hasil" value="<?= htmlspecialchars($laporan['hasil4']) ?>" required>
+                </div>
+                <div class="form-group mb-2">
+                    <label>parameter 5</label>
+                    <select class="form-control" name="parameter5" required>
+                        <option value="<?php echo $laporan['parameter5']; ?>" selected><?php echo $laporan['parameter5']; ?></option>
+                        <option value="SO2">SO2</option>
+                        <option value="HO2">HO2</option>
+                        <option value="TSP/DEBU">TSP/DEBU</option>
+                        <option value="CO">CO</option>
+                        <option value="kebisingan">Kebisingan</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">baku Mutu 5</label>
+                    <input type="text" name="baku_mutu5" class="form-control" placeholder="Masukkan baku mutu" value="<?= htmlspecialchars($laporan['baku_mutu5']) ?>" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Hasil 5</label>
+                    <input type="text" name="hasil5" class="form-control" placeholder="Masukkan hasil" value="<?= htmlspecialchars($laporan['hasil5']) ?>" required>
+                </div>
                 <div class="mb-3">
                     <label class="form-label">Upload Laporan (PDF, DOC, DOCX, XLS, XLSX)</label>
                     <input type="file" name="file_laporan" class="form-control" accept=".pdf,.doc,.docx,.xls,.xlsx">

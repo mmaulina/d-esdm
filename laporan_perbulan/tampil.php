@@ -123,7 +123,6 @@ $stmtCheck->bindParam(':id_user', $id_user, PDO::PARAM_INT);
 $stmtCheck->execute();
 $hasprofil = $stmtCheck->fetchColumn() > 0;
 ?>
-
 <div class="container mt-4">
     <h3 class="text-center mb-3"><i class="fas fa-bolt" style="color: #ffc107;"></i>Pelaporan Bulanan<i class="fas fa-bolt" style="color: #ffc107;"></i></h3>
     <hr>
@@ -469,6 +468,7 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                                         ?>
                                     </td>
                                         <td>
+                                        <?php if ($role == 'superadmin' && in_array($row['status'], ['dikembalikan', 'diterima'])): ?>
                                         <?php
                                         $namaPerusahaan = $row['nama_perusahaan'];
                                         if (isset($pembangkitGrouped[$namaPerusahaan])) {
@@ -483,6 +483,7 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                                             echo "-";
                                         }
                                         ?>
+                                        <?php endif; ?>
                                     </td>
                                     <td><?= htmlspecialchars($row['produksi_sendiri']); ?></td>
                                     <td><?= htmlspecialchars($row['pemb_sumber_lain']); ?></td>
@@ -512,7 +513,6 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                                             </form>
                                             <a href="" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modalTolak<?php echo $row['id']; ?>">Tolak</a>
                                         <?php endif; ?>
-
                                         <?php if ($role == 'superadmin' && in_array($row['status'], ['dikembalikan', 'diterima'])): ?>
                                             <a href="?page=edit_laporan_perbulan&id=<?php echo $row['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
                                             <a href="?page=hapus_laporan_perbulan&id=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus?');">Hapus</a>

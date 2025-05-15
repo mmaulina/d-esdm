@@ -188,6 +188,18 @@ $hasLaporanBulanan = $stmtCheck->fetchColumn() > 0;
                             <th onclick="sortTable(8)">Parameter <i class="fa fa-sort"></th>
                             <th onclick="sortTable(9)">Baku Mutu <i class="fa fa-sort"></th>
                             <th onclick="sortTable(10)">Hasil <i class="fa fa-sort"></th>
+                            <th onclick="sortTable(8)">Parameter 2 <i class="fa fa-sort"></th>
+                            <th onclick="sortTable(9)">Baku Mutu 2 <i class="fa fa-sort"></th>
+                            <th onclick="sortTable(10)">Hasil 2 <i class="fa fa-sort"></th>
+                            <th onclick="sortTable(8)">Parameter 3 <i class="fa fa-sort"></th>
+                            <th onclick="sortTable(9)">Baku Mutu 3 <i class="fa fa-sort"></th>
+                            <th onclick="sortTable(10)">Hasil 3 <i class="fa fa-sort"></th>
+                            <th onclick="sortTable(8)">Parameter 4 <i class="fa fa-sort"></th>
+                            <th onclick="sortTable(9)">Baku Mutu 4 <i class="fa fa-sort"></th>
+                            <th onclick="sortTable(10)">Hasil 4 <i class="fa fa-sort"></th>
+                            <th onclick="sortTable(8)">Parameter 5 <i class="fa fa-sort"></th>
+                            <th onclick="sortTable(9)">Baku Mutu 5 <i class="fa fa-sort"></th>
+                            <th onclick="sortTable(10)">Hasil 5 <i class="fa fa-sort"></th>
                             <th>Laporan</th>
                             <th>LHU</th>
                             <th onclick="sortTable(11)">Tahun <i class="fa fa-sort"></th>
@@ -217,6 +229,18 @@ $hasLaporanBulanan = $stmtCheck->fetchColumn() > 0;
                                     <td><?php echo htmlspecialchars($row['parameter']); ?></td>
                                     <td><?php echo htmlspecialchars($row['baku_mutu']); ?></td>
                                     <td><?php echo htmlspecialchars($row['hasil']); ?></td>
+                                    <td><?php echo htmlspecialchars($row['parameter2']); ?></td>
+                                    <td><?php echo htmlspecialchars($row['baku_mutu2']); ?></td>
+                                    <td><?php echo htmlspecialchars($row['hasil2']); ?></td>
+                                    <td><?php echo htmlspecialchars($row['parameter3']); ?></td>
+                                    <td><?php echo htmlspecialchars($row['baku_mutu3']); ?></td>
+                                    <td><?php echo htmlspecialchars($row['hasil3']); ?></td>
+                                    <td><?php echo htmlspecialchars($row['parameter4']); ?></td>
+                                    <td><?php echo htmlspecialchars($row['baku_mutu4']); ?></td>
+                                    <td><?php echo htmlspecialchars($row['hasil4']); ?></td>
+                                    <td><?php echo htmlspecialchars($row['parameter5']); ?></td>
+                                    <td><?php echo htmlspecialchars($row['baku_mutu5']); ?></td>
+                                    <td><?php echo htmlspecialchars($row['hasil5']); ?></td>
                                     <td class="text-center">
                                         <?php if (!empty($row['file_laporan'])) : ?>
                                             <a href="<?php echo htmlspecialchars($row['file_laporan']); ?>" target="_blank" class="btn btn-sm btn-dark">
