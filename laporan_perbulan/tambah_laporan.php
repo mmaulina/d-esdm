@@ -69,6 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $kabupaten = checkEmpty(sanitizeInput($_POST['kabupaten'] ?? ''));
 
     $alamat_arr = $_POST['alamat'] ?? [];
+    $kabupaten_arr = $_POST['kabupaten'] ?? [];
     $latitude_arr = $_POST['latitude'] ?? [];
     $longitude_arr = $_POST['longitude'] ?? [];
     $jenis_pembangkit_arr = $_POST['jenis_pembangkit'] ?? [];
@@ -132,16 +133,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($data_pembangkit) {
         $querypembangkit = "INSERT INTO pembangkit (
-                id_user, nama_perusahaan, alamat, longitude, latitude, jenis_pembangkit, fungsi, kapasitas_terpasang, 
+                id_user, nama_perusahaan,kabupaten, alamat, longitude, latitude, jenis_pembangkit, fungsi, kapasitas_terpasang, 
                 daya_mampu_netto, jumlah_unit, no_unit, tahun_operasi, status_operasi, bahan_bakar_jenis, bahan_bakar_satuan, volume_bb) 
             VALUES (
-                :id_user, :nama_perusahaan, :alamat, :longitude, :latitude, :jenis_pembangkit, :fungsi, :kapasitas_terpasang, 
+                :id_user, :nama_perusahaan, :kabupaten, :alamat, :longitude, :latitude, :jenis_pembangkit, :fungsi, :kapasitas_terpasang, 
                 :daya_mampu_netto, :jumlah_unit, :no_unit, :tahun_operasi, :status_operasi, :bahan_bakar_jenis, :bahan_bakar_satuan, :volume_bb
             )";
 
         $allPembangkitSaved = true; // Tambahkan di awal sebelum for
         for ($i = 0; $i < count($alamat_arr); $i++) {
             $alamat = $alamat_arr[$i];
+            $kabupaten2 = $kabupaten_arr[$i];
             $latitude = $latitude_arr[$i];
             $longitude = $longitude_arr[$i];
             $jenis_pembangkit = $jenis_pembangkit_arr[$i];
@@ -157,6 +159,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             $stmt2 = $db->prepare($querypembangkit);
             $stmt2->bindParam(':nama_perusahaan', $nama_perusahaan);
+            $stmt2->bindParam(':kabupaten', $kabupaten2);
             $stmt2->bindParam(':id_user', $id_user);
             $stmt2->bindParam(':alamat', $alamat);
             $stmt2->bindParam(':latitude', $latitude);
@@ -438,6 +441,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <label class="form-label">Alamat Pembangkit</label>
                 <input type="text" name="alamat[]" class="form-control" placeholder="Masukkan Alamat" required>
             </div>
+            <div class="form-group mb-2">
+                    <label>Kabupaten/Kota</label>
+                    <select class="form-control" name="kabupaten[]" >
+                        <option value="">-- Pilih Kabupaten/Kota --</option>
+                        <option value="Balangan">Balangan</option>
+                        <option value="Banjar">Banjar</option>
+                        <option value="Barito Kuala">Barito Kuala</option>
+                        <option value="Hulu Sungai Selatan">Hulu Sungai Selatan</option>
+                        <option value="Hulu Sungai Tengah">Hulu Sungai Tengah</option>
+                        <option value="Hulu Sungai Utara">Hulu Sungai Utara</option>
+                        <option value="Kotabaru">Kotabaru</option>
+                        <option value="Tabalong">Tabalong</option>
+                        <option value="Tanah Bumbu">Tanah Bumbu</option>
+                        <option value="Tanah Laut">Tanah Laut</option>
+                        <option value="Tapin">Tapin</option>
+                        <option value="Kota Banjarmasin">Banjarmasin (Kota)</option>
+                        <option value="Kota Banjarbaru">Banjarbaru (Kota)</option>
+                    </select>
+                </div>
             <div class="row mb-3">
                 <div class="col">
                     <label class="form-label">Latitude</label>

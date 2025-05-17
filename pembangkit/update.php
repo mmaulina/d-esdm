@@ -32,6 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Sanitasi input
     $nama_perusahaan = trim($_POST['nama_perusahaan']);
     $alamat = trim($_POST['alamat']);
+    $kabupaten = trim($_POST['kabupaten']);
     $longitude = trim($_POST['longitude']);
     $latitude = trim($_POST['latitude']);
     $jenis_pembangkit = trim($_POST['jenis_pembangkit']);
@@ -47,9 +48,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $volume_bb = trim($_POST['volume_bb']);
 
     // Query update
-    $query = "UPDATE pembangkit SET nama_perusahaan=?, alamat=?, longitude=?, latitude=?, jenis_pembangkit=?, fungsi=?, kapasitas_terpasang=?, daya_mampu_netto=?, jumlah_unit=?, no_unit=?, tahun_operasi=?, status_operasi=?, bahan_bakar_jenis=?, bahan_bakar_satuan=?, volume_bb=? WHERE id =?";
+    $query = "UPDATE pembangkit SET nama_perusahaan=?, alamat=?, kabupaten=? longitude=?, latitude=?, jenis_pembangkit=?, fungsi=?, kapasitas_terpasang=?, daya_mampu_netto=?, jumlah_unit=?, no_unit=?, tahun_operasi=?, status_operasi=?, bahan_bakar_jenis=?, bahan_bakar_satuan=?, volume_bb=? WHERE id =?";
     $stmt = $conn->prepare($query);
-    $success = $stmt->execute([$nama_perusahaan, $alamat, $longitude, $latitude, $jenis_pembangkit, $fungsi, $kapasitas_terpasang, $daya_mampu_netto, $jumlah_unit, $no_unit, $tahun_operasi, $status_operasi, $bahan_bakar_jenis, $bahan_bakar_satuan, $volume_bb, $id_pembangkit]);
+    $success = $stmt->execute([$nama_perusahaan, $alamat, $kabupaten, $longitude, $latitude, $jenis_pembangkit, $fungsi, $kapasitas_terpasang, $daya_mampu_netto, $jumlah_unit, $no_unit, $tahun_operasi, $status_operasi, $bahan_bakar_jenis, $bahan_bakar_satuan, $volume_bb, $id_pembangkit]);
 
     if ($success) {
         echo "<script>alert('Data berhasil diperbarui!'); window.location.href='?page=laporan_perbulan';</script>";
@@ -72,6 +73,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <div class="mb-3">
                     <label class="form-label">Alamat</label>
                     <input type="text" name="alamat" class="form-control" placeholder="Masukkan alamat lengkap" value="<?= $data['alamat'] ?>" required>
+                </div>
+                <div class="form-group mb-2">
+                    <label>Kabupaten/Kota</label>
+                    <select class="form-control" name="kabupaten" >
+                        <option value="<?php echo $data['kabupaten']; ?>" selected><?php echo $data['kabupaten']; ?></option>
+                        <option value="Balangan">Balangan</option>
+                        <option value="Banjar">Banjar</option>
+                        <option value="Barito Kuala">Barito Kuala</option>
+                        <option value="Hulu Sungai Selatan">Hulu Sungai Selatan</option>
+                        <option value="Hulu Sungai Tengah">Hulu Sungai Tengah</option>
+                        <option value="Hulu Sungai Utara">Hulu Sungai Utara</option>
+                        <option value="Kotabaru">Kotabaru</option>
+                        <option value="Tabalong">Tabalong</option>
+                        <option value="Tanah Bumbu">Tanah Bumbu</option>
+                        <option value="Tanah Laut">Tanah Laut</option>
+                        <option value="Tapin">Tapin</option>
+                        <option value="Kota Banjarmasin">Banjarmasin (Kota)</option>
+                        <option value="Kota Banjarbaru">Banjarbaru (Kota)</option>
+                    </select>
                 </div>
                 <div class="row mb-3">
                     <div class="col-md-6">

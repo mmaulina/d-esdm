@@ -60,20 +60,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $tahun = checkEmpty(sanitizeInput($_POST['tahun'] ?? ''));
     $bulan = checkEmpty(sanitizeInput($_POST['bulan'] ?? ''));
     $kabupaten = checkEmpty(sanitizeInput($_POST['kabupaten'] ?? ''));
-    $alamat = checkEmpty(sanitizeInput($_POST['alamat'] ?? ''));
-    $latitude = checkEmpty(sanitizeInput($_POST['latitude'] ?? ''));
-    $longitude = checkEmpty(sanitizeInput($_POST['longitude'] ?? ''));
-    $jenis_pembangkit = checkEmpty(sanitizeInput($_POST['jenis_pembangkit'] ?? ''));
-    $fungsi = checkEmpty(sanitizeInput($_POST['fungsi'] ?? ''));
-    $kapasitas_terpasang = checkEmpty(sanitizeInput($_POST['kapasitas_terpasang'] ?? ''));
-    $daya_mampu_netto = checkEmpty(sanitizeInput($_POST['daya_mampu_netto'] ?? ''));
-    $jumlah_unit = checkEmpty(sanitizeInput($_POST['jumlah_unit'] ?? ''));
-    $no_unit = checkEmpty(sanitizeInput($_POST['no_unit'] ?? ''));
-    $tahun_operasi = checkEmpty(sanitizeInput($_POST['tahun_operasi'] ?? ''));
-    $status_operasi = checkEmpty(sanitizeInput($_POST['status_operasi'] ?? ''));
-    $bahan_bakar_jenis = checkEmpty(sanitizeInput($_POST['bahan_bakar_jenis'] ?? ''));
-    $bahan_bakar_satuan = checkEmpty(sanitizeInput($_POST['bahan_bakar_satuan'] ?? ''));
-    $volume_bb = checkEmpty(sanitizeInput($_POST['volume_bb'] ?? ''));
     $produksi_sendiri = checkEmpty(sanitizeInput($_POST['produksi_sendiri'] ?? ''));
     $pemb_sumber_lain = checkEmpty(sanitizeInput($_POST['pemb_sumber_lain'] ?? ''));
     $susut_jaringan = checkEmpty(sanitizeInput($_POST['susut_jaringan'] ?? ''));
@@ -85,7 +71,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $keterangan = '-';    // Keterangan diisi otomatis
 
 
-    $updateSQL = "UPDATE laporan_bulanan SET nama_perusahaan = :nama_perusahaan,no_hp_pimpinan=:no_hp_pimpinan, tenaga_teknik=:tenaga_teknik, no_hp_teknik=:no_hp_teknik, nama=:nama, no_hp=:no_hp, no_telp_kantor=:no_telp_kantor, tahun = :tahun, bulan = :bulan, kabupaten = :kabupaten, alamat = :alamat, latitude = :latitude, longitude = :longitude, jenis_pembangkit = :jenis_pembangkit, fungsi = :fungsi, kapasitas_terpasang = :kapasitas_terpasang, daya_mampu_netto = :daya_mampu_netto, jumlah_unit = :jumlah_unit, no_unit = :no_unit, tahun_operasi = :tahun_operasi, status_operasi = :status_operasi, bahan_bakar_jenis = :bahan_bakar_jenis, bahan_bakar_satuan = :bahan_bakar_satuan, volume_bb = :volume_bb, produksi_sendiri = :produksi_sendiri, pemb_sumber_lain = :pemb_sumber_lain, susut_jaringan = :susut_jaringan, penj_ke_pelanggan = :penj_ke_pelanggan, penj_ke_pln = :penj_ke_pln, pemakaian_sendiri = :pemakaian_sendiri, status = :status, keterangan = :keterangan WHERE id = :id";
+    $updateSQL = "UPDATE laporan_bulanan SET nama_perusahaan = :nama_perusahaan,no_hp_pimpinan=:no_hp_pimpinan, tenaga_teknik=:tenaga_teknik, no_hp_teknik=:no_hp_teknik, nama=:nama, no_hp=:no_hp, no_telp_kantor=:no_telp_kantor, tahun = :tahun, bulan = :bulan, kabupaten = :kabupaten, produksi_sendiri = :produksi_sendiri, pemb_sumber_lain = :pemb_sumber_lain, susut_jaringan = :susut_jaringan, penj_ke_pelanggan = :penj_ke_pelanggan, penj_ke_pln = :penj_ke_pln, pemakaian_sendiri = :pemakaian_sendiri, status = :status, keterangan = :keterangan WHERE id = :id";
     $stmt = $db->prepare($updateSQL);
 
     $stmt->bindParam(':nama_perusahaan', $nama_perusahaan);
@@ -98,20 +84,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bindParam(':tahun', $tahun);
     $stmt->bindParam(':bulan', $bulan);
     $stmt->bindParam(':kabupaten', $kabupaten);
-    $stmt->bindParam(':alamat', $alamat);
-    $stmt->bindParam(':latitude', $latitude);
-    $stmt->bindParam(':longitude', $longitude);
-    $stmt->bindParam(':jenis_pembangkit', $jenis_pembangkit);
-    $stmt->bindParam(':fungsi', $fungsi);
-    $stmt->bindParam(':kapasitas_terpasang', $kapasitas_terpasang);
-    $stmt->bindParam(':daya_mampu_netto', $daya_mampu_netto);
-    $stmt->bindParam(':jumlah_unit', $jumlah_unit);
-    $stmt->bindParam(':no_unit', $no_unit);
-    $stmt->bindParam(':tahun_operasi', $tahun_operasi);
-    $stmt->bindParam(':status_operasi', $status_operasi);
-    $stmt->bindParam(':bahan_bakar_jenis', $bahan_bakar_jenis);
-    $stmt->bindParam(':bahan_bakar_satuan', $bahan_bakar_satuan);
-    $stmt->bindParam(':volume_bb', $volume_bb);
     $stmt->bindParam(':produksi_sendiri', $produksi_sendiri);
     $stmt->bindParam(':pemb_sumber_lain', $pemb_sumber_lain);
     $stmt->bindParam(':susut_jaringan', $susut_jaringan);
@@ -220,103 +192,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <option value="Kota Banjarmasin" <?= ($data['kabupaten'] == 'Kota Banjarmasin') ? 'selected' : '' ?>>Banjarmasin (Kota)</option>
                         <option value="Kota Banjarbaru" <?= ($data['kabupaten'] == 'Kota Banjarbaru') ? 'selected' : '' ?>>Banjarbaru (Kota)</option>
                     </select>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Alamat Pembangkit</label>
-                    <input type="text" name="alamat" class="form-control" placeholder="Masukkan alamat lengkap" value="<?= htmlspecialchars($data['alamat']) ?>" required>
-                </div>
-                <div class="row mb-3">
-                    <div class="col">
-                        <label class="form-label">Latitude</label>
-                        <input type="text" name="latitude" class="form-control"
-                            placeholder="Contoh : 3*26'43&quot;LS"
-                            value="<?= $data['latitude'] ?>"
-                            oninput="replaceAsterisk(this)" required>
-                        <small class="text-muted">Gunakan tanda * sebagai pengganti derajat (°). Contoh: 3*26'43"LS</small>
-                    </div>
-                    <div class="col">
-                        <label class="form-label">Longitude</label>
-                        <input type="text" name="longitude" class="form-control"
-                            placeholder="Contoh : 114*50'21&quot;BT"
-                            value="<?= $data['longitude'] ?>"
-                            oninput="replaceAsterisk(this)" required>
-                        <small class="text-muted">Gunakan tanda * sebagai pengganti derajat (°). Contoh: 114*50'21"BT</small>
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Jenis Pembangkit</label>
-                    <input type="text" name="jenis_pembangkit" class="form-control" placeholder="Masukkan jenis pembangkit" value="<?= htmlspecialchars($data['jenis_pembangkit']) ?>" required>
-                </div>
-                <div class="form-group mb-3">
-                    <label>Fungsi</label>
-                    <select class="form-control" name="fungsi" required>
-                        <option value="">-- Pilih Fungsi --</option>
-                        <option value="Utama" <?= isset($data['fungsi']) && $data['fungsi'] == 'Utama' ? 'selected' : '' ?>>Utama</option>
-                        <option value="Darurat" <?= isset($data['fungsi']) && $data['fungsi'] == 'Darurat' ? 'selected' : '' ?>>Darurat</option>
-                        <option value="Cadangan" <?= isset($data['fungsi']) && $data['fungsi'] == 'Cadangan' ? 'selected' : '' ?>>Cadangan</option>
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Kapasitas Terpasang (MW)</label>
-                    <input type="text" name="kapasitas_terpasang" class="form-control" placeholder="Contoh: 1.250,75" value="<?= htmlspecialchars($data['kapasitas_terpasang']) ?>" required>
-                    <small class="text-danger">Catatan : Gunakan titik untuk ribuan dan koma untuk desimal.</small>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Daya Mampu Netto (MW)</label>
-                    <input type="text" name="daya_mampu_netto" class="form-control" placeholder="Contoh: 1.250,75" value="<?= htmlspecialchars($data['daya_mampu_netto']) ?>" required>
-                    <small class="text-danger">Catatan : Gunakan titik untuk ribuan dan koma untuk desimal.</small>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Jumlah Unit</label>
-                    <input type="number" name="jumlah_unit" class="form-control" id="jumlahUnitInput" min="1" max="200" placeholder="Masukkan jumlah unit" value="<?= htmlspecialchars($data['jumlah_unit']) ?>" required>
-                    <small class="text-danger">Catatan : Max. 200 unit</small>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">No. Unit</label>
-                    <input type="text" name="no_unit" class="form-control" placeholder="Masukkan nomor unit" value="<?= htmlspecialchars($data['no_unit']) ?>" required>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Tahun Operasi</label>
-                    <select name="tahun_operasi" class="form-select" required>
-                        <option value="">-- Pilih Tahun --</option>
-                        <!-- Tahun dari 2030 ke 2000 -->
-                        <!-- Kode ini akan diisi otomatis dengan JavaScript -->
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Status Operasi</label>
-                    <select name="status_operasi" class="form-select" required>
-                        <option value="">-- Pilih Status Operasi --</option>
-                        <option value="Beroperasi" <?= ($data['status_operasi'] == 'Beroperasi') ? 'selected' : '' ?>>Beroperasi</option>
-                        <option value="Maintenance/Perbaikan" <?= ($data['status_operasi'] == 'Maintenance/Perbaikan') ? 'selected' : '' ?>>Maintenance/Perbaikan</option>
-                        <option value="Rusak" <?= ($data['status_operasi'] == 'Rusak') ? 'selected' : '' ?>>Rusak</option>
-                    </select>
-                </div>
-                <div class="row mb-3">
-                    <div class="col">
-                        <label class="form-label">Jenis Bahan Bakar</label>
-                        <select name="bahan_bakar_jenis" class="form-select" required>
-                            <option value="">-- Pilih Jenis Bahan Bakar --</option>
-                            <option value="Solar" <?= ($data['bahan_bakar_jenis'] == 'Solar') ? 'selected' : '' ?>>Solar</option>
-                            <option value="Biomasa" <?= ($data['bahan_bakar_jenis'] == 'Biomasa') ? 'selected' : '' ?>>Biomasa</option>
-                        </select>
-                        <small class="text-danger">
-                            Catatan: <strong>Biomasa</strong> mencakup bahan-bahan organik seperti <em>cangkang sawit</em>, <em>serbuk gergaji</em>, dan <em>sekam padi</em>, dll yang digunakan sebagai bahan bakar alternatif dalam pembangkit listrik.
-                        </small>
-                    </div>
-                    <div class="col">
-                        <label class="form-label">Satuan Bahan Bakar</label>
-                        <select name="bahan_bakar_satuan" class="form-select" required>
-                            <option value="">-- Pilih Satuan --</option>
-                            <option value="Liter" <?= ($data['bahan_bakar_satuan'] == 'Liter') ? 'selected' : '' ?>>Liter</option>
-                            <option value="Ton" <?= ($data['bahan_bakar_satuan'] == 'Ton') ? 'selected' : '' ?>>Ton</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Volume Bahan Bakar</label>
-                    <input type="text" name="volume_bb" class="form-control" placeholder="Masukkan volume bahan bakar" value="<?= htmlspecialchars($data['volume_bb']) ?>" required>
-                    <small class="text-danger">Catatan : Gunakan titik untuk ribuan dan koma untuk desimal.</small>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Produksi Sendiri (kWh)</label>
