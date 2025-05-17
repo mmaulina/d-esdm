@@ -152,79 +152,121 @@ $daftarKabupatenKotaKalsel = [
     'Kota Banjarmasin'
 ];
 
-$totalProduksi = 0;
-$totalKonsumsi = 0;
-$totalProduksiPerKota = [];
-$totalKonsumsiPerKota = [];
-$totalVolumeBBPerKota = []; // Array untuk menyimpan volume bahan bakar per kota
-
-// Fungsi parsing angka format IDR
 function parseNumber($val)
 {
     if ($val === '-' || trim($val) === '') return 0;
-    $val = str_replace('.', '', $val);     // hapus titik ribuan
-    $val = str_replace(',', '.', $val);    // ubah koma jadi titik (desimal)
-    return (float) $val;
+    // Hilangkan titik ribuan
+    $val = str_replace('.', '', $val);
+    // Ubah koma desimal menjadi titik
+    $val = str_replace(',', '.', $val);
+    // Jika setelah konversi bukan angka, kembalikan 0
+    return is_numeric($val) ? (float)$val : 0;
 }
 
-// Ambil data laporan
-$sql = "SELECT 
-            lb.kabupaten, 
-            lb.produksi_sendiri, 
-            lb.pemb_sumber_lain, 
-            lb.penj_ke_pelanggan, 
-            lb.penj_ke_pln, 
-            lb.pemakaian_sendiri, 
-            pb.bahan_bakar_jenis, 
-            pb.volume_bb 
-        FROM laporan_bulanan lb
-        JOIN pembangkit pb ON lb.id = pb.id";
-$stmt = $conn->query($sql);
+// List kabupaten/kota di Kalsel tetap
+$daftarKabupatenKotaKalsel = [
+    'Kabupaten Balangan',
+    'Kabupaten Banjar',
+    'Kabupaten Barito Kuala',
+    'Kabupaten Hulu Sungai Selatan',
+    'Kabupaten Hulu Sungai Tengah',
+    'Kabupaten Hulu Sungai Utara',
+    'Kabupaten Kotabaru',
+    'Kabupaten Tabalong',
+    'Kabupaten Tanah Bumbu',
+    'Kabupaten Tanah Laut',
+    'Kabupaten Tapin',
+    'Kota Banjarbaru',
+    'Kota Banjarmasin'
+];
 
-foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $laporan) {
+// Inisialisasi variabel array hasil
+$totalProduksiPerKota = [];
+$totalKonsumsiPerKota = [];
+$totalVolumeBBPerKota = [];
+$jumlahJenisPembangkitPerKota = [];
+$jumlahFungsiPerKota = [];
+
+$totalProduksi = 0;
+$totalKonsumsi = 0;
+
+// Inisialisasi semua kota agar terdefinisi dengan nilai awal 0, agar data konsisten di output
+foreach ($daftarKabupatenKotaKalsel as $kota) {
+    $totalProduksiPerKota[$kota] = 0;
+    $totalKonsumsiPerKota[$kota] = 0;
+    $totalVolumeBBPerKota[$kota] = ['Solar' => 0, 'Biomasa' => 0];
+    $jumlahJenisPembangkitPerKota[$kota] = ['PLTD' => 0, 'PLTS' => 0];
+    $jumlahFungsiPerKota[$kota] = ['utama' => 0, 'cadangan' => 0, 'darurat' => 0];
+}
+
+// Ambil data laporan bulanan
+$sql1 = "SELECT kabupaten, produksi_sendiri, pemb_sumber_lain, penj_ke_pelanggan, penj_ke_pln, pemakaian_sendiri FROM laporan_bulanan";
+$stmt1 = $conn->query($sql1);
+$laporanBulanan = $stmt1->fetchAll(PDO::FETCH_ASSOC);
+
+foreach ($laporanBulanan as $laporan) {
     $kabupaten = trim($laporan['kabupaten']);
+    if (!in_array($kabupaten, $daftarKabupatenKotaKalsel)) {
+        // Abaikan data jika kabupaten/kota tidak valid
+        continue;
+    }
+
+    // Hitung total produksi dan konsumsi
     $produksi = parseNumber($laporan['produksi_sendiri']) + parseNumber($laporan['pemb_sumber_lain']);
     $konsumsi = parseNumber($laporan['penj_ke_pelanggan']) + parseNumber($laporan['penj_ke_pln']) + parseNumber($laporan['pemakaian_sendiri']);
-    $bahanBakarJenis = strtolower(trim($laporan['bahan_bakar_jenis']));
-    $volumeBB = parseNumber($laporan['volume_bb']);
 
-    $totalProduksiPerKota[$kabupaten] = ($totalProduksiPerKota[$kabupaten] ?? 0) + $produksi;
-    $totalKonsumsiPerKota[$kabupaten] = ($totalKonsumsiPerKota[$kabupaten] ?? 0) + $konsumsi;
+    // Tambahkan ke total per kota
+    $totalProduksiPerKota[$kabupaten] += $produksi;
+    $totalKonsumsiPerKota[$kabupaten] += $konsumsi;
 
-    // Hitung volume bahan bakar berdasarkan jenis
-    if (!isset($totalVolumeBBPerKota[$kabupaten])) {
-        $totalVolumeBBPerKota[$kabupaten] = [
-            'solar' => 0,
-            'biomasa' => 0
-        ];
-    }
-    if ($bahanBakarJenis === 'solar') {
-        $totalVolumeBBPerKota[$kabupaten]['solar'] += $volumeBB;
-    } elseif ($bahanBakarJenis === 'biomasa') {
-        $totalVolumeBBPerKota[$kabupaten]['biomasa'] += $volumeBB;
-    }
-
+    // Tambahkan ke total keseluruhan
     $totalProduksi += $produksi;
     $totalKonsumsi += $konsumsi;
 }
 
-// Pastikan semua kabupaten/kota ada
-foreach ($daftarKabupatenKotaKalsel as $kota) {
-    if (!isset($totalProduksiPerKota[$kota])) {
-        $totalProduksiPerKota[$kota] = 0;
+// Fungsi parse number khusus untuk volume bahan bakar (mirip parseNumber)
+function parseNumber2($value) {
+    $value = str_replace('.', '', $value);
+    $value = str_replace(',', '.', $value);
+    return is_numeric($value) ? (float)$value : 0;
+}
+
+// Ambil data pembangkit
+$sql2 = "SELECT kabupaten, bahan_bakar_jenis, volume_bb, jenis_pembangkit, fungsi FROM pembangkit";
+$stmt2 = $conn->query($sql2);
+$pembangkit = $stmt2->fetchAll(PDO::FETCH_ASSOC);
+
+foreach ($pembangkit as $pb) {
+    $kabupaten = trim($pb['kabupaten']);
+    if (!in_array($kabupaten, $daftarKabupatenKotaKalsel)) {
+        // Abaikan jika kabupaten tidak valid
+        continue;
     }
-    if (!isset($totalKonsumsiPerKota[$kota])) {
-        $totalKonsumsiPerKota[$kota] = 0;
+
+    // Standardisasi format nama bahan bakar
+    $bahanBakar = ucfirst(strtolower(trim($pb['bahan_bakar_jenis']))); // contoh: "Solar", "Biomasa"
+    $jenis = strtoupper(trim($pb['jenis_pembangkit'])); // contoh: PLTD, PLTS
+    $fungsi = strtolower(trim($pb['fungsi'])); // contoh: utama, cadangan, darurat
+    $volume = parseNumber2($pb['volume_bb']);
+
+    // Hitung total volume bahan bakar hanya jika bahan bakar valid
+    if (in_array($bahanBakar, ['Solar', 'Biomasa'])) {
+        $totalVolumeBBPerKota[$kabupaten][$bahanBakar] += $volume;
     }
-    if (!isset($totalVolumeBBPerKota[$kota])) {
-        $totalVolumeBBPerKota[$kota] = [
-            'solar' => 0,
-            'biomasa' => 0
-        ];
+
+    // Hitung jumlah jenis pembangkit jika valid
+    if (in_array($jenis, ['PLTD', 'PLTS'])) {
+        $jumlahJenisPembangkitPerKota[$kabupaten][$jenis]++;
+    }
+
+    // Hitung jumlah fungsi jika valid
+    if (in_array($fungsi, ['utama', 'cadangan', 'darurat'])) {
+        $jumlahFungsiPerKota[$kabupaten][$fungsi]++;
     }
 }
 
-// Sekarang Anda dapat menggunakan $totalVolumeBBPerKota untuk mendapatkan volume bahan bakar per kota
+// Sekarang kamu punya data produksi, konsumsi, dan volume BB per kabupaten/kota di variabel masing-masing
+
 ?>
 <main>
     <div class="container mt-4">
@@ -314,8 +356,8 @@ foreach ($daftarKabupatenKotaKalsel as $kota) {
                 <div class="row mt-3">
                     <div class="col">
                         <h5 class="fw-bold mb-3">Total Produksi & Konsumsi per Kabupaten/Kota</h5>
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-striped table-sm" id="tabel-produksi-konsumsi">
+                        <div class="table-responsive" style="overflow-x:auto; -webkit-overflow-scrolling: touch;">
+                            <table class="table table-bordered table-striped table-sm" id="tabel-produksi-konsumsi" style="min-width: 1000px; white-space: nowrap;">
                                 <thead class="table-dark">
                                     <tr class="text-center">
                                         <th onclick="sortTable('tabel-produksi-konsumsi', 0)">Kabupaten/Kota <i class="fa fa-sort "></i></th>
@@ -323,6 +365,11 @@ foreach ($daftarKabupatenKotaKalsel as $kota) {
                                         <th onclick="sortTable('tabel-produksi-konsumsi', 2)">Total Konsumsi Listrik (kWh) <i class="fa fa-sort"></i></th>
                                         <th onclick="sortTable('tabel-produksi-konsumsi', 3)">Total Konsumsi BBM Solar (L) <i class="fa fa-sort"></i></th>
                                         <th onclick="sortTable('tabel-produksi-konsumsi', 4)">Total Konsumsi BBM Biomasa (Ton) <i class="fa fa-sort"></i></th>
+                                        <th onclick="sortTable('tabel-produksi-konsumsi', 5)">Total Pembangkit PLTD <i class="fa fa-sort"></i></th>
+                                        <th onclick="sortTable('tabel-produksi-konsumsi', 6)">Total Pembangkit PLTS <i class="fa fa-sort"></i></th>
+                                        <th onclick="sortTable('tabel-produksi-konsumsi', 7)">Total Pembangkit UTAMA <i class="fa fa-sort"></i></th>
+                                        <th onclick="sortTable('tabel-produksi-konsumsi', 8)">Total Pembangkit CADANGAN <i class="fa fa-sort"></i></th>
+                                        <th onclick="sortTable('tabel-produksi-konsumsi', 9)">Total Pembangkit DARURAT <i class="fa fa-sort"></i></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -331,8 +378,13 @@ foreach ($daftarKabupatenKotaKalsel as $kota) {
                                             <td><?= htmlspecialchars($kota); ?></td>
                                             <td class="text-end"><?= number_format($produksi, 2, ',', '.'); ?></td>
                                             <td class="text-end"><?= number_format($totalKonsumsiPerKota[$kota] ?? 0, 2, ',', '.'); ?></td>
-                                            <td class="text-end"><?= number_format($totalVolumeBBPerKota[$kota]['solar'] ?? 0, 2, ',', '.'); ?></td>
-                                            <td class="text-end"><?= number_format($totalVolumeBBPerKota[$kota]['biomasa'] ?? 0, 2, ',', '.'); ?></td>
+                                            <td class="text-end"><?= number_format($totalVolumeBBPerKota[$kota]['Solar'] ?? 0, 2, ',', '.'); ?></td>
+                                            <td class="text-end"><?= number_format($totalVolumeBBPerKota[$kota]['Biomasa'] ?? 0, 2, ',', '.'); ?></td>
+                                            <td class="text-end"><?= number_format($jumlahJenisPembangkitPerKota[$kota]['PLTD'] ); ?></td>
+                                            <td class="text-end"><?= number_format($jumlahJenisPembangkitPerKota[$kota]['PLTS'] ); ?></td>
+                                            <td class="text-end"><?= ($jumlahFungsiPerKota[$kota]['utama'] ); ?></td>
+                                            <td class="text-end"><?= ($jumlahFungsiPerKota[$kota]['cadangan'] ); ?></td>
+                                            <td class="text-end"><?= ($jumlahFungsiPerKota[$kota]['darurat'] ); ?></td>
                                         </tr>
                                     <?php endforeach; ?>
                                 </tbody>
@@ -341,8 +393,13 @@ foreach ($daftarKabupatenKotaKalsel as $kota) {
                                         <td class="text-end">Total:</td>
                                         <td class="text-end"><?= number_format($totalProduksi, 2, ',', '.'); ?></td>
                                         <td class="text-end"><?= number_format($totalKonsumsi, 2, ',', '.'); ?></td>
-                                        <td class="text-end"><?= number_format(array_sum(array_column($totalVolumeBBPerKota, 'solar')), 2, ',', '.'); ?></td>
-                                        <td class="text-end"><?= number_format(array_sum(array_column($totalVolumeBBPerKota, 'biomasa')), 2, ',', '.'); ?></td>
+                                        <td class="text-end"><?= number_format(array_sum(array_column($totalVolumeBBPerKota, 'Solar')), 2, ',', '.'); ?></td>
+                                        <td class="text-end"><?= number_format(array_sum(array_column($totalVolumeBBPerKota, 'Biomasa')), 2, ',', '.'); ?></td>
+                                        <td class="text-end"><?= number_format(array_sum(array_column($jumlahJenisPembangkitPerKota, 'PLTD'))); ?></td>
+                                        <td class="text-end"><?= number_format(array_sum(array_column($jumlahJenisPembangkitPerKota, 'PLTS'))); ?></td>
+                                        <td class="text-end"><?= number_format(array_sum(array_column($jumlahFungsiPerKota, 'utama'))); ?></td>
+                                        <td class="text-end"><?= number_format(array_sum(array_column($jumlahFungsiPerKota, 'cadangan'))); ?></td>
+                                        <td class="text-end"><?= number_format(array_sum(array_column($jumlahFungsiPerKota, 'darurat'))); ?></td>
                                     </tr>
                                 </tfoot>
                             </table>

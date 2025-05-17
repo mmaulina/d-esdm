@@ -468,7 +468,7 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                                         ?>
                                     </td>
                                         <td>
-                                        <?php if ($role == 'superadmin' || in_array($row['status'], ['dikembalikan'])): ?>
+                                        <?php if (($role == 'superadmin' && in_array($row['status'], ['dikembalikan','diterima'] )) || ( $role == 'umum' && in_array($row['status'], ['dikembalikan']) )): ?>
                                         <?php
                                         $namaPerusahaan = $row['nama_perusahaan'];
                                         if (isset($pembangkitGrouped[$namaPerusahaan])) {
@@ -513,7 +513,7 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                                             </form>
                                             <a href="" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modalTolak<?php echo $row['id']; ?>">Tolak</a>
                                         <?php endif; ?>
-                                        <?php if ($role == 'superadmin' || in_array($row['status'], ['dikembalikan'])): ?>
+                                        <?php if (($role == 'superadmin' && in_array($row['status'], ['dikembalikan','diterima'] )) || ( $role == 'umum' && in_array($row['status'], ['dikembalikan']) )): ?>
                                             <a href="?page=edit_laporan_perbulan&id=<?php echo $row['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
                                             <a href="?page=hapus_laporan_perbulan&id=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus?');">Hapus</a>
                                         <?php endif; ?>

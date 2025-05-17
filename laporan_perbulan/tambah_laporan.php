@@ -61,8 +61,7 @@ function sanitizeInput($input)
     // Hapus tag HTML dan trim spasi
     $input = strip_tags(trim($input));
 
-    // Hanya izinkan karakter yang diinginkan: huruf, digit, titik, koma, dan spasi
-    $input = preg_replace('/[^a-zA-Z0-9.,\s]/', '', $input);
+    $input = preg_replace('/[^a-zA-Z0-9.,\s\'"°]/u', '', $input);
 
     return $input;
 }
