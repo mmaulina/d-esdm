@@ -157,6 +157,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <option value="Beroperasi">Beroperasi</option>
                         <option value="Maintenance/Perbaikan">Maintenance/Perbaikan</option>
                         <option value="Rusak">Rusak</option>
+                        <option value="Rusak Total">Rusak Total</option>
                     </select>
                 </div>
                 <div class="row">

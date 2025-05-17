@@ -46,10 +46,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $database = new Database();
     $db = $database->getConnection();
 
-    function sanitizeInput($input)
-    {
-        return strip_tags(trim($input));
+
+
+function sanitizeInput($input)
+{
+    // Jika input null atau boolean, kembalikan string kosong
+    if (is_null($input) || is_bool($input)) {
+        return '';
     }
+
+    // Ubah input menjadi string (untuk menangani input numerik)
+    $input = (string) $input;
+
+    // Hapus tag HTML dan trim spasi
+    $input = strip_tags(trim($input));
+
+    // Hanya izinkan karakter yang diinginkan: huruf, digit, titik, koma, dan spasi
+    $input = preg_replace('/[^a-zA-Z0-9.,\s]/', '', $input);
+
+    return $input;
+}
 
 
     function checkEmpty($input)
@@ -66,7 +82,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $no_telp_kantor = checkEmpty(sanitizeInput($_POST['no_telp_kantor'] ?? ''));
     $tahun = checkEmpty(sanitizeInput($_POST['tahun'] ?? ''));
     $bulan = checkEmpty(sanitizeInput($_POST['bulan'] ?? ''));
-    $kabupaten = checkEmpty(sanitizeInput($_POST['kabupaten'] ?? ''));
+    $kabupaten_laporan = checkEmpty(sanitizeInput(is_array($_POST['kabupaten']) ? ($_POST['kabupaten'][0] ?? '') : $_POST['kabupaten']));
 
     $alamat_arr = $_POST['alamat'] ?? [];
     $kabupaten_arr = $_POST['kabupaten'] ?? [];
@@ -119,7 +135,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bindParam(':no_telp_kantor', $no_telp_kantor);
         $stmt->bindParam(':tahun', $tahun);
         $stmt->bindParam(':bulan', $bulan);
-        $stmt->bindParam(':kabupaten', $kabupaten);
+        $stmt->bindParam(':kabupaten', $kabupaten_laporan);
 
         $stmt->bindParam(':produksi_sendiri', $produksi_sendiri);
         $stmt->bindParam(':pemb_sumber_lain', $pemb_sumber_lain);
@@ -133,7 +149,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($data_pembangkit) {
         $querypembangkit = "INSERT INTO pembangkit (
-                id_user, nama_perusahaan,kabupaten, alamat, longitude, latitude, jenis_pembangkit, fungsi, kapasitas_terpasang, 
+                id_user, nama_perusahaan, kabupaten, alamat, longitude, latitude, jenis_pembangkit, fungsi, kapasitas_terpasang, 
                 daya_mampu_netto, jumlah_unit, no_unit, tahun_operasi, status_operasi, bahan_bakar_jenis, bahan_bakar_satuan, volume_bb) 
             VALUES (
                 :id_user, :nama_perusahaan, :kabupaten, :alamat, :longitude, :latitude, :jenis_pembangkit, :fungsi, :kapasitas_terpasang, 
@@ -142,24 +158,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $allPembangkitSaved = true; // Tambahkan di awal sebelum for
         for ($i = 0; $i < count($alamat_arr); $i++) {
-            $alamat = $alamat_arr[$i];
-            $kabupaten2 = $kabupaten_arr[$i];
-            $latitude = $latitude_arr[$i];
-            $longitude = $longitude_arr[$i];
-            $jenis_pembangkit = $jenis_pembangkit_arr[$i];
-            $fungsi = $fungsi_arr[$i];
-            $kapasitas_terpasang = $kapasitas_terpasang_arr[$i];
-            $daya_mampu_netto = $daya_mampu_netto_arr[$i];
-            $no_unit = $no_unit_arr[$i];
-            $tahun_operasi = $tahun_operasi_arr[$i];
-            $status_operasi = $status_operasi_arr[$i];
-            $bahan_bakar_jenis = $bahan_bakar_jenis_arr[$i];
-            $bahan_bakar_satuan = $bahan_bakar_satuan_arr[$i];
-            $volume_bb = $volume_bb_arr[$i];
+        $alamat = sanitizeInput($alamat_arr[$i] ?? '');
+        $kabupaten = sanitizeInput($kabupaten_arr[$i] ?? '');
+        $latitude = sanitizeInput($latitude_arr[$i] ?? '');
+        $longitude = sanitizeInput($longitude_arr[$i] ?? '');
+        $jenis_pembangkit = sanitizeInput($jenis_pembangkit_arr[$i] ?? '');
+        $fungsi = sanitizeInput($fungsi_arr[$i] ?? '');
+        $kapasitas_terpasang = sanitizeInput($kapasitas_terpasang_arr[$i] ?? '');
+        $daya_mampu_netto = sanitizeInput($daya_mampu_netto_arr[$i] ?? '');
+        $no_unit = sanitizeInput($no_unit_arr[$i] ?? '');
+        $tahun_operasi = sanitizeInput($tahun_operasi_arr[$i] ?? '');
+        $status_operasi = sanitizeInput($status_operasi_arr[$i] ?? '');
+        $bahan_bakar_jenis = sanitizeInput($bahan_bakar_jenis_arr[$i] ?? '');
+        $bahan_bakar_satuan = sanitizeInput($bahan_bakar_satuan_arr[$i] ?? '');
+        $volume_bb = sanitizeInput($volume_bb_arr[$i] ?? '');
 
             $stmt2 = $db->prepare($querypembangkit);
             $stmt2->bindParam(':nama_perusahaan', $nama_perusahaan);
-            $stmt2->bindParam(':kabupaten', $kabupaten2);
+            $stmt2->bindParam(':kabupaten', $kabupaten);
             $stmt2->bindParam(':id_user', $id_user);
             $stmt2->bindParam(':alamat', $alamat);
             $stmt2->bindParam(':latitude', $latitude);
@@ -516,6 +532,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <option value="Beroperasi">Beroperasi</option>
                     <option value="Maintenance/Perbaikan">Maintenance/Perbaikan</option>
                     <option value="Rusak">Rusak</option>
+                    <option value="Rusak">Rusak Total</option>
                 </select>
             </div>
             <div class="row mb-3">
