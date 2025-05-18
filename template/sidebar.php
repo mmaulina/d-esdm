@@ -57,11 +57,11 @@ $konten_djih = $stmt->fetch(PDO::FETCH_ASSOC)['jumlah_baru'];
                         </a>
                     </li>
                 <?php } ?>
-                <!-- <li class="nav-item">
+                <li class="nav-item">
                     <a class="nav-link <?= ($currentPage == 'pembangkit') ? 'active' : ''; ?>" href="?page=pembangkit">
                         <i class="fas fa-plug me-2"></i> <span class="sidebar-text">Data Pembangkit</span>
                     </a>
-                </li> -->
+                </li>
                 <?php if ( $_SESSION['role'] !== 'kementerian') { ?>
                 <li class="nav-item">
                     <a class="nav-link collapsed" data-bs-toggle="collapse" href="#submenuPelaporan" role="button" aria-expanded="false" aria-controls="submenuPelaporan">

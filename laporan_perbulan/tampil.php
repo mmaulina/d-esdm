@@ -203,32 +203,29 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                             <th rowspan="3" style="width: 3%;" onclick="sortTable(0)">No. <i class="fa fa-sort"></i></th>
                             <th rowspan="3" onclick="sortTable(1)">Nama Perusahaan <i class="fa fa-sort"></th>
                             <?php if ($_SESSION['role'] == 'superadmin') { ?>
-                            <th rowspan="3" onclick="sortTable(2)">No Hp Pimpinan<i class="fa fa-sort"></i></th>
-                            <th rowspan="3" onclick="sortTable(3)">Tenaga Teknik <i class="fa fa-sort"></i></th>
-                            <th rowspan="3" onclick="sortTable(4)">No Hp Tenaga Teknik <i class="fa fa-sort"></i></th>
-                            <th rowspan="3" onclick="sortTable(5)">Nama Admin <i class="fa fa-sort"></i></th>
-                            <th rowspan="3" onclick="sortTable(6)">Nomor Admin <i class="fa fa-sort"></i></th>
+                                <th rowspan="3" onclick="sortTable(2)">No Hp Pimpinan<i class="fa fa-sort"></i></th>
+                                <th rowspan="3" onclick="sortTable(3)">Tenaga Teknik <i class="fa fa-sort"></i></th>
+                                <th rowspan="3" onclick="sortTable(4)">No Hp Tenaga Teknik <i class="fa fa-sort"></i></th>
+                                <th rowspan="3" onclick="sortTable(5)">Nama Admin <i class="fa fa-sort"></i></th>
+                                <th rowspan="3" onclick="sortTable(6)">Nomor Admin <i class="fa fa-sort"></i></th>
                             <?php } ?>
                             <th rowspan="3" onclick="sortTable(7)">Nomor Telepon Kantor <i class="fa fa-sort"></i></th>
                             <th rowspan="3" onclick="sortTable(8)">Tahun <i class="fa fa-sort"></th>
                             <th rowspan="3" onclick="sortTable(9)">Bulan <i class="fa fa-sort"></th>
                             <th rowspan="3" onclick="sortTable(10)">Kabupaten <i class="fa fa-sort"></th>
-                            <th colspan="8" style="min-width: 250px;">Pelaporan Bulanan</th>
-                            <th rowspan="3" style="min-width: 150px;" onclick="sortTable(5)">Status <i class="fa fa-sort"></th>
-                            <th rowspan="3" style="min-width: 150px;" onclick="sortTable(6)">Keterangan <i class="fa fa-sort"></th>
+                            <th colspan="2">Produksi Listrik</th>
+                            <th rowspan="3" onclick="sortTable(11)">Susut Jaringan <i class="fa fa-sort"></th>
+                            <th colspan="3" >Konsumsi Listrik</th>
+                            <th rowspan="3" style="min-width: 150px;" onclick="sortTable(12)">Status <i class="fa fa-sort"></th>
+                            <th rowspan="3" style="min-width: 150px;" onclick="sortTable(13)">Keterangan <i class="fa fa-sort"></th>
                             <th rowspan="3" style="min-width: 150px;">Aksi</th>
                         </tr>
                         <tr>
-                            <th colspan="2">Produksi Listrik</th>
-                            <th rowspan="2" onclick="sortTable(21)">Susut Jaringan (bila ada) (kWh) <i class="fa fa-sort"></th>
-                            <th colspan="3">Konsumsi Listrik</th>
-                        </tr>
-                        <tr>
-                            <th onclick="sortTable(26)">Produksi Sendiri (kWh) <i class="fa fa-sort"></th>
-                            <th onclick="sortTable(27)">Pembelian Sumber Lain (bila ada) (kWh) <i class="fa fa-sort"></th>
-                            <th onclick="sortTable(28)">Penjualan ke Pelanggan (bila ada) (kWh) <i class="fa sort"></th>
-                            <th onclick="sortTable(29)">Penjualan ke PLN (bila ada) (kWh) <i class="fa fa-sort"></th>
-                            <th onclick="sortTable(30)">Pemakaian Sendiri (kWh) <i class="fa fa-sort"></th>
+                            <th onclick="sortTable(14)">Produksi Sendiri (kWh) <i class="fa fa-sort"></th>
+                            <th onclick="sortTable(15)">Pembelian Sumber Lain (kWh) <i class="fa fa-sort"></th>
+                            <th onclick="sortTable(16)">Penjualan ke Pelanggan (kWh) <i class="fa fa sort"></th>
+                            <th onclick="sortTable(17)">Penjualan ke PLN (kWh) <i class="fa fa-sort"></th>
+                            <th onclick="sortTable(18)">Pemakaian Sendiri (kWh) <i class="fa fa-sort"></th>
                         </tr>
                     </thead>
 
@@ -242,11 +239,11 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                                     <td class="text-center"><?php echo $no++; ?></td>
                                     <td><?php echo htmlspecialchars($row['nama_perusahaan']); ?> </td>
                                     <?php if ($_SESSION['role'] == 'superadmin') { ?>
-                                    <td><?= htmlspecialchars($row['no_hp_pimpinan']); ?></td>
-                                    <td><?= htmlspecialchars($row['tenaga_teknik']); ?></td>
-                                    <td><?= htmlspecialchars($row['no_hp_teknik']); ?></td>
-                                    <td><?= htmlspecialchars($row['nama']); ?></td>
-                                    <td><?= htmlspecialchars($row['no_hp']); ?></td>
+                                        <td><?= htmlspecialchars($row['no_hp_pimpinan']); ?></td>
+                                        <td><?= htmlspecialchars($row['tenaga_teknik']); ?></td>
+                                        <td><?= htmlspecialchars($row['no_hp_teknik']); ?></td>
+                                        <td><?= htmlspecialchars($row['nama']); ?></td>
+                                        <td><?= htmlspecialchars($row['no_hp']); ?></td>
                                     <?php } ?>
                                     <td><?= htmlspecialchars($row['no_telp_kantor']); ?></td>
                                     <td><?php echo htmlspecialchars($row['tahun']); ?> </td>
@@ -280,7 +277,7 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                                             </form>
                                             <a href="" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modalTolak<?php echo $row['id']; ?>">Tolak</a>
                                         <?php endif; ?>
-                                        <?php if (($role == 'superadmin' && in_array($row['status'], ['dikembalikan','diterima'] )) || ( $role == 'umum' && in_array($row['status'], ['dikembalikan']) )): ?>
+                                        <?php if (($role == 'superadmin' && in_array($row['status'], ['dikembalikan', 'diterima'])) || ($role == 'umum' && in_array($row['status'], ['dikembalikan']))): ?>
                                             <a href="?page=edit_laporan_perbulan&id=<?php echo $row['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
                                             <a href="?page=hapus_laporan_perbulan&id=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus?');">Hapus</a>
                                         <?php endif; ?>

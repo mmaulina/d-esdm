@@ -23,7 +23,7 @@ try {
         // Role umum hanya melihat data miliknya
         $stmt = $conn->prepare("SELECT * FROM pembangkit WHERE id_user = :id_user");
         $stmt->bindParam(':id_user', $id_user, PDO::PARAM_INT);
-    }        
+    }
 
     $query = "SELECT * FROM pembangkit";
     $params = [];
@@ -69,33 +69,35 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
     <div class="card shadow">
         <div class="card-body">
             <!-- Fitur pencarian -->
-            <form method="GET" class="mb-3">
-                <input type="hidden" name="page" value="pembangkit">
-                <div class="input-group">
-                    <input type="text" name="keyword" class="form-control" placeholder="Cari berdasarkan nama perusahaan..." value="<?= isset($_GET['keyword']) ? htmlspecialchars($_GET['keyword']) : '' ?>">
-                    <button type="submit" class="btn btn-success">Cari</button>
-                    <a href="?page=pembangkit" class="btn btn-secondary">Reset</a>
-                </div>
-            </form>
+            <?php if ($_SESSION['role'] == 'superadmin') { ?>
+                <form method="GET" class="mb-3">
+                    <input type="hidden" name="page" value="pembangkit">
+                    <div class="input-group">
+                        <input type="text" name="keyword" class="form-control" placeholder="Cari berdasarkan nama perusahaan..." value="<?= isset($_GET['keyword']) ? htmlspecialchars($_GET['keyword']) : '' ?>">
+                        <button type="submit" class="btn btn-success">Cari</button>
+                        <a href="?page=pembangkit" class="btn btn-secondary">Reset</a>
+                    </div>
+                </form>
+            <?php } ?>
             <div class="mb-3">
                 <?php if (!$hasprofil && $role == 'umum') : ?>
                     <div class="alert alert-warning text-center" role="alert">
                         Anda harus melengkapi <strong>Profil Perusahaan</strong> terlebih dahulu sebelum dapat menambahkan Data Pembangkit.
                     </div>
                 <?php endif; ?>
-                <div class="mb-3">
-                <?php if ($hasprofil && $role == 'umum') : ?>
-                    <a href="?page=pembangkit_tambah" class="btn btn-primary">
-                        <i class="fas fa-plus"></i> Tambah Data
-                    </a>
-                <?php endif; ?>
-                        <?php if ($_SESSION['role'] == 'superadmin') { ?> 
+                <!-- <div class="mb-3">
+                    <?php if ($hasprofil && $role == 'umum') : ?>
                         <a href="?page=pembangkit_tambah" class="btn btn-primary">
                             <i class="fas fa-plus"></i> Tambah Data
                         </a>
-                        <?php } ?>
-                        <a href="?page=pembangkit_export" class="btn btn-success">Ekspor ke Spreadsheet</a>
-                    </div>
+                    <?php endif; ?>
+                    <?php if ($_SESSION['role'] == 'superadmin') { ?>
+                        <a href="?page=pembangkit_tambah" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Tambah Data
+                        </a>
+                    <?php } ?>
+                    <a href="?page=pembangkit_export" class="btn btn-success">Ekspor ke Spreadsheet</a>
+                </div> -->
             </div>
             <div class="table-responsive" style="max-height: 500px; overflow-x: auto; overflow-y: auto;">
                 <table class="table table-bordered" style="table-layout: fixed; min-width: 1800px;">
@@ -104,11 +106,11 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                             <th rowspan="3" style="width: 3%;">No.</th>
                             <th rowspan="3">Nama Perusahaan</th>
                             <th colspan="4" style="min-width: 250px;">Data Pembangkit</th>
-                            <th colspan="9" style="min-width: 1500px;">Data Teknis Pembangkit</th>
+                            <th colspan="10" style="min-width: 1500px;">Data Teknis Pembangkit</th>
                             <th rowspan="3" style="min-width: 150px;">Aksi</th>
                         </tr>
                         <tr>
-                            <th rowspan="2">Alamat</th>
+                            <th rowspan="2">Alamat Pembangkit</th>
                             <th colspan="2">Koordinat Pembangkit</th>
                             <th rowspan="2">Jenis Pembangkit</th>
                             <th rowspan="2">Fungsi</th>
@@ -119,6 +121,7 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                             <th rowspan="2">Tahun Operasi</th>
                             <th rowspan="2">Status Operasi</th>
                             <th colspan="2">Bahan Bakar yang Digunakan</th>
+                            <th rowspan="2">Volume Bahan Bakar</th>
                         </tr>
                         <tr>
                             <th>Latitude</th>
@@ -149,6 +152,7 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                                     <td><?= htmlspecialchars($row['status_operasi']) ?></td>
                                     <td><?= htmlspecialchars($row['bahan_bakar_jenis']) ?></td>
                                     <td><?= htmlspecialchars($row['bahan_bakar_satuan']) ?></td>
+                                    <td><?= htmlspecialchars($row['volume_bb']) ?></td>
                                     <td>
                                         <a href='?page=pembangkit_edit&id=<?= $row['id'] ?>' class='btn btn-sm btn-warning'>Edit</a>
                                         <a href='?page=pembangkit_hapus&id=<?= $row['id'] ?>' class='btn btn-sm btn-danger' onclick='return confirm("Hapus data ini?")'>Hapus</a>
