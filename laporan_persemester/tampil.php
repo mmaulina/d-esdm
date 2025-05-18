@@ -287,7 +287,7 @@ $hasLaporanBulanan = $stmtCheck->fetchColumn() > 0;
                                             <a href="" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modalTolak<?php echo $row['id']; ?>">Tolak</a>
                                         <?php endif; ?>
 
-                                        <?php if ($row['status'] == 'diterima' && $row['status'] == 'dikembalikan'&& $role == 'superadmin'): ?>
+                                        <?php if (($row['status'] == 'diterima' || $row['status'] == 'dikembalikan')&& $role == 'superadmin'): ?>
                                             <a href="?page=edit_laporan_persemester&id=<?php echo $row['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
                                             <a href="?page=hapus_laporan_persemester&id=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus?');">Hapus</a>
                                         <?php endif; ?>

@@ -34,6 +34,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $parameter = sanitizeInput($_POST['parameter']);
     $baku_mutu = sanitizeInput($_POST['baku_mutu']);
     $hasil = sanitizeInput($_POST['hasil']);
+    $parameter2 = sanitizeInput($_POST['parameter2']);
+    $baku_mutu2 = sanitizeInput($_POST['baku_mutu2']);
+    $hasil2 = sanitizeInput($_POST['hasil2']);
+    $parameter3 = sanitizeInput($_POST['parameter3']);
+    $baku_mutu3 = sanitizeInput($_POST['baku_mutu3']);
+    $hasil3 = sanitizeInput($_POST['hasil3']);
+    $parameter4 = sanitizeInput($_POST['parameter4']);
+    $baku_mutu4 = sanitizeInput($_POST['baku_mutu4']);
+    $hasil4 = sanitizeInput($_POST['hasil4']);
+    $parameter5 = sanitizeInput($_POST['parameter5']);
+    $baku_mutu5 = sanitizeInput($_POST['baku_mutu5']);
+    $hasil5 = sanitizeInput($_POST['hasil5']);
 
     $file_laporan = uploadFile('file_laporan');
     $file_lhu = uploadFile('file_lhu');
@@ -51,6 +63,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     parameter = :parameter, 
     baku_mutu = :baku_mutu, 
     hasil = :hasil,
+    parameter2 = :parameter2, 
+    baku_mutu2 = :baku_mutu2, 
+    hasil2 = :hasil2,
+    parameter3 = :parameter3, 
+    baku_mutu3 = :baku_mutu3, 
+    hasil3 = :hasil3,
+    parameter4 = :parameter4, 
+    baku_mutu4 = :baku_mutu4, 
+    hasil4 = :hasil4,
+    parameter5 = :parameter5, 
+    baku_mutu5 = :baku_mutu5, 
+    hasil5 = :hasil5,
     tahun = :tahun,
     semester = :semester_final,
     status = 'Diajukan',
@@ -82,6 +106,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bindParam(':parameter', $parameter);
     $stmt->bindParam(':baku_mutu', $baku_mutu);
     $stmt->bindParam(':hasil', $hasil);
+    $stmt->bindParam(':parameter2', $parameter2);
+    $stmt->bindParam(':baku_mutu2', $baku_mutu2);
+    $stmt->bindParam(':hasil2', $hasil2);
+        $stmt->bindParam(':parameter3', $parameter3);
+    $stmt->bindParam(':baku_mutu3', $baku_mutu3);
+    $stmt->bindParam(':hasil3', $hasil3);
+        $stmt->bindParam(':parameter4', $parameter4);
+    $stmt->bindParam(':baku_mutu4', $baku_mutu4);
+    $stmt->bindParam(':hasil4', $hasil4);
+        $stmt->bindParam(':parameter5', $parameter5);
+    $stmt->bindParam(':baku_mutu5', $baku_mutu5);
+    $stmt->bindParam(':hasil5', $hasil5);
 
     // Bind parameter hanya jika file diunggah
     if ($file_laporan !== null) {
