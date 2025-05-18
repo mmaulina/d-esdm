@@ -139,7 +139,7 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
 
                 <div class="row mb-3 align-items-end">
                     <div class="col">
-                        <label for="tahun" class="form-label">Tahun</label>
+                        <label for="tahun" class="form-label">Filter Tahun</label>
                         <select name="tahun" id="tahun" class="form-select">
                             <option value="">-- Pilih Tahun --</option>
                             <?php foreach ($tahunList as $tahun): ?>
@@ -150,7 +150,7 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                         </select>
                     </div>
                     <div class="col">
-                        <label for="bulan" class="form-label">Bulan</label>
+                        <label for="bulan" class="form-label">Filter Bulan</label>
                         <select name="bulan" id="bulan" class="form-select">
                             <option value="">-- Pilih Bulan --</option>
                             <?php foreach ($bulanList as $bulan): ?>
@@ -161,7 +161,7 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                         </select>
                     </div>
                     <div class="col">
-                        <label for="kabupaten" class="form-label">Kabupaten/Kota</label>
+                        <label for="kabupaten" class="form-label">Filter Kabupaten/Kota</label>
                         <select name="kabupaten" id="kabupaten" class="form-select">
                             <option value="">-- Pilih Kabupaten/Kota --</option>
                             <?php foreach ($kabupatenList as $kab): ?>
