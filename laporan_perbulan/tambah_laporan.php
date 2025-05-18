@@ -235,23 +235,43 @@ function sanitizeInput($input)
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Tenaga Teknik</label>
-                    <input type="text" name="tenaga_teknik" class="form-control" value="<?= htmlspecialchars($tenaga_teknik) ?>" readonly>
+                    <?php if ($role === 'superadmin') : ?>
+                        <input type="text" name="tenaga_teknik" class="form-control" placeholder="Masukkan nama tenaga teknik" value="<?= htmlspecialchars($tenaga_teknik) ?>">
+                    <?php else : ?>
+                        <input type="text" name="tenaga_teknik" class="form-control" value="<?= htmlspecialchars($tenaga_teknik) ?>" readonly>
+                    <?php endif; ?>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">No Hp Tenaga Teknik</label>
-                    <input type="text" name="no_hp_teknik" class="form-control" value="<?= htmlspecialchars($no_hp_teknik) ?>" readonly>
+                    <?php if ($role === 'superadmin') : ?>
+                        <input type="text" name="no_hp_teknik" class="form-control" placeholder="Masukkan nomor HP tenaga teknik" value="<?= htmlspecialchars($no_hp_teknik) ?>">
+                    <?php else : ?>
+                        <input type="text" name="no_hp_teknik" class="form-control" value="<?= htmlspecialchars($no_hp_teknik) ?>" readonly>
+                    <?php endif; ?>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Nama Admin</label>
-                    <input type="text" name="nama" class="form-control" value="<?= htmlspecialchars($nama) ?>" readonly>
+                    <?php if ($role === 'superadmin') : ?>
+                        <input type="text" name="nama" class="form-control" placeholder="Masukkan nama admin" value="<?= htmlspecialchars($nama) ?>">
+                    <?php else : ?>
+                        <input type="text" name="nama" class="form-control" value="<?= htmlspecialchars($nama) ?>" readonly>
+                    <?php endif; ?>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">No Hp Admin</label>
-                    <input type="text" name="no_hp" class="form-control" value="<?= htmlspecialchars($no_hp) ?>" readonly>
+                    <?php if ($role === 'superadmin') : ?>
+                        <input type="text" name="no_hp" class="form-control" placeholder="Masukkan nomor HP admin" value="<?= htmlspecialchars($no_hp) ?>">
+                    <?php else : ?>
+                        <input type="text" name="no_hp" class="form-control" value="<?= htmlspecialchars($no_hp) ?>" readonly>
+                    <?php endif; ?>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">No Telpon Kantor</label>
-                    <input type="text" name="no_telp_kantor" class="form-control" value="<?= htmlspecialchars($no_telp_kantor) ?>" readonly>
+                    <?php if ($role === 'superadmin') : ?>
+                        <input type="text" name="no_telp_kantor" class="form-control" placeholder="Masukkan nomor telepon kantor/perusahaan" value="<?= htmlspecialchars($no_telp_kantor) ?>">
+                    <?php else : ?>
+                        <input type="text" name="no_telp_kantor" class="form-control" value="<?= htmlspecialchars($no_telp_kantor) ?>" readonly>
+                    <?php endif; ?>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Tahun</label>
