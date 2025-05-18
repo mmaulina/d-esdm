@@ -4,7 +4,7 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 
 if (!isset($_SESSION['id_user']) || !isset($_SESSION['role'])) {
-    echo "&lt;script&gt;alert('Silakan login terlebih dahulu!'); window.location.href='login.php';&lt;/script&gt;";
+    echo "<script>alert('Silakan login terlebih dahulu!'); window.location.href='login.php';</script>";
     exit;
 }
 
@@ -16,99 +16,60 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 
-$id_user = $_SESSION['id_user'];
-$role = $_SESSION['role'];
+function parseIndoNumber($str) {
+    // Hapus titik ribuan, ganti koma menjadi titik
+    $str = str_replace('.', '', $str);
+    $str = str_replace(',', '.', $str);
+    return is_numeric($str) ? (float)$str : $str;
+}
 
 try {
     require_once 'koneksi.php';
     $db = new Database();
     $conn = $db->getConnection();
 
-    if ($role === 'adminbulanan' || $role === 'superadmin') {
-        $stmt = $conn->prepare("
-            SELECT 
-                lb.id as lb_id, lb.id_user, lb.tahun, lb.bulan, lb.nama_perusahaan, lb.no_hp_pimpinan, 
-                lb.tenaga_teknik, lb.no_hp_teknik, lb.nama, lb.no_hp, lb.no_telp_kantor, lb.kabupaten, 
-                lb.produksi_sendiri, lb.pemb_sumber_lain, lb.susut_jaringan, lb.penj_ke_pelanggan, 
-                lb.penj_ke_pln, lb.pemakaian_sendiri,
-                pb.id as pb_id, pb.alamat, pb.longitude, pb.latitude, pb.jenis_pembangkit, pb.fungsi, pb.kapasitas_terpasang,
-                pb.daya_mampu_netto, pb.jumlah_unit, pb.no_unit, pb.tahun_operasi, 
-                pb.status_operasi, pb.bahan_bakar_jenis, pb.bahan_bakar_satuan, pb.volume_bb
-            FROM laporan_bulanan lb
-            LEFT JOIN pembangkit pb ON lb.id_user = pb.id_user
-            ORDER BY lb.id, pb.id
-        ");
-        $stmt->execute();
-        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    } else {
-        $stmt = $conn->prepare("
-            SELECT 
-                lb.id as lb_id, lb.id_user, lb.tahun, lb.bulan, lb.nama_perusahaan, lb.no_hp_pimpinan, 
-                lb.tenaga_teknik, lb.no_hp_teknik, lb.nama, lb.no_hp, lb.no_telp_kantor, lb.kabupaten, 
-                lb.produksi_sendiri, lb.pemb_sumber_lain, lb.susut_jaringan, lb.penj_ke_pelanggan, 
-                lb.penj_ke_pln, lb.pemakaian_sendiri,
-                pb.id as pb_id, pb.alamat, pb.longitude, pb.latitude, pb.jenis_pembangkit, pb.fungsi, pb.kapasitas_terpasang,
-                pb.daya_mampu_netto, pb.jumlah_unit, pb.no_unit, pb.tahun_operasi, 
-                pb.status_operasi, pb.bahan_bakar_jenis, pb.bahan_bakar_satuan, pb.volume_bb
-            FROM laporan_bulanan lb
-            LEFT JOIN pembangkit pb ON lb.id_user = pb.id_user
-            WHERE lb.id_user = :id_user
-            ORDER BY lb.id, pb.id
-        ");
-        $stmt->bindParam(':id_user', $id_user, PDO::PARAM_INT);
-        $stmt->execute();
-        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    // Fetch all laporan_bulanan ordered by id_user then id
+    $stmt = $conn->prepare("
+        SELECT 
+            id, id_user, tahun, bulan, nama_perusahaan, no_hp_pimpinan, 
+            tenaga_teknik, no_hp_teknik, nama, no_hp, no_telp_kantor, kabupaten, 
+            produksi_sendiri, pemb_sumber_lain, susut_jaringan, penj_ke_pelanggan, 
+            penj_ke_pln, pemakaian_sendiri
+        FROM laporan_bulanan
+        ORDER BY id_user, id
+    ");
+    $stmt->execute();
+    $laporan_rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Fetch all pembangkit ordered by id_user then id
+    $stmt = $conn->prepare("
+        SELECT 
+            id, id_user, alamat, longitude, latitude, jenis_pembangkit, fungsi, 
+            kapasitas_terpasang, daya_mampu_netto, jumlah_unit, no_unit, tahun_operasi, 
+            status_operasi, bahan_bakar_jenis, bahan_bakar_satuan, volume_bb
+        FROM pembangkit
+        ORDER BY id_user, id
+    ");
+    $stmt->execute();
+    $pembangkit_rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Group laporan by id_user
+    $laporan_grouped = [];
+    foreach ($laporan_rows as $row) {
+        $laporan_grouped[$row['id_user']][] = $row;
     }
 
-    // Group laporan bulanan by lb_id, but also store pembangkit per id_user
-    $grouped_reports = [];
-    $pembangkit_per_user = [];
-
-    foreach ($rows as $row) {
-        $lb_id = $row['lb_id'];
-        $user_id = $row['id_user'];
-
-        // Group laporan bulanan
-        if (!isset($grouped_reports[$lb_id])) {
-            $grouped_reports[$lb_id] = $row;
-        }
-
-        // Group pembangkit per user only once, avoiding duplicates
-        if ($row['pb_id'] !== null) {
-            // Init if not set
-            if (!isset($pembangkit_per_user[$user_id])) {
-                $pembangkit_per_user[$user_id] = [];
-            }
-            // Use pb_id as key to avoid duplicate pembangkit entries
-            $pembangkit_per_user[$user_id][$row['pb_id']] = [
-                'alamat' => $row['alamat'],
-                'latitude' => $row['latitude'],
-                'longitude' => $row['longitude'],
-                'jenis_pembangkit' => $row['jenis_pembangkit'],
-                'fungsi' => $row['fungsi'],
-                'kapasitas_terpasang' => $row['kapasitas_terpasang'],
-                'daya_mampu_netto' => $row['daya_mampu_netto'],
-                'jumlah_unit' => $row['jumlah_unit'],
-                'no_unit' => $row['no_unit'],
-                'tahun_operasi' => $row['tahun_operasi'],
-                'status_operasi' => $row['status_operasi'],
-                'bahan_bakar_jenis' => $row['bahan_bakar_jenis'],
-                'bahan_bakar_satuan' => $row['bahan_bakar_satuan'],
-                'volume_bb' => $row['volume_bb']
-            ];
-        } else {
-            // Ensure array exists even if no pembangkit for that user
-            if (!isset($pembangkit_per_user[$user_id])) {
-                $pembangkit_per_user[$user_id] = [];
-            }
-        }
+    // Group pembangkit by id_user
+    $pembangkit_grouped = [];
+    foreach ($pembangkit_rows as $row) {
+        $pembangkit_grouped[$row['id_user']][] = $row;
     }
 
     $spreadsheet = new Spreadsheet();
     $sheet = $spreadsheet->getActiveSheet();
 
     // Judul
-    $sheet->setCellValue('A1', 'LAPORAN BULANAN');
+    $sheet->setCellValue('A1', 'LAPORAN BULANAN DAN DATA PEMBANGKIT');
     $sheet->mergeCells('A1:X1');
     $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(14);
     $sheet->getStyle('A1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
@@ -154,32 +115,51 @@ try {
     $rowNum = 5;
     $no = 1;
 
-    // Track which users have pembangkit data displayed
-    $users_with_pb_displayed = [];
+    // Iterate through each user group
+    foreach ($laporan_grouped as $id_user => $laporans) {
+        // Add a section header for the user
+        $sheet->setCellValue('A' . $rowNum, "ID User: $id_user");
+        $sheet->mergeCells("A{$rowNum}:X{$rowNum}");
+        $sheet->getStyle("A{$rowNum}:X{$rowNum}")->getFont()->setBold(true);
+        $rowNum++;
 
-    foreach ($grouped_reports as $lb_id => $laporan) {
-        $user_id = $laporan['id_user'];
+        // Get the number of laporan and pembangkit for the current user
+        $laporan_count = count($laporans);
+        $pembangkit_count = isset($pembangkit_grouped[$id_user]) ? count($pembangkit_grouped[$id_user]) : 0;
+        $max_count = max($laporan_count, $pembangkit_count);
 
-        // Fill laporan bulanan columns
-        $sheet->setCellValue('A' . $rowNum, $no);
-        $sheet->setCellValue('B' . $rowNum, $laporan['nama_perusahaan']);
-        $sheet->setCellValue('C' . $rowNum, $laporan['tahun']);
-        $sheet->setCellValue('D' . $rowNum, $laporan['bulan']);
-        $sheet->setCellValue('S' . $rowNum, $laporan['produksi_sendiri']);
-        $sheet->setCellValue('T' . $rowNum, $laporan['pemb_sumber_lain']);
-        $sheet->setCellValue('U' . $rowNum, $laporan['susut_jaringan']);
-        $sheet->setCellValue('V' . $rowNum, $laporan['penj_ke_pelanggan']);
-        $sheet->setCellValue('W' . $rowNum, $laporan['penj_ke_pln']);
-        $sheet->setCellValue('X' . $rowNum, $laporan['pemakaian_sendiri']);
+        // Fill in data for each row
+        for ($i = 0; $i < $max_count; $i++) {
+            // Fill in laporan data if available
+            if ($i < $laporan_count) {
+                $laporan = $laporans[$i];
+                $sheet->setCellValue('A' . $rowNum, $no);
+                $sheet->setCellValue('B' . $rowNum, $laporan['nama_perusahaan']);
+                $sheet->setCellValue('C' . $rowNum, $laporan['tahun']);
+                $sheet->setCellValue('D' . $rowNum, $laporan['bulan']);
+                $sheet->setCellValue('S' . $rowNum, parseIndoNumber($laporan['produksi_sendiri']));
+                $sheet->setCellValue('T' . $rowNum, parseIndoNumber($laporan['pemb_sumber_lain']));
+                $sheet->setCellValue('U' . $rowNum, parseIndoNumber($laporan['susut_jaringan']));
+                $sheet->setCellValue('V' . $rowNum, parseIndoNumber($laporan['penj_ke_pelanggan']));
+                $sheet->setCellValue('W' . $rowNum, parseIndoNumber($laporan['penj_ke_pln']));
+                $sheet->setCellValue('X' . $rowNum, parseIndoNumber($laporan['pemakaian_sendiri']));
+            } else {
+                // Kosongkan kolom laporan bulanan jika tidak ada
+                $sheet->setCellValue('A' . $rowNum, '');
+                $sheet->setCellValue('B' . $rowNum, '');
+                $sheet->setCellValue('C' . $rowNum, '');
+                $sheet->setCellValue('D' . $rowNum, '');
+                $sheet->setCellValue('S' . $rowNum, '');
+                $sheet->setCellValue('T' . $rowNum, '');
+                $sheet->setCellValue('U' . $rowNum, '');
+                $sheet->setCellValue('V' . $rowNum, '');
+                $sheet->setCellValue('W' . $rowNum, '');
+                $sheet->setCellValue('X' . $rowNum, '');
+            }
 
-        // If pembangkit data for this user not displayed yet, show pembangkit data in this row
-        if (!in_array($user_id, $users_with_pb_displayed)) {
-            $pbs = $pembangkit_per_user[$user_id] ?? [];
-
-            // For simplicity, show only the first pembangkit (if exists),
-            // or you may customize to concatenate or handle multiple pembangkits.
-            if (count($pbs) > 0) {
-                $pb = reset($pbs);
+            // Fill in pembangkit data if available
+            if (isset($pembangkit_grouped[$id_user]) && $i < $pembangkit_count) {
+                $pb = $pembangkit_grouped[$id_user][$i];
                 $sheet->setCellValue('E' . $rowNum, $pb['alamat']);
                 $sheet->setCellValue('F' . $rowNum, $pb['latitude']);
                 $sheet->setCellValue('G' . $rowNum, $pb['longitude']);
@@ -193,24 +173,31 @@ try {
                 $sheet->setCellValue('O' . $rowNum, $pb['status_operasi']);
                 $sheet->setCellValue('P' . $rowNum, $pb['bahan_bakar_jenis']);
                 $sheet->setCellValue('Q' . $rowNum, $pb['bahan_bakar_satuan']);
-                $sheet->setCellValue('R' . $rowNum, $pb['volume_bb']);
+                $sheet->setCellValue('R' . $rowNum, parseIndoNumber($pb['volume_bb']));
             } else {
-                // No pembangkit data for this user - clear columns
-                foreach (range('E', 'R') as $col) {
-                    $sheet->setCellValue($col . $rowNum, '');
-                }
+                // Kosongkan kolom pembangkit jika tidak ada
+                $sheet->setCellValue('E' . $rowNum, '');
+                $sheet->setCellValue('F' . $rowNum, '');
+                $sheet->setCellValue('G' . $rowNum, '');
+                $sheet->setCellValue('H' . $rowNum, '');
+                $sheet->setCellValue('I' . $rowNum, '');
+                $sheet->setCellValue('J' . $rowNum, '');
+                $sheet->setCellValue('K' . $rowNum, '');
+                $sheet->setCellValue('L' . $rowNum, '');
+                $sheet->setCellValue('M' . $rowNum, '');
+                $sheet->setCellValue('N' . $rowNum, '');
+                $sheet->setCellValue('O' . $rowNum, '');
+                $sheet->setCellValue('P' . $rowNum, '');
+                $sheet->setCellValue('Q' . $rowNum, '');
+                $sheet->setCellValue('R' . $rowNum, '');
             }
 
-            $users_with_pb_displayed[] = $user_id;
-        } else {
-            // Already displayed pembangkit data for this user, leave pembangkit columns empty
-            foreach (range('E', 'R') as $col) {
-                $sheet->setCellValue($col . $rowNum, '');
-            }
+            $rowNum++;
+            $no++;
         }
 
-        $rowNum++;
-        $no++;
+        // Add extra spacing before next user
+        $rowNum += 2;
     }
 
     $sheet->getStyle('A5:X' . ($rowNum - 1))->applyFromArray([
@@ -280,4 +267,3 @@ try {
     die("Error: " . $e->getMessage());
 }
 ?>
-
