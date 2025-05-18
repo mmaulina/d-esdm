@@ -65,8 +65,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $file_lhu = uploadFile('file_lhu');
 
     // Prepare the insert statement
-    $insertSQL = "INSERT INTO laporan_semester (id_user, nama_perusahaan, no_hp_pimpinan, tenaga_teknik, no_hp_teknik, nama, no_hp, no_telp_kantor, parameter, baku_mutu, hasil, parameter2, baku_mutu2, hasil2, parameter3, baku_mutu3, hasil3, parameter4, baku_mutu4, hasil4, parameter5, baku_mutu5, hasil5, status, keterangan, file_laporan, file_lhu, tahun, semester) 
-                  VALUES (:id_user, :nama_perusahaan, :no_hp_pimpinan, :tenaga_teknik, :no_hp_teknik, :nama, :no_hp, :no_telp_kantor, :parameter, :baku_mutu, :hasil, :parameter2, :baku_mutu2, :hasil2, :parameter3, :baku_mutu3, :hasil3, :parameter4, :baku_mutu4, :hasil4, :parameter5, :baku_mutu5, :hasil5, :status, :keterangan, :file_laporan, :file_lhu, :tahun, :semester)";
+    $insertSQL = "INSERT INTO laporan_semester (
+    id_user, nama_perusahaan, no_hp_pimpinan, tenaga_teknik, no_hp_teknik, nama, no_hp, no_telp_kantor,
+    baku_mutu_so2, hasil_so2,
+    baku_mutu_ho2, hasil_ho2,
+    baku_mutu_tsp, hasil_tsp,
+    baku_mutu_co, hasil_co,
+    baku_mutu_kebisingan, hasil_kebisingan,
+    status, keterangan,
+    file_laporan, file_lhu,
+    tahun, semester
+) VALUES (
+    :id_user, :nama_perusahaan, :no_hp_pimpinan, :tenaga_teknik, :no_hp_teknik, :nama, :no_hp, :no_telp_kantor,
+    :baku_mutu_so2, :hasil_so2,
+    :baku_mutu_ho2, :hasil_ho2,
+    :baku_mutu_tsp, :hasil_tsp,
+    :baku_mutu_co, :hasil_co,
+    :baku_mutu_kebisingan, :hasil_kebisingan,
+    :status, :keterangan,
+    :file_laporan, :file_lhu,
+    :tahun, :semester
+)";
+
 
     $stmt = $db->prepare($insertSQL);
 
@@ -75,59 +95,49 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $status = 'diajukan'; // Status diisi otomatis
     $keterangan = '-'; // Keterangan diisi otomatis
 
-    // Loop through the parameters, baku_mutu, and hasil
-    $parameter = $_POST['parameter'] ;
-    $baku_mutu = $_POST['baku_mutu'] ;
-    $hasil = $_POST['hasil'] ;
-    $parameter2 = $_POST['parameter2'] ;
-    $baku_mutu2 = $_POST['baku_mutu2'] ;
-    $hasil2 = $_POST['hasil2'] ;
-    $parameter3 = $_POST['parameter3'] ;
-    $baku_mutu3 = $_POST['baku_mutu3'] ;
-    $hasil3 = $_POST['hasil3'] ;
-    $parameter4 = $_POST['parameter4'] ;
-    $baku_mutu4 = $_POST['baku_mutu4'] ;
-    $hasil4 = $_POST['hasil4'] ;
-    $parameter5 = $_POST['parameter5'] ;
-    $baku_mutu5 = $_POST['baku_mutu5'] ;
-    $hasil5 = $_POST['hasil5'] ;
+    // Loop through the, baku_mutu, and hasil
+    $baku_mutu_so2 = $_POST['baku_mutu_so2'];
+    $hasil_so2 = $_POST['hasil_so2'];
+    $baku_mutu_ho2 = $_POST['baku_mutu_ho2'];
+    $hasil_ho2 = $_POST['hasil_ho2'];
+    $baku_mutu_tsp = $_POST['baku_mutu_tsp'];
+    $hasil_tsp = $_POST['hasil_tsp'];
+    $baku_mutu_co = $_POST['baku_mutu_co'];
+    $hasil_co = $_POST['hasil_co'];
+    $baku_mutu_kebisingan = $_POST['baku_mutu_kebisingan'];
+    $hasil_kebisingan = $_POST['hasil_kebisingan'];
 
-        // Bind parameters
-        $stmt->bindParam(':id_user', $id_user);
-        $stmt->bindParam(':nama_perusahaan', $nama_perusahaan);
-        $stmt->bindParam(':no_hp_pimpinan', $no_hp_pimpinan);
-        $stmt->bindParam(':tenaga_teknik', $tenaga_teknik);
-        $stmt->bindParam(':no_hp_teknik', $no_hp_teknik);
-        $stmt->bindParam(':nama', $nama);
-        $stmt->bindParam(':no_hp', $no_hp);
-        $stmt->bindParam(':no_telp_kantor', $no_telp_kantor);
-        $stmt->bindParam(':parameter', $parameter);
-        $stmt->bindParam(':baku_mutu', $baku_mutu);
-        $stmt->bindParam(':hasil', $hasil);
-        $stmt->bindParam(':parameter2', $parameter2);
-        $stmt->bindParam(':baku_mutu2', $baku_mutu2);
-        $stmt->bindParam(':hasil2', $hasil2);
-        $stmt->bindParam(':parameter3', $parameter3);
-        $stmt->bindParam(':baku_mutu3', $baku_mutu3);
-        $stmt->bindParam(':hasil3', $hasil3);
-        $stmt->bindParam(':parameter4', $parameter4);
-        $stmt->bindParam(':baku_mutu4', $baku_mutu4);
-        $stmt->bindParam(':hasil4', $hasil4);
-        $stmt->bindParam(':parameter5', $parameter5);
-        $stmt->bindParam(':baku_mutu5', $baku_mutu5);
-        $stmt->bindParam(':hasil5', $hasil5);
-        $stmt->bindParam(':status', $status);
-        $stmt->bindParam(':keterangan', $keterangan);
-        $stmt->bindParam(':file_laporan', $file_laporan);
-        $stmt->bindParam(':file_lhu', $file_lhu);
-        $stmt->bindParam(':tahun', $tahun);
-        $stmt->bindParam(':semester', $semester_final);
+    // Bind
+    $stmt->bindParam(':id_user', $id_user);
+    $stmt->bindParam(':nama_perusahaan', $nama_perusahaan);
+    $stmt->bindParam(':no_hp_pimpinan', $no_hp_pimpinan);
+    $stmt->bindParam(':tenaga_teknik', $tenaga_teknik);
+    $stmt->bindParam(':no_hp_teknik', $no_hp_teknik);
+    $stmt->bindParam(':nama', $nama);
+    $stmt->bindParam(':no_hp', $no_hp);
+    $stmt->bindParam(':no_telp_kantor', $no_telp_kantor);
+    $stmt->bindParam(':baku_mutu_so2', $baku_mutu_so2);
+    $stmt->bindParam(':hasil_so2', $hasil_so2);
+    $stmt->bindParam(':baku_mutu_ho2', $baku_mutu_ho2);
+    $stmt->bindParam(':hasil_ho2', $hasil_ho2);
+    $stmt->bindParam(':baku_mutu_tsp', $baku_mutu_tsp);
+    $stmt->bindParam(':hasil_tsp', $hasil_tsp);
+    $stmt->bindParam(':baku_mutu_co', $baku_mutu_co);
+    $stmt->bindParam(':hasil_co', $hasil_co);
+    $stmt->bindParam(':baku_mutu_kebisingan', $baku_mutu_kebisingan);
+    $stmt->bindParam(':hasil_kebisingan', $hasil_kebisingan);
+    $stmt->bindParam(':status', $status);
+    $stmt->bindParam(':keterangan', $keterangan);
+    $stmt->bindParam(':file_laporan', $file_laporan);
+    $stmt->bindParam(':file_lhu', $file_lhu);
+    $stmt->bindParam(':tahun', $tahun);
+    $stmt->bindParam(':semester', $semester_final);
 
-        // Execute the statement
-        if (!$stmt->execute()) {
-            $_SESSION['hasil'] = false;
-            $_SESSION['pesan'] = "Gagal Simpan Data";
-        }
+    // Execute the statement
+    if (!$stmt->execute()) {
+        $_SESSION['hasil'] = false;
+        $_SESSION['pesan'] = "Gagal Simpan Data";
+    }
 
     $_SESSION['hasil'] = true;
     $_SESSION['pesan'] = "Berhasil Simpan Data";
@@ -170,6 +180,11 @@ function uploadFile($input_name)
     <hr>
     <div class="card shadow" style="overflow-x: auto; max-height: calc(100vh - 150px); overflow-y: auto;">
         <div class="card-body">
+            <!-- <div class="mb-3">
+                <a href="tampil_data.php" class="btn btn-secondary">
+                    <i class="fa fa-arrow-left"></i> Kembali
+                </a>
+            </div> -->
             <form method="POST" enctype="multipart/form-data">
                 <div class="mb-3">
                     <label class="form-label">Nama Perusahaan</label>
@@ -227,101 +242,61 @@ function uploadFile($input_name)
                         <input type="text" name="no_telp_kantor" class="form-control" value="<?= htmlspecialchars($no_telp_kantor) ?>" readonly>
                     <?php endif; ?>
                 </div>
-                    <div class="mb-3">
-                        <label class="form-label">Parameter</label>
-                        <select class="form-control" name="parameter" required>
-                            <option value="">-- Pilih Parameter --</option>
-                            <option value="SO2">SO2</option>
-                            <option value="HO2">HO2</option>
-                            <option value="TSP/DEBU">TSP/DEBU</option>
-                            <option value="CO">CO</option>
-                            <option value="kebisingan">Kebisingan</option>
-                        </select>
-                    </div>
+                <div class="card-header mt-4">
+                    <h6>Parameter SO2</h6>
                     <div class="mb-3">
                         <label class="form-label">Baku Mutu</label>
-                        <input type="text" name="baku_mutu" class="form-control" placeholder="Masukkan baku mutu" required>
+                        <input type="text" name="baku_mutu_so2" class="form-control" placeholder="Masukkan baku mutu" required>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Hasil</label>
-                        <input type="text" name="hasil" class="form-control" placeholder="Masukkan hasil" required>
+                        <input type="text" name="hasil_so2" class="form-control" placeholder="Masukkan hasil" required>
+                    </div>
+                </div>
+                <div class="card-header mt-4">
+                    <h6>Parameter HO2</h6>
+                    <div class="mb-3">
+                        <label class="form-label">Baku Mutu</label>
+                        <input type="text" name="baku_mutu_ho2" class="form-control" placeholder="Masukkan baku mutu" required>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Parameter 2</label>
-                        <select class="form-control" name="parameter2" required>
-                            <option value="">-- Pilih Parameter --</option>
-                            <option value="SO2">SO2</option>
-                            <option value="HO2">HO2</option>
-                            <option value="TSP/DEBU">TSP/DEBU</option>
-                            <option value="CO">CO</option>
-                            <option value="kebisingan">Kebisingan</option>
-                        </select>
+                        <label class="form-label">Hasil</label>
+                        <input type="text" name="hasil_ho2" class="form-control" placeholder="Masukkan hasil" required>
+                    </div>
+                </div>
+                <div class="card-header mt-4">
+                    <h6>Parameter TSP/Debu</h6>
+                    <div class="mb-3">
+                        <label class="form-label">Baku Mutu</label>
+                        <input type="text" name="baku_mutu_tsp" class="form-control" placeholder="Masukkan baku mutu" required>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Baku Mutu 2</label>
-                        <input type="text" name="baku_mutu2" class="form-control" placeholder="Masukkan baku mutu" required>
+                        <label class="form-label">Hasil</label>
+                        <input type="text" name="hasil_tsp" class="form-control" placeholder="Masukkan hasil" required>
+                    </div>
+                </div>
+                <div class="card-header mt-4">
+                    <h6>Parameter CO</h6>
+                    <div class="mb-3">
+                        <label class="form-label">Baku Mutu</label>
+                        <input type="text" name="baku_mutu_co" class="form-control" placeholder="Masukkan baku mutu" required>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Hasil 2</label>
-                        <input type="text" name="hasil2" class="form-control" placeholder="Masukkan hasil" required>
+                        <label class="form-label">Hasil</label>
+                        <input type="text" name="hasil_co" class="form-control" placeholder="Masukkan hasil" required>
+                    </div>
+                </div>
+                <div class="card-header mt-4 mb-3">
+                    <h6>Parameter Kebisingan</h6>
+                    <div class="mb-3">
+                        <label class="form-label">Baku Mutu</label>
+                        <input type="text" name="baku_mutu_kebisingan" class="form-control" placeholder="Masukkan baku mutu" required>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Parameter 3</label>
-                        <select class="form-control" name="parameter3" required>
-                            <option value="">-- Pilih Parameter --</option>
-                            <option value="SO2">SO2</option>
-                            <option value="HO2">HO2</option>
-                            <option value="TSP/DEBU">TSP/DEBU</option>
-                            <option value="CO">CO</option>
-                            <option value="kebisingan">Kebisingan</option>
-                        </select>
+                        <label class="form-label">Hasil</label>
+                        <input type="text" name="hasil_kebisingan" class="form-control" placeholder="Masukkan hasil" required>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Baku Mutu 3</label>
-                        <input type="text" name="baku_mutu3" class="form-control" placeholder="Masukkan baku mutu" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Hasil 3</label>
-                        <input type="text" name="hasil3" class="form-control" placeholder="Masukkan hasil" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Parameter 4</label>
-                        <select class="form-control" name="parameter4" required>
-                            <option value="">-- Pilih Parameter --</option>
-                            <option value="SO2">SO2</option>
-                            <option value="HO2">HO2</option>
-                            <option value="TSP/DEBU">TSP/DEBU</option>
-                            <option value="CO">CO</option>
-                            <option value="kebisingan">Kebisingan</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Baku Mutu 4</label>
-                        <input type="text" name="baku_mutu4" class="form-control" placeholder="Masukkan baku mutu" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Hasil 4</label>
-                        <input type="text" name="hasil4" class="form-control" placeholder="Masukkan hasil" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Parameter 5</label>
-                        <select class="form-control" name="parameter5" required>
-                            <option value="">-- Pilih Parameter --</option>
-                            <option value="SO2">SO2</option>
-                            <option value="HO2">HO2</option>
-                            <option value="TSP/DEBU">TSP/DEBU</option>
-                            <option value="CO">CO</option>
-                            <option value="kebisingan">Kebisingan</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Baku Mutu 5</label>
-                        <input type="text" name="baku_mutu5" class="form-control" placeholder="Masukkan baku mutu" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Hasil 5</label>
-                        <input type="text" name="hasil5" class="form-control" placeholder="Masukkan hasil" required>
-                    </div>
+                </div>
                 <div class="mb-3">
                     <label class="form-label">Upload Laporan (PDF, DOC, DOCX, XLS, XLSX)</label>
                     <input type="file" name="file_laporan" class="form-control" accept=".pdf,.doc,.docx,.xls,.xlsx">
@@ -374,8 +349,6 @@ function uploadFile($input_name)
 </script>
 
 <script>
-
-
     const monthNow = new Date().getMonth() + 1; // getMonth() = 0 (Jan) s.d. 11 (Des)
     const semester1 = document.getElementById('semester1');
     const semester2 = document.getElementById('semester2');
