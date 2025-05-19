@@ -57,26 +57,25 @@ $konten_djih = $stmt->fetch(PDO::FETCH_ASSOC)['jumlah_baru'];
                         </a>
                     </li>
                 <?php } ?>
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <a class="nav-link <?= ($currentPage == 'pembangkit') ? 'active' : ''; ?>" href="?page=pembangkit">
                         <i class="fas fa-plug me-2"></i> <span class="sidebar-text">Data Pembangkit</span>
                     </a>
-                </li>
-                <?php if ( $_SESSION['role'] !== 'kementerian') { ?>
+                </li> -->
                 <li class="nav-item">
                     <a class="nav-link collapsed" data-bs-toggle="collapse" href="#submenuPelaporan" role="button" aria-expanded="false" aria-controls="submenuPelaporan">
                         <i class="fas fa-file-alt me-2"></i> <span class="sidebar-text">Pelaporan</span>
                     </a>
                     <div class="collapse" id="submenuPelaporan">
                         <ul class="nav flex-column ms-3">
-                        <?php if ( $_SESSION['role'] !== 'adminsemester') { ?> 
+                        <?php if ( ($_SESSION['role'] !== 'adminsemester')) { ?> 
                             <li class="nav-item">
                                 <a class="nav-link <?= ($currentPage == 'laporan_perbulan') ? 'active' : ''; ?>" href="?page=laporan_perbulan">
                                     <i class="fas fa-calendar-alt me-2"></i> <span class="sidebar-text">Pelaporan Bulanan</span>
                                 </a>
                             </li>
                             <?php } ?>
-                            <?php if ( $_SESSION['role'] !== 'adminbulanan') { ?>
+                            <?php if ( $_SESSION['role'] !== 'adminbulanan'&&$_SESSION['role'] !== 'kementerian') { ?>
                             <li class="nav-item">
                                 <a class="nav-link <?= ($currentPage == 'laporan_persemester') ? 'active' : ''; ?>" href="?page=laporan_persemester">
                                     <i class="fas fa-calendar me-2"></i> <span class="sidebar-text">Pelaporan Semester</span>
@@ -86,7 +85,6 @@ $konten_djih = $stmt->fetch(PDO::FETCH_ASSOC)['jumlah_baru'];
                         </ul>
                     </div>
                 </li>
-                <?php } ?>
                 <li class="nav-item">
                     <a class="nav-link <?= ($currentPage == 'tampil_konten_djih') ? 'active' : ''; ?>" href="?page=tampil_konten_djih">
                         <i class="fas fa-earth-americas me-2"></i>
