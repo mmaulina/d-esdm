@@ -68,7 +68,7 @@ $konten_djih = $stmt->fetch(PDO::FETCH_ASSOC)['jumlah_baru'];
                     </a>
                     <div class="collapse" id="submenuPelaporan">
                         <ul class="nav flex-column ms-3">
-                        <?php if ( ($_SESSION['role'] !== 'adminsemester')&&($_SESSION['role'] == 'kementerian')) { ?> 
+                        <?php if ( ($_SESSION['role'] !== 'adminsemester')) { ?> 
                             <li class="nav-item">
                                 <a class="nav-link <?= ($currentPage == 'laporan_perbulan') ? 'active' : ''; ?>" href="?page=laporan_perbulan">
                                     <i class="fas fa-calendar-alt me-2"></i> <span class="sidebar-text">Pelaporan Bulanan</span>
