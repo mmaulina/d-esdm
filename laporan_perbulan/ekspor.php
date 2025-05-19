@@ -154,8 +154,8 @@ try {
                 $sheet->setCellValue('A' . $rowNum, '');
                 $sheet->setCellValue('B' . $rowNum, '');
                 $sheet->setCellValue('C' . $rowNum, '');
-                $sheet->setCellValue('D' . $rowNum, '');
-                $sheet->setCellValue('S' . $rowNum, '');
+                $sheet->setCellValue('Q' . $rowNum, '');
+                $sheet->setCellValue('R' . $rowNum, '');
                 $sheet->setCellValue('T' . $rowNum, '');
                 $sheet->setCellValue('U' . $rowNum, '');
                 $sheet->setCellValue('V' . $rowNum, '');
@@ -183,6 +183,8 @@ try {
 
             } else {
                 // Kosongkan kolom pembangkit jika tidak ada
+                $sheet->setCellValue('C' . $rowNum, '');
+                $sheet->setCellValue('D' . $rowNum, '');
                 $sheet->setCellValue('E' . $rowNum, '');
                 $sheet->setCellValue('F' . $rowNum, '');
                 $sheet->setCellValue('G' . $rowNum, '');
@@ -195,8 +197,6 @@ try {
                 $sheet->setCellValue('N' . $rowNum, '');
                 $sheet->setCellValue('O' . $rowNum, '');
                 $sheet->setCellValue('P' . $rowNum, '');
-                $sheet->setCellValue('Q' . $rowNum, '');
-                $sheet->setCellValue('R' . $rowNum, '');
             }
 
             $rowNum++;

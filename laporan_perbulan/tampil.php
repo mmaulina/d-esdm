@@ -435,7 +435,6 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
     </table>
 </div>
 
-
 <script>
     function sortTable(columnIndex) {
         var table = document.querySelector("table tbody");
