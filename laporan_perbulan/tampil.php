@@ -423,9 +423,9 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                         <td><?= htmlspecialchars($row['bahan_bakar_jenis']) ?></td>
                         <td><?= htmlspecialchars($row['bahan_bakar_satuan']) ?></td>
                         <td><?= htmlspecialchars($row['volume_bb']) ?></td>
-                        <td>
-                            <a href='?page=pembangkit_edit&id=<?= $row['id'] ?>' class='btn btn-sm btn-warning'>Edit</a>
-                            <a href='?page=pembangkit_hapus&id=<?= $row['id'] ?>' class='btn btn-sm btn-danger' onclick='return confirm("Hapus data ini?")'>Hapus</a>
+                        <td class="d-flex flex-wrap gap-2">
+                            <a href='?page=pembangkit_edit&id=<?= $row['id'] ?>' class='btn btn-sm btn-warning mb-2 me-2'>Edit</a>
+                            <a href='?page=pembangkit_hapus&id=<?= $row['id'] ?>' class='btn btn-sm btn-danger mb-2' onclick='return confirm("Hapus data ini?")'>Hapus</a>
                         </td>
                     </tr>
                 <?php endforeach; endforeach; ?>
