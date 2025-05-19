@@ -114,6 +114,12 @@ include 'template/alert.php';
                 case "tambah_laporan_perbulan":
                     include "laporan_perbulan/tambah_laporan.php";
                     break;
+                case "tambah_laporan_perbulan2":
+                    include "laporan_perbulan/tambah_laporan2.php";
+                    break;
+                case "tambah_unit":
+                    include "laporan_perbulan/tambah_unit.php";
+                    break;
                 case "edit_laporan_perbulan":
                     include "laporan_perbulan/update.php";
                     break;
