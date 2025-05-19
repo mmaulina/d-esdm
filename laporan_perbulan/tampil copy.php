@@ -97,18 +97,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 }
 
 if ($role == 'admin' || $role == 'superadmin') {
-    // Admin dan Superadmin melihat semua data
-    $stmtpembangkit = $conn->prepare("SELECT * FROM pembangkit");
-} else {
-    // Role umum hanya melihat data miliknya
-    $stmtpembangkit = $conn->prepare("SELECT * FROM pembangkit WHERE id_user = :id_user");
-    $stmtpembangkit->bindParam(':id_user', $id_user, PDO::PARAM_INT);
-}
+        // Admin dan Superadmin melihat semua data
+        $stmtpembangkit = $conn->prepare("SELECT * FROM pembangkit");
+    } else {
+        // Role umum hanya melihat data miliknya
+        $stmtpembangkit = $conn->prepare("SELECT * FROM pembangkit WHERE id_user = :id_user");
+        $stmtpembangkit->bindParam(':id_user', $id_user, PDO::PARAM_INT);
+    }
 
-$querypembangkit = "SELECT * FROM pembangkit";
-$paramspembangkit = [];
-$stmtpembangkit->execute();
-$resultpembangkit = $stmtpembangkit->fetchAll(PDO::FETCH_ASSOC);
+    $querypembangkit = "SELECT * FROM pembangkit";
+    $paramspembangkit = [];
+     $stmtpembangkit->execute();
+    $resultpembangkit = $stmtpembangkit->fetchAll(PDO::FETCH_ASSOC);
 
 
 
@@ -120,7 +120,7 @@ $stmtCheck->execute();
 $hasprofil = $stmtCheck->fetchColumn() > 0;
 ?>
 <div class="container mt-4">
-    <h3 class="text-center mb-3"><i class="fas fa-bolt" style="color: #ffc107;"></i>Pelaporan Bulanan dan Data Pembangkit<i class="fas fa-bolt" style="color: #ffc107;"></i></h3>
+    <h3 class="text-center mb-3"><i class="fas fa-bolt" style="color: #ffc107;"></i>Pelaporan Bulanan<i class="fas fa-bolt" style="color: #ffc107;"></i></h3>
     <hr>
     <div class="card shadow" style="overflow-x: auto; max-height: calc(100vh - 150px); overflow-y: auto;">
         <div class="card-body">
@@ -184,30 +184,14 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                     <a href="?page=tambah_laporan_perbulan" class="btn btn-primary">
                         <i class="fas fa-plus"></i> Tambah Data
                     </a>
-                    <a href="?page=tambah_laporan_perbulan2" class="btn btn-primary">
-                        <i class="fas fa-plus"></i> Tambah Data Opsi 2
-                    </a>
                 <?php endif; ?>
                 <?php if ($_SESSION['role'] == 'superadmin') { ?>
                     <a href="?page=tambah_laporan_perbulan" class="btn btn-primary">
                         <i class="fas fa-plus"></i> Tambah Data
                     </a>
-                    <a href="?page=tambah_laporan_perbulan2" class="btn btn-primary">
-                        <i class="fas fa-plus"></i> Tambah Data Opsi 2
-                    </a>
                 <?php } ?>
                 <a href="?page=excel_laporan_bulanan" class="btn btn-success">Ekspor ke Spreadsheet</a>
             </div>
-        </div>
-    </div>
-</div>
-
-<!-- PELAPORAN BULANAN -->
-<div class="container mt-4">
-    <div class="card shadow" style="overflow-x: auto; max-height: calc(100vh - 150px); overflow-y: auto;">
-        <div class="card-body">
-            <h3 class="text-center mb-3">Pelaporan Bulanan</h3>
-            <hr>
             <div class="table-responsive" style="max-height: 500px; overflow-x: auto; overflow-y: auto;">
                 <table class="table table-bordered" style="min-width: 1200px; white-space: nowrap;">
                     <thead class="table-dark text-center align-middle">
@@ -227,7 +211,7 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                             <th rowspan="3" onclick="sortTable(10)">Kabupaten <i class="fa fa-sort"></th>
                             <th colspan="2">Produksi Listrik</th>
                             <th rowspan="3" onclick="sortTable(11)">Susut Jaringan <i class="fa fa-sort"></th>
-                            <th colspan="3">Konsumsi Listrik</th>
+                            <th colspan="3" >Konsumsi Listrik</th>
                             <th rowspan="3" style="min-width: 150px;" onclick="sortTable(12)">Status <i class="fa fa-sort"></th>
                             <th rowspan="3" style="min-width: 150px;" onclick="sortTable(13)">Keterangan <i class="fa fa-sort"></th>
                             <th rowspan="3" style="min-width: 150px;">Aksi</th>
@@ -330,13 +314,11 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
         </div>
     </div>
 </div>
-
-<!-- DATA PEMBANGKIT -->
 <div class="container mt-4">
+    <h3 class="text-center mb-3">Data Pembangkit dan Data Teknis Pembangkit</h3>
+    <hr>
     <div class="card shadow">
         <div class="card-body">
-            <h3 class="text-center mb-3">Data Pembangkit dan Data Teknis Pembangkit</h3>
-            <hr>
             <!-- Fitur pencarian -->
             <?php if ($_SESSION['role'] == 'superadmin') { ?>
                 <form method="GET" class="mb-3">
@@ -369,13 +351,11 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                 </div> -->
             </div>
             <div class="table-responsive" style="max-height: 500px; overflow-x: auto; overflow-y: auto;">
-                <table class="table table-bordered" style="table-layout: fixed; min-width: 2000px;">
+                <table class="table table-bordered" style="table-layout: fixed; min-width: 1800px;">
                     <thead class="table-dark text-center align-middle">
                         <tr>
                             <th rowspan="3" style="width: 3%;">No.</th>
                             <th rowspan="3">Nama Perusahaan</th>
-                            <th rowspan="3">Tahun</th>
-                            <th rowspan="3">Bulan</th>
                             <th colspan="4" style="min-width: 250px;">Data Pembangkit</th>
                             <th colspan="10" style="min-width: 1500px;">Data Teknis Pembangkit</th>
                             <th rowspan="3" style="min-width: 150px;">Aksi</th>
@@ -410,8 +390,6 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                                 <tr>
                                     <td class="text-center"><?php echo $no++; ?></td>
                                     <td><?= htmlspecialchars($row['nama_perusahaan']) ?></td>
-                                    <td><?= htmlspecialchars($row['tahun']) ?></td>
-                                    <td><?= htmlspecialchars($row['bulan']) ?></td>
                                     <td><?= htmlspecialchars($row['alamat']) ?></td>
                                     <td><?= htmlspecialchars($row['latitude']) ?></td>
                                     <td><?= htmlspecialchars($row['longitude']) ?></td>

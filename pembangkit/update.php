@@ -31,6 +31,8 @@ if (!$data) {
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Sanitasi input
     $nama_perusahaan = trim($_POST['nama_perusahaan']);
+    $tahun = trim($_POST['tahun']);
+    $bulan = trim($_POST['bulan']);
     $alamat = trim($_POST['alamat']);
     $kabupaten = trim($_POST['kabupaten']);
     $longitude = trim($_POST['longitude']);
@@ -48,9 +50,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $volume_bb = trim($_POST['volume_bb']);
 
     // Query update
-    $query = "UPDATE pembangkit SET nama_perusahaan=?, alamat=?, kabupaten=? longitude=?, latitude=?, jenis_pembangkit=?, fungsi=?, kapasitas_terpasang=?, daya_mampu_netto=?, jumlah_unit=?, no_unit=?, tahun_operasi=?, status_operasi=?, bahan_bakar_jenis=?, bahan_bakar_satuan=?, volume_bb=? WHERE id =?";
+    $query = "UPDATE pembangkit SET nama_perusahaan=?, tahun=?, bulan=?, alamat=?, kabupaten=?, latitude=?, longitude=?, jenis_pembangkit=?, fungsi=?, kapasitas_terpasang=?, daya_mampu_netto=?, jumlah_unit=?, no_unit=?, tahun_operasi=?, status_operasi=?, bahan_bakar_jenis=?, bahan_bakar_satuan=?, volume_bb=? WHERE id =?";
     $stmt = $conn->prepare($query);
-    $success = $stmt->execute([$nama_perusahaan, $alamat, $kabupaten, $longitude, $latitude, $jenis_pembangkit, $fungsi, $kapasitas_terpasang, $daya_mampu_netto, $jumlah_unit, $no_unit, $tahun_operasi, $status_operasi, $bahan_bakar_jenis, $bahan_bakar_satuan, $volume_bb, $id_pembangkit]);
+    $success = $stmt->execute([$nama_perusahaan, $tahun, $bulan, $alamat, $kabupaten, $latitude, $longitude, $jenis_pembangkit, $fungsi, $kapasitas_terpasang, $daya_mampu_netto, $jumlah_unit, $no_unit, $tahun_operasi, $status_operasi, $bahan_bakar_jenis, $bahan_bakar_satuan, $volume_bb, $id_pembangkit]);
 
     if ($success) {
         echo "<script>alert('Data berhasil diperbarui!'); window.location.href='?page=laporan_perbulan';</script>";
@@ -69,6 +71,37 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <div class="mb-3">
                     <label class="form-label">Nama Perusahaan</label>
                     <input type="text" name="nama_perusahaan" class="form-control" placeholder="Masukkan jenis pembangkit" value="<?= $data['nama_perusahaan'] ?>" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Tahun</label>
+                    <select class="form-control" name="tahun" id="tahun" required>
+                        <option value="">-- Pilih Tahun --</option>
+                        <?php
+                        // Isi dropdown tahun dari currentYear sampai endYear
+                        for ($year = 2025; $year <= 2035; $year++) {
+                            $selected = ($data['tahun'] == $year) ? 'selected' : '';
+                            echo "<option value='$year' $selected>$year</option>";
+                        }
+                        ?>
+                    </select>
+                </div>
+                <div class="form-group mb-3">
+                    <label>Bulan</label>
+                    <select class="form-control" name="bulan" required>
+                        <option value="">-- Pilih Bulan --</option>
+                        <option value="Januari" <?= ($data['bulan'] == 'Januari') ? 'selected' : '' ?>>Januari</option>
+                        <option value="Februari" <?= ($data['bulan'] == 'Februari') ? 'selected' : '' ?>>Februari</option>
+                        <option value="Maret" <?= ($data['bulan'] == 'Maret') ? 'selected' : '' ?>>Maret</option>
+                        <option value="April" <?= ($data['bulan'] == 'April') ? 'selected' : '' ?>>April</option>
+                        <option value="Mei" <?= ($data['bulan'] == 'Mei') ? 'selected' : '' ?>>Mei</option>
+                        <option value="Juni" <?= ($data['bulan'] == 'Juni') ? 'selected' : '' ?>>Juni</option>
+                        <option value="Juli" <?= ($data['bulan'] == 'Juli') ? 'selected' : '' ?>>Juli</option>
+                        <option value="Agustus" <?= ($data['bulan'] == 'Agustus') ? 'selected' : '' ?>>Agustus</option>
+                        <option value="September" <?= ($data['bulan'] == 'September') ? 'selected' : '' ?>>September</option>
+                        <option value="Oktober" <?= ($data['bulan'] == 'Oktober') ? 'selected' : '' ?>>Oktober</option>
+                        <option value="November" <?= ($data['bulan'] == 'November') ? 'selected' : '' ?>>November</option>
+                        <option value="Desember" <?= ($data['bulan'] == 'Desember') ? 'selected' : '' ?>>Desember</option>
+                    </select>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Alamat</label>
