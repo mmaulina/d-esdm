@@ -32,11 +32,6 @@ if (!empty($_GET['keyword'])) {
 }
 
 // Filter
-$parameter = $_GET['parameter'] ?? '';
-if (!empty($parameter)) {
-    $query .= " AND parameter = :parameter";
-    $params[':parameter'] = $parameter;
-}
 
 $tahun = $_GET['tahun'] ?? '';
 if (!empty($tahun)) {
@@ -50,9 +45,6 @@ if (!empty($semester)) {
     $params[':semester'] = $semester;
 }
 
-// Ambil daftar untuk dropdown filter
-// $parameterStmt = $conn->query("SELECT DISTINCT parameter FROM laporan_semester ORDER BY parameter");
-// $parameterList = $parameterStmt->fetchAll(PDO::FETCH_COLUMN);
 
 $tahunStmt = $conn->query("SELECT DISTINCT tahun FROM laporan_semester ORDER BY tahun");
 $tahunList = $tahunStmt->fetchAll(PDO::FETCH_COLUMN);
@@ -116,17 +108,6 @@ $hasLaporanBulanan = $stmtCheck->fetchColumn() > 0;
                     <a href="?page=laporan_persemester" class="btn btn-secondary">Reset</a>
                 </div>
                 <div class="row mb-3 align-items-end">
-                    <div class="col">
-                        <label for="parameter" class="form-label">Parameter</label>
-                        <select name="parameter" id="parameter" class="form-select">
-                            <option value="">-- Pilih Parameter --</option>
-                            <?php foreach ($parameterList as $parameter): ?>
-                                <option value="<?= htmlspecialchars($parameter) ?>" <?= (isset($_GET['parameter']) && $_GET['parameter'] == $parameter) ? 'selected' : '' ?>>
-                                    <?= htmlspecialchars($parameter) ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
                     <div class="col">
                         <label for="tahun" class="form-label">Tahun</label>
                         <select name="tahun" id="tahun" class="form-select">
@@ -285,7 +266,7 @@ $hasLaporanBulanan = $stmtCheck->fetchColumn() > 0;
                                                 <button type="submit" class="btn btn-success btn-sm">Terima</button>
                                             </form>
                                             <!-- Tombol Tolak dengan Modal -->
-                                            <a href="" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modalTolak<?php echo $row['id']; ?>">Tolak</a>
+                                            <a href="" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modalTolak<?php echo $row['id']; ?>">Kembalikan</a>
                                         <?php endif; ?>
 
                                         <?php if (($row['status'] == 'diterima' || $row['status'] == 'dikembalikan') && $role == 'superadmin'): ?>
