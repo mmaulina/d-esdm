@@ -344,11 +344,6 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
             <?php if ($_SESSION['role'] == 'superadmin') { ?>
                 <form method="GET" class="mb-3">
                     <input type="hidden" name="page" value="pembangkit">
-                    <div class="input-group">
-                        <input type="text" name="keyword" class="form-control" placeholder="Cari berdasarkan nama perusahaan..." value="<?= isset($_GET['keyword']) ? htmlspecialchars($_GET['keyword']) : '' ?>">
-                        <button type="submit" class="btn btn-success">Cari</button>
-                        <a href="?page=pembangkit" class="btn btn-secondary">Reset</a>
-                    </div>
                 </form>
             <?php } ?>
             <div class="mb-3">
