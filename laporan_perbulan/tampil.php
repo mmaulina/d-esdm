@@ -186,17 +186,17 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                     <a href="?page=tambah_laporan_perbulan" class="btn btn-primary">
                         <i class="fas fa-plus"></i> Tambah Data
                     </a>
-                    <a href="?page=tambah_laporan_perbulan2" class="btn btn-primary">
+                    <!-- <a href="?page=tambah_laporan_perbulan2" class="btn btn-primary">
                         <i class="fas fa-plus"></i> Tambah Data Opsi 2
-                    </a>
+                    </a> -->
                 <?php endif; ?>
                 <?php if ($_SESSION['role'] == 'superadmin') { ?>
                     <a href="?page=tambah_laporan_perbulan" class="btn btn-primary">
                         <i class="fas fa-plus"></i> Tambah Data
                     </a>
-                    <a href="?page=tambah_laporan_perbulan2" class="btn btn-primary">
+                    <!-- <a href="?page=tambah_laporan_perbulan2" class="btn btn-primary">
                         <i class="fas fa-plus"></i> Tambah Data Opsi 2
-                    </a>
+                    </a> -->
                 <?php } ?>
                 <?php if ($_SESSION['role'] == 'superadmin'||$_SESSION['role'] == 'adminbulanan') { ?>
                 <a href="?page=excel_laporan_bulanan" class="btn btn-success">Ekspor ke Spreadsheet</a>
