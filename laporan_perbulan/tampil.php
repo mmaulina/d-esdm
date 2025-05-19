@@ -96,16 +96,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 }
 
-<<<<<<< HEAD
-if ($role == 'admin' || $role == 'superadmin') {
-    // Admin dan Superadmin melihat semua data
-    $stmtpembangkit = $conn->prepare("SELECT * FROM pembangkit");
-} else {
-    // Role umum hanya melihat data miliknya
-    $stmtpembangkit = $conn->prepare("SELECT * FROM pembangkit WHERE id_user = :id_user");
-    $stmtpembangkit->bindParam(':id_user', $id_user, PDO::PARAM_INT);
-}
-=======
 if ($role == 'adminbulanan' || $role == 'superadmin'|| $role == 'kementerian' ) {
         // Admin dan Superadmin melihat semua data
         $stmtpembangkit = $conn->prepare("SELECT * FROM pembangkit");
@@ -114,12 +104,11 @@ if ($role == 'adminbulanan' || $role == 'superadmin'|| $role == 'kementerian' ) 
         $stmtpembangkit = $conn->prepare("SELECT * FROM pembangkit WHERE id_user = :id_user");
         $stmtpembangkit->bindParam(':id_user', $id_user, PDO::PARAM_INT);
     }
->>>>>>> ae2d8459daa6fcc12498f537a3a125f559598caa
 
-$querypembangkit = "SELECT * FROM pembangkit";
-$paramspembangkit = [];
-$stmtpembangkit->execute();
-$resultpembangkit = $stmtpembangkit->fetchAll(PDO::FETCH_ASSOC);
+    $querypembangkit = "SELECT * FROM pembangkit";
+    $paramspembangkit = [];
+     $stmtpembangkit->execute();
+    $resultpembangkit = $stmtpembangkit->fetchAll(PDO::FETCH_ASSOC);
 
 
 
@@ -133,7 +122,7 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
 
 ?>
 <div class="container mt-4">
-    <h3 class="text-center mb-3"><i class="fas fa-bolt" style="color: #ffc107;"></i>Pelaporan Bulanan dan Data Pembangkit<i class="fas fa-bolt" style="color: #ffc107;"></i></h3>
+    <h3 class="text-center mb-3"><i class="fas fa-bolt" style="color: #ffc107;"></i>Pelaporan Bulanan<i class="fas fa-bolt" style="color: #ffc107;"></i></h3>
     <hr>
     <div class="card shadow" style="overflow-x: auto; max-height: calc(100vh - 150px); overflow-y: auto;">
         <div class="card-body">
@@ -187,7 +176,7 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                 </div>
             </form>
 
-            <div class="mb-3">
+                <div class="mb-3">
                 <?php if (!$hasprofil && $role == 'umum') : ?>
                     <div class="alert alert-warning text-center" role="alert">
                         Anda harus melengkapi <strong>Profil Perusahaan</strong> dan verifikasi terlebih dahulu sebelum dapat menambahkan Laporan Bulanan.
@@ -213,50 +202,7 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                 <a href="?page=excel_laporan_bulanan" class="btn btn-success">Ekspor ke Spreadsheet</a>
                 <?php } ?>
             </div>
-        </div>
-    </div>
-</div>
-
-<!-- PELAPORAN BULANAN -->
-<div class="container mt-4">
-    <div class="card shadow" style="overflow-x: auto; max-height: calc(100vh - 150px); overflow-y: auto;">
-        <div class="card-body">
-            <h3 class="text-center mb-3">Pelaporan Bulanan</h3>
-            <hr>
             <div class="table-responsive" style="max-height: 500px; overflow-x: auto; overflow-y: auto;">
-<<<<<<< HEAD
-                <table class="table table-bordered" style="min-width: 1200px; white-space: nowrap;">
-                    <thead class="table-dark text-center align-middle">
-                        <tr>
-                            <th rowspan="3" style="width: 3%;" onclick="sortTable(0)">No. <i class="fa fa-sort"></i></th>
-                            <th rowspan="3" onclick="sortTable(1)">Nama Perusahaan <i class="fa fa-sort"></th>
-                            <?php if ($_SESSION['role'] == 'superadmin') { ?>
-                                <th rowspan="3" onclick="sortTable(2)">No Hp Pimpinan<i class="fa fa-sort"></i></th>
-                                <th rowspan="3" onclick="sortTable(3)">Tenaga Teknik <i class="fa fa-sort"></i></th>
-                                <th rowspan="3" onclick="sortTable(4)">No Hp Tenaga Teknik <i class="fa fa-sort"></i></th>
-                                <th rowspan="3" onclick="sortTable(5)">Nama Admin <i class="fa fa-sort"></i></th>
-                                <th rowspan="3" onclick="sortTable(6)">Nomor Admin <i class="fa fa-sort"></i></th>
-                            <?php } ?>
-                            <th rowspan="3" onclick="sortTable(7)">Nomor Telepon Kantor <i class="fa fa-sort"></i></th>
-                            <th rowspan="3" onclick="sortTable(8)">Tahun <i class="fa fa-sort"></th>
-                            <th rowspan="3" onclick="sortTable(9)">Bulan <i class="fa fa-sort"></th>
-                            <th rowspan="3" onclick="sortTable(10)">Kabupaten <i class="fa fa-sort"></th>
-                            <th colspan="2">Produksi Listrik</th>
-                            <th rowspan="3" onclick="sortTable(11)">Susut Jaringan <i class="fa fa-sort"></th>
-                            <th colspan="3">Konsumsi Listrik</th>
-                            <th rowspan="3" style="min-width: 150px;" onclick="sortTable(12)">Status <i class="fa fa-sort"></th>
-                            <th rowspan="3" style="min-width: 150px;" onclick="sortTable(13)">Keterangan <i class="fa fa-sort"></th>
-                            <th rowspan="3" style="min-width: 150px;">Aksi</th>
-                        </tr>
-                        <tr>
-                            <th onclick="sortTable(14)">Produksi Sendiri (kWh) <i class="fa fa-sort"></th>
-                            <th onclick="sortTable(15)">Pembelian Sumber Lain (kWh) <i class="fa fa-sort"></th>
-                            <th onclick="sortTable(16)">Penjualan ke Pelanggan (kWh) <i class="fa fa sort"></th>
-                            <th onclick="sortTable(17)">Penjualan ke PLN (kWh) <i class="fa fa-sort"></th>
-                            <th onclick="sortTable(18)">Pemakaian Sendiri (kWh) <i class="fa fa-sort"></th>
-                        </tr>
-                    </thead>
-=======
     <table class="table table-bordered" style="min-width: 1200px; white-space: nowrap;">
         <thead class="table-dark text-center align-middle">
             <tr>
@@ -288,7 +234,6 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                 <th onclick="sortTable(18)">Pemakaian Sendiri (kWh) <i class="fa fa-sort"></i></th>
             </tr>
         </thead>
->>>>>>> ae2d8459daa6fcc12498f537a3a125f559598caa
 
         <tbody>
             <?php if (count($result) > 0): ?>
@@ -396,13 +341,11 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
         </div>
     </div>
 </div>
-
-<!-- DATA PEMBANGKIT -->
 <div class="container mt-4">
+    <h3 class="text-center mb-3">Data Pembangkit dan Data Teknis Pembangkit</h3>
+    <hr>
     <div class="card shadow">
         <div class="card-body">
-            <h3 class="text-center mb-3">Data Pembangkit dan Data Teknis Pembangkit</h3>
-            <hr>
             <!-- Fitur pencarian -->
             <?php if ($_SESSION['role'] == 'superadmin') { ?>
                 <form method="GET" class="mb-3">
@@ -416,81 +359,6 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                     </div>
                 <?php endif; ?>
             <div class="table-responsive" style="max-height: 500px; overflow-x: auto; overflow-y: auto;">
-<<<<<<< HEAD
-                <table class="table table-bordered" style="table-layout: fixed; min-width: 2000px;">
-                    <thead class="table-dark text-center align-middle">
-                        <tr>
-                            <th rowspan="3" style="width: 3%;">No.</th>
-                            <th rowspan="3">Nama Perusahaan</th>
-                            <th rowspan="3">Tahun</th>
-                            <th rowspan="3">Bulan</th>
-                            <th colspan="4" style="min-width: 250px;">Data Pembangkit</th>
-                            <th colspan="10" style="min-width: 1500px;">Data Teknis Pembangkit</th>
-                            <th rowspan="3" style="min-width: 150px;">Aksi</th>
-                        </tr>
-                        <tr>
-                            <th rowspan="2">Alamat Pembangkit</th>
-                            <th colspan="2">Koordinat Pembangkit</th>
-                            <th rowspan="2">Jenis Pembangkit</th>
-                            <th rowspan="2">Fungsi</th>
-                            <th rowspan="2">Kapasitas Terpasang (MW)</th>
-                            <th rowspan="2">Daya Mampu Netto (MW)</th>
-                            <th rowspan="2">Jumlah Unit</th>
-                            <th rowspan="2">No. Unit</th>
-                            <th rowspan="2">Tahun Operasi</th>
-                            <th rowspan="2">Status Operasi</th>
-                            <th colspan="2">Bahan Bakar yang Digunakan</th>
-                            <th rowspan="2">Volume Bahan Bakar</th>
-                        </tr>
-                        <tr>
-                            <th>Latitude</th>
-                            <th>Longitude</th>
-                            <th>Jenis</th>
-                            <th>Satuan</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php if (count($resultpembangkit) > 0): ?>
-                            <?php
-                            $no = 1;
-                            foreach ($resultpembangkit as $row):
-                            ?>
-                                <tr>
-                                    <td class="text-center"><?php echo $no++; ?></td>
-                                    <td><?= htmlspecialchars($row['nama_perusahaan']) ?></td>
-                                    <td><?= htmlspecialchars($row['tahun']) ?></td>
-                                    <td><?= htmlspecialchars($row['bulan']) ?></td>
-                                    <td><?= htmlspecialchars($row['alamat']) ?></td>
-                                    <td><?= htmlspecialchars($row['latitude']) ?></td>
-                                    <td><?= htmlspecialchars($row['longitude']) ?></td>
-                                    <td><?= htmlspecialchars($row['jenis_pembangkit']) ?></td>
-                                    <td><?= htmlspecialchars($row['fungsi']) ?></td>
-                                    <td><?= htmlspecialchars($row['kapasitas_terpasang']) ?></td>
-                                    <td><?= htmlspecialchars($row['daya_mampu_netto']) ?></td>
-                                    <td><?= htmlspecialchars($row['jumlah_unit']) ?></td>
-                                    <td><?= htmlspecialchars($row['no_unit']) ?></td>
-                                    <td><?= htmlspecialchars($row['tahun_operasi']) ?></td>
-                                    <td><?= htmlspecialchars($row['status_operasi']) ?></td>
-                                    <td><?= htmlspecialchars($row['bahan_bakar_jenis']) ?></td>
-                                    <td><?= htmlspecialchars($row['bahan_bakar_satuan']) ?></td>
-                                    <td><?= htmlspecialchars($row['volume_bb']) ?></td>
-                                    <td>
-                                        <a href='?page=pembangkit_edit&id=<?= $row['id'] ?>' class='btn btn-sm btn-warning'>Edit</a>
-                                        <a href='?page=pembangkit_hapus&id=<?= $row['id'] ?>' class='btn btn-sm btn-danger' onclick='return confirm("Hapus data ini?")'>Hapus</a>
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <tr>
-                                <td colspan='16' class='text-center'>Data tidak ditemukan</td>
-                            </tr>
-                        <?php endif; ?>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-=======
     <table class="table table-bordered" style="table-layout: fixed; min-width: 1800px;">
         <thead class="table-dark text-center align-middle">
             <tr>
@@ -571,7 +439,6 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
             <?php endif; ?>
         </tbody>
     </table>
->>>>>>> ae2d8459daa6fcc12498f537a3a125f559598caa
 </div>
 
 <script>
