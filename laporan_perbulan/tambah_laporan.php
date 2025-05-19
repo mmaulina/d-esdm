@@ -148,17 +148,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($data_pembangkit) {
         $querypembangkit = "INSERT INTO pembangkit (
-                id_user, nama_perusahaan, tahun, bulan kabupaten, alamat, longitude, latitude, jenis_pembangkit, fungsi, kapasitas_terpasang, 
+                id_user, nama_perusahaan, kabupaten, alamat, longitude, latitude, jenis_pembangkit, fungsi, kapasitas_terpasang, 
                 daya_mampu_netto, jumlah_unit, no_unit, tahun_operasi, status_operasi, bahan_bakar_jenis, bahan_bakar_satuan, volume_bb) 
             VALUES (
-                :id_user, :nama_perusahaan, :tahun, :bulan, :kabupaten, :alamat, :longitude, :latitude, :jenis_pembangkit, :fungsi, :kapasitas_terpasang, 
+                :id_user, :nama_perusahaan, :kabupaten, :alamat, :longitude, :latitude, :jenis_pembangkit, :fungsi, :kapasitas_terpasang, 
                 :daya_mampu_netto, :jumlah_unit, :no_unit, :tahun_operasi, :status_operasi, :bahan_bakar_jenis, :bahan_bakar_satuan, :volume_bb
             )";
 
         $allPembangkitSaved = true; // Tambahkan di awal sebelum for
         for ($i = 0; $i < count($alamat_arr); $i++) {
-            $tahun = sanitizeInput($tahun[$i] ?? '');
-            $bulan = sanitizeInput($bulan[$i] ?? '');
             $alamat = sanitizeInput($alamat_arr[$i] ?? '');
             $kabupaten = sanitizeInput($kabupaten_arr[$i] ?? '');
             $latitude = sanitizeInput($latitude_arr[$i] ?? '');
@@ -176,8 +174,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             $stmt2 = $db->prepare($querypembangkit);
             $stmt2->bindParam(':nama_perusahaan', $nama_perusahaan);
-            $stmt2->bindParam(':tahun', $tahun);
-            $stmt2->bindParam(':bulan', $bulan);
             $stmt2->bindParam(':kabupaten', $kabupaten);
             $stmt2->bindParam(':id_user', $id_user);
             $stmt2->bindParam(':alamat', $alamat);
