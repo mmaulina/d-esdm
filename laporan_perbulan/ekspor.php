@@ -125,6 +125,9 @@ try {
     $sheet->setCellValue('A' . $rowNum, "Nama Perusahaan: $namaPerusahaan");
     $sheet->mergeCells("A{$rowNum}:X{$rowNum}");
     $sheet->getStyle("A{$rowNum}:X{$rowNum}")->getFont()->setBold(true);
+      // Atur background kuning
+    $sheet->getStyle("A{$rowNum}:X{$rowNum}")->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+        ->getStartColor()->setRGB('FFFF00'); // Kuning (hex FFFF00)
     $rowNum++;
 
 
