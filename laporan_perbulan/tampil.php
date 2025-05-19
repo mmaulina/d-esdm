@@ -73,26 +73,6 @@ foreach ($params as $key => $value) {
 $stmt->execute();
 $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Ambil data pembangkit berdasarkan nama_perusahaan
-$pembangkitData = [];
-if (count($result) > 0) {
-    $namaPerusahaanList = array_unique(array_column($result, 'nama_perusahaan'));
-    $placeholders = implode(',', array_fill(0, count($namaPerusahaanList), '?'));
-    $queryPembangkit = "SELECT * FROM pembangkit WHERE nama_perusahaan IN ($placeholders)";
-    $stmtPembangkit = $conn->prepare($queryPembangkit);
-    foreach ($namaPerusahaanList as $index => $np) {
-        $stmtPembangkit->bindValue($index + 1, $np, PDO::PARAM_STR);
-    }
-    $stmtPembangkit->execute();
-    $pembangkitData = $stmtPembangkit->fetchAll(PDO::FETCH_ASSOC);
-}
-
-// Kelompokkan data pembangkit berdasarkan nama_perusahaan
-$pembangkitGrouped = [];
-foreach ($pembangkitData as $pembangkit) {
-    $pembangkitGrouped[$pembangkit['nama_perusahaan']][] = $pembangkit;
-}
-
 // Proses Persetujuan/Tolak
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (isset($_POST['terima_id'])) {
@@ -115,6 +95,22 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         exit;
     }
 }
+
+if ($role == 'admin' || $role == 'superadmin') {
+        // Admin dan Superadmin melihat semua data
+        $stmtpembangkit = $conn->prepare("SELECT * FROM pembangkit");
+    } else {
+        // Role umum hanya melihat data miliknya
+        $stmtpembangkit = $conn->prepare("SELECT * FROM pembangkit WHERE id_user = :id_user");
+        $stmtpembangkit->bindParam(':id_user', $id_user, PDO::PARAM_INT);
+    }
+
+    $querypembangkit = "SELECT * FROM pembangkit";
+    $paramspembangkit = [];
+     $stmtpembangkit->execute();
+    $resultpembangkit = $stmtpembangkit->fetchAll(PDO::FETCH_ASSOC);
+
+
 
 // Cek apakah id_user ada di laporan_bulanan
 $queryCheck = "SELECT COUNT(*) FROM profil WHERE id_user = :id_user AND status = 'diterima'";
@@ -318,7 +314,113 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
         </div>
     </div>
 </div>
-
+<div class="container mt-4">
+    <h3 class="text-center mb-3">Data Pembangkit dan Data Teknis Pembangkit</h3>
+    <hr>
+    <div class="card shadow">
+        <div class="card-body">
+            <!-- Fitur pencarian -->
+            <?php if ($_SESSION['role'] == 'superadmin') { ?>
+                <form method="GET" class="mb-3">
+                    <input type="hidden" name="page" value="pembangkit">
+                    <div class="input-group">
+                        <input type="text" name="keyword" class="form-control" placeholder="Cari berdasarkan nama perusahaan..." value="<?= isset($_GET['keyword']) ? htmlspecialchars($_GET['keyword']) : '' ?>">
+                        <button type="submit" class="btn btn-success">Cari</button>
+                        <a href="?page=pembangkit" class="btn btn-secondary">Reset</a>
+                    </div>
+                </form>
+            <?php } ?>
+            <div class="mb-3">
+                <?php if (!$hasprofil && $role == 'umum') : ?>
+                    <div class="alert alert-warning text-center" role="alert">
+                        Anda harus melengkapi <strong>Profil Perusahaan</strong> terlebih dahulu sebelum dapat menambahkan Data Pembangkit.
+                    </div>
+                <?php endif; ?>
+                <!-- <div class="mb-3">
+                    <?php if ($hasprofil && $role == 'umum') : ?>
+                        <a href="?page=pembangkit_tambah" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Tambah Data
+                        </a>
+                    <?php endif; ?>
+                    <?php if ($_SESSION['role'] == 'superadmin') { ?>
+                        <a href="?page=pembangkit_tambah" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Tambah Data
+                        </a>
+                    <?php } ?>
+                    <a href="?page=pembangkit_export" class="btn btn-success">Ekspor ke Spreadsheet</a>
+                </div> -->
+            </div>
+            <div class="table-responsive" style="max-height: 500px; overflow-x: auto; overflow-y: auto;">
+                <table class="table table-bordered" style="table-layout: fixed; min-width: 1800px;">
+                    <thead class="table-dark text-center align-middle">
+                        <tr>
+                            <th rowspan="3" style="width: 3%;">No.</th>
+                            <th rowspan="3">Nama Perusahaan</th>
+                            <th colspan="4" style="min-width: 250px;">Data Pembangkit</th>
+                            <th colspan="10" style="min-width: 1500px;">Data Teknis Pembangkit</th>
+                            <th rowspan="3" style="min-width: 150px;">Aksi</th>
+                        </tr>
+                        <tr>
+                            <th rowspan="2">Alamat Pembangkit</th>
+                            <th colspan="2">Koordinat Pembangkit</th>
+                            <th rowspan="2">Jenis Pembangkit</th>
+                            <th rowspan="2">Fungsi</th>
+                            <th rowspan="2">Kapasitas Terpasang (MW)</th>
+                            <th rowspan="2">Daya Mampu Netto (MW)</th>
+                            <th rowspan="2">Jumlah Unit</th>
+                            <th rowspan="2">No. Unit</th>
+                            <th rowspan="2">Tahun Operasi</th>
+                            <th rowspan="2">Status Operasi</th>
+                            <th colspan="2">Bahan Bakar yang Digunakan</th>
+                            <th rowspan="2">Volume Bahan Bakar</th>
+                        </tr>
+                        <tr>
+                            <th>Latitude</th>
+                            <th>Longitude</th>
+                            <th>Jenis</th>
+                            <th>Satuan</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if (count($resultpembangkit) > 0): ?>
+                            <?php
+                            $no = 1;
+                            foreach ($resultpembangkit as $row):
+                            ?>
+                                <tr>
+                                    <td class="text-center"><?php echo $no++; ?></td>
+                                    <td><?= htmlspecialchars($row['nama_perusahaan']) ?></td>
+                                    <td><?= htmlspecialchars($row['alamat']) ?></td>
+                                    <td><?= htmlspecialchars($row['latitude']) ?></td>
+                                    <td><?= htmlspecialchars($row['longitude']) ?></td>
+                                    <td><?= htmlspecialchars($row['jenis_pembangkit']) ?></td>
+                                    <td><?= htmlspecialchars($row['fungsi']) ?></td>
+                                    <td><?= htmlspecialchars($row['kapasitas_terpasang']) ?></td>
+                                    <td><?= htmlspecialchars($row['daya_mampu_netto']) ?></td>
+                                    <td><?= htmlspecialchars($row['jumlah_unit']) ?></td>
+                                    <td><?= htmlspecialchars($row['no_unit']) ?></td>
+                                    <td><?= htmlspecialchars($row['tahun_operasi']) ?></td>
+                                    <td><?= htmlspecialchars($row['status_operasi']) ?></td>
+                                    <td><?= htmlspecialchars($row['bahan_bakar_jenis']) ?></td>
+                                    <td><?= htmlspecialchars($row['bahan_bakar_satuan']) ?></td>
+                                    <td><?= htmlspecialchars($row['volume_bb']) ?></td>
+                                    <td>
+                                        <a href='?page=pembangkit_edit&id=<?= $row['id'] ?>' class='btn btn-sm btn-warning'>Edit</a>
+                                        <a href='?page=pembangkit_hapus&id=<?= $row['id'] ?>' class='btn btn-sm btn-danger' onclick='return confirm("Hapus data ini?")'>Hapus</a>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <tr>
+                                <td colspan='16' class='text-center'>Data tidak ditemukan</td>
+                            </tr>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     function sortTable(columnIndex) {
         var table = document.querySelector("table tbody");
