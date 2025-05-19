@@ -20,13 +20,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Sanitasi input
         $nama_perusahaan = htmlspecialchars(trim($_POST['nama_perusahaan']));
         $alamat = htmlspecialchars(trim($_POST['alamat']));
-        $longitude = htmlspecialchars(trim($_POST['longitude']));
-        $latitude = htmlspecialchars(trim($_POST['latitude']));
-        $jenis_pembangkit = htmlspecialchars(trim($_POST['jenis_pembangkit']));
-        $fungsi = htmlspecialchars(trim($_POST['fungsi']));
-        $kapasitas_terpasang = htmlspecialchars(trim($_POST['kapasitas_terpasang']));
-        $daya_mampu_netto = htmlspecialchars(trim($_POST['daya_mampu_netto']));
-        $jumlah_unit = intval($_POST['jumlah_unit']);
         $no_unit = htmlspecialchars(trim($_POST['no_unit']));
         $tahun_operasi = intval($_POST['tahun_operasi']);
         $status_operasi = htmlspecialchars(trim($_POST['status_operasi']));
@@ -34,20 +27,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $bahan_bakar_satuan = htmlspecialchars(trim($_POST['bahan_bakar_satuan']));
 
         // Query dengan prepared statement
-        $query = "INSERT INTO pembangkit (id_user, nama_perusahaan, alamat, longitude, latitude, jenis_pembangkit, fungsi, kapasitas_terpasang, daya_mampu_netto, jumlah_unit, no_unit, tahun_operasi, status_operasi, bahan_bakar_jenis, bahan_bakar_satuan) 
-                  VALUES (:id_user, :nama_perusahaan, :alamat, :longitude, :latitude, :jenis_pembangkit, :fungsi, :kapasitas_terpasang, :daya_mampu_netto, :jumlah_unit, :no_unit, :tahun_operasi, :status_operasi, :bahan_bakar_jenis, :bahan_bakar_satuan)";
+        $query = "INSERT INTO pembangkit (id_user, nama_perusahaan, alamat, no_unit, tahun_operasi, status_operasi, bahan_bakar_jenis, bahan_bakar_satuan) 
+                  VALUES (:id_user, :nama_perusahaan, :alamat, :no_unit, :tahun_operasi, :status_operasi, :bahan_bakar_jenis, :bahan_bakar_satuan)";
 
         $stmt = $conn->prepare($query);
         $stmt->bindParam(':id_user', $id_user);
-        $stmt->bindParam(':nama_perusahaan', $nama_perusahaan);
-        $stmt->bindParam(':alamat', $alamat);
-        $stmt->bindParam(':longitude', $longitude);
-        $stmt->bindParam(':latitude', $latitude);
-        $stmt->bindParam(':jenis_pembangkit', $jenis_pembangkit);
-        $stmt->bindParam(':fungsi', $fungsi);
-        $stmt->bindParam(':kapasitas_terpasang', $kapasitas_terpasang);
-        $stmt->bindParam(':daya_mampu_netto', $daya_mampu_netto);
-        $stmt->bindParam(':jumlah_unit', $jumlah_unit, PDO::PARAM_INT);
         $stmt->bindParam(':no_unit', $no_unit);
         $stmt->bindParam(':tahun_operasi', $tahun_operasi, PDO::PARAM_INT);
         $stmt->bindParam(':status_operasi', $status_operasi);
@@ -66,10 +50,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 ?>
 
 <div class="container mt-4">
-    <h3 class="text-center">Tambah Data Pembangkit</h3>
+    <h3 class="text-center">Tambah Unit</h3>
     <hr>
     <div class="card shadow">
         <div class="card-body">
+            <div class="mb-3">
+                <a href="?page=laporan_perbulan" class="btn btn-secondary">
+                    <i class="fa fa-arrow-left"></i> Kembali
+                </a>
+            </div>
             <form method="POST">
                 <div class="mb-3">
                     <label class="form-label">Nama Perusahaan</label>
@@ -78,48 +67,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <div class="mb-3">
                     <label class="form-label">Alamat</label>
                     <input type="text" name="alamat" class="form-control" placeholder="Masukkan alamat lengkap" required>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label class="form-label">Latitude</label>
-                        <input type="text" name="latitude" class="form-control" placeholder="Contoh : 3°26&#39;43&quot;LS" required>
-                        <small class="text-muted">Gunakan tanda * sebagai pengganti derajat (°). Contoh: 3*26'43,25"LS</small>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Longitude</label>
-                        <input type="text" name="longitude" class="form-control" placeholder="Contoh : 114°50&#39;21&quot;BT" required>
-                        <small class="text-muted">Gunakan tanda * sebagai pengganti derajat (°). Contoh: 114*50'21,15"BT</small>
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Jenis Pembangkit</label>
-                    <input type="text" name="jenis_pembangkit" class="form-control" placeholder="Masukkan jenis pembangkit" required>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Fungsi</label>
-                    <select name="fungsi" class="form-select" required>
-                        <option value="">-- Pilih Fungsi --</option>
-                        <option value="Utama">Utama</option>
-                        <option value="Darurat">Darurat</option>
-                        <option value="Cadangan">Cadangan</option>
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Kapasitas Terpasang (MW)</label>
-                    <input type="text" name="kapasitas_terpasang" class="form-control"
-                        placeholder="Contoh: 1.250,75" required oninput="formatAngkaIndonesia(this)">
-                    <small class="text-muted">Catatan : Gunakan titik untuk ribuan dan koma untuk desimal.</small>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Daya Mampu Netto (MW)</label>
-                    <input type="text" name="daya_mampu_netto" class="form-control"
-                        placeholder="Contoh: 1.250,75" required oninput="formatAngkaIndonesia(this)">
-                    <small class="text-muted">Catatan : Gunakan titik untuk ribuan dan koma untuk desimal.</small>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Jumlah Unit</label>
-                    <input type="number" name="jumlah_unit" class="form-control" id="jumlahUnitInput" placeholder="Masukkan jumlah unit" required min="1" max="200">
-                    <small class="text-muted">Catatan : Max. 200 unit</small>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">No. Unit</label>

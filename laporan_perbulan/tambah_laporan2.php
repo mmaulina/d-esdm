@@ -216,10 +216,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <hr>
     <div class="card shadow" style="overflow-x: auto; max-height: calc(100vh - 150px); overflow-y: auto;">
         <div class="card-body">
+            <a href="?page=laporan_perbulan" class="btn btn-secondary">
+                <i class="fa fa-arrow-left"></i> Kembali
+            </a>
+
             <!-- Pilihan Tambah Data -->
             <div class="mb-4 d-flex justify-content-center gap-2 text-center">
                 <a href="?page=tambah_laporan_perbulan" class="btn btn-primary">Tambah Data Pelaporan Bulanan</a>
-                <a href="?page=pembangkit_tambah" class="btn btn-success">Tambah Unit</a>
+                <a href="?page=tambah_unit" class="btn btn-success">Tambah Unit</a>
             </div>
 
             <form method="POST" enctype="multipart/form-data">
