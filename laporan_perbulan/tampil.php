@@ -118,6 +118,8 @@ $stmtCheck = $conn->prepare($queryCheck);
 $stmtCheck->bindParam(':id_user', $id_user, PDO::PARAM_INT);
 $stmtCheck->execute();
 $hasprofil = $stmtCheck->fetchColumn() > 0;
+
+
 ?>
 <div class="container mt-4">
     <h3 class="text-center mb-3"><i class="fas fa-bolt" style="color: #ffc107;"></i>Pelaporan Bulanan<i class="fas fa-bolt" style="color: #ffc107;"></i></h3>
@@ -193,124 +195,141 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                 <a href="?page=excel_laporan_bulanan" class="btn btn-success">Ekspor ke Spreadsheet</a>
             </div>
             <div class="table-responsive" style="max-height: 500px; overflow-x: auto; overflow-y: auto;">
-                <table class="table table-bordered" style="min-width: 1200px; white-space: nowrap;">
-                    <thead class="table-dark text-center align-middle">
-                        <tr>
-                            <th rowspan="3" style="width: 3%;" onclick="sortTable(0)">No. <i class="fa fa-sort"></i></th>
-                            <th rowspan="3" onclick="sortTable(1)">Nama Perusahaan <i class="fa fa-sort"></th>
-                            <?php if ($_SESSION['role'] == 'superadmin') { ?>
-                                <th rowspan="3" onclick="sortTable(2)">No Hp Pimpinan<i class="fa fa-sort"></i></th>
-                                <th rowspan="3" onclick="sortTable(3)">Tenaga Teknik <i class="fa fa-sort"></i></th>
-                                <th rowspan="3" onclick="sortTable(4)">No Hp Tenaga Teknik <i class="fa fa-sort"></i></th>
-                                <th rowspan="3" onclick="sortTable(5)">Nama Admin <i class="fa fa-sort"></i></th>
-                                <th rowspan="3" onclick="sortTable(6)">Nomor Admin <i class="fa fa-sort"></i></th>
-                            <?php } ?>
-                            <th rowspan="3" onclick="sortTable(7)">Nomor Telepon Kantor <i class="fa fa-sort"></i></th>
-                            <th rowspan="3" onclick="sortTable(8)">Tahun <i class="fa fa-sort"></th>
-                            <th rowspan="3" onclick="sortTable(9)">Bulan <i class="fa fa-sort"></th>
-                            <th rowspan="3" onclick="sortTable(10)">Kabupaten <i class="fa fa-sort"></th>
-                            <th colspan="2">Produksi Listrik</th>
-                            <th rowspan="3" onclick="sortTable(11)">Susut Jaringan <i class="fa fa-sort"></th>
-                            <th colspan="3" >Konsumsi Listrik</th>
-                            <th rowspan="3" style="min-width: 150px;" onclick="sortTable(12)">Status <i class="fa fa-sort"></th>
-                            <th rowspan="3" style="min-width: 150px;" onclick="sortTable(13)">Keterangan <i class="fa fa-sort"></th>
-                            <th rowspan="3" style="min-width: 150px;">Aksi</th>
-                        </tr>
-                        <tr>
-                            <th onclick="sortTable(14)">Produksi Sendiri (kWh) <i class="fa fa-sort"></th>
-                            <th onclick="sortTable(15)">Pembelian Sumber Lain (kWh) <i class="fa fa-sort"></th>
-                            <th onclick="sortTable(16)">Penjualan ke Pelanggan (kWh) <i class="fa fa sort"></th>
-                            <th onclick="sortTable(17)">Penjualan ke PLN (kWh) <i class="fa fa-sort"></th>
-                            <th onclick="sortTable(18)">Pemakaian Sendiri (kWh) <i class="fa fa-sort"></th>
-                        </tr>
-                    </thead>
+    <table class="table table-bordered" style="min-width: 1200px; white-space: nowrap;">
+        <thead class="table-dark text-center align-middle">
+            <tr>
+                <th rowspan="3" style="width: 3%;" onclick="sortTable(0)">No. <i class="fa fa-sort"></i></th>
+                <th rowspan="3" onclick="sortTable(1)">Nama Perusahaan <i class="fa fa-sort"></i></th>
+                <?php if ($_SESSION['role'] == 'superadmin') { ?>
+                    <th rowspan="3" onclick="sortTable(2)">No Hp Pimpinan<i class="fa fa-sort"></i></th>
+                    <th rowspan="3" onclick="sortTable(3)">Tenaga Teknik <i class="fa fa-sort"></i></th>
+                    <th rowspan="3" onclick="sortTable(4)">No Hp Tenaga Teknik <i class="fa fa-sort"></i></th>
+                    <th rowspan="3" onclick="sortTable(5)">Nama Admin <i class="fa fa-sort"></i></th>
+                    <th rowspan="3" onclick="sortTable(6)">Nomor Admin <i class="fa fa-sort"></i></th>
+                <?php } ?>
+                <th rowspan="3" onclick="sortTable(7)">Nomor Telepon Kantor <i class="fa fa-sort"></i></th>
+                <th rowspan="3" onclick="sortTable(8)">Tahun <i class="fa fa-sort"></i></th>
+                <th rowspan="3" onclick="sortTable(9)">Bulan <i class="fa fa-sort"></i></th>
+                <th rowspan="3" onclick="sortTable(10)">Kabupaten <i class="fa fa-sort"></i></th>
+                <th colspan="2">Produksi Listrik</th>
+                <th rowspan="3" onclick="sortTable(11)">Susut Jaringan <i class="fa fa-sort"></i></th>
+                <th colspan="3">Konsumsi Listrik</th>
+                <th rowspan="3" style="min-width: 150px;" onclick="sortTable(12)">Status <i class="fa fa-sort"></i></th>
+                <th rowspan="3" style="min-width: 150px;" onclick="sortTable(13)">Keterangan <i class="fa fa-sort"></i></th>
+                <th rowspan="3" style="min-width: 150px;">Aksi</th>
+            </tr>
+            <tr>
+                <th onclick="sortTable(14)">Produksi Sendiri (kWh) <i class="fa fa-sort"></i></th>
+                <th onclick="sortTable(15)">Pembelian Sumber Lain (kWh) <i class="fa fa-sort"></i></th>
+                <th onclick="sortTable(16)">Penjualan ke Pelanggan (kWh) <i class="fa fa-sort"></i></th>
+                <th onclick="sortTable(17)">Penjualan ke PLN (kWh) <i class="fa fa-sort"></i></th>
+                <th onclick="sortTable(18)">Pemakaian Sendiri (kWh) <i class="fa fa-sort"></i></th>
+            </tr>
+        </thead>
 
-                    <tbody>
-                        <?php if (count($result) > 0): ?>
+        <tbody>
+            <?php if (count($result) > 0): ?>
+                <?php
+                // Group data by id_user
+                $groupedData = [];
+                foreach ($result as $row) {
+                    if (isset($row['id_user'])) {
+                        $groupedData[$row['id_user']][] = $row;
+                    } else {
+                        // Tangani kasus di mana id_user tidak ada
+                        echo "id_user tidak ditemukan untuk baris: " . json_encode($row);
+                    }
+                }
+
+
+                foreach ($groupedData as $id_user => $rows):
+                                    $no = 1;
+                    // Get nama_perusahaan from the first row
+                    $nama_perusahaan = htmlspecialchars($rows[0]['nama_perusahaan']);
+                    // Group header row with id_user and nama_perusahaan
+                    echo "<tr><td colspan='16' class='fw-bold bg-light'>NAMA PERUSAHAAN = ($nama_perusahaan) </td></tr>";
+                    foreach ($rows as $row):
+                ?>
+                    <tr>
+                        <td class="text-center"><?php echo $no++; ?></td>
+                        <td><?php echo htmlspecialchars($row['nama_perusahaan']); ?> </td>
+                        <?php if ($_SESSION['role'] == 'superadmin') { ?>
+                            <td><?= htmlspecialchars($row['no_hp_pimpinan']); ?></td>
+                            <td><?= htmlspecialchars($row['tenaga_teknik']); ?></td>
+                            <td><?= htmlspecialchars($row['no_hp_teknik']); ?></td>
+                            <td><?= htmlspecialchars($row['nama']); ?></td>
+                            <td><?= htmlspecialchars($row['no_hp']); ?></td>
+                        <?php } ?>
+                        <td><?= htmlspecialchars($row['no_telp_kantor']); ?></td>
+                        <td><?php echo htmlspecialchars($row['tahun']); ?> </td>
+                        <td><?php echo htmlspecialchars($row['bulan']); ?> </td>
+                        <td><?= htmlspecialchars($row['kabupaten']) ?></td>
+                        <td><?= htmlspecialchars($row['produksi_sendiri']); ?></td>
+                        <td><?= htmlspecialchars($row['pemb_sumber_lain']); ?></td>
+                        <td><?= htmlspecialchars($row['susut_jaringan']); ?></td>
+                        <td><?= htmlspecialchars($row['penj_ke_pelanggan']); ?></td>
+                        <td><?= htmlspecialchars($row['penj_ke_pln']); ?></td>
+                        <td><?= htmlspecialchars($row['pemakaian_sendiri']); ?></td>
+                        <td class="text-center">
                             <?php
-                            $no = 1;
-                            foreach ($result as $row) {
+                            if ($row['status'] == 'diajukan') {
+                                echo '<i class="fas fa-clock" style="color: yellow;"></i> Diajukan';
+                            } elseif ($row['status'] == 'diterima') {
+                                echo '<i class="fas fa-check" style="color: green;"></i> Diterima';
+                            } elseif ($row['status'] == 'dikembalikan') {
+                                echo '<i class="fas fa-times" style="color: red;"></i> Dikembalikan';
+                            } else {
+                                echo '<span class="text-muted">Status tidak diketahui</span>';
+                            }
                             ?>
-                                <tr>
-                                    <td class="text-center"><?php echo $no++; ?></td>
-                                    <td><?php echo htmlspecialchars($row['nama_perusahaan']); ?> </td>
-                                    <?php if ($_SESSION['role'] == 'superadmin') { ?>
-                                        <td><?= htmlspecialchars($row['no_hp_pimpinan']); ?></td>
-                                        <td><?= htmlspecialchars($row['tenaga_teknik']); ?></td>
-                                        <td><?= htmlspecialchars($row['no_hp_teknik']); ?></td>
-                                        <td><?= htmlspecialchars($row['nama']); ?></td>
-                                        <td><?= htmlspecialchars($row['no_hp']); ?></td>
-                                    <?php } ?>
-                                    <td><?= htmlspecialchars($row['no_telp_kantor']); ?></td>
-                                    <td><?php echo htmlspecialchars($row['tahun']); ?> </td>
-                                    <td><?php echo htmlspecialchars($row['bulan']); ?> </td>
-                                    <td><?= htmlspecialchars($row['kabupaten']) ?></td>
-                                    <td><?= htmlspecialchars($row['produksi_sendiri']); ?></td>
-                                    <td><?= htmlspecialchars($row['pemb_sumber_lain']); ?></td>
-                                    <td><?= htmlspecialchars($row['susut_jaringan']); ?></td>
-                                    <td><?= htmlspecialchars($row['penj_ke_pelanggan']); ?></td>
-                                    <td><?= htmlspecialchars($row['penj_ke_pln']); ?></td>
-                                    <td><?= htmlspecialchars($row['pemakaian_sendiri']); ?></td>
-                                    <td class="text-center">
-                                        <?php
-                                        if ($row['status'] == 'diajukan') {
-                                            echo '<i class="fas fa-clock" style="color: yellow;"></i> Diajukan';
-                                        } elseif ($row['status'] == 'diterima') {
-                                            echo '<i class="fas fa-check" style="color: green;"></i> Diterima';
-                                        } elseif ($row['status'] == 'dikembalikan') {
-                                            echo '<i class="fas fa-times" style="color: red;"></i> Dikembalikan';
-                                        } else {
-                                            echo '<span class="text-muted">Status tidak diketahui</ span>';
-                                        }
-                                        ?>
-                                    </td>
-                                    <td><?php echo htmlspecialchars($row['keterangan']); ?></td>
-                                    <td class="text-center">
-                                        <?php if (($role == 'adminbulanan' || $role == 'superadmin') && $row['status'] == 'diajukan'): ?>
-                                            <form method="POST" style="display: inline;">
-                                                <input type="hidden" name="terima_id" value="<?php echo $row['id']; ?>">
-                                                <button type="submit" class="btn btn-success btn-sm">Terima</button>
-                                            </form>
-                                            <a href="" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modalTolak<?php echo $row['id']; ?>">Tolak</a>
-                                        <?php endif; ?>
-                                        <?php if (($role == 'superadmin' && in_array($row['status'], ['dikembalikan', 'diterima'])) || ($role == 'umum' && in_array($row['status'], ['dikembalikan']))): ?>
-                                            <a href="?page=edit_laporan_perbulan&id=<?php echo $row['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
-                                            <a href="?page=hapus_laporan_perbulan&id=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus?');">Hapus</a>
-                                        <?php endif; ?>
-                                    </td>
-                                </tr>
-                                <!-- Modal untuk Tolak -->
-                                <div class="modal fade" id="modalTolak<?php echo $row['id']; ?>" tabindex="-1" role="dialog" aria-labelledby="modalTolakLabel" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="modalTolakLabel">Kembalikan Laporan</h5>
-                                            </div>
-                                            <form action="" method="POST">
-                                                <div class="modal-body">
-                                                    <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
-                                                    <div class="form-group">
-                                                        <label for="keterangan<?php echo $row['id']; ?>">Keterangan di Kembalikan</label>
-                                                        <textarea class="form-control" id="keterangan" name="keterangan" rows="3" required></textarea>
-                                                    </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                                                    <button type="submit" name="tolak_laporan" class="btn btn-danger">Kembalikan</button>
-                                                </div>
-                                            </form>
+                        </td>
+                        <td><?php echo htmlspecialchars($row['keterangan']); ?></td>
+                        <td class="text-center">
+                            <?php if (($role == 'adminbulanan' || $role == 'superadmin') && $row['status'] == 'diajukan'): ?>
+                                <form method="POST" style="display: inline;">
+                                    <input type="hidden" name="terima_id" value="<?php echo $row['id']; ?>">
+                                    <button type="submit" class="btn btn-success btn-sm">Terima</button>
+                                </form>
+                                <a href="" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modalTolak<?php echo $row['id']; ?>">Tolak</a>
+                            <?php endif; ?>
+                            <?php if (($role == 'superadmin' && in_array($row['status'], ['dikembalikan', 'diterima'])) || ($role == 'umum' && in_array($row['status'], ['dikembalikan']))): ?>
+                                <a href="?page=edit_laporan_perbulan&id=<?php echo $row['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
+                                <a href="?page=hapus_laporan_perbulan&id=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus?');">Hapus</a>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                    <!-- Modal untuk Tolak -->
+                    <div class="modal fade" id="modalTolak<?php echo $row['id']; ?>" tabindex="-1" role="dialog" aria-labelledby="modalTolakLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="modalTolakLabel">Kembalikan Laporan</h5>
+                                </div>
+                                <form action="" method="POST">
+                                    <div class="modal-body">
+                                        <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
+                                        <div class="form-group">
+                                            <label for="keterangan<?php echo $row['id']; ?>">Keterangan di Kembalikan</label>
+                                            <textarea class="form-control" id="keterangan" name="keterangan" rows="3" required></textarea>
                                         </div>
                                     </div>
-                                </div>
-                            <?php } ?>
-                        <?php else: ?>
-                            <tr>
-                                <td colspan='11' class='text-center'>Data tidak ditemukan</td>
-                            </tr>
-                        <?php endif; ?>
-                    </tbody>
-                </table>
-            </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                                        <button type="submit" name="tolak_laporan" class="btn btn-danger">Kembalikan</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; endforeach; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan='16' class='text-center'>Data tidak ditemukan</td>
+                </tr>
+            <?php endif; ?>
+        </tbody>
+    </table>
+</div>
         </div>
     </div>
 </div>
@@ -336,91 +355,87 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                         Anda harus melengkapi <strong>Profil Perusahaan</strong> terlebih dahulu sebelum dapat menambahkan Data Pembangkit.
                     </div>
                 <?php endif; ?>
-                <!-- <div class="mb-3">
-                    <?php if ($hasprofil && $role == 'umum') : ?>
-                        <a href="?page=pembangkit_tambah" class="btn btn-primary">
-                            <i class="fas fa-plus"></i> Tambah Data
-                        </a>
-                    <?php endif; ?>
-                    <?php if ($_SESSION['role'] == 'superadmin') { ?>
-                        <a href="?page=pembangkit_tambah" class="btn btn-primary">
-                            <i class="fas fa-plus"></i> Tambah Data
-                        </a>
-                    <?php } ?>
-                    <a href="?page=pembangkit_export" class="btn btn-success">Ekspor ke Spreadsheet</a>
-                </div> -->
-            </div>
             <div class="table-responsive" style="max-height: 500px; overflow-x: auto; overflow-y: auto;">
-                <table class="table table-bordered" style="table-layout: fixed; min-width: 1800px;">
-                    <thead class="table-dark text-center align-middle">
-                        <tr>
-                            <th rowspan="3" style="width: 3%;">No.</th>
-                            <th rowspan="3">Nama Perusahaan</th>
-                            <th colspan="4" style="min-width: 250px;">Data Pembangkit</th>
-                            <th colspan="10" style="min-width: 1500px;">Data Teknis Pembangkit</th>
-                            <th rowspan="3" style="min-width: 150px;">Aksi</th>
-                        </tr>
-                        <tr>
-                            <th rowspan="2">Alamat Pembangkit</th>
-                            <th colspan="2">Koordinat Pembangkit</th>
-                            <th rowspan="2">Jenis Pembangkit</th>
-                            <th rowspan="2">Fungsi</th>
-                            <th rowspan="2">Kapasitas Terpasang (MW)</th>
-                            <th rowspan="2">Daya Mampu Netto (MW)</th>
-                            <th rowspan="2">Jumlah Unit</th>
-                            <th rowspan="2">No. Unit</th>
-                            <th rowspan="2">Tahun Operasi</th>
-                            <th rowspan="2">Status Operasi</th>
-                            <th colspan="2">Bahan Bakar yang Digunakan</th>
-                            <th rowspan="2">Volume Bahan Bakar</th>
-                        </tr>
-                        <tr>
-                            <th>Latitude</th>
-                            <th>Longitude</th>
-                            <th>Jenis</th>
-                            <th>Satuan</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php if (count($resultpembangkit) > 0): ?>
-                            <?php
-                            $no = 1;
-                            foreach ($resultpembangkit as $row):
-                            ?>
-                                <tr>
-                                    <td class="text-center"><?php echo $no++; ?></td>
-                                    <td><?= htmlspecialchars($row['nama_perusahaan']) ?></td>
-                                    <td><?= htmlspecialchars($row['alamat']) ?></td>
-                                    <td><?= htmlspecialchars($row['latitude']) ?></td>
-                                    <td><?= htmlspecialchars($row['longitude']) ?></td>
-                                    <td><?= htmlspecialchars($row['jenis_pembangkit']) ?></td>
-                                    <td><?= htmlspecialchars($row['fungsi']) ?></td>
-                                    <td><?= htmlspecialchars($row['kapasitas_terpasang']) ?></td>
-                                    <td><?= htmlspecialchars($row['daya_mampu_netto']) ?></td>
-                                    <td><?= htmlspecialchars($row['jumlah_unit']) ?></td>
-                                    <td><?= htmlspecialchars($row['no_unit']) ?></td>
-                                    <td><?= htmlspecialchars($row['tahun_operasi']) ?></td>
-                                    <td><?= htmlspecialchars($row['status_operasi']) ?></td>
-                                    <td><?= htmlspecialchars($row['bahan_bakar_jenis']) ?></td>
-                                    <td><?= htmlspecialchars($row['bahan_bakar_satuan']) ?></td>
-                                    <td><?= htmlspecialchars($row['volume_bb']) ?></td>
-                                    <td>
-                                        <a href='?page=pembangkit_edit&id=<?= $row['id'] ?>' class='btn btn-sm btn-warning'>Edit</a>
-                                        <a href='?page=pembangkit_hapus&id=<?= $row['id'] ?>' class='btn btn-sm btn-danger' onclick='return confirm("Hapus data ini?")'>Hapus</a>
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <tr>
-                                <td colspan='16' class='text-center'>Data tidak ditemukan</td>
-                            </tr>
-                        <?php endif; ?>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
+    <table class="table table-bordered" style="table-layout: fixed; min-width: 1800px;">
+        <thead class="table-dark text-center align-middle">
+            <tr>
+                <th rowspan="3" style="width: 3%;">No.</th>
+                <th rowspan="3">Nama Perusahaan</th>
+                <th colspan="4" style="min-width: 250px;">Data Pembangkit</th>
+                <th colspan="10" style="min-width: 1500px;">Data Teknis Pembangkit</th>
+                <th rowspan="3" style="min-width: 150px;">Aksi</th>
+            </tr>
+            <tr>
+                <th rowspan="2">Alamat Pembangkit</th>
+                <th colspan="2">Koordinat Pembangkit</th>
+                <th rowspan="2">Jenis Pembangkit</th>
+                <th rowspan="2">Fungsi</th>
+                <th rowspan="2">Kapasitas Terpasang (MW)</th>
+                <th rowspan="2">Daya Mampu Netto (MW)</th>
+                <th rowspan="2">Jumlah Unit</th>
+                <th rowspan="2">No. Unit</th>
+                <th rowspan="2">Tahun Operasi</th>
+                <th rowspan="2">Status Operasi</th>
+                <th colspan="2">Bahan Bakar yang Digunakan</th>
+                <th rowspan="2">Volume Bahan Bakar</th>
+            </tr>
+            <tr>
+                <th>Latitude</th>
+                <th>Longitude</th>
+                <th>Jenis</th>
+                <th>Satuan</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if (count($resultpembangkit) > 0): ?>
+                <?php
+                // Group data by id_user
+                $groupedData = [];
+                foreach ($resultpembangkit as $row) {
+                    $groupedData[$row['id_user']][] = $row;
+                }
+
+
+                foreach ($groupedData as $id_user => $rows):
+                                    $no = 1;
+                    // Get nama_perusahaan from first row
+                    $nama_perusahaan = htmlspecialchars($rows[0]['nama_perusahaan']);
+                    // Group header row with user_id and nama_perusahaan
+                    echo "<tr><td colspan='16' class='fw-bold bg-light'>NAMA PERUSAHAAN = ($nama_perusahaan) </td></tr>";
+                    foreach ($rows as $row):
+                ?>
+                    <tr>
+                        <td class="text-center"><?php echo $no++; ?></td>
+                        <td><?= htmlspecialchars($row['nama_perusahaan']) ?></td>
+                        <td><?= htmlspecialchars($row['alamat']) ?></td>
+                        <td><?= htmlspecialchars($row['latitude']) ?></td>
+                        <td><?= htmlspecialchars($row['longitude']) ?></td>
+                        <td><?= htmlspecialchars($row['jenis_pembangkit']) ?></td>
+                        <td><?= htmlspecialchars($row['fungsi']) ?></td>
+                        <td><?= htmlspecialchars($row['kapasitas_terpasang']) ?></td>
+                        <td><?= htmlspecialchars($row['daya_mampu_netto']) ?></td>
+                        <td><?= htmlspecialchars($row['jumlah_unit']) ?></td>
+                        <td><?= htmlspecialchars($row['no_unit']) ?></td>
+                        <td><?= htmlspecialchars($row['tahun_operasi']) ?></td>
+                        <td><?= htmlspecialchars($row['status_operasi']) ?></td>
+                        <td><?= htmlspecialchars($row['bahan_bakar_jenis']) ?></td>
+                        <td><?= htmlspecialchars($row['bahan_bakar_satuan']) ?></td>
+                        <td><?= htmlspecialchars($row['volume_bb']) ?></td>
+                        <td>
+                            <a href='?page=pembangkit_edit&id=<?= $row['id'] ?>' class='btn btn-sm btn-warning'>Edit</a>
+                            <a href='?page=pembangkit_hapus&id=<?= $row['id'] ?>' class='btn btn-sm btn-danger' onclick='return confirm("Hapus data ini?")'>Hapus</a>
+                        </td>
+                    </tr>
+                <?php endforeach; endforeach; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan='16' class='text-center'>Data tidak ditemukan</td>
+                </tr>
+            <?php endif; ?>
+        </tbody>
+    </table>
 </div>
+
 <script>
     function sortTable(columnIndex) {
         var table = document.querySelector("table tbody");
