@@ -22,7 +22,7 @@ $query = "SELECT * FROM laporan_bulanan WHERE 1=1";
 $params = [];
 
 // Query berdasarkan role
-if ($role != 'adminbulanan' && $role != 'superadmin') {
+if ($role != 'adminbulanan' && $role != 'superadmin' && $role != 'kementerian') {
     $query .= " AND id_user = :id_user";
     $params[':id_user'] = $id_user;
 }
@@ -96,7 +96,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 }
 
-if ($role == 'admin' || $role == 'superadmin') {
+if ($role == 'adminbulanan' || $role == 'superadmin'|| $role == 'kementerian' ) {
         // Admin dan Superadmin melihat semua data
         $stmtpembangkit = $conn->prepare("SELECT * FROM pembangkit");
     } else {
@@ -419,8 +419,10 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                         <td><?= htmlspecialchars($row['bahan_bakar_satuan']) ?></td>
                         <td><?= htmlspecialchars($row['volume_bb']) ?></td>
                         <td class="d-flex flex-wrap gap-2">
+                            <?php if (($role == 'umum' || $role == 'superadmin')): ?>
                             <a href='?page=pembangkit_edit&id=<?= $row['id'] ?>' class='btn btn-sm btn-warning mb-2 me-2'>Edit</a>
                             <a href='?page=pembangkit_hapus&id=<?= $row['id'] ?>' class='btn btn-sm btn-danger mb-2' onclick='return confirm("Hapus data ini?")'>Hapus</a>
+                            <?php endif; ?>
                         </td>
                     </tr>
                 <?php endforeach; endforeach; ?>
