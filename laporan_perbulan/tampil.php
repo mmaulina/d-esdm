@@ -192,7 +192,9 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                         <i class="fas fa-plus"></i> Tambah Data
                     </a>
                 <?php } ?>
+                <?php if ($_SESSION['role'] == 'superadmin'||$_SESSION['role'] == 'adminbulanan') { ?>
                 <a href="?page=excel_laporan_bulanan" class="btn btn-success">Ekspor ke Spreadsheet</a>
+                <?php } ?>
             </div>
             <div class="table-responsive" style="max-height: 500px; overflow-x: auto; overflow-y: auto;">
     <table class="table table-bordered" style="min-width: 1200px; white-space: nowrap;">
