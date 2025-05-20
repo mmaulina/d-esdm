@@ -186,6 +186,7 @@ $totalKonsumsiPerKota = [];
 $totalVolumeBBPerKota = [];
 $jumlahJenisPembangkitPerKota = [];
 $jumlahFungsiPerKota = [];
+$jumlahStatusPerKota = [];
 
 $totalProduksi = 0;
 $totalKonsumsi = 0;
@@ -197,6 +198,7 @@ foreach ($daftarKabupatenKotaKalsel as $kota) {
     $totalVolumeBBPerKota[$kota] = ['Solar' => 0, 'Biomasa' => 0];
     $jumlahJenisPembangkitPerKota[$kota] = ['PLTD' => 0, 'PLTS' => 0];
     $jumlahFungsiPerKota[$kota] = ['utama' => 0, 'cadangan' => 0, 'darurat' => 0];
+    $jumlahStatusPerKota[$kota] = ['Beroperasi' => 0,'Perbaikan' => 0,'Rusak' => 0,'Rusak Total' =>0];
 }
 
 // Ambil data laporan bulanan
@@ -232,7 +234,7 @@ function parseNumber2($value) {
 }
 
 // Ambil data pembangkit
-$sql2 = "SELECT kabupaten, bahan_bakar_jenis, volume_bb, jenis_pembangkit, fungsi FROM pembangkit";
+$sql2 = "SELECT kabupaten, bahan_bakar_jenis, volume_bb, jenis_pembangkit, fungsi, status_operasi FROM pembangkit";
 $stmt2 = $conn->query($sql2);
 $pembangkit = $stmt2->fetchAll(PDO::FETCH_ASSOC);
 
@@ -248,6 +250,7 @@ foreach ($pembangkit as $pb) {
     $jenis = strtoupper(trim($pb['jenis_pembangkit'])); // contoh: PLTD, PLTS
     $fungsi = strtolower(trim($pb['fungsi'])); // contoh: utama, cadangan, darurat
     $volume = parseNumber2($pb['volume_bb']);
+    $status = ucwords(strtolower(trim($pb['status_operasi']))); // contoh: utama, cadangan, darurat
 
     // Hitung total volume bahan bakar hanya jika bahan bakar valid
     if (in_array($bahanBakar, ['Solar', 'Biomasa'])) {
@@ -258,6 +261,10 @@ foreach ($pembangkit as $pb) {
     if (in_array($jenis, ['PLTD', 'PLTS'])) {
         $jumlahJenisPembangkitPerKota[$kabupaten][$jenis]++;
     }
+
+    if (in_array($status, ['Beroperasi', 'Perbaikan', 'Rusak', 'Rusak Total'])) {
+    $jumlahStatusPerKota[$kabupaten][$status]++;
+}
 
     // Hitung jumlah fungsi jika valid
     if (in_array($fungsi, ['utama', 'cadangan', 'darurat'])) {
@@ -270,7 +277,7 @@ foreach ($pembangkit as $pb) {
 ?>
 <main>
     <div class="container mt-4">
-        <h2 class="text-center mb-3">Welcome to Dashboard</h2>
+        <h2 class="text-center mb-3">Welcome to </h2>
         <hr>
         <div class="card shadow" style="overflow-x: auto; max-height: calc(100vh - 150px); overflow-y: auto;">
             <div class="card-body">
@@ -370,6 +377,10 @@ foreach ($pembangkit as $pb) {
                                         <th onclick="sortTable('tabel-produksi-konsumsi', 7)">Total Pembangkit UTAMA <i class="fa fa-sort"></i></th>
                                         <th onclick="sortTable('tabel-produksi-konsumsi', 8)">Total Pembangkit CADANGAN <i class="fa fa-sort"></i></th>
                                         <th onclick="sortTable('tabel-produksi-konsumsi', 9)">Total Pembangkit DARURAT <i class="fa fa-sort"></i></th>
+                                        <th onclick="sortTable('tabel-produksi-konsumsi', 9)">Status Pembangkit (Beroperasi) <i class="fa fa-sort"></i></th>
+                                        <th onclick="sortTable('tabel-produksi-konsumsi', 9)">Status Pembangkit (Perbaikan) <i class="fa fa-sort"></i></th>
+                                        <th onclick="sortTable('tabel-produksi-konsumsi', 9)">Status Pembangkit (Rusak) <i class="fa fa-sort"></i></th>
+                                        <th onclick="sortTable('tabel-produksi-konsumsi', 9)">Status Pembangkit (Rusak Total) <i class="fa fa-sort"></i></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -385,6 +396,10 @@ foreach ($pembangkit as $pb) {
                                             <td class="text-end"><?= ($jumlahFungsiPerKota[$kota]['utama'] ); ?></td>
                                             <td class="text-end"><?= ($jumlahFungsiPerKota[$kota]['cadangan'] ); ?></td>
                                             <td class="text-end"><?= ($jumlahFungsiPerKota[$kota]['darurat'] ); ?></td>
+                                            <td class="text-end"><?= ($jumlahStatusPerKota[$kota]['Beroperasi'] ); ?></td>
+                                            <td class="text-end"><?= ($jumlahStatusPerKota[$kota]['Perbaikan'] ); ?></td>
+                                            <td class="text-end"><?= ($jumlahStatusPerKota[$kota]['Rusak'] ); ?></td>
+                                            <td class="text-end"><?= ($jumlahStatusPerKota[$kota]['Rusak Total'] ); ?></td>
                                         </tr>
                                     <?php endforeach; ?>
                                 </tbody>
@@ -400,6 +415,10 @@ foreach ($pembangkit as $pb) {
                                         <td class="text-end"><?= number_format(array_sum(array_column($jumlahFungsiPerKota, 'utama'))); ?></td>
                                         <td class="text-end"><?= number_format(array_sum(array_column($jumlahFungsiPerKota, 'cadangan'))); ?></td>
                                         <td class="text-end"><?= number_format(array_sum(array_column($jumlahFungsiPerKota, 'darurat'))); ?></td>
+                                        <td class="text-end"><?= number_format(array_sum(array_column($jumlahStatusPerKota, 'Beroperasi'))); ?></td>
+                                        <td class="text-end"><?= number_format(array_sum(array_column($jumlahStatusPerKota, 'Perbaikan'))); ?></td>
+                                        <td class="text-end"><?= number_format(array_sum(array_column($jumlahStatusPerKota, 'Rusak'))); ?></td>
+                                        <td class="text-end"><?= number_format(array_sum(array_column($jumlahStatusPerKota, 'Rusak Total'))); ?></td>
                                     </tr>
                                 </tfoot>
                             </table>
