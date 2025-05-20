@@ -550,9 +550,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <select name="status_operasi[]" class="form-select" required>
                     <option value="">-- Pilih Status Operasi --</option>
                     <option value="Beroperasi">Beroperasi</option>
-                    <option value="Maintenance/Perbaikan">Maintenance/Perbaikan</option>
+                    <option value="Perbaikan">Perbaikan</option>
                     <option value="Rusak">Rusak</option>
-                    <option value="Rusak">Rusak Total</option>
+                    <option value="Rusak Total">Rusak Total</option>
                 </select>
             </div>
             <div class="row mb-3">
