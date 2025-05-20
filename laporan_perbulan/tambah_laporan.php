@@ -533,6 +533,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="mb-3">
                 <label class="form-label">Daya Mampu Netto (MW)</label>
                 <input type="text" name="daya_mampu_netto[]" class="form-control" placeholder="Contoh: 1.250,75" required>
+                <small class="text-danger">Titik = ribuan, koma = desimal.</small>
             </div>
             <div class="mb-3">
                 <label class="form-label">No. Unit</label>
@@ -563,6 +564,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <option value="Solar">Solar</option>
                         <option value="Biomasa">Biomasa</option>
                     </select>
+                    <small class="text-muted">
+                        Catatan: <strong>Biomasa</strong> mencakup bahan-bahan organik seperti <em>cangkang sawit</em>, <em>serbuk gergaji</em>, dan <em>sekam padi</em>, dll yang digunakan sebagai bahan bakar alternatif dalam pembangkit listrik.
+                    </small>
                 </div>
                 <div class="col">
                     <label class="form-label">Satuan Bahan Bakar</label>
