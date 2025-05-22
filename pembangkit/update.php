@@ -48,11 +48,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $bahan_bakar_jenis = trim($_POST['bahan_bakar_jenis']);
     $bahan_bakar_satuan = trim($_POST['bahan_bakar_satuan']);
     $volume_bb = trim($_POST['volume_bb']);
+    $status = 'diajukan'; // Status diisi otomatis
+    $keterangan = '-';    // Keterangan diisi otomatis
 
     // Query update
-    $query = "UPDATE pembangkit SET nama_perusahaan=?, tahun=?, bulan=?, alamat=?, kabupaten=?, latitude=?, longitude=?, jenis_pembangkit=?, fungsi=?, kapasitas_terpasang=?, daya_mampu_netto=?, jumlah_unit=?, no_unit=?, tahun_operasi=?, status_operasi=?, bahan_bakar_jenis=?, bahan_bakar_satuan=?, volume_bb=? WHERE id =?";
+    $query = "UPDATE pembangkit SET nama_perusahaan=?, tahun=?, bulan=?, alamat=?, kabupaten=?, latitude=?, longitude=?, jenis_pembangkit=?, fungsi=?, kapasitas_terpasang=?, daya_mampu_netto=?, jumlah_unit=?, no_unit=?, tahun_operasi=?, status_operasi=?, bahan_bakar_jenis=?, bahan_bakar_satuan=?, volume_bb=?, status=?, keterangan=? WHERE id =?";
     $stmt = $conn->prepare($query);
-    $success = $stmt->execute([$nama_perusahaan, $tahun, $bulan, $alamat, $kabupaten, $latitude, $longitude, $jenis_pembangkit, $fungsi, $kapasitas_terpasang, $daya_mampu_netto, $jumlah_unit, $no_unit, $tahun_operasi, $status_operasi, $bahan_bakar_jenis, $bahan_bakar_satuan, $volume_bb, $id_pembangkit]);
+    $success = $stmt->execute([$nama_perusahaan, $tahun, $bulan, $alamat, $kabupaten, $latitude, $longitude, $jenis_pembangkit, $fungsi, $kapasitas_terpasang, $daya_mampu_netto, $jumlah_unit, $no_unit, $tahun_operasi, $status_operasi, $bahan_bakar_jenis, $bahan_bakar_satuan, $volume_bb, $status, $keterangan, $id_pembangkit]);
 
     if ($success) {
         echo "<script>alert('Data berhasil diperbarui!'); window.location.href='?page=laporan_perbulan';</script>";

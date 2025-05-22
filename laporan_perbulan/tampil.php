@@ -94,6 +94,26 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         echo "<meta http-equiv='refresh' content='0; url=?page=laporan_perbulan'>";
         exit;
     }
+
+    if (isset($_POST['terima_id2'])) {
+        $id = $_POST['terima_id2'];
+        $updatequerypembangkit = "UPDATE pembangkit SET status = 'diterima' WHERE id = :id";
+    } elseif (isset($_POST['tolak_laporan2'])) {
+        $id = $_POST['id'];
+        $keterangan = $_POST['keterangan'];
+        $updatequerypembangkit = "UPDATE pembangkit SET status = 'dikembalikan', keterangan = :keterangan WHERE id = :id";
+    }
+
+    if (isset($updatequerypembangkit)) {
+        $updatestmt2 = $conn->prepare($updatequerypembangkit);
+        $updatestmt2->bindParam(':id', $id, PDO::PARAM_INT);
+        if (isset($keterangan)) {
+            $updatestmt2->bindParam(':keterangan', $keterangan, PDO::PARAM_STR);
+        }
+        $updatestmt2->execute();
+        echo "<meta http-equiv='refresh' content='0; url=?page=laporan_perbulan'>";
+        exit;
+    }
 }
 
 if ($role == 'adminbulanan' || $role == 'superadmin'|| $role == 'kementerian' ) {
@@ -278,6 +298,7 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                         <td><?= htmlspecialchars($row['penj_ke_pelanggan']); ?></td>
                         <td><?= htmlspecialchars($row['penj_ke_pln']); ?></td>
                         <td><?= htmlspecialchars($row['pemakaian_sendiri']); ?></td>
+
                         <td class="text-center">
                             <?php
                             if ($row['status'] == 'diajukan') {
@@ -298,11 +319,14 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                                     <input type="hidden" name="terima_id" value="<?php echo $row['id']; ?>">
                                     <button type="submit" class="btn btn-success btn-sm">Terima</button>
                                 </form>
-                                <a href="" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modalTolak<?php echo $row['id']; ?>">Tolak</a>
+                                <a href="" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modalTolak<?php echo $row['id']; ?>">Dikembalikan</a>
                             <?php endif; ?>
                             <?php if (($role == 'superadmin' && in_array($row['status'], ['dikembalikan', 'diterima'])) || ($role == 'umum' && in_array($row['status'], ['dikembalikan']))): ?>
                                 <a href="?page=edit_laporan_perbulan&id=<?php echo $row['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
                                 <a href="?page=hapus_laporan_perbulan&id=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus?');">Hapus</a>
+                                <?php if (($role == 'superadmin') && $row['status'] == 'diterima'): ?>
+                                <a href="" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalTolak<?php echo $row['id']; ?>">Dikembalikan</a>
+                                <?php endif; ?>
                             <?php endif; ?>
                         </td>
                     </tr>
@@ -329,6 +353,7 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                             </div>
                         </div>
                     </div>
+
                 <?php endforeach; endforeach; ?>
             <?php else: ?>
                 <tr>
@@ -366,6 +391,8 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                 <th rowspan="3">Nama Perusahaan</th>
                 <th colspan="4" style="min-width: 250px;">Data Pembangkit</th>
                 <th colspan="10" style="min-width: 1500px;">Data Teknis Pembangkit</th>
+                <th rowspan="3" style="min-width: 150px;">Status</th>
+                <th rowspan="3" style="min-width: 150px;">Keterangan</th>
                 <th rowspan="3" style="min-width: 150px;">Aksi</th>
             </tr>
             <tr>
@@ -424,13 +451,60 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                         <td><?= htmlspecialchars($row['bahan_bakar_jenis']) ?></td>
                         <td><?= htmlspecialchars($row['bahan_bakar_satuan']) ?></td>
                         <td><?= htmlspecialchars($row['volume_bb']) ?></td>
-                        <td class="d-flex flex-wrap gap-2">
-                            <?php if (($role == 'umum' || $role == 'superadmin')): ?>
-                            <a href='?page=pembangkit_edit&id=<?= $row['id'] ?>' class='btn btn-sm btn-warning mb-2 me-2'>Edit</a>
-                            <a href='?page=pembangkit_hapus&id=<?= $row['id'] ?>' class='btn btn-sm btn-danger mb-2' onclick='return confirm("Hapus data ini?")'>Hapus</a>
+                        <td class="text-center">
+                            <?php
+                            if ($row['status'] == 'diajukan') {
+                                echo '<i class="fas fa-clock" style="color: yellow;"></i> Diajukan';
+                            } elseif ($row['status'] == 'diterima') {
+                                echo '<i class="fas fa-check" style="color: green;"></i> Diterima';
+                            } elseif ($row['status'] == 'dikembalikan') {
+                                echo '<i class="fas fa-times" style="color: red;"></i> Dikembalikan';
+                            } else {
+                                echo '<span class="text-muted">Status tidak diketahui</span>';
+                            }
+                            ?>
+                        </td>
+                        <td><?php echo htmlspecialchars($row['keterangan']); ?></td>
+                        <td class="text-center">
+                            <?php if (($role == 'adminbulanan' || $role == 'superadmin') && $row['status'] == 'diajukan'): ?>
+                                <form method="POST" style="display: inline;">
+                                    <input type="hidden" name="terima_id2" value="<?php echo $row['id']; ?>">
+                                    <button type="submit" class="btn btn-success btn-sm">Terima</button>
+                                </form>
+                                <a href="" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modalTolak2<?php echo $row['id']; ?>">Kembalikan</a>
+                            <?php endif; ?>
+                            <?php if (($role == 'superadmin' && in_array($row['status'], ['dikembalikan', 'diterima'])) || ($role == 'umum' && in_array($row['status'], ['dikembalikan']))): ?>
+                                <a href='?page=pembangkit_edit&id=<?= $row['id'] ?>' class='btn btn-sm btn-warning mb-2 me-2'>Edit</a>
+                                <a href='?page=pembangkit_hapus&id=<?= $row['id'] ?>' class='btn btn-sm btn-danger mb-2' onclick='return confirm("Hapus data ini?")'>Hapus</a>
+                                <?php if (($role == 'superadmin') && $row['status'] == 'diterima'): ?>
+                                <a href="" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalTolak2<?php echo $row['id']; ?>">Kembalikan</a>
+                                <?php endif; ?>
                             <?php endif; ?>
                         </td>
                     </tr>
+                    <!-- Modal untuk Tolak -->
+                    <div class="modal fade" id="modalTolak2<?php echo $row['id']; ?>" tabindex="-1" role="dialog" aria-labelledby="modalTolakLabel2" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="modalTolakLabel2">Kembalikan Pembangkit</h5>
+                                </div>
+                                <form action="" method="POST">
+                                    <div class="modal-body">
+                                        <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
+                                        <div class="form-group">
+                                            <label for="keterangan<?php echo $row['id']; ?>">Keterangan di Kembalikan</label>
+                                            <textarea class="form-control" id="keterangan" name="keterangan" rows="3" required></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                                        <button type="submit" name="tolak_laporan2" class="btn btn-danger">Kembalikan</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 <?php endforeach; endforeach; ?>
             <?php else: ?>
                 <tr>

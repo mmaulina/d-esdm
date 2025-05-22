@@ -46,7 +46,7 @@ if (isset($_POST['btn_simpan'])) {
     }
 }
 ?>
-
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 <div class="container mt-4">
     <h3 class="text-center">Ganti Password</h3>
     <hr>
@@ -54,13 +54,19 @@ if (isset($_POST['btn_simpan'])) {
         <!-- Form untuk mengganti password -->
         <div class="card-body">
             <form action="" method="post">
-                <div class="mb-3">
+                <div class="mb-3 input-group">
                     <label for="inputPasswordLama" class="form-label">Password Lama</label>
                     <input type="password" class="form-control" id="inputPasswordLama" required name="password_lama">
+                    <span class="input-group-text" onclick="togglePassword()" style="cursor:pointer;">
+                        <i class="bi bi-eye-slash" id="toggleIcon"></i>
+                    </span>
                 </div>
-                <div class="mb-3">
+                <div class="mb-3 input-group">
                     <label for="inputPasswordBaru" class="form-label">Password Baru</label>
                     <input type="password" class="form-control" id="inputPasswordBaru" required name="password_baru">
+                    <span class="input-group-text" onclick="togglePassword2()" style="cursor:pointer;">
+                        <i class="bi bi-eye-slash" id="toggleIcon2"></i>
+                    </span>
                 </div>
                 <button type="submit" class="btn btn-warning" name="btn_simpan">Simpan Perubahan</button>
                 <button type="reset" class="btn btn-secondary">Batal</button>
@@ -68,3 +74,33 @@ if (isset($_POST['btn_simpan'])) {
         </div>
     </div>
 </div>
+
+
+    <script>
+        function togglePassword() {
+            const passwordField = document.getElementById("inputPasswordLama");
+            const toggleIcon = document.getElementById("toggleIcon");
+
+            const type = passwordField.getAttribute("type") === "password" ? "text" : "password";
+            passwordField.setAttribute("type", type);
+
+            toggleIcon.classList.toggle("bi-eye");
+            toggleIcon.classList.toggle("bi-eye-slash");
+        }
+    </script>
+    <script>
+        function togglePassword2() {
+            const passwordField = document.getElementById("inputPasswordBaru");
+            const toggleIcon = document.getElementById("toggleIcon2");
+
+            const type = passwordField.getAttribute("type") === "password" ? "text" : "password";
+            passwordField.setAttribute("type", type);
+
+            toggleIcon.classList.toggle("bi-eye");
+            toggleIcon.classList.toggle("bi-eye-slash");
+        }
+    </script>
+
+    <script src="../assets/js/bootstrap.bundle.min.js"></script>
+
+    </script>
