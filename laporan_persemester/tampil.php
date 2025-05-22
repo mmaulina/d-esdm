@@ -168,14 +168,14 @@ $hasLaporanBulanan = $stmtCheck->fetchColumn() > 0;
                             <?php } ?>
                             <th rowspan="3" onclick="sortTable(7)">Nomor Telepon Kantor <i class="fa fa-sort"></i></th>
 
-                            <th colspan="2">Parameter SO₂</th>
-                            <th colspan="2">Parameter HO₂</th>
-                            <th colspan="2">Parameter TSP/Debu</th>
-                            <th colspan="2">Parameter CO</th>
-                            <th colspan="2">Parameter Kebisingan</th>
+                            <th colspan="3">Parameter SO₂</th>
+                            <th colspan="3">Parameter HO₂</th>
+                            <th colspan="3">Parameter TSP/Debu</th>
+                            <th colspan="3">Parameter CO</th>
+                            <th colspan="3">Parameter Kebisingan</th>
 
-                            <th rowspan="3">Laporan</th>
-                            <th rowspan="3">LHU</th>
+                            <th rowspan="3">Laporan Semester</th>
+                            <th rowspan="3">Laporan Hasil Uji Parameter</th>
                             <th rowspan="3" onclick="sortTable(10)">Tahun <i class="fa fa-sort"></i></th>
                             <th rowspan="3" onclick="sortTable(11)">Semester <i class="fa fa-sort"></i></th>
                             <th rowspan="3" onclick="sortTable(12)">Status <i class="fa fa-sort"></i></th>
@@ -186,14 +186,19 @@ $hasLaporanBulanan = $stmtCheck->fetchColumn() > 0;
                         <tr>
                             <th>Baku Mutu</th>
                             <th>Hasil</th>
+                            <th>Rencana Aksi</th>
                             <th>Baku Mutu</th>
                             <th>Hasil</th>
+                            <th>Rencana Aksi</th>
                             <th>Baku Mutu</th>
                             <th>Hasil</th>
+                            <th>Rencana Aksi</th>
                             <th>Baku Mutu</th>
                             <th>Hasil</th>
+                            <th>Rencana Aksi</th>
                             <th>Baku Mutu</th>
                             <th>Hasil</th>
+                            <th>Rencana Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -215,14 +220,19 @@ $hasLaporanBulanan = $stmtCheck->fetchColumn() > 0;
                                         <td><?= htmlspecialchars($row['no_telp_kantor']); ?></td>
                                     <td><?php echo htmlspecialchars($row['baku_mutu_so2']); ?></td>
                                     <td><?php echo htmlspecialchars($row['hasil_so2']); ?></td>
+                                    <td><?php echo htmlspecialchars($row['rencana_aksi_so2']); ?></td>
                                     <td><?php echo htmlspecialchars($row['baku_mutu_ho2']); ?></td>
                                     <td><?php echo htmlspecialchars($row['hasil_ho2']); ?></td>
+                                    <td><?php echo htmlspecialchars($row['rencana_aksi_ho2']); ?></td>
                                     <td><?php echo htmlspecialchars($row['baku_mutu_tsp']); ?></td>
                                     <td><?php echo htmlspecialchars($row['hasil_tsp']); ?></td>
+                                    <td><?php echo htmlspecialchars($row['rencana_aksi_tsp']); ?></td>
                                     <td><?php echo htmlspecialchars($row['baku_mutu_co']); ?></td>
                                     <td><?php echo htmlspecialchars($row['hasil_co']); ?></td>
+                                    <td><?php echo htmlspecialchars($row['rencana_aksi_co']); ?></td>
                                     <td><?php echo htmlspecialchars($row['baku_mutu_kebisingan']); ?></td>
                                     <td><?php echo htmlspecialchars($row['hasil_kebisingan']); ?></td>
+                                    <td><?php echo htmlspecialchars($row['rencana_aksi_kebisingan']); ?></td>
                                     <td class="text-center">
                                         <?php if (!empty($row['file_laporan'])) : ?>
                                             <a href="<?php echo htmlspecialchars($row['file_laporan']); ?>" target="_blank" class="btn btn-sm btn-dark">
