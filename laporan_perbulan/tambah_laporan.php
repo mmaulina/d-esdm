@@ -149,10 +149,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($data_pembangkit) {
         $querypembangkit = "INSERT INTO pembangkit (
                 id_user, nama_perusahaan, kabupaten, alamat, longitude, latitude, jenis_pembangkit, fungsi, kapasitas_terpasang, 
-                daya_mampu_netto, jumlah_unit, no_unit, tahun_operasi, status_operasi, bahan_bakar_jenis, bahan_bakar_satuan, volume_bb) 
+                daya_mampu_netto, jumlah_unit, no_unit, tahun_operasi, status_operasi, bahan_bakar_jenis, bahan_bakar_satuan, volume_bb, bulan, tahun, status, keterangan) 
             VALUES (
                 :id_user, :nama_perusahaan, :kabupaten, :alamat, :longitude, :latitude, :jenis_pembangkit, :fungsi, :kapasitas_terpasang, 
-                :daya_mampu_netto, :jumlah_unit, :no_unit, :tahun_operasi, :status_operasi, :bahan_bakar_jenis, :bahan_bakar_satuan, :volume_bb
+                :daya_mampu_netto, :jumlah_unit, :no_unit, :tahun_operasi, :status_operasi, :bahan_bakar_jenis, :bahan_bakar_satuan, :volume_bb, :bulan, :tahun, :status, :keterangan
             )";
 
         $allPembangkitSaved = true; // Tambahkan di awal sebelum for
@@ -184,12 +184,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt2->bindParam(':kapasitas_terpasang', $kapasitas_terpasang);
             $stmt2->bindParam(':daya_mampu_netto', $daya_mampu_netto);
             $stmt2->bindParam(':jumlah_unit', $jumlah_unit);
+            $stmt2->bindParam(':bulan', $bulan);
+            $stmt2->bindParam(':tahun', $tahun);
             $stmt2->bindParam(':no_unit', $no_unit);
             $stmt2->bindParam(':tahun_operasi', $tahun_operasi);
             $stmt2->bindParam(':status_operasi', $status_operasi);
             $stmt2->bindParam(':bahan_bakar_jenis', $bahan_bakar_jenis);
             $stmt2->bindParam(':bahan_bakar_satuan', $bahan_bakar_satuan);
             $stmt2->bindParam(':volume_bb', $volume_bb);
+            $stmt2->bindParam(':tahun', $tahun);
+            $stmt2->bindParam(':bulan', $bulan);
+            $stmt2->bindParam(':status', $status);
+            $stmt2->bindParam(':keterangan', $keterangan);
 
             if (!$stmt2->execute()) {
                 $allPembangkitSaved = false;
