@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 19 Bulan Mei 2025 pada 02.25
+-- Waktu pembuatan: 24 Bulan Mei 2025 pada 02.50
 -- Versi server: 10.4.28-MariaDB
 -- Versi PHP: 8.0.28
 
@@ -39,14 +39,19 @@ CREATE TABLE `laporan_semester` (
   `no_telp_kantor` varchar(15) NOT NULL,
   `baku_mutu_so2` varchar(225) NOT NULL,
   `hasil_so2` varchar(100) NOT NULL,
+  `rencana_aksi_so2` varchar(255) NOT NULL,
   `baku_mutu_ho2` varchar(225) NOT NULL,
   `hasil_ho2` varchar(100) NOT NULL,
+  `rencana_aksi_ho2` varchar(255) NOT NULL,
   `baku_mutu_tsp` varchar(225) NOT NULL,
   `hasil_tsp` varchar(100) NOT NULL,
+  `rencana_aksi_tsp` varchar(255) NOT NULL,
   `baku_mutu_co` varchar(225) NOT NULL,
   `hasil_co` varchar(100) NOT NULL,
+  `rencana_aksi_co` varchar(255) NOT NULL,
   `baku_mutu_kebisingan` varchar(225) NOT NULL,
   `hasil_kebisingan` varchar(100) NOT NULL,
+  `rencana_aksi_kebisingan` int(255) NOT NULL,
   `file_laporan` varchar(225) NOT NULL,
   `file_lhu` varchar(225) NOT NULL,
   `tahun` year(4) NOT NULL,
@@ -59,9 +64,9 @@ CREATE TABLE `laporan_semester` (
 -- Dumping data untuk tabel `laporan_semester`
 --
 
-INSERT INTO `laporan_semester` (`id`, `id_user`, `nama_perusahaan`, `no_hp_pimpinan`, `tenaga_teknik`, `no_hp_teknik`, `nama`, `no_hp`, `no_telp_kantor`, `baku_mutu_so2`, `hasil_so2`, `baku_mutu_ho2`, `hasil_ho2`, `baku_mutu_tsp`, `hasil_tsp`, `baku_mutu_co`, `hasil_co`, `baku_mutu_kebisingan`, `hasil_kebisingan`, `file_laporan`, `file_lhu`, `tahun`, `semester`, `status`, `keterangan`) VALUES
-(28, 5, 'PT Energi Mandiri', '087535764768', 'Nama Tenaga Teknik Anda', '085654375689', 'MUHAMMAD IRWAN FIRDAUS', '086567896567', '088247342027', '0,26', '0,08', '0,21', '0,10', '0,23', '0,18', '55', '50', '10', '3,5', 'uploads/1747588518_Laporan_Bulanan_1747579893.xlsx', 'uploads/1747588518_SK-UJIAN-SKRIPSI-20100100561.docx', '2025', 'Semester I 2025', 'diterima', '-'),
-(29, 5, 'PT Energi Mandiri', '087535764768', 'Nama Tenaga Teknik Anda', '085654375689', 'MUHAMMAD IRWAN FIRDAUS', '086567896567', '088247342027', '800', '540', '400', '285', '230', '160', '10.000', '7.200', '85', '79', 'uploads/1747609053_Laporan_Bulanan_1747579893.xlsx', 'uploads/1747609053_SK-UJIAN-SKRIPSI-20100100561.docx', '2025', 'Semester I 2025', 'dikembalikan', 'cek lagi');
+INSERT INTO `laporan_semester` (`id`, `id_user`, `nama_perusahaan`, `no_hp_pimpinan`, `tenaga_teknik`, `no_hp_teknik`, `nama`, `no_hp`, `no_telp_kantor`, `baku_mutu_so2`, `hasil_so2`, `rencana_aksi_so2`, `baku_mutu_ho2`, `hasil_ho2`, `rencana_aksi_ho2`, `baku_mutu_tsp`, `hasil_tsp`, `rencana_aksi_tsp`, `baku_mutu_co`, `hasil_co`, `rencana_aksi_co`, `baku_mutu_kebisingan`, `hasil_kebisingan`, `rencana_aksi_kebisingan`, `file_laporan`, `file_lhu`, `tahun`, `semester`, `status`, `keterangan`) VALUES
+(28, 5, 'PT Energi Mandiri', '087535764768', 'Nama Tenaga Teknik Anda', '085654375689', 'MUHAMMAD IRWAN FIRDAUS', '086567896567', '088247342027', '0,26', '0,08', '', '0,21', '0,10', '0', '0,23', '0,18', '', '55', '50', '', '10', '3,5', 0, 'uploads/1747588518_Laporan_Bulanan_1747579893.xlsx', 'uploads/1747588518_SK-UJIAN-SKRIPSI-20100100561.docx', '2025', 'Semester I 2025', 'diajukan', '-'),
+(29, 5, 'PT Energi Mandiri', '087535764768', 'Nama Tenaga Teknik Anda', '085654375689', 'MUHAMMAD IRWAN FIRDAUS', '086567896567', '088247342027', '800', '540', '', '400', '285', '0', '230', '160', '', '10.000', '7.200', '', '85', '79', 0, 'uploads/1747609053_Laporan_Bulanan_1747579893.xlsx', 'uploads/1747609053_SK-UJIAN-SKRIPSI-20100100561.docx', '2025', 'Semester I 2025', 'dikembalikan', 'cek lagi');
 
 --
 -- Indexes for dumped tables
