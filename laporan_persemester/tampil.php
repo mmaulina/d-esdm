@@ -282,6 +282,11 @@ $hasLaporanBulanan = $stmtCheck->fetchColumn() > 0;
                                         <?php if (($row['status'] == 'diterima' || $row['status'] == 'dikembalikan') && $role == 'superadmin'): ?>
                                             <a href="?page=edit_laporan_persemester&id=<?php echo $row['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
                                             <a href="?page=hapus_laporan_persemester&id=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus?');">Hapus</a>
+                                            
+                                            <?php if (($row['status'] == 'diterima') && $role == 'superadmin'): ?>
+                                            <a href="" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalTolak<?php echo $row['id']; ?>">Kembalikan</a>
+                                        <?php endif; ?>
+                                        
                                         <?php endif; ?>
                                         <?php if ($role == 'umum' && $row['status'] == 'dikembalikan'): ?>
                                             <a href="?page=edit_laporan_persemester&id=<?php echo $row['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
