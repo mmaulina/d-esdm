@@ -534,12 +534,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="mb-3">
                 <label class="form-label">Kapasitas Terpasang (MW)</label>
                 <input type="text" name="kapasitas_terpasang[]" class="form-control" placeholder="Contoh: 1.250,75" required>
-                <small class="text-danger">Titik = ribuan, koma = desimal.</small>
-            </div>
-            <div class="mb-3">
+                <div><small class="text-primary">Catatan : 1 kVA = 0,001 MW. Contoh 15kVA = 0,015MW</small></div>
+                <div><small class="text-danger">Titik = ribuan, koma = desimal.</small></div>
+                </div>
+                <div class="mb-3">
                 <label class="form-label">Daya Mampu Netto (MW)</label>
                 <input type="text" name="daya_mampu_netto[]" class="form-control" placeholder="Contoh: 1.250,75" required>
-                <small class="text-danger">Titik = ribuan, koma = desimal.</small>
+                <div><small class="text-primary">Catatan : 1 kVA = 0,001 MW. Contoh 15kVA = 0,015MW</small></div>
+                <div><small class="text-danger">Titik = ribuan, koma = desimal.</small></div>
             </div>
             <div class="mb-3">
                 <label class="form-label">No. Unit</label>
