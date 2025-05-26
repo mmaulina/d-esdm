@@ -198,7 +198,7 @@ foreach ($daftarKabupatenKotaKalsel as $kota) {
     $totalVolumeBBPerKota[$kota] = ['Solar' => 0, 'Biomasa' => 0];
     $jumlahJenisPembangkitPerKota[$kota] = ['PLTD' => 0, 'PLTS' => 0];
     $jumlahFungsiPerKota[$kota] = ['utama' => 0, 'cadangan' => 0, 'darurat' => 0];
-    $jumlahStatusPerKota[$kota] = ['Beroperasi' => 0,'Perbaikan' => 0,'Rusak' => 0,'Rusak Total' =>0];
+    $jumlahStatusPerKota[$kota] = ['Beroperasi' => 0, 'Perbaikan' => 0, 'Rusak' => 0, 'Rusak Total' => 0];
 }
 
 // Ambil data laporan bulanan
@@ -227,7 +227,8 @@ foreach ($laporanBulanan as $laporan) {
 }
 
 // Fungsi parse number khusus untuk volume bahan bakar (mirip parseNumber)
-function parseNumber2($value) {
+function parseNumber2($value)
+{
     $value = str_replace('.', '', $value);
     $value = str_replace(',', '.', $value);
     return is_numeric($value) ? (float)$value : 0;
@@ -263,8 +264,8 @@ foreach ($pembangkit as $pb) {
     }
 
     if (in_array($status, ['Beroperasi', 'Perbaikan', 'Rusak', 'Rusak Total'])) {
-    $jumlahStatusPerKota[$kabupaten][$status]++;
-}
+        $jumlahStatusPerKota[$kabupaten][$status]++;
+    }
 
     // Hitung jumlah fungsi jika valid
     if (in_array($fungsi, ['utama', 'cadangan', 'darurat'])) {
@@ -366,21 +367,24 @@ foreach ($pembangkit as $pb) {
                         <div class="table-responsive" style="overflow-x:auto; -webkit-overflow-scrolling: touch;">
                             <table class="table table-bordered table-striped table-sm" id="tabel-produksi-konsumsi" style="min-width: 1000px; white-space: nowrap;">
                                 <thead class="table-dark">
+                                    <tr class="text-center align-middle">
+                                        <th rowspan="2" onclick="sortTable('tabel-produksi-konsumsi', 0)">Kabupaten/Kota <i class="fa fa-sort"></i></th>
+                                        <th rowspan="2" onclick="sortTable('tabel-produksi-konsumsi', 1)">Total Produksi Listrik (kWh) <i class="fa fa-sort"></i></th>
+                                        <th rowspan="2" onclick="sortTable('tabel-produksi-konsumsi', 2)">Total Konsumsi Listrik (kWh) <i class="fa fa-sort"></i></th>
+                                        <th rowspan="2" onclick="sortTable('tabel-produksi-konsumsi', 3)">Total Konsumsi BBM Solar (L) <i class="fa fa-sort"></i></th>
+                                        <th rowspan="2" onclick="sortTable('tabel-produksi-konsumsi', 4)">Total Konsumsi BBM Biomasa (Ton) <i class="fa fa-sort"></i></th>
+                                        <th rowspan="2" onclick="sortTable('tabel-produksi-konsumsi', 5)">Total Pembangkit PLTD <i class="fa fa-sort"></i></th>
+                                        <th rowspan="2" onclick="sortTable('tabel-produksi-konsumsi', 6)">Total Pembangkit PLTS <i class="fa fa-sort"></i></th>
+                                        <th colspan="3">Sifat Penggunaan Pembangkit</th>
+                                        <th rowspan="2" onclick="sortTable('tabel-produksi-konsumsi', 10)">Status Pembangkit (Beroperasi) <i class="fa fa-sort"></i></th>
+                                        <th rowspan="2" onclick="sortTable('tabel-produksi-konsumsi', 11)">Status Pembangkit (Perbaikan) <i class="fa fa-sort"></i></th>
+                                        <th rowspan="2" onclick="sortTable('tabel-produksi-konsumsi', 12)">Status Pembangkit (Rusak) <i class="fa fa-sort"></i></th>
+                                        <th rowspan="2" onclick="sortTable('tabel-produksi-konsumsi', 13)">Status Pembangkit (Rusak Total) <i class="fa fa-sort"></i></th>
+                                    </tr>
                                     <tr class="text-center">
-                                        <th onclick="sortTable('tabel-produksi-konsumsi', 0)">Kabupaten/Kota <i class="fa fa-sort "></i></th>
-                                        <th onclick="sortTable('tabel-produksi-konsumsi', 1)">Total Produksi Listrik (kWh) <i class="fa fa-sort"></i></th>
-                                        <th onclick="sortTable('tabel-produksi-konsumsi', 2)">Total Konsumsi Listrik (kWh) <i class="fa fa-sort"></i></th>
-                                        <th onclick="sortTable('tabel-produksi-konsumsi', 3)">Total Konsumsi BBM Solar (L) <i class="fa fa-sort"></i></th>
-                                        <th onclick="sortTable('tabel-produksi-konsumsi', 4)">Total Konsumsi BBM Biomasa (Ton) <i class="fa fa-sort"></i></th>
-                                        <th onclick="sortTable('tabel-produksi-konsumsi', 5)">Total Pembangkit PLTD <i class="fa fa-sort"></i></th>
-                                        <th onclick="sortTable('tabel-produksi-konsumsi', 6)">Total Pembangkit PLTS <i class="fa fa-sort"></i></th>
                                         <th onclick="sortTable('tabel-produksi-konsumsi', 7)">Total Pembangkit UTAMA <i class="fa fa-sort"></i></th>
                                         <th onclick="sortTable('tabel-produksi-konsumsi', 8)">Total Pembangkit CADANGAN <i class="fa fa-sort"></i></th>
                                         <th onclick="sortTable('tabel-produksi-konsumsi', 9)">Total Pembangkit DARURAT <i class="fa fa-sort"></i></th>
-                                        <th onclick="sortTable('tabel-produksi-konsumsi', 9)">Status Pembangkit (Beroperasi) <i class="fa fa-sort"></i></th>
-                                        <th onclick="sortTable('tabel-produksi-konsumsi', 9)">Status Pembangkit (Perbaikan) <i class="fa fa-sort"></i></th>
-                                        <th onclick="sortTable('tabel-produksi-konsumsi', 9)">Status Pembangkit (Rusak) <i class="fa fa-sort"></i></th>
-                                        <th onclick="sortTable('tabel-produksi-konsumsi', 9)">Status Pembangkit (Rusak Total) <i class="fa fa-sort"></i></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -391,15 +395,15 @@ foreach ($pembangkit as $pb) {
                                             <td class="text-end"><?= number_format($totalKonsumsiPerKota[$kota] ?? 0, 2, ',', '.'); ?></td>
                                             <td class="text-end"><?= number_format($totalVolumeBBPerKota[$kota]['Solar'] ?? 0, 2, ',', '.'); ?></td>
                                             <td class="text-end"><?= number_format($totalVolumeBBPerKota[$kota]['Biomasa'] ?? 0, 2, ',', '.'); ?></td>
-                                            <td class="text-end"><?= number_format($jumlahJenisPembangkitPerKota[$kota]['PLTD'] ); ?></td>
-                                            <td class="text-end"><?= number_format($jumlahJenisPembangkitPerKota[$kota]['PLTS'] ); ?></td>
-                                            <td class="text-end"><?= ($jumlahFungsiPerKota[$kota]['utama'] ); ?></td>
-                                            <td class="text-end"><?= ($jumlahFungsiPerKota[$kota]['cadangan'] ); ?></td>
-                                            <td class="text-end"><?= ($jumlahFungsiPerKota[$kota]['darurat'] ); ?></td>
-                                            <td class="text-end"><?= ($jumlahStatusPerKota[$kota]['Beroperasi'] ); ?></td>
-                                            <td class="text-end"><?= ($jumlahStatusPerKota[$kota]['Perbaikan'] ); ?></td>
-                                            <td class="text-end"><?= ($jumlahStatusPerKota[$kota]['Rusak'] ); ?></td>
-                                            <td class="text-end"><?= ($jumlahStatusPerKota[$kota]['Rusak Total'] ); ?></td>
+                                            <td class="text-end"><?= number_format($jumlahJenisPembangkitPerKota[$kota]['PLTD']); ?></td>
+                                            <td class="text-end"><?= number_format($jumlahJenisPembangkitPerKota[$kota]['PLTS']); ?></td>
+                                            <td class="text-end"><?= ($jumlahFungsiPerKota[$kota]['utama']); ?></td>
+                                            <td class="text-end"><?= ($jumlahFungsiPerKota[$kota]['cadangan']); ?></td>
+                                            <td class="text-end"><?= ($jumlahFungsiPerKota[$kota]['darurat']); ?></td>
+                                            <td class="text-end"><?= ($jumlahStatusPerKota[$kota]['Beroperasi']); ?></td>
+                                            <td class="text-end"><?= ($jumlahStatusPerKota[$kota]['Perbaikan']); ?></td>
+                                            <td class="text-end"><?= ($jumlahStatusPerKota[$kota]['Rusak']); ?></td>
+                                            <td class="text-end"><?= ($jumlahStatusPerKota[$kota]['Rusak Total']); ?></td>
                                         </tr>
                                     <?php endforeach; ?>
                                 </tbody>
