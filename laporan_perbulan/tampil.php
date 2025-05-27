@@ -116,21 +116,19 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 }
 
-if ($role == 'adminbulanan' || $role == 'superadmin' || $role == 'kementerian') {
-    // Admin dan Superadmin melihat semua data
-    $stmtpembangkit = $conn->prepare("SELECT * FROM pembangkit");
-} else {
-    // Role umum hanya melihat data miliknya
-    $stmtpembangkit = $conn->prepare("SELECT * FROM pembangkit WHERE id_user = :id_user");
-    $stmtpembangkit->bindParam(':id_user', $id_user, PDO::PARAM_INT);
-}
 $querypembangkit = "SELECT * FROM pembangkit WHERE 1=1";
 $paramspembangkit = [];
+
+// Jika bukan admin/superadmin/kementerian, tambahkan filter user
+if (!in_array($role, ['adminbulanan', 'superadmin', 'kementerian'])) {
+    $querypembangkit .= " AND id_user = :id_user";
+    $paramspembangkit[':id_user'] = $id_user;
+}
 
 // Cek apakah ada keyword pencarian
 if (!empty($_GET['keyword2'])) {
     $keyword = "%" . $_GET['keyword2'] . "%";
-    $querypembangkit .= " AND nama_perusahaan LIKE :keyword2"; // fitur cari berdasarkan nama_perusahaan
+    $querypembangkit .= " AND nama_perusahaan LIKE :keyword2";
     $paramspembangkit[':keyword2'] = $keyword;
 }
 
@@ -140,9 +138,8 @@ foreach ($paramspembangkit as $key => $value2) {
     $stmtpembangkit->bindValue($key, $value2, PDO::PARAM_STR);
 }
 $stmtpembangkit->execute();
-
-// Ambil hasil
 $resultpembangkit = $stmtpembangkit->fetchAll(PDO::FETCH_ASSOC);
+
 
 
 // Cek apakah id_user ada di laporan_bulanan
