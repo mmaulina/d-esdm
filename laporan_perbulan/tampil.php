@@ -227,7 +227,7 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                         <i class="fas fa-plus"></i> Tambah Data Opsi 2
                     </a> -->
                 <?php } ?>
-                <?php if ($_SESSION['role'] == 'superadmin' || $_SESSION['role'] == 'adminbulanan') { ?>
+                <?php if ($_SESSION['role'] == 'superadmin' || $_SESSION['role'] == 'adminbulanan' || $_SESSION['role'] == 'kementerian') { ?>
                     <a href="?page=excel_laporan_bulanan" class="btn btn-success">Ekspor ke Spreadsheet</a>
                 <?php } ?>
             </div>
