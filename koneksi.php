@@ -13,6 +13,7 @@ if (!class_exists('Database')) {
         private $db_name = "d-esdm";
         private $username = "root";
         private $password = "";
+
         public $conn;
 
         public function getConnection() {
