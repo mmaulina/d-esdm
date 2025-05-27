@@ -278,7 +278,7 @@ foreach ($pembangkit as $pb) {
 ?>
 <main>
     <div class="container mt-4">
-        <h2 class="text-center mb-3">Welcome to </h2>
+        <h2 class="text-center mb-3"><i class="fas fa-bolt" style="color: #ffc107;"></i>Welcome to E-WASDAL GATRIK<i class="fas fa-bolt" style="color: #ffc107;"></i></h2>
         <hr>
         <div class="card shadow" style="overflow-x: auto; max-height: calc(100vh - 150px); overflow-y: auto;">
             <div class="card-body">

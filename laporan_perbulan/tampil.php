@@ -124,12 +124,25 @@ if ($role == 'adminbulanan' || $role == 'superadmin' || $role == 'kementerian') 
     $stmtpembangkit = $conn->prepare("SELECT * FROM pembangkit WHERE id_user = :id_user");
     $stmtpembangkit->bindParam(':id_user', $id_user, PDO::PARAM_INT);
 }
-
-$querypembangkit = "SELECT * FROM pembangkit";
+$querypembangkit = "SELECT * FROM pembangkit WHERE 1=1";
 $paramspembangkit = [];
-$stmtpembangkit->execute();
-$resultpembangkit = $stmtpembangkit->fetchAll(PDO::FETCH_ASSOC);
 
+// Cek apakah ada keyword pencarian
+if (!empty($_GET['keyword2'])) {
+    $keyword = "%" . $_GET['keyword2'] . "%";
+    $querypembangkit .= " AND nama_perusahaan LIKE :keyword2"; // fitur cari berdasarkan nama_perusahaan
+    $paramspembangkit[':keyword2'] = $keyword;
+}
+
+// Siapkan dan eksekusi query
+$stmtpembangkit = $conn->prepare($querypembangkit);
+foreach ($paramspembangkit as $key => $value2) {
+    $stmtpembangkit->bindValue($key, $value2, PDO::PARAM_STR);
+}
+$stmtpembangkit->execute();
+
+// Ambil hasil
+$resultpembangkit = $stmtpembangkit->fetchAll(PDO::FETCH_ASSOC);
 
 
 // Cek apakah id_user ada di laporan_bulanan
@@ -142,9 +155,10 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
 
 ?>
 <div class="container mt-4">
-    <h3 class="text-center mb-3"><i class="fas fa-bolt" style="color: #ffc107;"></i>Pelaporan Bulanan & Data Pembangkit<i class="fas fa-bolt" style="color: #ffc107;"></i></h3>
     <div class="card shadow" style="overflow-x: auto; max-height: calc(100vh - 150px); overflow-y: auto;">
         <div class="card-body">
+            <h3 class="text-center mb-3">Pelaporan Bulanan</h3>
+            <hr>
             <!-- Fitur pencarian dan filter -->
             <form method="GET" class="mb-3">
                 <input type="hidden" name="page" value="laporan_perbulan">
@@ -194,14 +208,6 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                     </div>
                 </div>
             </form>
-        </div>
-    </div>
-</div>
-<div class="container mt-4">
-    <div class="card shadow" style="overflow-x: auto; max-height: calc(100vh - 150px); overflow-y: auto;">
-        <div class="card-body">
-            <h3 class="text-center mb-3">Pelaporan Bulanan</h3>
-            <hr>
             <div class="mb-3">
                 <?php if (!$hasprofil && $role == 'umum') : ?>
                     <div class="alert alert-warning text-center" role="alert">
@@ -373,17 +379,21 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
         </div>
     </div>
 </div>
+
+<!-- PEMBANGKIT -->
 <div class="container mt-4">
     <div class="card shadow">
         <div class="card-body">
             <h3 class="text-center mb-3">Data Pembangkit dan Data Teknis Pembangkit</h3>
             <hr>
-            <!-- Fitur pencarian -->
-            <?php if ($_SESSION['role'] == 'superadmin') { ?>
-                <form method="GET" class="mb-3">
-                    <input type="hidden" name="page" value="pembangkit">
-                </form>
-            <?php } ?>
+            <form method="GET" class="mb-2">
+                <input type="hidden" name="page" value="laporan_perbulan">
+                <div class="input-group mb-2">
+                    <input type="text" name="keyword2" class="form-control" placeholder="Cari berdasarkan nama perusahaan..." value="<?= isset($_GET['keyword2']) ? htmlspecialchars($_GET['keyword2']) : '' ?>">
+                    <button type="submit" class="btn btn-success">Cari</button>
+                    <a href="?page=laporan_perbulan" class="btn btn-secondary">Reset</a>
+                </div>
+            </form>
             <div class="mb-3">
                 <?php if (!$hasprofil && $role == 'umum') : ?>
                     <div class="alert alert-warning text-center" role="alert">
@@ -391,7 +401,7 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                     </div>
                 <?php endif; ?>
                 <div class="table-responsive" style="max-height: 500px; overflow-x: auto; overflow-y: auto;">
-                    <table class="table table-bordered" style="table-layout: fixed; min-width: 1800px;">
+                    <table class="table table-bordered" style="table-layout: fixed; min-width: 2000px;">
                         <thead class="table-dark text-center align-middle">
                             <tr>
                                 <th rowspan="3" style="width: 3%;">No.</th>
@@ -522,32 +532,36 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                         </tbody>
                     </table>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-                <script>
-                    function sortTable(columnIndex) {
-                        var table = document.querySelector("table tbody");
-                        var rows = Array.from(table.querySelectorAll("tr"));
-                        var isAscending = table.getAttribute("data-sort-order") === "asc";
+<script>
+    function sortTable(columnIndex) {
+        var table = document.querySelector("table tbody");
+        var rows = Array.from(table.querySelectorAll("tr"));
+        var isAscending = table.getAttribute("data-sort-order") === "asc";
 
-                        rows.sort((rowA, rowB) => {
-                            var cellA = rowA.children[columnIndex].textContent.trim().toLowerCase();
-                            var cellB = rowB.children[columnIndex].textContent.trim().toLowerCase();
-                            if (!isNaN(cellA) && !isNaN(cellB)) {
-                                return isAscending ? cellA - cellB : cellB - cellA;
-                            }
-                            return isAscending ? cellA.localeCompare(cellB) : cellB.localeCompare(cellA);
-                        });
+        rows.sort((rowA, rowB) => {
+            var cellA = rowA.children[columnIndex].textContent.trim().toLowerCase();
+            var cellB = rowB.children[columnIndex].textContent.trim().toLowerCase();
+            if (!isNaN(cellA) && !isNaN(cellB)) {
+                return isAscending ? cellA - cellB : cellB - cellA;
+            }
+            return isAscending ? cellA.localeCompare(cellB) : cellB.localeCompare(cellA);
+        });
 
-                        table.innerHTML = "";
-                        rows.forEach(row => table.appendChild(row));
-                        table.setAttribute("data-sort-order", isAscending ? "desc" : "asc");
+        table.innerHTML = "";
+        rows.forEach(row => table.appendChild(row));
+        table.setAttribute("data-sort-order", isAscending ? "desc" : "asc");
 
-                        var headers = document.querySelectorAll("thead th i");
-                        headers.forEach(icon => icon.className = "fa fa-sort");
+        var headers = document.querySelectorAll("thead th i");
+        headers.forEach(icon => icon.className = "fa fa-sort");
 
-                        var selectedHeader = document.querySelector(`thead th:nth-child(${columnIndex + 1}) i`);
-                        if (selectedHeader) {
-                            selectedHeader.className = isAscending ? "fa fa-sort-up" : "fa fa-sort-down";
-                        }
-                    }
-                </script>
+        var selectedHeader = document.querySelector(`thead th:nth-child(${columnIndex + 1}) i`);
+        if (selectedHeader) {
+            selectedHeader.className = isAscending ? "fa fa-sort-up" : "fa fa-sort-down";
+        }
+    }
+</script>
