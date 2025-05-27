@@ -4,6 +4,8 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 include 'koneksi.php';
 
+$id_user = $_SESSION['id_user']; // Pastikan ada sesi id_user
+$role = $_SESSION['role'];
 // Buat koneksi menggunakan PDO
 $database = new Database();
 $conn = $database->getConnection();
@@ -14,17 +16,27 @@ $stmtUser = $conn->prepare($queryUser);
 $stmtUser->execute();
 $resultUser = $stmtUser->fetchAll(PDO::FETCH_ASSOC);
 
-// Ambil laporan bulanan yang diajukan
-$queryLapBulanan = "SELECT * FROM laporan_bulanan WHERE status = 'diajukan'";
-$stmtLapBulanan = $conn->prepare($queryLapBulanan);
-$stmtLapBulanan->execute();
-$resultLapBulanan = $stmtLapBulanan->fetchAll(PDO::FETCH_ASSOC);
+if ($_SESSION['role'] != 'adminsemester') {
+    $queryLapBulanan = "SELECT * FROM laporan_bulanan WHERE status = 'diajukan'";
+    $stmtLapBulanan = $conn->prepare($queryLapBulanan);
+    $stmtLapBulanan->execute();
+    $resultLapBulanan = $stmtLapBulanan->fetchAll(PDO::FETCH_ASSOC);
+} else {
+    $resultLapBulanan = []; // kosongkan data untuk adminsemester
+}
 
-// Ambil laporan semester yang diajukan
-$queryLapSemester = "SELECT * FROM laporan_semester WHERE status = 'diajukan'";
-$stmtLapSemester = $conn->prepare($queryLapSemester);
-$stmtLapSemester->execute();
-$resultLapSemester = $stmtLapSemester->fetchAll(PDO::FETCH_ASSOC);
+
+if ($_SESSION['role'] != 'adminbulanan') {
+    // Ambil laporan semester yang diajukan
+    $queryLapSemester = "SELECT * FROM laporan_semester WHERE status = 'diajukan'";
+    $stmtLapSemester = $conn->prepare($queryLapSemester);
+    $stmtLapSemester->execute();
+    $resultLapSemester = $stmtLapSemester->fetchAll(PDO::FETCH_ASSOC);
+} else {
+    // Kosongkan data jika user adalah adminbulanan
+    $resultLapSemester = [];
+}
+
 
 // Ambil profil perusahaan yang diajukan
 $queryperusahaan = "SELECT * FROM profil WHERE status = 'diajukan'";

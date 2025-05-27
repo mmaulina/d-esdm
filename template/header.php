@@ -117,23 +117,34 @@ if (session_status() == PHP_SESSION_NONE) {
                     <!-- LONCENG NOTIFIKASI -->
                     <li class="nav-item">
                         <?php
+                        $id_user = $_SESSION['id_user']; // Pastikan ada sesi id_user
+                        $role = $_SESSION['role'];
                         include 'koneksi.php';
                         $database = new Database();
                         $conn = $database->getConnection();
 
                         // Query untuk menghitung jumlah laporan_bulanan yang berstatus 'diajukan'
-                        $queryLapBulanan = "SELECT COUNT(*) as total FROM laporan_bulanan WHERE status = 'diajukan'";
-                        $stmtLapBulanan = $conn->prepare($queryLapBulanan);
-                        $stmtLapBulanan->execute();
-                        $resultLapBulanan = $stmtLapBulanan->fetch(PDO::FETCH_ASSOC);
-                        $jumlahLapBulananDiajukan = $resultLapBulanan['total'];
+                        $jumlahLapBulananDiajukan = 0; // Default jika role adalah adminsemester
 
-                        // Query untuk menghitung jumlah laporan_semester yang berstatus 'diajukan'
-                        $queryLapSemester = "SELECT COUNT(*) as total FROM laporan_semester WHERE status = 'diajukan'";
-                        $stmtLapSemester = $conn->prepare($queryLapSemester);
-                        $stmtLapSemester->execute();
-                        $resultLapSemester = $stmtLapSemester->fetch(PDO::FETCH_ASSOC);
-                        $jumlahLapSemesterDiajukan = $resultLapSemester['total'];
+                      if ($role != 'adminsemester') {
+                          // Query untuk menghitung jumlah laporan_bulanan yang berstatus 'diajukan'
+                          $queryLapBulanan = "SELECT COUNT(*) as total FROM laporan_bulanan WHERE status = 'diajukan'";
+                          $stmtLapBulanan = $conn->prepare($queryLapBulanan);
+                          $stmtLapBulanan->execute();
+                          $resultLapBulanan = $stmtLapBulanan->fetch(PDO::FETCH_ASSOC);
+                          $jumlahLapBulananDiajukan = $resultLapBulanan['total'];
+                      }
+                        $jumlahLapSemesterDiajukan = 0; // Default jika role adalah adminbulanan
+
+                        if ($role != 'adminbulanan') {
+                            // Query untuk menghitung jumlah laporan_semester yang berstatus 'diajukan'
+                            $queryLapSemester = "SELECT COUNT(*) as total FROM laporan_semester WHERE status = 'diajukan'";
+                            $stmtLapSemester = $conn->prepare($queryLapSemester);
+                            $stmtLapSemester->execute();
+                            $resultLapSemester = $stmtLapSemester->fetch(PDO::FETCH_ASSOC);
+                            $jumlahLapSemesterDiajukan = $resultLapSemester['total'];
+                        }
+
 
                         // Query untuk menghitung jumlah pengguna yang berstatus 'diajukan'
                         $queryPengguna = "SELECT COUNT(*) as total FROM users WHERE status = 'diajukan'";
