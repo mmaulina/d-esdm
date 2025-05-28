@@ -93,7 +93,7 @@ function uploadFile($input_name)
 ?>
 
 <div class="container mt-4">
-    <h3 class="text-center mb-3"><i class="fas fa-bolt" style="color: #ffc107;"></i> Edit Konten <i class="fas fa-bolt" style="color: #ffc107;"></i></h3>
+    <h3 class="text-center mb-3">Edit Konten</h3>
     <hr>
     <div class="card shadow" style="overflow-x: auto; max-height: calc(100vh - 150px); overflow-y: auto;">
         <div class="card-body">
@@ -109,7 +109,7 @@ function uploadFile($input_name)
                 </div>
                 <div class="form-group mb-2">
                     <label>Jenis Konten</label>
-                    <select class="form-control" name="jenis_konten" required>
+                    <select class="form-control" name="jenis_konten" id="jenis_konten" required>
                         <option value="gambar" <?= ($konten['jenis_konten'] == 'gambar') ? 'selected' : ''; ?>>Gambar</option>
                         <option value="file" <?= ($konten['jenis_konten'] == 'file') ? 'selected' : ''; ?>>File</option>
                         <option value="link" <?= ($konten['jenis_konten'] == 'link') ? 'selected' : ''; ?>>Link</option>
@@ -131,7 +131,7 @@ function uploadFile($input_name)
                         <?php endif; ?>
                     </div>
                 <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
-                <a href="?page=tabel_djih" class="btn btn-secondary">Kembali</a>
+                <a href="?page=tabel" class="btn btn-secondary">Kembali</a>
             </form>
         </div>
     </div>
@@ -161,3 +161,4 @@ document.getElementById('jenis_konten').addEventListener('change', function () {
     kontenInput.innerHTML = html;
 });
 </script>
+
