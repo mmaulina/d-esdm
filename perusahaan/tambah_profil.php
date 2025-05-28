@@ -85,17 +85,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bindParam(':status', $status);
         $stmt->bindParam(':keterangan', $keterangan);
 
-                    // Eksekusi statement
-            if ($stmt->execute()) {
-                if ($role === 'superadmin') {
-                    echo "<script>alert('Profil berhasil ditambahkan!'); window.location.href='?page=profil_admin';</script>";
-                } else {
-                    echo "<script>alert('Profil berhasil ditambahkan!'); window.location.href='?page=profil_perusahaan';</script>";
-                }
+        // Eksekusi statement
+        if ($stmt->execute()) {
+            if ($role === 'superadmin') {
+                echo "<script>alert('Profil berhasil ditambahkan!'); window.location.href='?page=profil_admin';</script>";
             } else {
-                echo "<script>alert('Gagal menambahkan profil. Silakan coba lagi.');</script>";
+                echo "<script>alert('Profil berhasil ditambahkan!'); window.location.href='?page=profil_perusahaan';</script>";
             }
-
+        } else {
+            echo "<script>alert('Gagal menambahkan profil. Silakan coba lagi.');</script>";
+        }
     } catch (PDOException $e) {
         die("Error: " . $e->getMessage());
     }
@@ -112,6 +111,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="form-group mb-2">
                     <label>Nama Perusahaan</label>
                     <input type="text" class="form-control" name="nama_perusahaan" placeholder="Masukkan nama perusahaan" required maxlength="100">
+                    <small class="text-muted">
+                        Catatan: nama perusahaan sesuai perizinan
+                    </small>
                 </div>
 
                 <div class="form-group mb-2">
@@ -152,6 +154,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <option value="Perdagangan">Perdagangan</option>
                         <option value="Telekomunikasi dan Teknologi">Telekomunikasi dan Teknologi</option>
                         <option value="Transportasi">Transportasi</option>
+                        <option value="Perhotelan">Perhotelan</option>
                         <option value="Logistik">Logistik</option>
                         <option value="Pertanian">Pertanian</option>
                         <option value="Perikanan">Perikanan</option>

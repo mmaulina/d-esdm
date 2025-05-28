@@ -76,9 +76,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="card shadow" style="overflow-x: auto; max-height: calc(100vh - 150px); overflow-y: auto;">
         <div class="card-body">
             <form method="POST">
-            <div class="form-group mb-2">
+                <div class="form-group mb-2">
                     <label>Nama Perusahaan</label>
                     <input type="text" class="form-control" name="nama_perusahaan" placeholder="Masukkan nama perusahaan" required value="<?php echo $profil['nama_perusahaan']; ?>">
+                    <small class="text-muted">
+                        Catatan: nama perusahaan sesuai perizinan
+                    </small>
                 </div>
 
                 <div class="form-group mb-2">
@@ -118,6 +121,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <option value="Perdagangan">Perdagangan</option>
                         <option value="Telekomunikasi dan Teknologi">Telekomunikasi dan Teknologi</option>
                         <option value="Transportasi">Transportasi</option>
+                        <option value="Perhotelan">Perhotelan</option>
                         <option value="Logistik">Logistik</option>
                         <option value="Pertanian">Pertanian</option>
                         <option value="Perikanan">Perikanan</option>
