@@ -147,7 +147,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <label class="form-label">Jenis Bahan Bakar</label>
                         <select name="bahan_bakar_jenis" class="form-select" required>
                             <option value="">-- Pilih Jenis Bahan Bakar --</option>
-                            <option value="Solar">Solar</option>
+                            <option value="Solar">Solar (Dexlite / Solar Industry)</option>
                             <option value="Biomasa">Biomasa</option>
                         </select>
                         <small class="text-muted">
