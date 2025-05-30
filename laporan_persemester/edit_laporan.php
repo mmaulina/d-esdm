@@ -363,17 +363,21 @@ function uploadFile($input_name)
 
 <script>
     const monthNow = new Date().getMonth() + 1; // getMonth() = 0 (Jan) s.d. 11 (Des)
-    const semester1 = document.getElementById('semester1');
-    const semester2 = document.getElementById('semester2');
+const semester1 = document.getElementById('semester1');
+const semester2 = document.getElementById('semester2');
 
-    // Jika bulan sekarang Januari - Juni (1-6), Semester II dikunci
-    if (monthNow >= 1 && monthNow <= 6) {
-        semester2.disabled = true;
-    }
-    // Jika bulan sekarang Juli - Desember (7-12), Semester I dikunci
-    else {
-        semester1.disabled = true;
-    }
+// Atur semua aktif dulu
+semester1.disabled = false;
+semester2.disabled = false;
+
+if (monthNow >= 2 && monthNow <= 6) {
+    // Februari s.d. Juni: hanya semester 1
+    semester2.disabled = true;
+} else if (monthNow >= 8 && monthNow <= 12) {
+    // Agustus s.d. Desember: hanya semester 2
+    semester1.disabled = true;
+}
+// Januari (1) dan Juli (7): keduanya aktif
 
     const tahunSelect = document.getElementById('tahun');
     const semesterSelect = document.getElementById('semester');
@@ -384,16 +388,16 @@ function uploadFile($input_name)
     });
 
 
-    const currentYear = new Date().getFullYear(); // Tahun sekarang (otomatis)
-    const endYear = currentYear + 10;
+    const currentYear = new Date().getFullYear();
+const startYear = currentYear - 1; // 1 tahun sebelum tahun sekarang
+const endYear = currentYear + 10;  // 10 tahun ke depan
 
-    // Isi dropdown tahun dari currentYear sampai endYear
-    for (let year = currentYear; year <= endYear; year++) {
-        const option = document.createElement("option");
-        option.value = year;
-        option.text = year;
-        tahunSelect.appendChild(option);
-    }
+for (let year = startYear; year <= endYear; year++) {
+    const option = document.createElement("option");
+    option.value = year;
+    option.text = year;
+    tahunSelect.appendChild(option);
+}
 
     function updateSemesterFinal() {
         const tahun = tahunSelect.value;
