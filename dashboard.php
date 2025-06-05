@@ -433,7 +433,7 @@ foreach ($pembangkit as $pb) {
                 <div class="row mt-4">
                     <div class="col-12 d-flex justify-content-between align-items-center">
                         <h5 class="fw-bold mb-0">News</h5>
-                        <?php if (isset($_SESSION['role']) && $_SESSION['role'] !== 'umum') : ?>
+                        <?php if (isset($_SESSION['role']) !== 'kementerian' && $_SESSION['role'] !== 'umum') : ?>
                             <div class="btn-group d-inline-flex">
                                 <a href="?page=tabel" class="btn btn-success">Tabel Konten</a>
                             </div>
