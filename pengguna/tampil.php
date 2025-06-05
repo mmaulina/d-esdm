@@ -128,9 +128,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['tolak_id'])) {
                                                 <button type="submit" class="btn btn-danger btn-sm">Tolak</button>
                                             </form>
                                         <?php elseif ($row['status'] == 'diverifikasi' || $row['status'] == 'ditolak'): ?>
-                                            <a href="?page=pengguna_edit_admin&id_user=<?php echo htmlspecialchars($row['id_user']); ?>" class="btn btn-warning btn-sm">Edit</a>
-                                            <?php if ($row['id_user'] != 1): ?>
-                                                <a href="?page=pengguna_hapus_admin&id_user=<?php echo htmlspecialchars($row['id_user']); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus?');">Hapus</a>
+                                            <?php if ($_SESSION['role'] == 'superadmin'): ?>
+                                                <a href="?page=pengguna_edit_admin&id_user=<?= htmlspecialchars($row['id_user']); ?>" class="btn btn-warning btn-sm">Edit</a>
+                                                
+                                                <?php if ($row['id_user'] != 1): ?>
+                                                    <a href="?page=pengguna_hapus_admin&id_user=<?= htmlspecialchars($row['id_user']); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus?');">Hapus</a>
+                                                <?php endif; ?>
+                                                
                                             <?php endif; ?>
                                         <?php endif; ?>
                                     </td>

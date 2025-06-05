@@ -140,9 +140,13 @@ try {
                             <th rowspan="2" onclick="sortTable(4)">Jenis Usaha <i class="fa fa-sort"></i></th>
                             <th rowspan="2" onclick="sortTable(5)">Email Kantor<i class="fa fa-sort"></i></th>
                             <th rowspan="2" onclick="sortTable(6)">Nomor Telepon Kantor <i class="fa fa-sort"></i></th>
+                            <?php if ($_SESSION['role'] == 'superadmin'): ?>
                             <th rowspan="2" onclick="sortTable(7)">No. Hp. Pimpinan<i class="fa fa-sort"></th>
+                            <?php endif; ?>
                             <th rowspan="2" onclick="sortTable(8)">Tenaga Teknik <i class="fa fa-sort"></i></th>
+                            <?php if ($_SESSION['role'] == 'superadmin'): ?>
                             <th rowspan="2" onclick="sortTable(9)">No Hp. Tenaga Teknik <i class="fa fa-sort"></i></th>
+                            <?php endif; ?>
                             <th colspan="2">Kontak Person</th>
                             <th rowspan="2" onclick="sortTable(10)">Status <i class="fa fa-sort"></i></th>
                             <th rowspan="2" onclick="sortTable(11)">Keterangan</th>
@@ -165,9 +169,13 @@ try {
                                     <td><?= htmlspecialchars($row['jenis_usaha']); ?></td>
                                     <td><?= htmlspecialchars($row['email']); ?></td>
                                     <td><?= htmlspecialchars($row['no_telp_kantor']); ?></td>
+                                    <?php if ($_SESSION['role'] == 'superadmin'): ?>
                                     <td><?= htmlspecialchars($row['no_hp_pimpinan']); ?></td>
+                                    <?php endif; ?>
                                     <td><?= htmlspecialchars($row['tenaga_teknik']); ?></td>
+                                    <?php if ($_SESSION['role'] == 'superadmin'): ?>
                                     <td><?= htmlspecialchars($row['no_hp_teknik']); ?></td>
+                                    <?php endif; ?>
                                     <td><?= htmlspecialchars($row['nama']); ?></td>
                                     <td><?= htmlspecialchars($row['no_hp']); ?></td>
                                     <td class="text-center">
