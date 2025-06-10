@@ -82,7 +82,7 @@ try {
     // Pindahkan header pembangkit ke mulai dari C
     $sheet->setCellValue('C2', 'Data Pembangkit')->mergeCells('C2:E2');
     $sheet->setCellValue('F2', 'Data Teknis Pembangkit')->mergeCells('F2:O2');
-    $sheet->setCellValue('P2', 'Volume BB')->mergeCells('P2:P4'); // kolom volume
+    $sheet->setCellValue('P2', 'Konsumsi Bahan Bakar')->mergeCells('P2:P4'); // kolom volume
     $sheet->setCellValue('Q2', 'Tahun')->mergeCells('Q2:Q4'); // kolom tahun
     $sheet->setCellValue('R2', 'Bulan')->mergeCells('R2:R4'); // kolom bulan
     $sheet->setCellValue('S2', 'Pelaporan Bulanan')->mergeCells('S2:X2');

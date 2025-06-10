@@ -586,7 +586,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
             </div>
             <div class="mb-3">
-                <label class="form-label">Volume Bahan Bakar</label>
+                <label class="form-label">Konsumsi Bahan Bakar</label>
                 <input type="text" name="volume_bb[]" class="form-control" placeholder="Masukkan volume bahan bakar" required>
             </div>
         </div>`;

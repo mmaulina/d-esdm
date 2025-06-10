@@ -423,7 +423,7 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                                 <th rowspan="2">Tahun Operasi</th>
                                 <th rowspan="2">Status Operasi</th>
                                 <th colspan="2">Bahan Bakar yang Digunakan</th>
-                                <th rowspan="2">Volume Bahan Bakar</th>
+                                <th rowspan="2">Konsumsi Bahan Bakar</th>
                             </tr>
                             <tr>
                                 <th>Latitude</th>
