@@ -141,6 +141,9 @@ include 'template/alert.php';
                     case "edit_parameter":
                     include "laporan_persemester/edit_parameter.php";
                     break;
+                    case "hapus_parameter":
+                    include "laporan_persemester/hapus_parameter.php";
+                    break;
                 case "tambah_laporan_persemester":
                     include "laporan_persemester/tambah_laporan.php";
                     break;
