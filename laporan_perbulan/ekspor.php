@@ -36,7 +36,7 @@ try {
             tenaga_teknik, no_hp_teknik, nama, no_hp, no_telp_kantor, kabupaten, 
             produksi_sendiri, pemb_sumber_lain, susut_jaringan, penj_ke_pelanggan, 
             penj_ke_pln, pemakaian_sendiri
-        FROM laporan_bulanan
+        FROM laporan_bulanan WHERE status = 'diterima'
         ORDER BY id_user, id
     ");
     $stmt->execute();
@@ -48,7 +48,7 @@ try {
             id, id_user, alamat, longitude, latitude, jenis_pembangkit, fungsi, 
             kapasitas_terpasang, daya_mampu_netto, jumlah_unit, no_unit, tahun_operasi, 
             status_operasi, bahan_bakar_jenis, bahan_bakar_satuan, volume_bb
-        FROM pembangkit
+        FROM pembangkit WHERE status = 'diterima'
         ORDER BY id_user, id
     ");
     $stmt->execute();
