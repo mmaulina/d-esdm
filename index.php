@@ -129,10 +129,17 @@ include 'template/alert.php';
                 case "excel_laporan_bulanan":
                     include "laporan_perbulan/ekspor.php";
                     break;
+                    
 
                 // laporan persemester
                 case "laporan_persemester":
                     include "laporan_persemester/tampil.php";
+                    break;
+                case "tambah_parameter":
+                    include "laporan_persemester/tambah_parameter.php";
+                    break;
+                    case "edit_parameter":
+                    include "laporan_persemester/edit_parameter.php";
                     break;
                 case "tambah_laporan_persemester":
                     include "laporan_persemester/tambah_laporan.php";

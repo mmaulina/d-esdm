@@ -67,21 +67,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Prepare the insert statement
     $insertSQL = "INSERT INTO laporan_semester (
     id_user, nama_perusahaan, no_hp_pimpinan, tenaga_teknik, no_hp_teknik, nama, no_hp, no_telp_kantor,
-    baku_mutu_so2, hasil_so2, rencana_aksi_so2,
-    baku_mutu_ho2, hasil_ho2, rencana_aksi_ho2,
-    baku_mutu_tsp, hasil_tsp, rencana_aksi_tsp,
-    baku_mutu_co, hasil_co, rencana_aksi_co,
-    baku_mutu_kebisingan, hasil_kebisingan, rencana_aksi_kebisingan,
     status, keterangan,
     file_laporan, file_lhu,
     tahun, semester
 ) VALUES (
     :id_user, :nama_perusahaan, :no_hp_pimpinan, :tenaga_teknik, :no_hp_teknik, :nama, :no_hp, :no_telp_kantor,
-    :baku_mutu_so2, :hasil_so2, :rencana_aksi_so2,
-    :baku_mutu_ho2, :hasil_ho2, :rencana_aksi_ho2,
-    :baku_mutu_tsp, :hasil_tsp, :rencana_aksi_tsp,
-    :baku_mutu_co, :hasil_co, :rencana_aksi_co,
-    :baku_mutu_kebisingan, :hasil_kebisingan, :rencana_aksi_kebisingan,
     :status, :keterangan,
     :file_laporan, :file_lhu,
     :tahun, :semester
@@ -96,22 +86,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $keterangan = '-'; // Keterangan diisi otomatis
 
     // Loop through the, baku_mutu, and hasil
-    $baku_mutu_so2 = $_POST['baku_mutu_so2'];
-    $hasil_so2 = $_POST['hasil_so2'];
-    $rencana_aksi_so2 = $_POST['rencana_aksi_so2'];
-    $baku_mutu_ho2 = $_POST['baku_mutu_ho2'];
-    $hasil_ho2 = $_POST['hasil_ho2'];
-    $rencana_aksi_ho2 = $_POST['rencana_aksi_ho2'];
-    $baku_mutu_tsp = $_POST['baku_mutu_tsp'];
-    $hasil_tsp = $_POST['hasil_tsp'];
-    $rencana_aksi_tsp = $_POST['rencana_aksi_tsp'];
-    $baku_mutu_co = $_POST['baku_mutu_co'];
-    $hasil_co = $_POST['hasil_co'];
-    $rencana_aksi_co = $_POST['rencana_aksi_co'];
-    $baku_mutu_kebisingan = $_POST['baku_mutu_kebisingan'];
-    $hasil_kebisingan = $_POST['hasil_kebisingan'];
-    $rencana_aksi_kebisingan = $_POST['rencana_aksi_kebisingan'];
-
     // Bind
     $stmt->bindParam(':id_user', $id_user);
     $stmt->bindParam(':nama_perusahaan', $nama_perusahaan);
@@ -121,21 +95,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bindParam(':nama', $nama);
     $stmt->bindParam(':no_hp', $no_hp);
     $stmt->bindParam(':no_telp_kantor', $no_telp_kantor);
-    $stmt->bindParam(':baku_mutu_so2', $baku_mutu_so2);
-    $stmt->bindParam(':hasil_so2', $hasil_so2);
-    $stmt->bindParam(':rencana_aksi_so2', $rencana_aksi_so2);
-    $stmt->bindParam(':baku_mutu_ho2', $baku_mutu_ho2);
-    $stmt->bindParam(':hasil_ho2', $hasil_ho2);
-    $stmt->bindParam(':rencana_aksi_ho2', $rencana_aksi_ho2);
-    $stmt->bindParam(':baku_mutu_tsp', $baku_mutu_tsp);
-    $stmt->bindParam(':hasil_tsp', $hasil_tsp);
-    $stmt->bindParam(':rencana_aksi_tsp', $rencana_aksi_tsp);
-    $stmt->bindParam(':baku_mutu_co', $baku_mutu_co);
-    $stmt->bindParam(':hasil_co', $hasil_co);
-    $stmt->bindParam(':rencana_aksi_co', $rencana_aksi_co);
-    $stmt->bindParam(':baku_mutu_kebisingan', $baku_mutu_kebisingan);
-    $stmt->bindParam(':hasil_kebisingan', $hasil_kebisingan);
-    $stmt->bindParam(':rencana_aksi_kebisingan', $rencana_aksi_kebisingan);
     $stmt->bindParam(':status', $status);
     $stmt->bindParam(':keterangan', $keterangan);
     $stmt->bindParam(':file_laporan', $file_laporan);
@@ -251,86 +210,6 @@ function uploadFile($input_name)
                     <?php else : ?>
                         <input type="text" name="no_telp_kantor" class="form-control" value="<?= htmlspecialchars($no_telp_kantor) ?>" readonly>
                     <?php endif; ?>
-                </div>
-                <div class="card-header mt-4">
-                    <h6>Parameter SO2</h6>
-                    <div class="mb-3">
-                        <label class="form-label">Baku Mutu</label>
-                        <input type="text" name="baku_mutu_so2" class="form-control" placeholder="Masukkan baku mutu" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Hasil</label>
-                        <input type="text" name="hasil_so2" class="form-control" placeholder="Masukkan hasil" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Rencana Aksi</label>
-                        <input type="text" name="rencana_aksi_so2" class="form-control" placeholder="Masukkan hasil" required>
-                        <small class="text-danger">Isi (-) jika mau dikosongkan</small>
-                    </div>
-                </div>
-                <div class="card-header mt-4">
-                    <h6>Parameter HO2</h6>
-                    <div class="mb-3">
-                        <label class="form-label">Baku Mutu</label>
-                        <input type="text" name="baku_mutu_ho2" class="form-control" placeholder="Masukkan baku mutu" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Hasil</label>
-                        <input type="text" name="hasil_ho2" class="form-control" placeholder="Masukkan hasil" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Rencana Aksi</label>
-                        <input type="text" name="rencana_aksi_ho2" class="form-control" placeholder="Masukkan hasil" required>
-                        <small class="text-danger">Isi (-) jika mau dikosongkan</small>
-                    </div>
-                </div>
-                <div class="card-header mt-4">
-                    <h6>Parameter TSP/Debu</h6>
-                    <div class="mb-3">
-                        <label class="form-label">Baku Mutu</label>
-                        <input type="text" name="baku_mutu_tsp" class="form-control" placeholder="Masukkan baku mutu" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Hasil</label>
-                        <input type="text" name="hasil_tsp" class="form-control" placeholder="Masukkan hasil" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Rencana Aksi</label>
-                        <input type="text" name="rencana_aksi_tsp" class="form-control" placeholder="Masukkan hasil" required>
-                        <small class="text-danger">Isi (-) jika mau dikosongkan</small>
-                    </div>
-                </div>
-                <div class="card-header mt-4">
-                    <h6>Parameter CO</h6>
-                    <div class="mb-3">
-                        <label class="form-label">Baku Mutu</label>
-                        <input type="text" name="baku_mutu_co" class="form-control" placeholder="Masukkan baku mutu" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Hasil</label>
-                        <input type="text" name="hasil_co" class="form-control" placeholder="Masukkan hasil" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Rencana Aksi</label>
-                        <input type="text" name="rencana_aksi_co" class="form-control" placeholder="Masukkan hasil" required>
-                        <small class="text-danger">Isi (-) jika mau dikosongkan</small>
-                    </div>
-                </div>
-                <div class="card-header mt-4 mb-3">
-                    <h6>Parameter Kebisingan</h6>
-                    <div class="mb-3">
-                        <label class="form-label">Baku Mutu</label>
-                        <input type="text" name="baku_mutu_kebisingan" class="form-control" placeholder="Masukkan baku mutu" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Hasil</label>
-                        <input type="text" name="hasil_kebisingan" class="form-control" placeholder="Masukkan hasil" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Rencana Aksi</label>
-                        <input type="text" name="rencana_aksi_kebisingan" class="form-control" placeholder="Masukkan hasil" required>
-                        <small class="text-danger">Isi (-) jika mau dikosongkan</small>
-                    </div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Upload Laporan (PDF, DOC, DOCX, XLS, XLSX)</label>

@@ -404,7 +404,7 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                                 <th rowspan="3" style="width: 3%;">No.</th>
                                 <th rowspan="3">Nama Perusahaan</th>
                                 <th colspan="4" style="min-width: 250px;">Data Pembangkit</th>
-                                <th colspan="10" style="min-width: 1500px;">Data Teknis Pembangkit</th>
+                                <th colspan="12" style="min-width: 1500px;">Data Teknis Pembangkit</th>
                                 <th rowspan="3" style="min-width: 150px;">Status</th>
                                 <th rowspan="3" style="min-width: 150px;">Keterangan</th>
                                 <th rowspan="3" style="min-width: 150px;">Aksi</th>
@@ -413,6 +413,8 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                                 <th rowspan="2">Alamat Pembangkit</th>
                                 <th colspan="2">Koordinat Pembangkit</th>
                                 <th rowspan="2">Jenis Pembangkit</th>
+                                <th rowspan="2">Tahun</th>
+                                <th rowspan="2">Bulan</th>
                                 <th rowspan="2">Fungsi</th>
                                 <th rowspan="2">Kapasitas Terpasang (MW)</th>
                                 <th rowspan="2">Daya Mampu Netto (MW)</th>
@@ -455,6 +457,8 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                                             <td><?= htmlspecialchars($row['latitude']) ?></td>
                                             <td><?= htmlspecialchars($row['longitude']) ?></td>
                                             <td><?= htmlspecialchars($row['jenis_pembangkit']) ?></td>
+                                            <td><?= htmlspecialchars($row['tahun']) ?></td>
+                                            <td><?= htmlspecialchars($row['bulan']) ?></td>
                                             <td><?= htmlspecialchars($row['fungsi']) ?></td>
                                             <td><?= htmlspecialchars($row['kapasitas_terpasang']) ?></td>
                                             <td><?= htmlspecialchars($row['daya_mampu_netto']) ?></td>
