@@ -15,13 +15,18 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat; // Tambahkan ini
 
 function parseIndoNumber($str)
 {
     // Hapus titik ribuan, ganti koma menjadi titik
     $str = str_replace('.', '', $str);
     $str = str_replace(',', '.', $str);
-    return is_numeric($str) ? (float)$str : $str;
+    if (is_numeric($str)) {
+        return (float)$str;
+    } else {
+        return null; // Atau nilai default lain, seperti 0
+    }
 }
 
 try {
@@ -45,7 +50,7 @@ try {
     // Fetch all pembangkit ordered by id_user then id
     $stmt = $conn->prepare("
         SELECT 
-            id, id_user, alamat, longitude, latitude, jenis_pembangkit, fungsi, 
+            id, id_user, tahun, bulan, alamat, longitude, latitude, jenis_pembangkit, fungsi, 
             kapasitas_terpasang, daya_mampu_netto, jumlah_unit, no_unit, tahun_operasi, 
             status_operasi, bahan_bakar_jenis, bahan_bakar_satuan, volume_bb
         FROM pembangkit WHERE status = 'diterima'
@@ -71,7 +76,7 @@ try {
 
     // Judul
     $sheet->setCellValue('A1', 'LAPORAN BULANAN DAN DATA PEMBANGKIT');
-    $sheet->mergeCells('A1:X1');
+    $sheet->mergeCells('A1:Z1'); // Update mergeCells
     $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(14);
     $sheet->getStyle('A1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
@@ -80,34 +85,36 @@ try {
     $sheet->setCellValue('B2', 'Nama Perusahaan')->mergeCells('B2:B4');
 
     // Pindahkan header pembangkit ke mulai dari C
-    $sheet->setCellValue('C2', 'Data Pembangkit')->mergeCells('C2:E2');
-    $sheet->setCellValue('F2', 'Data Teknis Pembangkit')->mergeCells('F2:O2');
-    $sheet->setCellValue('P2', 'Konsumsi Bahan Bakar')->mergeCells('P2:P4'); // kolom volume
-    $sheet->setCellValue('Q2', 'Tahun')->mergeCells('Q2:Q4'); // kolom tahun
-    $sheet->setCellValue('R2', 'Bulan')->mergeCells('R2:R4'); // kolom bulan
-    $sheet->setCellValue('S2', 'Pelaporan Bulanan')->mergeCells('S2:X2');
+    $sheet->setCellValue('C2', 'Data Pembangkit')->mergeCells('C2:G2'); // Update mergeCells
+    $sheet->setCellValue('H2', 'Data Teknis Pembangkit')->mergeCells('H2:Q2'); // Update mergeCells
+    $sheet->setCellValue('R2', 'Konsumsi Bahan Bakar')->mergeCells('R2:R4'); // kolom volume
+    $sheet->setCellValue('S2', 'Tahun')->mergeCells('S2:S4'); // kolom tahun
+    $sheet->setCellValue('T2', 'Bulan')->mergeCells('T2:T4'); // kolom bulan
+    $sheet->setCellValue('U2', 'Pelaporan Bulanan')->mergeCells('U2:Z2'); // Update mergeCells
 
     // Baris 3
-    $sheet->setCellValue('C3', 'Alamat Pembangkit')->mergeCells('C3:C4');
-    $sheet->setCellValue('D3', 'Latitude')->mergeCells('D3:D4');
-    $sheet->setCellValue('E3', 'Longitude')->mergeCells('E3:E4');
-    $sheet->setCellValue('F3', 'Jenis Pembangkit')->mergeCells('F3:F4');
-    $sheet->setCellValue('G3', 'Fungsi')->mergeCells('G3:G4');
-    $sheet->setCellValue('H3', 'Kapasitas Terpasang (MW)')->mergeCells('H3:H4');
-    $sheet->setCellValue('I3', 'Daya Mampu Netto (MW)')->mergeCells('I3:I4');
-    $sheet->setCellValue('J3', 'Jumlah Unit')->mergeCells('J3:J4');
-    $sheet->setCellValue('K3', 'No. Unit')->mergeCells('K3:K4');
-    $sheet->setCellValue('L3', 'Tahun Operasi')->mergeCells('L3:L4');
-    $sheet->setCellValue('M3', 'Status Operasi')->mergeCells('M3:M4');
-    $sheet->setCellValue('N3', 'Jenis BB')->mergeCells('N3:N4');
-    $sheet->setCellValue('O3', 'Satuan BB')->mergeCells('O3:O4');
+    $sheet->setCellValue('C3', 'Tahun')->mergeCells('C3:C4'); // Tambah Tahun
+    $sheet->setCellValue('D3', 'Bulan')->mergeCells('D3:D4'); // Tambah Bulan
+    $sheet->setCellValue('E3', 'Alamat Pembangkit')->mergeCells('E3:E4'); // Geser Alamat
+    $sheet->setCellValue('F3', 'Latitude')->mergeCells('F3:F4'); // Geser Latitude
+    $sheet->setCellValue('G3', 'Longitude')->mergeCells('G3:G4'); // Geser Longitude
+    $sheet->setCellValue('H3', 'Jenis Pembangkit')->mergeCells('H3:H4'); // Geser Jenis Pembangkit
+    $sheet->setCellValue('I3', 'Fungsi')->mergeCells('I3:I4'); // Geser Fungsi
+    $sheet->setCellValue('J3', 'Kapasitas Terpasang (MW)')->mergeCells('J3:J4'); // Geser Kapasitas
+    $sheet->setCellValue('K3', 'Daya Mampu Netto (MW)')->mergeCells('K3:K4'); // Geser Daya
+    $sheet->setCellValue('L3', 'Jumlah Unit')->mergeCells('L3:L4'); // Geser Jumlah Unit
+    $sheet->setCellValue('M3', 'No. Unit')->mergeCells('M3:M4'); // Geser No Unit
+    $sheet->setCellValue('N3', 'Tahun Operasi')->mergeCells('N3:N4'); // Geser Tahun Operasi
+    $sheet->setCellValue('O3', 'Status Operasi')->mergeCells('O3:O4'); // Geser Status Operasi
+    $sheet->setCellValue('P3', 'Jenis BB')->mergeCells('P3:P4'); // Geser Jenis BB
+    $sheet->setCellValue('Q3', 'Satuan BB')->mergeCells('Q3:Q4'); // Geser Satuan BB
 
-    $sheet->setCellValue('S3', 'Produksi Sendiri (kWh)')->mergeCells('S3:S4');
-    $sheet->setCellValue('T3', 'Pembelian Sumber Lain (kWh)')->mergeCells('T3:T4');
-    $sheet->setCellValue('U3', 'Susut Jaringan (kWh)')->mergeCells('U3:U4');
-    $sheet->setCellValue('V3', 'Penjualan ke Pelanggan (kWh)')->mergeCells('V3:V4');
-    $sheet->setCellValue('W3', 'Penjualan ke PLN (kWh)')->mergeCells('W3:W4');
-    $sheet->setCellValue('X3', 'Pemakaian Sendiri (kWh)')->mergeCells('X3:X4');
+    $sheet->setCellValue('U3', 'Produksi Sendiri (kWh)')->mergeCells('U3:U4'); // Geser Produksi
+    $sheet->setCellValue('V3', 'Pembelian Sumber Lain (kWh)')->mergeCells('V3:V4'); // Geser Pembelian
+    $sheet->setCellValue('W3', 'Susut Jaringan (kWh)')->mergeCells('W3:W4'); // Geser Susut
+    $sheet->setCellValue('X3', 'Penjualan ke Pelanggan (kWh)')->mergeCells('X3:X4'); // Geser Penjualan Pelanggan
+    $sheet->setCellValue('Y3', 'Penjualan ke PLN (kWh)')->mergeCells('Y3:Y4'); // Geser Penjualan PLN
+    $sheet->setCellValue('Z3', 'Pemakaian Sendiri (kWh)')->mergeCells('Z3:Z4'); // Geser Pemakaian Sendiri
 
     $headerStyle = [
         'font' => ['bold' => true, 'color' => ['rgb' => 'FFFFFF']],
@@ -123,8 +130,8 @@ try {
         'borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]]
 
     ];
-    $sheet->getStyle('A2:P4')->applyFromArray($headerStyle);
-    $sheet->getStyle('Q2:X4')->applyFromArray($headerStyle2);
+    $sheet->getStyle('A2:R4')->applyFromArray($headerStyle); // Update range
+    $sheet->getStyle('S2:Z4')->applyFromArray($headerStyle2); // Update range
 
     $rowNum = 5;
     $no = 1;
@@ -133,10 +140,10 @@ try {
     foreach ($laporan_grouped as $id_user => $laporans) {
         $namaPerusahaan = isset($laporans[0]['nama_perusahaan']) ? $laporans[0]['nama_perusahaan'] : 'Tidak Diketahui';
         $sheet->setCellValue('A' . $rowNum, "Nama Perusahaan: $namaPerusahaan");
-        $sheet->mergeCells("A{$rowNum}:X{$rowNum}");
-        $sheet->getStyle("A{$rowNum}:X{$rowNum}")->getFont()->setBold(true);
+        $sheet->mergeCells("A{$rowNum}:Z{$rowNum}"); // Update mergeCells
+        $sheet->getStyle("A{$rowNum}:Z{$rowNum}")->getFont()->setBold(true);
         // Atur background kuning
-        $sheet->getStyle("A{$rowNum}:X{$rowNum}")->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+        $sheet->getStyle("A{$rowNum}:Z{$rowNum}")->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
             ->getStartColor()->setRGB('FFFF00'); // Kuning (hex FFFF00)
         $rowNum++;
 
@@ -153,61 +160,100 @@ try {
                 $laporan = $laporans[$i];
                 $sheet->setCellValue('A' . $rowNum, $no);
                 $sheet->setCellValue('B' . $rowNum, $laporan['nama_perusahaan']);
-                $sheet->setCellValue('Q' . $rowNum, $laporan['tahun']); // Pindah ke Q
-                $sheet->setCellValue('R' . $rowNum, $laporan['bulan']); // Pindah ke R
-                $sheet->setCellValue('S' . $rowNum, parseIndoNumber($laporan['produksi_sendiri']));
-                $sheet->setCellValue('T' . $rowNum, parseIndoNumber($laporan['pemb_sumber_lain']));
-                $sheet->setCellValue('U' . $rowNum, parseIndoNumber($laporan['susut_jaringan']));
-                $sheet->setCellValue('V' . $rowNum, parseIndoNumber($laporan['penj_ke_pelanggan']));
-                $sheet->setCellValue('W' . $rowNum, parseIndoNumber($laporan['penj_ke_pln']));
-                $sheet->setCellValue('X' . $rowNum, parseIndoNumber($laporan['pemakaian_sendiri']));
+                $sheet->setCellValue('S' . $rowNum, $laporan['tahun']); // Pindah ke S
+                $sheet->setCellValue('T' . $rowNum, $laporan['bulan']); // Pindah ke T
+
+                // Format angka dengan NumberFormat
+                $produksi_sendiri = parseIndoNumber($laporan['produksi_sendiri']);
+                $pemb_sumber_lain = parseIndoNumber($laporan['pemb_sumber_lain']);
+                $susut_jaringan = parseIndoNumber($laporan['susut_jaringan']);
+                $penj_ke_pelanggan = parseIndoNumber($laporan['penj_ke_pelanggan']);
+                $penj_ke_pln = parseIndoNumber($laporan['penj_ke_pln']);
+                $pemakaian_sendiri = parseIndoNumber($laporan['pemakaian_sendiri']);
+
+                // Set nilai dan format angka jika valid
+                if ($produksi_sendiri !== null) {
+                    $sheet->setCellValue('U' . $rowNum, $produksi_sendiri);
+                    $sheet->getStyle('U' . $rowNum)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                }
+                if ($pemb_sumber_lain !== null) {
+                    $sheet->setCellValue('V' . $rowNum, $pemb_sumber_lain);
+                    $sheet->getStyle('V' . $rowNum)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                }
+                if ($susut_jaringan !== null) {
+                    $sheet->setCellValue('W' . $rowNum, $susut_jaringan);
+                    $sheet->getStyle('W' . $rowNum)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                }
+                if ($penj_ke_pelanggan !== null) {
+                    $sheet->setCellValue('X' . $rowNum, $penj_ke_pelanggan);
+                    $sheet->getStyle('X' . $rowNum)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                }
+                if ($penj_ke_pln !== null) {
+                    $sheet->setCellValue('Y' . $rowNum, $penj_ke_pln);
+                    $sheet->getStyle('Y' . $rowNum)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                }
+                if ($pemakaian_sendiri !== null) {
+                    $sheet->setCellValue('Z' . $rowNum, $pemakaian_sendiri);
+                    $sheet->getStyle('Z' . $rowNum)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                }
             } else {
                 // Kosongkan kolom laporan bulanan jika tidak ada
                 $sheet->setCellValue('A' . $rowNum, '');
                 $sheet->setCellValue('B' . $rowNum, '');
                 $sheet->setCellValue('C' . $rowNum, '');
-                $sheet->setCellValue('Q' . $rowNum, '');
-                $sheet->setCellValue('R' . $rowNum, '');
+                $sheet->setCellValue('S' . $rowNum, '');
                 $sheet->setCellValue('T' . $rowNum, '');
                 $sheet->setCellValue('U' . $rowNum, '');
                 $sheet->setCellValue('V' . $rowNum, '');
                 $sheet->setCellValue('W' . $rowNum, '');
                 $sheet->setCellValue('X' . $rowNum, '');
+                $sheet->setCellValue('Y' . $rowNum, '');
+                $sheet->setCellValue('Z' . $rowNum, '');
             }
 
             // Fill in pembangkit data if available
             if (isset($pembangkit_grouped[$id_user]) && $i < $pembangkit_count) {
                 $pb = $pembangkit_grouped[$id_user][$i];
-                $sheet->setCellValue('C' . $rowNum, $pb['alamat']);
-                $sheet->setCellValue('D' . $rowNum, $pb['latitude']);
-                $sheet->setCellValue('E' . $rowNum, $pb['longitude']);
-                $sheet->setCellValue('F' . $rowNum, $pb['jenis_pembangkit']);
-                $sheet->setCellValue('G' . $rowNum, $pb['fungsi']);
-                $sheet->setCellValue('H' . $rowNum, $pb['kapasitas_terpasang']);
-                $sheet->setCellValue('I' . $rowNum, $pb['daya_mampu_netto']);
-                $sheet->setCellValue('J' . $rowNum, $pb['jumlah_unit']);
-                $sheet->setCellValue('K' . $rowNum, $pb['no_unit']);
-                $sheet->setCellValue('L' . $rowNum, $pb['tahun_operasi']);
-                $sheet->setCellValue('M' . $rowNum, $pb['status_operasi']);
-                $sheet->setCellValue('N' . $rowNum, $pb['bahan_bakar_jenis']);
-                $sheet->setCellValue('O' . $rowNum, $pb['bahan_bakar_satuan']);
-                $sheet->setCellValue('P' . $rowNum, parseIndoNumber($pb['volume_bb']));
+                $sheet->setCellValue('C' . $rowNum, $pb['tahun']); // Tambah Tahun
+                $sheet->setCellValue('D' . $rowNum, $pb['bulan']); // Tambah Bulan
+                $sheet->setCellValue('E' . $rowNum, $pb['alamat']); // Geser Alamat
+                $sheet->setCellValue('F' . $rowNum, $pb['latitude']); // Geser Latitude
+                $sheet->setCellValue('G' . $rowNum, $pb['longitude']); // Geser Longitude
+                $sheet->setCellValue('H' . $rowNum, $pb['jenis_pembangkit']); // Geser Jenis Pembangkit
+                $sheet->setCellValue('I' . $rowNum, $pb['fungsi']); // Geser Fungsi
+                $sheet->setCellValue('J' . $rowNum, $pb['kapasitas_terpasang']); // Geser Kapasitas
+                $sheet->setCellValue('K' . $rowNum, $pb['daya_mampu_netto']); // Geser Daya
+                $sheet->setCellValue('L' . $rowNum, $pb['jumlah_unit']); // Geser Jumlah Unit
+                $sheet->setCellValue('M' . $rowNum, $pb['no_unit']); // Geser No Unit
+                $sheet->setCellValue('N' . $rowNum, $pb['tahun_operasi']); // Geser Tahun Operasi
+                $sheet->setCellValue('O' . $rowNum, $pb['status_operasi']); // Geser Status Operasi
+                $sheet->setCellValue('P' . $rowNum, $pb['bahan_bakar_jenis']); // Geser Jenis BB
+                $sheet->setCellValue('Q' . $rowNum, $pb['bahan_bakar_satuan']); // Geser Satuan BB
+
+                // Format volume bahan bakar
+                $volume_bb = parseIndoNumber($pb['volume_bb']);
+                if ($volume_bb !== null) {
+                    $sheet->setCellValue('R' . $rowNum, $volume_bb);
+                    $sheet->getStyle('R' . $rowNum)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                }
             } else {
                 // Kosongkan kolom pembangkit jika tidak ada
-                $sheet->setCellValue('C' . $rowNum, '');
-                $sheet->setCellValue('D' . $rowNum, '');
-                $sheet->setCellValue('E' . $rowNum, '');
-                $sheet->setCellValue('F' . $rowNum, '');
-                $sheet->setCellValue('G' . $rowNum, '');
-                $sheet->setCellValue('H' . $rowNum, '');
-                $sheet->setCellValue('I' . $rowNum, '');
-                $sheet->setCellValue('J' . $rowNum, '');
-                $sheet->setCellValue('K' . $rowNum, '');
-                $sheet->setCellValue('L' . $rowNum, '');
-                $sheet->setCellValue('M' . $rowNum, '');
-                $sheet->setCellValue('N' . $rowNum, '');
-                $sheet->setCellValue('O' . $rowNum, '');
-                $sheet->setCellValue('P' . $rowNum, '');
+                $sheet->setCellValue('C' . $rowNum, ''); // Tambah Tahun
+                $sheet->setCellValue('D' . $rowNum, ''); // Tambah Bulan
+                $sheet->setCellValue('E' . $rowNum, ''); // Geser Alamat
+                $sheet->setCellValue('F' . $rowNum, ''); // Geser Latitude
+                $sheet->setCellValue('G' . $rowNum, ''); // Geser Longitude
+                $sheet->setCellValue('H' . $rowNum, ''); // Geser Jenis Pembangkit
+                $sheet->setCellValue('I' . $rowNum, ''); // Geser Fungsi
+                $sheet->setCellValue ('J' . $rowNum, ''); // Geser Kapasitas
+                $sheet->setCellValue('K' . $rowNum, ''); // Geser Daya
+                $sheet->setCellValue('L' . $rowNum, ''); // Geser Jumlah Unit
+                $sheet->setCellValue('M' . $rowNum, ''); // Geser No Unit
+                $sheet->setCellValue('N' . $rowNum, ''); // Geser Tahun Operasi
+                $sheet->setCellValue('O' . $rowNum, ''); // Geser Status Operasi
+                $sheet->setCellValue('P' . $rowNum, ''); // Geser Jenis BB
+                $sheet->setCellValue('Q' . $rowNum, ''); // Geser Satuan BB
+                $sheet->setCellValue('R' . $rowNum, ''); // Geser Volume
             }
 
             $rowNum++;
@@ -218,11 +264,11 @@ try {
         $rowNum += 2;
     }
 
-    $sheet->getStyle('A5:X' . ($rowNum - 1))->applyFromArray([
+    $sheet->getStyle('A5:Z' . ($rowNum - 1))->applyFromArray([ // Update range
         'borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]]
     ]);
 
-    foreach (range('A', 'X') as $col) {
+    foreach (range('A', 'Z') as $col) { // Update range
         $sheet->getColumnDimension($col)->setAutoSize(true);
     }
 

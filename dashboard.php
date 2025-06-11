@@ -165,17 +165,17 @@ function parseNumber($val)
 
 // List kabupaten/kota di Kalsel tetap
 $daftarKabupatenKotaKalsel = [
-    'Kabupaten Balangan',
-    'Kabupaten Banjar',
-    'Kabupaten Barito Kuala',
-    'Kabupaten Hulu Sungai Selatan',
-    'Kabupaten Hulu Sungai Tengah',
-    'Kabupaten Hulu Sungai Utara',
-    'Kabupaten Kotabaru',
-    'Kabupaten Tabalong',
-    'Kabupaten Tanah Bumbu',
-    'Kabupaten Tanah Laut',
-    'Kabupaten Tapin',
+    'Balangan',
+    'Banjar',
+    'Barito Kuala',
+    'Hulu Sungai Selatan',
+    'Hulu Sungai Tengah',
+    'Hulu Sungai Utara',
+    'Kotabaru',
+    'Tabalong',
+    'Tanah Bumbu',
+    'Tanah Laut',
+    'Tapin',
     'Kota Banjarbaru',
     'Kota Banjarmasin'
 ];

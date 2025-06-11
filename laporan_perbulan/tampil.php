@@ -25,7 +25,10 @@ $params = [];
 if ($role != 'adminbulanan' && $role != 'superadmin' && $role != 'kementerian') {
     $query .= " AND id_user = :id_user";
     $params[':id_user'] = $id_user;
+} elseif ($role == 'kementerian') {
+    $query .= " AND status = 'diterima'";
 }
+
 
 // Cek apakah ada keyword pencarian
 if (!empty($_GET['keyword'])) {
@@ -123,7 +126,10 @@ $paramspembangkit = [];
 if (!in_array($role, ['adminbulanan', 'superadmin', 'kementerian'])) {
     $querypembangkit .= " AND id_user = :id_user";
     $paramspembangkit[':id_user'] = $id_user;
+} elseif ($role == 'kementerian') {
+    $querypembangkit .= " AND status = 'diterima'";
 }
+
 
 // Cek apakah ada keyword pencarian
 if (!empty($_GET['keyword2'])) {
