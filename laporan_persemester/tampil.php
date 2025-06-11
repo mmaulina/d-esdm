@@ -234,132 +234,130 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     </thead>
                     <tbody>
     <?php if (count($result) > 0): ?>
-        <?php
-                            // Group data by id_user
-                            $groupedData = [];
-                            foreach ($result as $row) {
-                                if (isset($row['id_user'])) {
-                                    $groupedData[$row['id_user']][] = $row;
-                                } else {
-                                    // Tangani kasus di mana id_user tidak ada
-                                    echo "id_user tidak ditemukan untuk baris: " . json_encode($row);
-                                }
-                            }
-                            foreach ($groupedData as $id_user => $rows):
-                                $no = 1;
-                                // Get nama_perusahaan from the first row
-                                $nama_perusahaan = htmlspecialchars($rows[0]['nama_perusahaan']);
-                                // Group header row with id_user and nama_perusahaan
-                                echo "<tr><td colspan='16' class='fw-bold bg-light'>NAMA PERUSAHAAN = ($nama_perusahaan) </td></tr>";
-                                foreach ($rows as $row):
-                            ?>
+    <?php
+        // Kelompokkan data berdasarkan id_user
+        $groupedData = [];
+        foreach ($result as $row) {
+            if (isset($row['id_user'])) {
+                $groupedData[$row['id_user']][] = $row;
+            } else {
+                // Tangani kasus di mana id_user tidak ditemukan
+                echo "id_user tidak ditemukan untuk baris: " . json_encode($row);
+            }
+        }
+
+        foreach ($groupedData as $id_user => $rows):
+            $no = 1;
+            // Ambil nama_perusahaan dari baris pertama
+            $nama_perusahaan = htmlspecialchars($rows[0]['nama_perusahaan']);
+            // Baris header grup dengan id_user dan nama_perusahaan
+            echo "<tr><td colspan='16' class='fw-bold bg-light'>NAMA PERUSAHAAN = ($nama_perusahaan) </td></tr>";
+            foreach ($rows as $row):
+    ?>
+        <tr>
+            <td class="text-center"><?= $no++; ?></td>
+            <td><?= htmlspecialchars($row['nama_perusahaan']); ?></td>
+            <?php if ($_SESSION['role'] == 'superadmin') : ?>
+                <td><?= htmlspecialchars($row['no_hp_pimpinan']); ?></td>
+                <td><?= htmlspecialchars($row['tenaga_teknik']); ?></td>
+                <td><?= htmlspecialchars($row['no_hp_teknik']); ?></td>
+                <td><?= htmlspecialchars($row['nama']); ?></td>
+                <td><?= htmlspecialchars($row['no_hp']); ?></td>
+            <?php endif; ?>
+            <td><?= htmlspecialchars($row['no_telp_kantor']); ?></td>
+            <td class="text-center">
+                <?php if (!empty($row['file_laporan'])) : ?>
+                    <a href="<?= htmlspecialchars($row['file_laporan']); ?>" target="_blank" class="btn btn-sm btn-dark">
+                        <i class="fas fa-file-alt"></i> Lihat
+                    </a>
+                <?php else : ?>
+                    <span class="text-danger">Tidak ada file</span>
+                <?php endif; ?>
+            </td>
+            <td class="text-center">
+                <?php if (!empty($row['file_lhu'])) : ?>
+                    <a href="<?= htmlspecialchars($row['file_lhu']); ?>" target="_blank" class="btn btn-sm btn-dark">
+                        <i class="fas fa-file-alt"></i> Lihat
+                    </a>
+                <?php else : ?>
+                    <span class="text-danger">Tidak ada file</span>
+                <?php endif; ?>
+            </td>
+            <td><?= htmlspecialchars($row['tahun']); ?></td>
+            <td><?= htmlspecialchars($row['semester']); ?></td>
+            <td class="text-center">
                 <?php
-                $no = 1; // Resetting the counter for each company
-                foreach ($rows as $row) : ?>
-                    <tr>
-                        <td class="text-center"><?= $no++; ?></td>
-                        <td><?= htmlspecialchars($row['nama_perusahaan']); ?></td>
-                        <?php if ($_SESSION['role'] == 'superadmin') : ?>
-                            <td><?= htmlspecialchars($row['no_hp_pimpinan']); ?></td>
-                            <td><?= htmlspecialchars($row['tenaga_teknik']); ?></td>
-                            <td><?= htmlspecialchars($row['no_hp_teknik']); ?></td>
-                            <td><?= htmlspecialchars($row['nama']); ?></td>
-                            <td><?= htmlspecialchars($row['no_hp']); ?></td>
-                        <?php endif; ?>
-                        <td><?= htmlspecialchars($row['no_telp_kantor']); ?></td>
-                        <td class="text-center">
-                            <?php if (!empty($row['file_laporan'])) : ?>
-                                <a href="<?= htmlspecialchars($row['file_laporan']); ?>" target="_blank" class="btn btn-sm btn-dark">
-                                    <i class="fas fa-file-alt"></i> Lihat
-                                </a>
-                            <?php else : ?>
-                                <span class="text-danger">Tidak ada file</span>
-                            <?php endif; ?>
-                        </td>
-                        <td class="text-center">
-                            <?php if (!empty($row['file_lhu'])) : ?>
-                                <a href="<?= htmlspecialchars($row['file_lhu']); ?>" target="_blank" class="btn btn-sm btn-dark">
-                                    <i class="fas fa-file-alt"></i> Lihat
-                                </a>
-                            <?php else : ?>
-                                <span class="text-danger">Tidak ada file</span>
-                            <?php endif; ?>
-                        </td>
-                        <td><?= htmlspecialchars($row['tahun']); ?></td>
-                        <td><?= htmlspecialchars($row['semester']); ?></td>
-                        <td class="text-center">
-                            <?php
-                            // Display status with icons and colors
-                            switch ($row['status']) {
-                                case 'diajukan':
-                                    echo '<i class="fas fa-clock" style="color: yellow;"></i> Diajukan';
-                                    break;
-                                case 'diterima':
-                                    echo '<i class="fas fa-check" style="color: green;"></i> Diterima';
-                                    break;
-                                case 'dikembalikan':
-                                    echo '<i class="fas fa-times" style="color: red;"></i> Dikembalikan';
-                                    break;
-                                default:
-                                    echo '<span class="text-muted">Status tidak diketahui</span>';
-                            }
-                            ?>
-                        </td>
-                        <td><?= htmlspecialchars($row['keterangan']); ?></td>
-                        <td class="text-center">
-                            <?php if (($role == 'adminsemester' || $role == 'superadmin') && $row['status'] == 'diajukan'): ?>
-                                <form method="POST" style="display: inline;">
-                                    <input type="hidden" name="terima_id" value="<?= $row['id']; ?>">
-                                    <button type="submit" class="btn btn-success btn-sm">Terima</button>
-                                </form>
-                                <a href="#" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modalTolak<?= $row['id']; ?>">Kembalikan</a>
-                            <?php endif; ?>
+                // Tampilkan status dengan ikon dan warna
+                switch ($row['status']) {
+                    case 'diajukan':
+                        echo '<i class="fas fa-clock" style="color: yellow;"></i> Diajukan';
+                        break;
+                    case 'diterima':
+                        echo '<i class="fas fa-check" style="color: green;"></i> Diterima';
+                        break;
+                    case 'dikembalikan':
+                        echo '<i class="fas fa-times" style="color: red;"></i> Dikembalikan';
+                        break;
+                    default:
+                        echo '<span class="text-muted">Status tidak diketahui</span>';
+                }
+                ?>
+            </td>
+            <td><?= htmlspecialchars($row['keterangan']); ?></td>
+            <td class="text-center">
+                <?php if (($role == 'adminsemester' || $role == 'superadmin') && $row['status'] == 'diajukan'): ?>
+                    <form method="POST" style="display: inline;">
+                        <input type="hidden" name="terima_id" value="<?= $row['id']; ?>">
+                        <button type="submit" class="btn btn-success btn-sm">Terima</button>
+                    </form>
+                    <a href="#" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modalTolak<?= $row['id']; ?>">Kembalikan</a>
+                <?php endif; ?>
 
-                            <?php if (($row['status'] == 'diterima' || $row['status'] == 'dikembalikan') && $role == 'superadmin'): ?>
-                                <a href="?page=edit_laporan_persemester&id=<?= $row['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
-                                <a href="?page=hapus_laporan_persemester&id=<?= $row['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus?');">Hapus</a>
-                                <?php if ($row['status'] == 'diterima'): ?>
-                                    <a href="#" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalTolak<?= $row['id']; ?>">Kembalikan</a>
-                                <?php endif; ?>
-                            <?php endif; ?>
+                <?php if (($row['status'] == 'diterima' || $row['status'] == 'dikembalikan') && $role == 'superadmin'): ?>
+                    <a href="?page=edit_laporan_persemester&id=<?= $row['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
+                    <a href="?page=hapus_laporan_persemester&id=<?= $row['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus?');">Hapus</a>
+                    <?php if ($row['status'] == 'diterima'): ?>
+                        <a href="#" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalTolak<?= $row['id']; ?>">Kembalikan</a>
+                    <?php endif; ?>
+                <?php endif; ?>
 
-                            <?php if ($role == 'umum' && $row['status'] == 'dikembalikan'): ?>
-                                <a href="?page=edit_laporan_persemester&id=<?= $row['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
-                                <a href="?page=hapus_laporan_persemester&id=<?= $row['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus?');">Hapus</a>
-                            <?php endif; ?>
-                        </td>
-                    </tr>
-                    <!-- Modal for Rejecting Report -->
-                    <div class="modal fade" id="modalTolak<?= $row['id']; ?>" tabindex="-1" role="dialog" aria-labelledby="modalTolakLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="modalTolakLabel">Kembalikan Laporan</h5>
-                                </div>
-                                <form action="" method="POST">
-                                    <div class="modal-body">
-                                        <input type="hidden" name="id" value="<?= $row['id']; ?>">
-                                        <div class="form-group">
-                                            <label for="keterangan<?= $row['id']; ?>">Keterangan di Kembalikan</label>
-                                            <textarea class="form-control" id="keterangan<?= $row['id']; ?>" name="keterangan" rows="3" required></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                                        <button type="submit" name="tolak_laporan" class="btn btn-danger">Kembalikan</button>
-                                    </div>
-                                </form>
+                <?php if ($role == 'umum' && $row['status'] == 'dikembalikan'): ?>
+                    <a href="?page=edit_laporan_persemester&id=<?= $row['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
+                    <a href="?page=hapus_laporan_persemester&id=<?= $row['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus?');">Hapus</a>
+                <?php endif; ?>
+            </td>
+        </tr>
+        <!-- Modal untuk Menolak Laporan -->
+        <div class="modal fade" id="modalTolak<?= $row['id']; ?>" tabindex="-1" role="dialog" aria-labelledby="modalTolakLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalTolakLabel">Kembalikan Laporan</h5>
+                    </div>
+                    <form action="" method="POST">
+                        <div class="modal-body">
+                            <input type="hidden" name="id" value="<?= $row['id']; ?>">
+                            <div class="form-group">
+                                <label for="keterangan<?= $row['id']; ?>">Keterangan di Kembalikan</label>
+                                <textarea class="form-control" id="keterangan<?= $row['id']; ?>" name="keterangan" rows="3" required></textarea>
                             </div>
                         </div>
-                    </div>
-                <?php endforeach; ?>
-            <?php endforeach; ?>
-        <?php endforeach; ?>
-    <?php else: ?>
-        <tr>
-            <td colspan='15' class='text-center'>Data tidak ditemukan</td>
-        </tr>
-    <?php endif; ?>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                            <button type="submit" name="tolak_laporan" class="btn btn-danger">Kembalikan</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    <?php endforeach; ?>
+    <?php endforeach; ?>
+<?php else: ?>
+    <tr>
+        <td colspan='15' class='text-center'>Data tidak ditemukan</td>
+    </tr>
+<?php endif; ?>
+
 </tbody>
                 </table>
             </div>

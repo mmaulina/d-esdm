@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.0
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Jun 10, 2025 at 08:07 AM
--- Server version: 10.4.18-MariaDB
--- PHP Version: 7.4.16
+-- Host: localhost:3306
+-- Generation Time: Jun 11, 2025 at 02:03 AM
+-- Server version: 8.0.30
+-- PHP Version: 8.1.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -28,12 +28,12 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `denda_laporan_semester` (
-  `id` int(11) NOT NULL,
-  `id_profil_perusahaan` int(11) NOT NULL,
+  `id` int NOT NULL,
+  `id_profil_perusahaan` int NOT NULL,
   `nama_perusahaan` varchar(100) NOT NULL,
   `denda` varchar(225) NOT NULL,
   `keterangan` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -42,14 +42,14 @@ CREATE TABLE `denda_laporan_semester` (
 --
 
 CREATE TABLE `djih` (
-  `id` int(11) NOT NULL,
+  `id` int NOT NULL,
   `id_title` varchar(20) NOT NULL,
   `title` varchar(100) NOT NULL,
   `jenis_konten` enum('gambar','file','link','kosong') NOT NULL,
   `konten` varchar(225) DEFAULT NULL,
   `caption` text NOT NULL,
   `tanggal` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -58,11 +58,11 @@ CREATE TABLE `djih` (
 --
 
 CREATE TABLE `djih_dilihat` (
-  `id` int(11) NOT NULL,
-  `id_user` int(11) NOT NULL,
-  `konten_id` int(11) NOT NULL,
-  `tanggal` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `id` int NOT NULL,
+  `id_user` int NOT NULL,
+  `konten_id` int NOT NULL,
+  `tanggal` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `djih_dilihat`
@@ -195,11 +195,11 @@ INSERT INTO `djih_dilihat` (`id`, `id_user`, `konten_id`, `tanggal`) VALUES
 --
 
 CREATE TABLE `konten_dilihat` (
-  `id` int(11) NOT NULL,
-  `id_user` int(11) NOT NULL,
-  `konten_id` int(11) NOT NULL,
-  `tanggal` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `id` int NOT NULL,
+  `id_user` int NOT NULL,
+  `konten_id` int NOT NULL,
+  `tanggal` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `konten_dilihat`
@@ -876,9 +876,9 @@ INSERT INTO `konten_dilihat` (`id`, `id_user`, `konten_id`, `tanggal`) VALUES
 --
 
 CREATE TABLE `laporan_bulanan` (
-  `id` int(11) NOT NULL,
-  `id_user` int(11) NOT NULL,
-  `tahun` year(4) NOT NULL,
+  `id` int NOT NULL,
+  `id_user` int NOT NULL,
+  `tahun` year NOT NULL,
   `bulan` enum('Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember') NOT NULL,
   `nama_perusahaan` varchar(200) NOT NULL,
   `no_hp_pimpinan` varchar(15) NOT NULL,
@@ -896,7 +896,7 @@ CREATE TABLE `laporan_bulanan` (
   `pemakaian_sendiri` varchar(200) NOT NULL,
   `status` enum('diajukan','diterima','dikembalikan') NOT NULL,
   `keterangan` varchar(225) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `laporan_bulanan`
@@ -913,8 +913,8 @@ INSERT INTO `laporan_bulanan` (`id`, `id_user`, `tahun`, `bulan`, `nama_perusaha
 --
 
 CREATE TABLE `laporan_semester` (
-  `id` int(11) NOT NULL,
-  `id_user` int(11) NOT NULL,
+  `id` int NOT NULL,
+  `id_user` int NOT NULL,
   `nama_perusahaan` varchar(225) NOT NULL,
   `no_hp_pimpinan` varchar(15) NOT NULL,
   `tenaga_teknik` varchar(100) NOT NULL,
@@ -922,36 +922,13 @@ CREATE TABLE `laporan_semester` (
   `nama` varchar(100) NOT NULL,
   `no_hp` varchar(15) NOT NULL,
   `no_telp_kantor` varchar(15) NOT NULL,
-  `baku_mutu_so2` varchar(225) NOT NULL,
-  `hasil_so2` varchar(100) NOT NULL,
-  `rencana_aksi_so2` varchar(255) NOT NULL,
-  `baku_mutu_ho2` varchar(225) NOT NULL,
-  `hasil_ho2` varchar(100) NOT NULL,
-  `rencana_aksi_ho2` varchar(255) NOT NULL,
-  `baku_mutu_tsp` varchar(225) NOT NULL,
-  `hasil_tsp` varchar(100) NOT NULL,
-  `rencana_aksi_tsp` varchar(255) NOT NULL,
-  `baku_mutu_co` varchar(225) NOT NULL,
-  `hasil_co` varchar(100) NOT NULL,
-  `rencana_aksi_co` varchar(255) NOT NULL,
-  `baku_mutu_kebisingan` varchar(225) NOT NULL,
-  `hasil_kebisingan` varchar(100) NOT NULL,
-  `rencana_aksi_kebisingan` int(255) NOT NULL,
   `file_laporan` varchar(225) NOT NULL,
   `file_lhu` varchar(225) NOT NULL,
-  `tahun` year(4) NOT NULL,
+  `tahun` year NOT NULL,
   `semester` varchar(30) NOT NULL,
   `status` enum('diterima','dikembalikan','diajukan') NOT NULL,
   `keterangan` varchar(225) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `laporan_semester`
---
-
-INSERT INTO `laporan_semester` (`id`, `id_user`, `nama_perusahaan`, `no_hp_pimpinan`, `tenaga_teknik`, `no_hp_teknik`, `nama`, `no_hp`, `no_telp_kantor`, `baku_mutu_so2`, `hasil_so2`, `rencana_aksi_so2`, `baku_mutu_ho2`, `hasil_ho2`, `rencana_aksi_ho2`, `baku_mutu_tsp`, `hasil_tsp`, `rencana_aksi_tsp`, `baku_mutu_co`, `hasil_co`, `rencana_aksi_co`, `baku_mutu_kebisingan`, `hasil_kebisingan`, `rencana_aksi_kebisingan`, `file_laporan`, `file_lhu`, `tahun`, `semester`, `status`, `keterangan`) VALUES
-(30, 5, 'PT Energi Mandiri', '0881810000', 'Nama Tenaga Teknik Anda', '00000000', 'MUHAMMAD IRWAN FIRDAUS', '00000000000', '088247342027', '111', '11', '-', '120', '1200', '-', '11000', '1200', '-', '1200', '2900', '-', '1200', '2300', 0, 'uploads/1748833193_Rapor_NiandaSafaRamadhani.pdf', 'uploads/1748833193_Rapor_NiandaSafaRamadhani.pdf', 2024, 'Semester I 2024', 'diterima', '-'),
-(31, 10, 'WASAKA CODE DIGITAL DEVELOPMENT', '0881810000', 'Nama Tenaga Teknik Anda', '0988888888888', 'MUHAMMAD IRWAN FIRDAUS', '088247342027', '088247342027', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, 'uploads/1749533256_BerkasLamaran-Bimbel122Edutama-.pdf', 'uploads/1749533256_BerkasLamaran-DinasLingkunganHidup.pdf', 2025, 'Semester I 2025', 'diajukan', '-');
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -960,14 +937,14 @@ INSERT INTO `laporan_semester` (`id`, `id_user`, `nama_perusahaan`, `no_hp_pimpi
 --
 
 CREATE TABLE `news` (
-  `id` int(11) NOT NULL,
+  `id` int NOT NULL,
   `id_title` varchar(20) NOT NULL,
   `title` varchar(100) NOT NULL,
   `jenis_konten` enum('gambar','file','link','kosong') NOT NULL,
   `konten` varchar(225) DEFAULT NULL,
   `caption` text NOT NULL,
   `tanggal` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -976,8 +953,8 @@ CREATE TABLE `news` (
 --
 
 CREATE TABLE `parameter` (
-  `id` int(11) NOT NULL,
-  `id_user` int(11) NOT NULL,
+  `id` int NOT NULL,
+  `id_user` int NOT NULL,
   `nama_perusahaan` varchar(100) NOT NULL,
   `no_seri_genset` varchar(100) NOT NULL,
   `baku_mutu_so2` varchar(100) NOT NULL,
@@ -995,20 +972,11 @@ CREATE TABLE `parameter` (
   `baku_mutu_kebisingan` varchar(100) NOT NULL,
   `hasil_kebisingan` varchar(100) NOT NULL,
   `rencana_aksi_kebisingan` varchar(225) NOT NULL,
-  `tahun` year(4) NOT NULL,
+  `tahun` year NOT NULL,
   `semester` varchar(100) NOT NULL,
   `keterangan` varchar(225) NOT NULL,
   `status` enum('diterima','diajukan','dikembalikan') NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `parameter`
---
-
-INSERT INTO `parameter` (`id`, `id_user`, `nama_perusahaan`, `no_seri_genset`, `baku_mutu_so2`, `hasil_so2`, `rencana_aksi_so2`, `baku_mutu_ho2`, `hasil_ho2`, `rencana_aksi_ho2`, `baku_mutu_tsp`, `hasil_tsp`, `rencana_aksi_tsp`, `baku_mutu_co`, `hasil_co`, `rencana_aksi_co`, `baku_mutu_kebisingan`, `hasil_kebisingan`, `rencana_aksi_kebisingan`, `tahun`, `semester`, `keterangan`, `status`) VALUES
-(1, 5, 'PT Energi Mandiri', '123', '111', '11', '-', '120', '1200', '-', '11000', '1200', '-', '1200', '2900', '-', '1200', '2300', '-', 2025, 'Semester I 2025', '', 'diterima'),
-(2, 5, 'PT Energi Mandiri', '113', '990', '1000', '-', '1201', '1200', '-', '11000', '1200', '-', '1200', '2900', '-', '12001', '1111', '-', 2024, 'Semester I 2024', '-', 'diajukan'),
-(3, 10, 'WASAKA CODE DIGITAL DEVELOPMENT', '111', '111', '11', '-', '120', '1200', '-', '11000', '1200', '-', '1200', '2900', '-', '1200', '2300', '-', 2025, 'Semester I 2025', 'salah', 'dikembalikan');
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -1017,8 +985,8 @@ INSERT INTO `parameter` (`id`, `id_user`, `nama_perusahaan`, `no_seri_genset`, `
 --
 
 CREATE TABLE `pembangkit` (
-  `id` int(11) NOT NULL,
-  `id_user` int(11) NOT NULL,
+  `id` int NOT NULL,
+  `id_user` int NOT NULL,
   `nama_perusahaan` varchar(225) NOT NULL,
   `kabupaten` enum('Balangan','Banjar','Barito Kuala','Hulu Sungai Selatan','Hulu Sungai Tengah','Hulu Sungai Utara','Kotabaru','Tabalong','Tanah Bumbu','Tanah Laut','Tapin','Kota Banjarbaru','Kota Banjarmasin') NOT NULL,
   `alamat` varchar(225) NOT NULL,
@@ -1037,9 +1005,9 @@ CREATE TABLE `pembangkit` (
   `volume_bb` varchar(100) NOT NULL,
   `status` enum('diterima','diajukan','dikembalikan') NOT NULL,
   `keterangan` varchar(225) NOT NULL,
-  `tahun` year(4) NOT NULL,
+  `tahun` year NOT NULL,
   `bulan` enum('Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember') NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `pembangkit`
@@ -1058,8 +1026,8 @@ INSERT INTO `pembangkit` (`id`, `id_user`, `nama_perusahaan`, `kabupaten`, `alam
 --
 
 CREATE TABLE `profil` (
-  `id_profil` int(11) NOT NULL,
-  `id_user` int(11) NOT NULL,
+  `id_profil` int NOT NULL,
+  `id_user` int NOT NULL,
   `nama_perusahaan` varchar(100) NOT NULL,
   `kabupaten` enum('Balangan','Banjar','Barito Kuala','Hulu Sungai Selatan','Hulu Sungai Tengah','Hulu Sungai Utara','Kotabaru','Tabalong','Tanah Bumbu','Tanah Laut','Tapin','Kota Banjarbaru','Kota Banjarmasin') NOT NULL,
   `alamat` varchar(200) NOT NULL,
@@ -1073,7 +1041,7 @@ CREATE TABLE `profil` (
   `email` varchar(100) NOT NULL,
   `status` enum('diajukan','diterima','ditolak') NOT NULL,
   `keterangan` varchar(225) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `profil`
@@ -1092,14 +1060,14 @@ INSERT INTO `profil` (`id_profil`, `id_user`, `nama_perusahaan`, `kabupaten`, `a
 --
 
 CREATE TABLE `users` (
-  `id_user` int(11) NOT NULL,
+  `id_user` int NOT NULL,
   `username` varchar(50) NOT NULL,
   `email` varchar(50) NOT NULL,
   `password` varchar(255) NOT NULL,
   `no_hp` varchar(15) NOT NULL,
   `role` enum('superadmin','admin','umum','adminbulanan','adminsemester','kementerian') NOT NULL,
   `status` enum('diajukan','diverifikasi','ditolak') NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `users`
@@ -1194,67 +1162,67 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `denda_laporan_semester`
 --
 ALTER TABLE `denda_laporan_semester`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=134;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=134;
 
 --
 -- AUTO_INCREMENT for table `djih`
 --
 ALTER TABLE `djih`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `djih_dilihat`
 --
 ALTER TABLE `djih_dilihat`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=192;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=192;
 
 --
 -- AUTO_INCREMENT for table `konten_dilihat`
 --
 ALTER TABLE `konten_dilihat`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=971;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=971;
 
 --
 -- AUTO_INCREMENT for table `laporan_bulanan`
 --
 ALTER TABLE `laporan_bulanan`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- AUTO_INCREMENT for table `laporan_semester`
 --
 ALTER TABLE `laporan_semester`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `news`
 --
 ALTER TABLE `news`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `parameter`
 --
 ALTER TABLE `parameter`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `pembangkit`
 --
 ALTER TABLE `pembangkit`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
 
 --
 -- AUTO_INCREMENT for table `profil`
 --
 ALTER TABLE `profil`
-  MODIFY `id_profil` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id_profil` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id_user` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
