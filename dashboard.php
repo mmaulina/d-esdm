@@ -201,10 +201,16 @@ foreach ($daftarKabupatenKotaKalsel as $kota) {
     $jumlahStatusPerKota[$kota] = ['Beroperasi' => 0, 'Perbaikan' => 0, 'Rusak' => 0, 'Rusak Total' => 0];
 }
 
-// Ambil data laporan bulanan
-$sql1 = "SELECT kabupaten, produksi_sendiri, pemb_sumber_lain, penj_ke_pelanggan, penj_ke_pln, pemakaian_sendiri FROM laporan_bulanan";
-$stmt1 = $conn->query($sql1);
+// Ambil data laporan bulanan untuk tahun saat ini
+$tahunSekarang = date('Y');
+$sql1 = "SELECT kabupaten, produksi_sendiri, pemb_sumber_lain, penj_ke_pelanggan, penj_ke_pln, pemakaian_sendiri 
+         FROM laporan_bulanan 
+         WHERE tahun = :tahun";
+$stmt1 = $conn->prepare($sql1);
+$stmt1->bindParam(':tahun', $tahunSekarang, PDO::PARAM_INT);
+$stmt1->execute();
 $laporanBulanan = $stmt1->fetchAll(PDO::FETCH_ASSOC);
+
 
 foreach ($laporanBulanan as $laporan) {
     $kabupaten = trim($laporan['kabupaten']);
