@@ -367,6 +367,8 @@ foreach ($pembangkit as $pb) {
                         </div>
                     </div>
                 <?php endif; ?>
+
+                <!-- TOTAL PRODUKSI & KONSUMSI -->
                 <div class="row mt-3">
                     <div class="col">
                         <h5 class="fw-bold mb-3">Total Produksi & Konsumsi per Kabupaten/Kota</h5>
@@ -377,6 +379,37 @@ foreach ($pembangkit as $pb) {
                                         <th rowspan="2" onclick="sortTable('tabel-produksi-konsumsi', 0)">Kabupaten/Kota <i class="fa fa-sort"></i></th>
                                         <th rowspan="2" onclick="sortTable('tabel-produksi-konsumsi', 1)">Total Produksi Listrik (kWh) <i class="fa fa-sort"></i></th>
                                         <th rowspan="2" onclick="sortTable('tabel-produksi-konsumsi', 2)">Total Konsumsi Listrik (kWh) <i class="fa fa-sort"></i></th>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($totalProduksiPerKota as $kota => $produksi): ?>
+                                        <tr>
+                                            <td><?= htmlspecialchars($kota); ?></td>
+                                            <td class="text-end"><?= number_format($produksi, 2, ',', '.'); ?></td>
+                                            <td class="text-end"><?= number_format($totalKonsumsiPerKota[$kota] ?? 0, 2, ',', '.'); ?></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                                <tfoot class="table-light fw-bold">
+                                    <tr>
+                                        <td class="text-end">Total:</td>
+                                        <td class="text-end"><?= number_format($totalProduksi, 2, ',', '.'); ?></td>
+                                        <td class="text-end"><?= number_format($totalKonsumsi, 2, ',', '.'); ?></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TOTAL PEMBANGKIT -->
+                <div class="row mt-3">
+                    <div class="col">
+                        <h5 class="fw-bold mb-3">Total Pembangkit</h5>
+                        <div class="table-responsive" style="overflow-x:auto; -webkit-overflow-scrolling: touch;">
+                            <table class="table table-bordered table-striped table-sm" id="tabel-produksi-konsumsi" style="min-width: 1000px; white-space: nowrap;">
+                                <thead class="table-dark">
+                                    <tr class="text-center align-middle">
+                                        <th rowspan="2" onclick="sortTable('tabel-produksi-konsumsi', 0)">Kabupaten/Kota <i class="fa fa-sort"></i></th>
                                         <th rowspan="2" onclick="sortTable('tabel-produksi-konsumsi', 3)">Total Konsumsi BBM Solar (L) <i class="fa fa-sort"></i></th>
                                         <th rowspan="2" onclick="sortTable('tabel-produksi-konsumsi', 4)">Total Konsumsi BBM Biomasa (Ton) <i class="fa fa-sort"></i></th>
                                         <th rowspan="2" onclick="sortTable('tabel-produksi-konsumsi', 5)">Total Pembangkit PLTD <i class="fa fa-sort"></i></th>
@@ -397,8 +430,6 @@ foreach ($pembangkit as $pb) {
                                     <?php foreach ($totalProduksiPerKota as $kota => $produksi): ?>
                                         <tr>
                                             <td><?= htmlspecialchars($kota); ?></td>
-                                            <td class="text-end"><?= number_format($produksi, 2, ',', '.'); ?></td>
-                                            <td class="text-end"><?= number_format($totalKonsumsiPerKota[$kota] ?? 0, 2, ',', '.'); ?></td>
                                             <td class="text-end"><?= number_format($totalVolumeBBPerKota[$kota]['Solar'] ?? 0, 2, ',', '.'); ?></td>
                                             <td class="text-end"><?= number_format($totalVolumeBBPerKota[$kota]['Biomasa'] ?? 0, 2, ',', '.'); ?></td>
                                             <td class="text-end"><?= number_format($jumlahJenisPembangkitPerKota[$kota]['PLTD']); ?></td>
@@ -416,8 +447,6 @@ foreach ($pembangkit as $pb) {
                                 <tfoot class="table-light fw-bold">
                                     <tr>
                                         <td class="text-end">Total:</td>
-                                        <td class="text-end"><?= number_format($totalProduksi, 2, ',', '.'); ?></td>
-                                        <td class="text-end"><?= number_format($totalKonsumsi, 2, ',', '.'); ?></td>
                                         <td class="text-end"><?= number_format(array_sum(array_column($totalVolumeBBPerKota, 'Solar')), 2, ',', '.'); ?></td>
                                         <td class="text-end"><?= number_format(array_sum(array_column($totalVolumeBBPerKota, 'Biomasa')), 2, ',', '.'); ?></td>
                                         <td class="text-end"><?= number_format(array_sum(array_column($jumlahJenisPembangkitPerKota, 'PLTD'))); ?></td>
