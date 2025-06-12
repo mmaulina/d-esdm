@@ -240,10 +240,31 @@ function parseNumber2($value)
     return is_numeric($value) ? (float)$value : 0;
 }
 
-// Ambil data pembangkit
-$sql2 = "SELECT kabupaten, bahan_bakar_jenis, volume_bb, jenis_pembangkit, fungsi, status_operasi FROM pembangkit";
-$stmt2 = $conn->query($sql2);
+$bulanFilter = $_GET['bulan'] ?? date('F');
+$tahunFilter = $_GET['tahun'] ?? date('Y');
+
+// Pastikan mapping bahasa Inggris ke Indonesia (jika diperlukan)
+$bulanMap = [
+    'January' => 'Januari', 'February' => 'Februari', 'March' => 'Maret',
+    'April' => 'April', 'May' => 'Mei', 'June' => 'Juni',
+    'July' => 'Juli', 'August' => 'Agustus', 'September' => 'September',
+    'October' => 'Oktober', 'November' => 'November', 'December' => 'Desember'
+];
+if (array_key_exists($bulanFilter, $bulanMap)) {
+    $bulanFilter = $bulanMap[$bulanFilter]; // Convert jika perlu
+}
+
+// Lanjutkan ke query...
+$sql2 = "SELECT kabupaten, bahan_bakar_jenis, volume_bb, jenis_pembangkit, fungsi, status_operasi 
+         FROM pembangkit 
+         WHERE bulan = :bulan AND tahun = :tahun";
+$stmt2 = $conn->prepare($sql2);
+$stmt2->bindParam(':bulan', $bulanFilter, PDO::PARAM_STR);
+$stmt2->bindParam(':tahun', $tahunFilter, PDO::PARAM_INT);
+$stmt2->execute();
 $pembangkit = $stmt2->fetchAll(PDO::FETCH_ASSOC);
+
+
 
 foreach ($pembangkit as $pb) {
     $kabupaten = trim($pb['kabupaten']);
@@ -406,6 +427,46 @@ foreach ($pembangkit as $pb) {
                     <div class="col">
                         <h5 class="fw-bold mb-3">Total Pembangkit</h5>
                         <div class="table-responsive" style="overflow-x:auto; -webkit-overflow-scrolling: touch;">
+                            <form method="GET" class="row g-2 mb-3">
+    <div class="col-md-3">
+        <label for="filter_bulan" class="form-label">Bulan</label>
+        <select class="form-select" name="bulan" id="filter_bulan">
+            <?php
+            $bulanList = [
+                'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+                'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+            ];
+
+            // Ambil bulan sekarang dalam angka lalu konversi ke nama bulan Indonesia
+            $bulanSekarang = $bulanList[date('n') - 1];
+            $bulanDipilih = $_GET['bulan'] ?? $bulanSekarang;
+
+            foreach ($bulanList as $bln) {
+                $selected = ($bln == $bulanDipilih) ? 'selected' : '';
+                echo "<option value='$bln' $selected>$bln</option>";
+            }
+            ?>
+        </select>
+    </div>
+    <div class="col-md-3">
+        <label for="filter_tahun" class="form-label">Tahun</label>
+        <select class="form-select" name="tahun" id="filter_tahun">
+            <?php
+            $tahunSekarang = date('Y');
+            $tahunDipilih = $_GET['tahun'] ?? $tahunSekarang;
+
+            for ($i = $tahunSekarang; $i >= $tahunSekarang - 5; $i--) {
+                $selected = ($i == $tahunDipilih) ? 'selected' : '';
+                echo "<option value='$i' $selected>$i</option>";
+            }
+            ?>
+        </select>
+    </div>
+    <div class="col-md-3 align-self-end">
+        <button type="submit" class="btn btn-primary">Tampilkan</button>
+    </div>
+</form>
+
                             <table class="table table-bordered table-striped table-sm" id="tabel-produksi-konsumsi" style="min-width: 1000px; white-space: nowrap;">
                                 <thead class="table-dark">
                                     <tr class="text-center align-middle">
