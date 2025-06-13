@@ -5,7 +5,7 @@ if (!isset($_SESSION['id_user'])) {
 }
 include "koneksi.php";
 include "template/header.php";
-include 'template/alert.php'; 
+include 'template/alert.php';
 ?>
 <style>
     .row {
@@ -129,7 +129,7 @@ include 'template/alert.php';
                 case "excel_laporan_bulanan":
                     include "laporan_perbulan/ekspor.php";
                     break;
-                    
+
 
                 // laporan persemester
                 case "laporan_persemester":
@@ -138,10 +138,10 @@ include 'template/alert.php';
                 case "tambah_parameter":
                     include "laporan_persemester/tambah_parameter.php";
                     break;
-                    case "edit_parameter":
+                case "edit_parameter":
                     include "laporan_persemester/edit_parameter.php";
                     break;
-                    case "hapus_parameter":
+                case "hapus_parameter":
                     include "laporan_persemester/hapus_parameter.php";
                     break;
                 case "tambah_laporan_persemester":
@@ -172,6 +172,9 @@ include 'template/alert.php';
                     break;
 
                 //news
+                case "tampil_news":
+                    include "news/tampil.php";
+                    break;
                 case "upload":
                     include "news/tambah.php";
                     break;

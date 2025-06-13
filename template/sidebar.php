@@ -37,7 +37,13 @@ $konten_djih = $stmt->fetch(PDO::FETCH_ASSOC)['jumlah_baru'];
                 <li class="nav-item">
                     <a class="nav-link <?= ($currentPage == 'dashboard') ? 'active' : ''; ?>" href="?page=dashboard">
                         <i class="fas fa-home me-2"></i>
-                        <span class="sidebar-text">Beranda</span>
+                        <span class="sidebar-text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link <?= ($currentPage == 'tampil_news') ? 'active' : ''; ?>" href="?page=tampil_news">
+                        <i class="fas fa-solid fa-newspaper me-2"></i>
+                        <span class="sidebar-text">News</span>
                         <?php if ($konten_baru > 0) : ?>
                             <span class="badge bg-danger ms-2"><?= $konten_baru; ?></span>
                         <?php endif; ?>
