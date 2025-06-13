@@ -56,7 +56,7 @@ $konten_djih = $stmt->fetch(PDO::FETCH_ASSOC)['jumlah_baru'];
                         </a>
                     </li>
                 <?php } ?>
-                <?php if ($_SESSION['role'] == 'superadmin'|| $_SESSION['role'] == 'admin'||$_SESSION['role'] == 'adminbulanan'||$_SESSION['role'] == 'adminsemester') { ?> 
+                <?php if ($_SESSION['role'] == 'superadmin' || $_SESSION['role'] == 'admin' || $_SESSION['role'] == 'adminbulanan' || $_SESSION['role'] == 'adminsemester') { ?>
                     <li class="nav-item">
                         <a class="nav-link <?= ($currentPage == 'profil_admin') ? 'active' : ''; ?>" href="?page=profil_admin">
                             <i class="fas fa-user-tie me-2"></i> <span class="sidebar-text">Profile Perusahaan</span>
@@ -74,27 +74,30 @@ $konten_djih = $stmt->fetch(PDO::FETCH_ASSOC)['jumlah_baru'];
                     </a>
                     <div class="collapse" id="submenuPelaporan">
                         <ul class="nav flex-column ms-3">
-                        <?php if ( ($_SESSION['role'] !== 'adminsemester')) { ?> 
-                            <li class="nav-item">
-                                <a class="nav-link <?= ($currentPage == 'laporan_perbulan') ? 'active' : ''; ?>" href="?page=laporan_perbulan">
-                                    <i class="fas fa-calendar-alt me-2"></i> <span class="sidebar-text">Pelaporan Bulanan</span>
-                                </a>
-                            </li>
+                            <?php if (($_SESSION['role'] !== 'adminsemester')) { ?>
+                                <li class="nav-item">
+                                    <a class="nav-link <?= ($currentPage == 'laporan_perbulan') ? 'active' : ''; ?>" href="?page=laporan_perbulan">
+                                        <i class="fas fa-calendar-alt me-2"></i> <span class="sidebar-text">Pelaporan Bulanan</span>
+                                    </a>
+                                </li>
                             <?php } ?>
-                            <?php if ( $_SESSION['role'] !== 'adminbulanan'&&$_SESSION['role'] !== 'kementerian') { ?>
-                            <li class="nav-item">
-                                <a class="nav-link <?= ($currentPage == 'laporan_persemester') ? 'active' : ''; ?>" href="?page=laporan_persemester">
-                                    <i class="fas fa-calendar me-2"></i> <span class="sidebar-text">Pelaporan Semester</span>
-                                </a>
-                            </li>
+                            <?php if ($_SESSION['role'] !== 'adminbulanan' && $_SESSION['role'] !== 'kementerian') { ?>
+                                <li class="nav-item">
+                                    <a class="nav-link <?= ($currentPage == 'laporan_persemester') ? 'active' : ''; ?>" href="?page=laporan_persemester">
+                                        <i class="fas fa-calendar me-2"></i> <span class="sidebar-text">Pelaporan Semester</span>
+                                    </a>
+                                </li>
                             <?php } ?>
                         </ul>
                     </div>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link <?= ($currentPage == 'tampil_konten_djih') ? 'active' : ''; ?>" href="?page=tampil_konten_djih">
-                        <i class="fas fa-earth-americas me-2"></i>
-                        <span class="sidebar-text">JDIH</span>
+                    <a class="nav-link d-flex align-items-center <?= ($currentPage == 'tampil_konten_djih') ? 'active' : ''; ?>" href="?page=tampil_konten_djih">
+                        <i class="fas fa-earth-americas me-2 fs-5"></i>
+                        <span class="sidebar-text lh-sm">
+                            <span class="d-block">Jaringan Dokumentasi</span>
+                            <span class="d-block">dan Informasi Hukum</span>
+                        </span>
                         <?php if ($konten_djih > 0) : ?>
                             <span class="badge bg-danger ms-2"><?= $konten_djih; ?></span>
                         <?php endif; ?>
@@ -105,7 +108,7 @@ $konten_djih = $stmt->fetch(PDO::FETCH_ASSOC)['jumlah_baru'];
                         <i class="fas fa-solid fa-address-book me-2"></i> <span class="sidebar-text">Kontak</span>
                     </a>
                 </li>
-                <?php if ($_SESSION['role'] == 'superadmin'||$_SESSION['role'] == 'admin'||$_SESSION['role'] == 'adminbulanan'||$_SESSION['role'] == 'adminsemester') { ?> <!-- hanya superadmin yang bisa mengakses menu ini -->
+                <?php if ($_SESSION['role'] == 'superadmin' || $_SESSION['role'] == 'admin' || $_SESSION['role'] == 'adminbulanan' || $_SESSION['role'] == 'adminsemester') { ?> <!-- hanya superadmin yang bisa mengakses menu ini -->
                     <li class="nav-item">
                         <a class="nav-link <?= ($currentPage == 'pengguna') ? 'active' : ''; ?>" href="?page=pengguna">
                             <i class="fas fa-users me-2"></i> <span class="sidebar-text">Data Pengguna</span>
