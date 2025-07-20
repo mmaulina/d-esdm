@@ -245,10 +245,18 @@ $tahunFilter = $_GET['tahun'] ?? date('Y');
 
 // Pastikan mapping bahasa Inggris ke Indonesia (jika diperlukan)
 $bulanMap = [
-    'January' => 'Januari', 'February' => 'Februari', 'March' => 'Maret',
-    'April' => 'April', 'May' => 'Mei', 'June' => 'Juni',
-    'July' => 'Juli', 'August' => 'Agustus', 'September' => 'September',
-    'October' => 'Oktober', 'November' => 'November', 'December' => 'Desember'
+    'January' => 'Januari',
+    'February' => 'Februari',
+    'March' => 'Maret',
+    'April' => 'April',
+    'May' => 'Mei',
+    'June' => 'Juni',
+    'July' => 'Juli',
+    'August' => 'Agustus',
+    'September' => 'September',
+    'October' => 'Oktober',
+    'November' => 'November',
+    'December' => 'Desember'
 ];
 if (array_key_exists($bulanFilter, $bulanMap)) {
     $bulanFilter = $bulanMap[$bulanFilter]; // Convert jika perlu
@@ -365,8 +373,8 @@ foreach ($pembangkit as $pb) {
                                         ?>
                                             <tr>
                                                 <td><?php echo htmlspecialchars($kota); ?></td>
-                                                <td><?php echo $data['semester1']; ?></td>
-                                                <td><?php echo $data['semester2']; ?></td>
+                                                <td class="text-center"><?php echo $data['semester1']; ?></td>
+                                                <td class="text-center"><?php echo $data['semester2']; ?></td>
                                             </tr>
                                         <?php endforeach; ?>
 
@@ -379,8 +387,8 @@ foreach ($pembangkit as $pb) {
                                     <tfoot>
                                         <tr class="table-dark">
                                             <td><strong>Total</strong></td>
-                                            <td><strong><?php echo $total_semester1; ?></strong></td>
-                                            <td><strong><?php echo $total_semester2; ?></strong></td>
+                                            <td class="text-center"><strong><?php echo $total_semester1; ?></strong></td>
+                                            <td class="text-center"><strong><?php echo $total_semester2; ?></strong></td>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -394,7 +402,7 @@ foreach ($pembangkit as $pb) {
                     <div class="col">
                         <h5 class="fw-bold mb-3">Total Produksi & Konsumsi per Kabupaten/Kota</h5>
                         <div class="table-responsive" style="overflow-x:auto; -webkit-overflow-scrolling: touch;">
-                            <table class="table table-bordered table-striped table-sm" id="tabel-produksi-konsumsi" style="min-width: 1000px; white-space: nowrap;">
+                            <table class="table table-bordered table-striped table-sm" id="tabel-produksi-konsumsi" style="min-width: 800px; white-space: nowrap;">
                                 <thead class="table-dark">
                                     <tr class="text-center align-middle">
                                         <th rowspan="2" onclick="sortTable('tabel-produksi-konsumsi', 0)">Kabupaten/Kota <i class="fa fa-sort"></i></th>
@@ -410,11 +418,11 @@ foreach ($pembangkit as $pb) {
                                         </tr>
                                     <?php endforeach; ?>
                                 </tbody>
-                                <tfoot class="table-light fw-bold">
-                                    <tr>
-                                        <td class="text-end">Total:</td>
-                                        <td class="text-end"><?= number_format($totalProduksi, 2, ',', '.'); ?></td>
-                                        <td class="text-end"><?= number_format($totalKonsumsi, 2, ',', '.'); ?></td>
+                                <tfoot>
+                                    <tr class="table-dark">
+                                        <td><strong>Total:</strong></td>
+                                        <td class="text-end"><strong><?= number_format($totalProduksi, 2, ',', '.'); ?></strong></td>
+                                        <td class="text-end"><strong><?= number_format($totalKonsumsi, 2, ',', '.'); ?></strong></td>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -433,8 +441,18 @@ foreach ($pembangkit as $pb) {
                                     <select class="form-select" name="bulan" id="filter_bulan">
                                         <?php
                                         $bulanList = [
-                                            'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
-                                            'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+                                            'Januari',
+                                            'Februari',
+                                            'Maret',
+                                            'April',
+                                            'Mei',
+                                            'Juni',
+                                            'Juli',
+                                            'Agustus',
+                                            'September',
+                                            'Oktober',
+                                            'November',
+                                            'Desember'
                                         ];
 
                                         // Ambil bulan sekarang dalam angka lalu konversi ke nama bulan Indonesia
@@ -505,9 +523,9 @@ foreach ($pembangkit as $pb) {
                                         </tr>
                                     <?php endforeach; ?>
                                 </tbody>
-                                <tfoot class="table-light fw-bold">
-                                    <tr>
-                                        <td class="text-end">Total:</td>
+                                <tfoot>
+                                    <tr class="table-dark" style="font-weight: bold;">
+                                        <td>Total:</td>
                                         <td class="text-end"><?= number_format(array_sum(array_column($totalVolumeBBPerKota, 'Solar')), 2, ',', '.'); ?></td>
                                         <td class="text-end"><?= number_format(array_sum(array_column($totalVolumeBBPerKota, 'Biomasa')), 2, ',', '.'); ?></td>
                                         <td class="text-end"><?= number_format(array_sum(array_column($jumlahJenisPembangkitPerKota, 'PLTD'))); ?></td>
@@ -522,48 +540,6 @@ foreach ($pembangkit as $pb) {
                                     </tr>
                                 </tfoot>
                             </table>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row mt-4">
-                    <div class="col-12 d-flex justify-content-between align-items-center">
-                        <h5 class="fw-bold mb-0">News</h5>
-                        <?php if ($_SESSION['role'] !== 'kementerian' && $_SESSION['role'] !== 'umum') : ?>
-                            <div class="btn-group d-inline-flex">
-                                <a href="?page=tabel" class="btn btn-success">Tabel Konten</a>
-                            </div>
-                        <?php endif; ?>
-                    </div>
-                </div>
-
-                <div class="row mt-3">
-                    <div class="col-12">
-                        <div class="timeline position-relative">
-                            <?php foreach ($grouped_konten as $id_title => $kontens) : ?>
-                                <div class="timeline-item d-flex flex-column align-items-center text-center position-relative">
-                                    <div class="circle bg-dark rounded-circle position-absolute" style="width: 15px; height: 15px; left: -10px; top: 50%; transform: translateY(-50%);"></div>
-                                    <div class="content w-75 ms-3">
-                                        <h5 class="card-text mt-3"><?php echo htmlspecialchars($kontens[0]['title']); ?></h5>
-                                        <div class="d-flex flex-column align-items-center mt-3">
-                                            <?php foreach ($kontens as $konten) : ?>
-                                                <div class="text-center">
-                                                    <?php if ($konten['jenis_konten'] === 'gambar') : ?>
-                                                        <img src="<?php echo htmlspecialchars($konten['konten']); ?>" class="img-fluid rounded" style="width: 150px; height: auto;" alt="Konten Gambar">
-                                                    <?php elseif ($konten['jenis_konten'] === 'file') : ?>
-                                                        <a href="<?php echo htmlspecialchars($konten['konten']); ?>" class="btn btn-secondary" style="width: 150px;">Download File</a>
-                                                    <?php elseif ($konten['jenis_konten'] === 'link') : ?>
-                                                        <a href="<?php echo htmlspecialchars($konten['konten']); ?>" target="_blank" class="btn btn-info" style="width: 150px;">Lihat Link</a>
-                                                    <?php endif; ?>
-                                                    <p class="mt-2 small"><?php echo nl2br(htmlspecialchars($konten['caption'])); ?></p>
-                                                </div>
-                                            <?php endforeach; ?>
-                                        </div>
-                                        <p class="card-text mt-3"><small class="text-muted">Diupload pada: <?php echo $kontens[0]['tanggal']; ?></small></p>
-                                    </div>
-                                    <div class="line position-absolute bg-dark" style="width: 2px; height: 100%; left: 0px; top: 0;"></div>
-                                </div>
-                            <?php endforeach; ?>
                         </div>
                     </div>
                 </div>
