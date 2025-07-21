@@ -375,36 +375,36 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 <table class="table table-bordered table-striped table-sm" id="tabel-produksi-konsumsi" style="min-width: 1000px; white-space: nowrap;">
                     <thead class="table-dark">
                         <tr>
-                            <th rowspan="3">No.</th>
-                            <th rowspan="3">Nama Perusahaan</th>
-                            <th rowspan="3">No Seri Genset</th>
-                            <th colspan="3">Parameter SO₂</th>
-                            <th colspan="3">Parameter HO₂</th>
-                            <th colspan="3">Parameter TSP/Debu</th>
-                            <th colspan="3">Parameter CO</th>
-                            <th colspan="3">Parameter Kebisingan</th>
-                            <th rowspan="3">Tahun</th>
-                            <th rowspan="3">Semester</th>
-                            <th rowspan="3">Status</th>
-                            <th rowspan="3">Keterangan</th>
-                            <th rowspan="3">Aksi</th>
+                            <th rowspan="3" style="text-align: center; vertical-align: middle;">No.</th>
+                            <th rowspan="3" style="text-align: center; vertical-align: middle;">Nama Perusahaan</th>
+                            <th rowspan="3" style="text-align: center; vertical-align: middle;">No Seri Genset</th>
+                            <th colspan="3" style="text-align: center; vertical-align: middle;">Parameter SO₂</th>
+                            <th colspan="3" style="text-align: center; vertical-align: middle;">Parameter HO₂</th>
+                            <th colspan="3" style="text-align: center; vertical-align: middle;">Parameter TSP/Debu</th>
+                            <th colspan="3" style="text-align: center; vertical-align: middle;">Parameter CO</th>
+                            <th colspan="3" style="text-align: center; vertical-align: middle;">Parameter Kebisingan</th>
+                            <th rowspan="3" style="text-align: center; vertical-align: middle;">Tahun</th>
+                            <th rowspan="3" style="text-align: center; vertical-align: middle;">Semester</th>
+                            <th rowspan="3" style="text-align: center; vertical-align: middle;">Status</th>
+                            <th rowspan="3" style="text-align: center; vertical-align: middle;">Keterangan</th>
+                            <th rowspan="3" style="text-align: center; vertical-align: middle;">Aksi</th>
                         </tr>
                         <tr>
-                            <th>Baku Mutu</th>
-                            <th>Hasil</th>
-                            <th>Rencana Aksi</th>
-                            <th>Baku Mutu</th>
-                            <th>Hasil</th>
-                            <th>Rencana Aksi</th>
-                            <th>Baku Mutu</th>
-                            <th>Hasil</th>
-                            <th>Rencana Aksi</th>
-                            <th>Baku Mutu</th>
-                            <th>Hasil</th>
-                            <th>Rencana Aksi</th>
-                            <th>Baku Mutu</th>
-                            <th>Hasil</th>
-                            <th>Rencana Aksi</th>
+                            <th style="text-align: center; vertical-align: middle;">Baku Mutu</th>
+                            <th style="text-align: center; vertical-align: middle;">Hasil</th>
+                            <th style="text-align: center; vertical-align: middle;">Rencana Aksi</th>
+                            <th style="text-align: center; vertical-align: middle;">Baku Mutu</th>
+                            <th style="text-align: center; vertical-align: middle;">Hasil</th>
+                            <th style="text-align: center; vertical-align: middle;">Rencana Aksi</th>
+                            <th style="text-align: center; vertical-align: middle;">Baku Mutu</th>
+                            <th style="text-align: center; vertical-align: middle;">Hasil</th>
+                            <th style="text-align: center; vertical-align: middle;">Rencana Aksi</th>
+                            <th style="text-align: center; vertical-align: middle;">Baku Mutu</th>
+                            <th style="text-align: center; vertical-align: middle;">Hasil</th>
+                            <th style="text-align: center; vertical-align: middle;">Rencana Aksi</th>
+                            <th style="text-align: center; vertical-align: middle;">Baku Mutu</th>
+                            <th style="text-align: center; vertical-align: middle;">Hasil</th>
+                            <th style="text-align: center; vertical-align: middle;">Rencana Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -720,10 +720,10 @@ if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'superadmin'):
                     <table class="table table-bordered" style="min-width: 1200px; white-space: nowrap;">
                         <thead class="table-dark">
                             <tr>
-                                <th onclick="sortTable(0)">No <i class="fa fa-sort"></i></th>
-                                <th onclick="sortTable(1)">Nama Perusahaan <i class="fa fa-sort"></i></th>
-                                <th onclick="sortTable(2)">Keterangan <i class="fa fa-sort"></i></th>
-                                <th>Aksi</th>
+                                <th class="text-center" onclick="sortTable(0)">No <i class="fa fa-sort"></i></th>
+                                <th class="text-center" onclick="sortTable(1)">Nama Perusahaan <i class="fa fa-sort"></i></th>
+                                <th class="text-center" onclick="sortTable(2)">Keterangan <i class="fa fa-sort"></i></th>
+                                <th class="text-center">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
