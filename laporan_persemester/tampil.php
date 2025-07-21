@@ -143,7 +143,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 ?>
 
 
-
+<!-- PELAPORAN SEMESTER -->
 <div class="container mt-4">
     <h3 class="text-center mb-3">
         <i class="fas fa-bolt" style="color: #ffc107;"></i> Pelaporan Semester dan Tabel Parameter
@@ -367,13 +367,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 <!-- PARAMETER -->
 <div class="container mt-4">
-    <div class="card shadow" style="overflow-x: auto; max-height: calc(100vh - 150px); overflow-y: auto;">
+    <div class="card shadow">
         <div class="card-body">
             <h3 class="text-center mb-3">Tabel Parameter</h3>
             <hr>
-            <div class="table-responsive" style="overflow-x:auto; -webkit-overflow-scrolling: touch;">
-                <table class="table table-bordered table-striped table-sm" id="tabel-produksi-konsumsi" style="min-width: 1000px; white-space: nowrap;">
-                    <thead class="table-dark">
+            <div class="table-responsive" style="max-height: 500px; overflow-x: auto; overflow-y: auto;">
+                <table class="table table-bordered" style="min-width: 1200px; white-space: nowrap;">
+                    <thead class="table-dark text-center align-middle">
                         <tr>
                             <th rowspan="3" style="text-align: center; vertical-align: middle;">No.</th>
                             <th rowspan="3" style="text-align: center; vertical-align: middle;">Nama Perusahaan</th>
@@ -712,13 +712,13 @@ if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'superadmin'):
 ?>
 
     <div class="container mt-4">
-        <div class="card shadow" style="overflow-x: auto; max-height: calc(100vh - 150px); overflow-y: auto;">
+        <div class="card shadow">
             <div class="card-body">
                 <h3 class="text-center mb-3">Status Laporan Semester Tahun <?= $tahun_sekarang ?></h3>
                 <hr>
                 <div class="table-responsive" style="max-height: 500px; overflow-x: auto; overflow-y: auto;">
                     <table class="table table-bordered" style="min-width: 1200px; white-space: nowrap;">
-                        <thead class="table-dark">
+                        <thead class="table-dark text-center align-middle">
                             <tr>
                                 <th class="text-center" onclick="sortTable(0)">No <i class="fa fa-sort"></i></th>
                                 <th class="text-center" onclick="sortTable(1)">Nama Perusahaan <i class="fa fa-sort"></i></th>

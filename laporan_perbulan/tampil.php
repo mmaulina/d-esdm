@@ -244,15 +244,15 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                             <th rowspan="3" style="width: 3%;">No.</th>
                             <th rowspan="3">Nama Perusahaan</th>
                             <?php if ($_SESSION['role'] == 'superadmin') { ?>
-                                <th rowspan="3" >No. HP Pimpinan</th>
-                                <th rowspan="3" >Tenaga Teknik</th>
-                                <th rowspan="3" >No. HP Tenaga Teknik</th>
-                                <th rowspan="3" >Nama Admin</th>
-                                <th rowspan="3" >Nomor Admin</th>
+                                <th rowspan="3">No. HP Pimpinan</th>
+                                <th rowspan="3">Tenaga Teknik</th>
+                                <th rowspan="3">No. HP Tenaga Teknik</th>
+                                <th rowspan="3">Nama Admin</th>
+                                <th rowspan="3">Nomor Admin</th>
                             <?php } ?>
-                            <th rowspan="3" >Nomor Telepon Kantor</th>
-                            <th rowspan="3" >Tahun</th>
-                            <th rowspan="3" >Bulan</th>
+                            <th rowspan="3">Nomor Telepon Kantor</th>
+                            <th rowspan="3">Tahun</th>
+                            <th rowspan="3">Bulan</th>
                             <th rowspan="3">Kabupaten</th>
                             <th colspan="2">Produksi Listrik</th>
                             <th rowspan="3">Susut Jaringan</th>
