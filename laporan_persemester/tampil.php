@@ -402,6 +402,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                             </tr>
                         </thead>
                         <tbody>
+                            <?php $modalList = []; ?>
                             <?php if (count($result2) > 0): ?>
                                 <?php
                                 $groupedData = [];
