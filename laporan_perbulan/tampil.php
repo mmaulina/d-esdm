@@ -158,7 +158,7 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
 
 ?>
 <div class="container mt-4">
-    <div class="card shadow" style="overflow-x: auto; max-height: calc(100vh - 150px); overflow-y: auto;">
+    <div class="card shadow">
         <div class="card-body">
             <h3 class="text-center mb-3">Pelaporan Bulanan</h3>
             <hr>
@@ -241,32 +241,32 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                 <table class="table table-bordered" style="min-width: 1200px; white-space: nowrap;">
                     <thead class="table-dark text-center align-middle">
                         <tr>
-                            <th rowspan="3" style="width: 3%;" onclick="sortTable(0)">No. <i class="fa fa-sort"></i></th>
-                            <th rowspan="3" onclick="sortTable(1)">Nama Perusahaan <i class="fa fa-sort"></i></th>
+                            <th rowspan="3" style="width: 3%;">No.</th>
+                            <th rowspan="3">Nama Perusahaan</th>
                             <?php if ($_SESSION['role'] == 'superadmin') { ?>
-                                <th rowspan="3" onclick="sortTable(2)">No Hp Pimpinan<i class="fa fa-sort"></i></th>
-                                <th rowspan="3" onclick="sortTable(3)">Tenaga Teknik <i class="fa fa-sort"></i></th>
-                                <th rowspan="3" onclick="sortTable(4)">No Hp Tenaga Teknik <i class="fa fa-sort"></i></th>
-                                <th rowspan="3" onclick="sortTable(5)">Nama Admin <i class="fa fa-sort"></i></th>
-                                <th rowspan="3" onclick="sortTable(6)">Nomor Admin <i class="fa fa-sort"></i></th>
+                                <th rowspan="3" >No. HP Pimpinan</th>
+                                <th rowspan="3" >Tenaga Teknik</th>
+                                <th rowspan="3" >No. HP Tenaga Teknik</th>
+                                <th rowspan="3" >Nama Admin</th>
+                                <th rowspan="3" >Nomor Admin</th>
                             <?php } ?>
-                            <th rowspan="3" onclick="sortTable(7)">Nomor Telepon Kantor <i class="fa fa-sort"></i></th>
-                            <th rowspan="3" onclick="sortTable(8)">Tahun <i class="fa fa-sort"></i></th>
-                            <th rowspan="3" onclick="sortTable(9)">Bulan <i class="fa fa-sort"></i></th>
-                            <th rowspan="3" onclick="sortTable(10)">Kabupaten <i class="fa fa-sort"></i></th>
+                            <th rowspan="3" >Nomor Telepon Kantor</th>
+                            <th rowspan="3" >Tahun</th>
+                            <th rowspan="3" >Bulan</th>
+                            <th rowspan="3">Kabupaten</th>
                             <th colspan="2">Produksi Listrik</th>
-                            <th rowspan="3" onclick="sortTable(11)">Susut Jaringan <i class="fa fa-sort"></i></th>
+                            <th rowspan="3">Susut Jaringan</th>
                             <th colspan="3">Konsumsi Listrik</th>
-                            <th rowspan="3" style="min-width: 150px;" onclick="sortTable(12)">Status <i class="fa fa-sort"></i></th>
-                            <th rowspan="3" style="min-width: 150px;" onclick="sortTable(13)">Keterangan <i class="fa fa-sort"></i></th>
+                            <th rowspan="3" style="min-width: 150px;">Status</th>
+                            <th rowspan="3" style="min-width: 150px;">Keterangan</th>
                             <th rowspan="3" style="min-width: 150px;">Aksi</th>
                         </tr>
                         <tr>
-                            <th onclick="sortTable(14)">Produksi Sendiri (kWh) <i class="fa fa-sort"></i></th>
-                            <th onclick="sortTable(15)">Pembelian Sumber Lain (kWh) <i class="fa fa-sort"></i></th>
-                            <th onclick="sortTable(16)">Penjualan ke Pelanggan (kWh) <i class="fa fa-sort"></i></th>
-                            <th onclick="sortTable(17)">Penjualan ke PLN (kWh) <i class="fa fa-sort"></i></th>
-                            <th onclick="sortTable(18)">Pemakaian Sendiri (kWh) <i class="fa fa-sort"></i></th>
+                            <th>Produksi Sendiri (kWh)</th>
+                            <th>Pembelian Sumber Lain (kWh)</th>
+                            <th>Penjualan ke Pelanggan (kWh)</th>
+                            <th>Penjualan ke PLN (kWh)</th>
+                            <th>Pemakaian Sendiri (kWh)</th>
                         </tr>
                     </thead>
 
@@ -404,7 +404,7 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                     </div>
                 <?php endif; ?>
                 <div class="table-responsive" style="max-height: 500px; overflow-x: auto; overflow-y: auto;">
-                    <table class="table table-bordered" style="table-layout: fixed; min-width: 2000px;">
+                    <table class="table table-bordered" style="table-layout: fixed; min-width: 3000px;">
                         <thead class="table-dark text-center align-middle">
                             <tr>
                                 <th rowspan="3" style="width: 3%;">No.</th>

@@ -150,7 +150,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <i class="fas fa-bolt" style="color: #ffc107;"></i>
     </h3>
     <hr>
-    <div class="card shadow" style="overflow-x: auto; max-height: calc(100vh - 150px); overw-y: auto;">
+    <div class="card shadow">
         <div class="card-body">
             <!-- Search and Filter Features -->
             <form method="GET" class="mb-2">
@@ -213,22 +213,22 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 <table class="table table-bordered" style="min-width: 1200px; white-space: nowrap;">
                     <thead class="table-dark text-center align-middle">
                         <tr>
-                            <th rowspan="3" onclick="sortTable(0)">No. <i class="fa fa-sort"></i></th>
-                            <th rowspan="3" onclick="sortTable(1)">Nama Perusahaan <i class="fa fa-sort"></i></th>
+                            <th rowspan="3">No.</th>
+                            <th rowspan="3">Nama Perusahaan</th>
                             <?php if ($_SESSION['role'] == 'superadmin') : ?>
-                                <th rowspan="3" onclick="sortTable(2)">No Hp Pimpinan <i class="fa fa-sort"></i></th>
-                                <th rowspan="3" onclick="sortTable(3)">Tenaga Teknik <i class="fa fa-sort"></i></th>
-                                <th rowspan="3" onclick="sortTable(4)">No Hp Tenaga Teknik <i class="fa fa-sort"></i></th>
-                                <th rowspan="3" onclick="sortTable(5)">Nama Admin <i class="fa fa-sort"></i></th>
-                                <th rowspan="3" onclick="sortTable(6)">Nomor Admin <i class="fa fa-sort"></i></th>
+                                <th rowspan="3">No Hp Pimpinan</th>
+                                <th rowspan="3">Tenaga Teknik</th>
+                                <th rowspan="3">No Hp Tenaga Teknik</th>
+                                <th rowspan="3">Nama Admin</th>
+                                <th rowspan="3">Nomor Admin</th>
                             <?php endif; ?>
-                            <th rowspan="3" onclick="sortTable(7)">Nomor Telepon Kantor <i class="fa fa-sort"></i></th>
+                            <th rowspan="3">Nomor Telepon Kantor</th>
                             <th rowspan="3">Laporan Semester</th>
                             <th rowspan="3">Laporan Hasil Uji Parameter</th>
-                            <th rowspan="3" onclick="sortTable(10)">Tahun <i class="fa fa-sort"></i></th>
-                            <th rowspan="3" onclick="sortTable(11)">Semester <i class="fa fa-sort"></i></th>
-                            <th rowspan="3" onclick="sortTable(12)">Status <i class="fa fa-sort"></i></th>
-                            <th rowspan="3" onclick="sortTable(13)">Keterangan <i class="fa fa-sort"></i></th>
+                            <th rowspan="3">Tahun</th>
+                            <th rowspan="3">Semester</th>
+                            <th rowspan="3">Status</th>
+                            <th rowspan="3">Keterangan</th>
                             <th rowspan="3">Aksi</th>
                         </tr>
                     </thead>
@@ -362,173 +362,180 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 </table>
             </div>
         </div>
-        <div class="row mt-3">
-            <div class="col">
-                <h5 class="fw-bold mb-3 text-center">Tabel Parameter</h5>
-                <div class="table-responsive" style="overflow-x:auto; -webkit-overflow-scrolling: touch;">
-                    <table class="table table-bordered table-striped table-sm" id="tabel-produksi-konsumsi" style="min-width: 1000px; white-space: nowrap;">
-                        <thead class="table-dark">
-                            <tr>
-                                <th rowspan="3">No.</th>
-                                <th rowspan="3">Nama Perusahaan</th>
-                                <th rowspan="3">No Seri Genset</th>
-                                <th colspan="3">Parameter SO₂</th>
-                                <th colspan="3">Parameter HO₂</th>
-                                <th colspan="3">Parameter TSP/Debu</th>
-                                <th colspan="3">Parameter CO</th>
-                                <th colspan="3">Parameter Kebisingan</th>
-                                <th rowspan="3">Tahun</th>
-                                <th rowspan="3">Semester</th>
-                                <th rowspan="3">Status</th>
-                                <th rowspan="3">Keterangan</th>
-                                <th rowspan="3">Aksi</th>
-                            </tr>
-                            <tr>
-                                <th>Baku Mutu</th>
-                                <th>Hasil</th>
-                                <th>Rencana Aksi</th>
-                                <th>Baku Mutu</th>
-                                <th>Hasil</th>
-                                <th>Rencana Aksi</th>
-                                <th>Baku Mutu</th>
-                                <th>Hasil</th>
-                                <th>Rencana Aksi</th>
-                                <th>Baku Mutu</th>
-                                <th>Hasil</th>
-                                <th>Rencana Aksi</th>
-                                <th>Baku Mutu</th>
-                                <th>Hasil</th>
-                                <th>Rencana Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php if (count($result2) > 0): ?>
-                                <?php
-                                $groupedData = [];
-                                foreach ($result2 as $row) {
-                                    if (isset($row['id_user'])) {
-                                        $groupedData[$row['id_user']][$row['nama_perusahaan']][] = $row;
-                                    }
+    </div>
+</div>
+
+<!-- PARAMETER -->
+<div class="container mt-4">
+    <div class="card shadow" style="overflow-x: auto; max-height: calc(100vh - 150px); overflow-y: auto;">
+        <div class="card-body">
+            <h3 class="text-center mb-3">Tabel Parameter</h3>
+            <hr>
+            <div class="table-responsive" style="overflow-x:auto; -webkit-overflow-scrolling: touch;">
+                <table class="table table-bordered table-striped table-sm" id="tabel-produksi-konsumsi" style="min-width: 1000px; white-space: nowrap;">
+                    <thead class="table-dark">
+                        <tr>
+                            <th rowspan="3">No.</th>
+                            <th rowspan="3">Nama Perusahaan</th>
+                            <th rowspan="3">No Seri Genset</th>
+                            <th colspan="3">Parameter SO₂</th>
+                            <th colspan="3">Parameter HO₂</th>
+                            <th colspan="3">Parameter TSP/Debu</th>
+                            <th colspan="3">Parameter CO</th>
+                            <th colspan="3">Parameter Kebisingan</th>
+                            <th rowspan="3">Tahun</th>
+                            <th rowspan="3">Semester</th>
+                            <th rowspan="3">Status</th>
+                            <th rowspan="3">Keterangan</th>
+                            <th rowspan="3">Aksi</th>
+                        </tr>
+                        <tr>
+                            <th>Baku Mutu</th>
+                            <th>Hasil</th>
+                            <th>Rencana Aksi</th>
+                            <th>Baku Mutu</th>
+                            <th>Hasil</th>
+                            <th>Rencana Aksi</th>
+                            <th>Baku Mutu</th>
+                            <th>Hasil</th>
+                            <th>Rencana Aksi</th>
+                            <th>Baku Mutu</th>
+                            <th>Hasil</th>
+                            <th>Rencana Aksi</th>
+                            <th>Baku Mutu</th>
+                            <th>Hasil</th>
+                            <th>Rencana Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php $modalList = []; ?>
+                        <?php if (count($result2) > 0): ?>
+                            <?php
+                            $groupedData = [];
+                            foreach ($result2 as $row) {
+                                if (isset($row['id_user'])) {
+                                    $groupedData[$row['id_user']][$row['nama_perusahaan']][] = $row;
                                 }
-                                $modalList = []; // Simpan ID untuk modal
-                                foreach ($groupedData as $companies) :
-                                    foreach ($companies as $nama_perusahaan => $rows) : ?>
+                            }
+                            $modalList = []; // Simpan ID untuk modal
+                            foreach ($groupedData as $companies) :
+                                foreach ($companies as $nama_perusahaan => $rows) : ?>
+                                    <tr>
+                                        <td colspan="25" class="fw-bold bg-light">NAMA PERUSAHAAN = <?= htmlspecialchars($nama_perusahaan); ?></td>
+                                    </tr>
+                                    <?php $no = 1;
+                                    foreach ($rows as $row) :
+                                        $modalList[] = $row; // Simpan untuk modal nanti
+                                    ?>
                                         <tr>
-                                            <td colspan="25" class="fw-bold bg-light">NAMA PERUSAHAAN = <?= htmlspecialchars($nama_perusahaan); ?></td>
+                                            <td class="text-center"><?= $no++; ?></td>
+                                            <td><?= htmlspecialchars($row['nama_perusahaan']); ?></td>
+                                            <td><?= htmlspecialchars($row['no_seri_genset']); ?></td>
+                                            <td><?= htmlspecialchars($row['baku_mutu_so2']); ?></td>
+                                            <td><?= htmlspecialchars($row['hasil_so2']); ?></td>
+                                            <td><?= htmlspecialchars($row['rencana_aksi_so2']); ?></td>
+                                            <td><?= htmlspecialchars($row['baku_mutu_ho2']); ?></td>
+                                            <td><?= htmlspecialchars($row['hasil_ho2']); ?></td>
+                                            <td><?= htmlspecialchars($row['rencana_aksi_ho2']); ?></td>
+                                            <td><?= htmlspecialchars($row['baku_mutu_tsp']); ?></td>
+                                            <td><?= htmlspecialchars($row['hasil_tsp']); ?></td>
+                                            <td><?= htmlspecialchars($row['rencana_aksi_tsp']); ?></td>
+                                            <td><?= htmlspecialchars($row['baku_mutu_co']); ?></td>
+                                            <td><?= htmlspecialchars($row['hasil_co']); ?></td>
+                                            <td><?= htmlspecialchars($row['rencana_aksi_co']); ?></td>
+                                            <td><?= htmlspecialchars($row['baku_mutu_kebisingan']); ?></td>
+                                            <td><?= htmlspecialchars($row['hasil_kebisingan']); ?></td>
+                                            <td><?= htmlspecialchars($row['rencana_aksi_kebisingan']); ?></td>
+                                            <td><?= htmlspecialchars($row['tahun']); ?></td>
+                                            <td><?= htmlspecialchars($row['semester']); ?></td>
+                                            <td class="text-center">
+                                                <?php
+                                                switch ($row['status']) {
+                                                    case 'diajukan':
+                                                        echo '<i class="fas fa-clock text-warning"></i> Diajukan';
+                                                        break;
+                                                    case 'diterima':
+                                                        echo '<i class="fas fa-check text-success"></i> Diterima';
+                                                        break;
+                                                    case 'dikembalikan':
+                                                        echo '<i class="fas fa-times text-danger"></i> Dikembalikan';
+                                                        break;
+                                                    default:
+                                                        echo '<span class="text-muted">Status tidak diketahui</span>';
+                                                }
+                                                ?>
+                                            </td>
+                                            <td><?= htmlspecialchars($row['keterangan']); ?></td>
+                                            <td class="text-center">
+                                                <?php if (($role == 'adminsemester' || $role == 'superadmin') && $row['status'] == 'diajukan'): ?>
+                                                    <form method="POST" style="display: inline;">
+                                                        <input type="hidden" name="terima_id2" value="<?= $row['id']; ?>">
+                                                        <button type="submit" class="btn btn-success btn-sm">Terima</button>
+                                                    </form>
+                                                    <a href="#" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modalTolak2<?= $row['id']; ?>">Kembalikan</a>
+                                                <?php endif; ?>
+
+                                                <?php if (($row['status'] == 'diterima' || $row['status'] == 'dikembalikan') && $role == 'superadmin'): ?>
+                                                    <a href="?page=edit_parameter&id=<?= $row['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
+                                                    <a href="?page=hapus_parameter&id=<?= $row['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus?');">Hapus</a>
+                                                    <?php if ($row['status'] == 'diterima'): ?>
+                                                        <a href="#" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalTolak2<?= $row['id']; ?>">Kembalikan</a>
+                                                    <?php endif; ?>
+                                                <?php endif; ?>
+
+                                                <?php if ($role == 'umum' && $row['status'] == 'dikembalikan'): ?>
+                                                    <a href="?page=edit_parameter&id=<?= $row['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
+                                                    <a href="?page=hapus_parameter&id=<?= $row['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus?');">Hapus</a>
+                                                <?php endif; ?>
+                                            </td>
                                         </tr>
-                                        <?php $no = 1;
-                                        foreach ($rows as $row) :
-                                            $modalList[] = $row; // Simpan untuk modal nanti
-                                        ?>
-                                            <tr>
-                                                <td class="text-center"><?= $no++; ?></td>
-                                                <td><?= htmlspecialchars($row['nama_perusahaan']); ?></td>
-                                                <td><?= htmlspecialchars($row['no_seri_genset']); ?></td>
-                                                <td><?= htmlspecialchars($row['baku_mutu_so2']); ?></td>
-                                                <td><?= htmlspecialchars($row['hasil_so2']); ?></td>
-                                                <td><?= htmlspecialchars($row['rencana_aksi_so2']); ?></td>
-                                                <td><?= htmlspecialchars($row['baku_mutu_ho2']); ?></td>
-                                                <td><?= htmlspecialchars($row['hasil_ho2']); ?></td>
-                                                <td><?= htmlspecialchars($row['rencana_aksi_ho2']); ?></td>
-                                                <td><?= htmlspecialchars($row['baku_mutu_tsp']); ?></td>
-                                                <td><?= htmlspecialchars($row['hasil_tsp']); ?></td>
-                                                <td><?= htmlspecialchars($row['rencana_aksi_tsp']); ?></td>
-                                                <td><?= htmlspecialchars($row['baku_mutu_co']); ?></td>
-                                                <td><?= htmlspecialchars($row['hasil_co']); ?></td>
-                                                <td><?= htmlspecialchars($row['rencana_aksi_co']); ?></td>
-                                                <td><?= htmlspecialchars($row['baku_mutu_kebisingan']); ?></td>
-                                                <td><?= htmlspecialchars($row['hasil_kebisingan']); ?></td>
-                                                <td><?= htmlspecialchars($row['rencana_aksi_kebisingan']); ?></td>
-                                                <td><?= htmlspecialchars($row['tahun']); ?></td>
-                                                <td><?= htmlspecialchars($row['semester']); ?></td>
-                                                <td class="text-center">
-                                                    <?php
-                                                    switch ($row['status']) {
-                                                        case 'diajukan':
-                                                            echo '<i class="fas fa-clock text-warning"></i> Diajukan';
-                                                            break;
-                                                        case 'diterima':
-                                                            echo '<i class="fas fa-check text-success"></i> Diterima';
-                                                            break;
-                                                        case 'dikembalikan':
-                                                            echo '<i class="fas fa-times text-danger"></i> Dikembalikan';
-                                                            break;
-                                                        default:
-                                                            echo '<span class="text-muted">Status tidak diketahui</span>';
-                                                    }
-                                                    ?>
-                                                </td>
-                                                <td><?= htmlspecialchars($row['keterangan']); ?></td>
-                                                <td class="text-center">
-                                                    <?php if (($role == 'adminsemester' || $role == 'superadmin') && $row['status'] == 'diajukan'): ?>
-                                                        <form method="POST" style="display: inline;">
-                                                            <input type="hidden" name="terima_id2" value="<?= $row['id']; ?>">
-                                                            <button type="submit" class="btn btn-success btn-sm">Terima</button>
-                                                        </form>
-                                                        <a href="#" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modalTolak2<?= $row['id']; ?>">Kembalikan</a>
-                                                    <?php endif; ?>
-
-                                                    <?php if (($row['status'] == 'diterima' || $row['status'] == 'dikembalikan') && $role == 'superadmin'): ?>
-                                                        <a href="?page=edit_parameter&id=<?= $row['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
-                                                        <a href="?page=hapus_parameter&id=<?= $row['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus?');">Hapus</a>
-                                                        <?php if ($row['status'] == 'diterima'): ?>
-                                                            <a href="#" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalTolak2<?= $row['id']; ?>">Kembalikan</a>
-                                                        <?php endif; ?>
-                                                    <?php endif; ?>
-
-                                                    <?php if ($role == 'umum' && $row['status'] == 'dikembalikan'): ?>
-                                                        <a href="?page=edit_parameter&id=<?= $row['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
-                                                        <a href="?page=hapus_parameter&id=<?= $row['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus?');">Hapus</a>
-                                                    <?php endif; ?>
-                                                </td>
-                                            </tr>
-                                        <?php endforeach; ?>
-                                <?php endforeach;
-                                endforeach; ?>
-                            <?php else: ?>
-                                <tr>
-                                    <td colspan="25" class="text-center">Data tidak ditemukan</td>
-                                </tr>
-                            <?php endif; ?>
-                        </tbody>
-                    </table>
-                </div>
+                                    <?php endforeach; ?>
+                            <?php endforeach;
+                            endforeach; ?>
+                        <?php else: ?>
+                            <tr>
+                                <td colspan="25" class="text-center">Data tidak ditemukan</td>
+                            </tr>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
             </div>
         </div>
+    </div>
 
-        <!-- MODAL KEMBALIKAN -->
-        <?php foreach ($modalList as $row): ?>
-            <?php if (($role == 'adminsemester' || $role == 'superadmin') && in_array($row['status'], ['diajukan', 'diterima'])): ?>
-                <div class="modal fade" id="modalTolak2<?= $row['id']; ?>" tabindex="-1" role="dialog" aria-labelledby="modalTolakLabel2<?= $row['id']; ?>" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <form action="" method="POST">
-                                <div class="modal-header">
-                                    <h5 class="modal-title">Kembalikan Laporan</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Tutup">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
+    <!-- MODAL KEMBALIKAN -->
+    <?php foreach ($modalList as $row): ?>
+        <?php if (($role == 'adminsemester' || $role == 'superadmin') && in_array($row['status'], ['diajukan', 'diterima'])): ?>
+            <div class="modal fade" id="modalTolak2<?= $row['id']; ?>" tabindex="-1" role="dialog" aria-labelledby="modalTolakLabel2<?= $row['id']; ?>" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <form action="" method="POST">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Kembalikan Laporan</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Tutup">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <input type="hidden" name="id" value="<?= $row['id']; ?>">
+                                <div class="form-group">
+                                    <label for="keterangan<?= $row['id']; ?>">Keterangan Dikembalikan</label>
+                                    <textarea class="form-control" id="keterangan<?= $row['id']; ?>" name="keterangan" rows="3" required></textarea>
                                 </div>
-                                <div class="modal-body">
-                                    <input type="hidden" name="id" value="<?= $row['id']; ?>">
-                                    <div class="form-group">
-                                        <label for="keterangan<?= $row['id']; ?>">Keterangan Dikembalikan</label>
-                                        <textarea class="form-control" id="keterangan<?= $row['id']; ?>" name="keterangan" rows="3" required></textarea>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                                    <button type="submit" name="tolak_laporan2" class="btn btn-danger">Kembalikan</button>
-                                </div>
-                            </form>
-                        </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                                <button type="submit" name="tolak_laporan2" class="btn btn-danger">Kembalikan</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
-            <?php endif; ?>
-        <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+    <?php endforeach; ?>
 
 
-    </div>
+
 </div>
 
 

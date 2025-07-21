@@ -329,7 +329,7 @@ foreach ($pembangkit as $pb) {
                     <div class="col mb-3">
                         <div class="card text-black" style="background-color: #008B47;">
                             <div class="card-body">
-                                <h5 class="card-title">Total Produksi Listrik(kwh)</h5>
+                                <h5 class="card-title">Total Produksi Listrik (kwh)</h5>
                                 <p class="card-text"><?php echo number_format($totalProduksi, 2, ',', '.'); ?></p>
                             </div>
                         </div>
@@ -337,7 +337,7 @@ foreach ($pembangkit as $pb) {
                     <div class="col mb-3">
                         <div class="card text-black" style="background-color: #E68A00;">
                             <div class="card-body">
-                                <h5 class="card-title">Total Konsumsi Listrik(kWh)</h5>
+                                <h5 class="card-title">Total Konsumsi Listrik (kWh)</h5>
                                 <p class="card-text"><?php echo number_format($totalKonsumsi, 2, ',', '.'); ?></p>
                             </div>
                         </div>
@@ -353,11 +353,11 @@ foreach ($pembangkit as $pb) {
                                 <table class="table table-bordered table-striped table-sm" id="tabel-belum-upload">
                                     <thead class="table-dark">
                                         <tr>
-                                            <th onclick="sortTable('tabel-belum-upload', 0)">Kabupaten/Kota <i class="fa fa-sort"></th>
+                                            <th class="text-center" onclick="sortTable('tabel-belum-upload', 0)">Kabupaten/Kota <i class="fa fa-sort"></th>
                                             </th>
-                                            <th onclick="sortTable('tabel-belum-upload', 1)">Belum Upload Semester I (<?php echo $tahun; ?>) <i class="fa fa-sort"></th>
+                                            <th class="text-center" onclick="sortTable('tabel-belum-upload', 1)">Belum Upload Semester I (<?php echo $tahun; ?>) <i class="fa fa-sort"></th>
                                             </th>
-                                            <th onclick="sortTable('tabel-belum-upload', 2)">Belum Upload Semester II (<?php echo $tahun; ?>) <i class="fa fa-sort"></th>
+                                            <th class="text-center" onclick="sortTable('tabel-belum-upload', 2)">Belum Upload Semester II (<?php echo $tahun; ?>) <i class="fa fa-sort"></th>
                                             </th>
                                         </tr>
                                     </thead>
