@@ -318,24 +318,24 @@ foreach ($pembangkit as $pb) {
         <div class="card shadow" style="overflow-x: auto; max-height: calc(100vh - 150px); overflow-y: auto;">
             <div class="card-body">
                 <div class="row">
-                    <div class="col mb-3">
-                        <div class="card text-black" style="background-color: #FCDC2A;">
+                    <div class="col-md mb-3">
+                        <div class="card text-black h-100" style="background-color: #FCDC2A;">
                             <div class="card-body">
                                 <h5 class="card-title">Total Perusahaan yang terdaftar di website</h5>
                                 <p class="card-text"><?php echo $total_perusahaan; ?></p>
                             </div>
                         </div>
                     </div>
-                    <div class="col mb-3">
-                        <div class="card text-black" style="background-color: #008B47;">
+                    <div class="col-md mb-3">
+                        <div class="card text-black h-100" style="background-color: #008B47;">
                             <div class="card-body">
-                                <h5 class="card-title">Total Produksi Listrik (kwh)</h5>
+                                <h5 class="card-title">Total Produksi Listrik (kWh)</h5>
                                 <p class="card-text"><?php echo number_format($totalProduksi, 2, ',', '.'); ?></p>
                             </div>
                         </div>
                     </div>
-                    <div class="col mb-3">
-                        <div class="card text-black" style="background-color: #E68A00;">
+                    <div class="col-md mb-3">
+                        <div class="card text-black h-100" style="background-color: #E68A00;">
                             <div class="card-body">
                                 <h5 class="card-title">Total Konsumsi Listrik (kWh)</h5>
                                 <p class="card-text"><?php echo number_format($totalKonsumsi, 2, ',', '.'); ?></p>
