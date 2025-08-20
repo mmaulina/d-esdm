@@ -78,6 +78,37 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Proses Persetujuan/Tolak
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
+   // Proses terima banyak
+    if (isset($_POST['terima_banyak']) && !empty($_POST['selected_ids'])) {
+        $ids = $_POST['selected_ids']; // ini array
+        $placeholders = implode(',', array_fill(0, count($ids), '?'));
+
+        $updatebanyak = "UPDATE laporan_bulanan SET status = 'diterima' WHERE id IN ($placeholders)";
+        $updatestmtbanyak = $conn->prepare($updatebanyak);
+        foreach ($ids as $k => $id) {
+            $updatestmtbanyak->bindValue(($k+1), $id, PDO::PARAM_INT);
+        }
+        $updatestmtbanyak->execute();
+
+        echo "<script>alert('Laporan terpilih berhasil diterima!'); window.location.href='?page=laporan_perbulan';</script>";
+        exit;
+    }
+
+    if (isset($_POST['terima_banyak2']) && !empty($_POST['selected_ids2'])) {
+        $ids2 = $_POST['selected_ids2']; // ini array
+        $placeholders2 = implode(',', array_fill(0, count($ids2), '?'));
+
+        $updatepembangkitbanyak = "UPDATE pembangkit SET status = 'diterima' WHERE id IN ($placeholders2)";
+        $updatestmtpembangkitbanyak = $conn->prepare($updatepembangkitbanyak);
+        foreach ($ids2 as $k => $id) {
+            $updatestmtpembangkitbanyak->bindValue(($k+1), $id, PDO::PARAM_INT);
+        }
+        $updatestmtpembangkitbanyak->execute();
+
+        echo "<script>alert('Laporan terpilih berhasil diterima!'); window.location.href='?page=laporan_perbulan';</script>";
+        exit;
+    }
+
     if (isset($_POST['terima_id'])) {
         $id = $_POST['terima_id'];
         $updateQuery = "UPDATE laporan_bulanan SET status = 'diterima' WHERE id = :id";
@@ -117,6 +148,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         echo "<meta http-equiv='refresh' content='0; url=?page=laporan_perbulan'>";
         exit;
     }
+
+
+
 }
 
 $querypembangkit = "SELECT * FROM pembangkit WHERE 1=1";
@@ -238,9 +272,13 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                 <?php } ?>
             </div>
             <div class="table-responsive" style="max-height: 500px; overflow-x: auto; overflow-y: auto;">
+                <form method="POST" action="">
                 <table class="table table-bordered" style="min-width: 1200px; white-space: nowrap;">
                     <thead class="table-dark text-center align-middle">
                         <tr>
+                            <?php if ($_SESSION['role'] == 'superadmin' || $_SESSION['role'] == 'adminbulanan') { ?>
+                            <th rowspan="2"><input type="checkbox" id="checkAll"></th>
+                            <?php } ?>
                             <th rowspan="3" style="width: 3%;">No.</th>
                             <th rowspan="3">Nama Perusahaan</th>
                             <?php if ($_SESSION['role'] == 'superadmin') { ?>
@@ -294,6 +332,11 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                                 foreach ($rows as $row):
                             ?>
                                     <tr>
+                                        <td class="text-center">
+                                            <?php if (($role == 'adminbulanan' || $role == 'superadmin') && $row['status'] == 'diajukan'): ?>
+                                                <input type="checkbox" name="selected_ids[]" value="<?php echo $row['id']; ?>">
+                                            <?php endif; ?>
+                                        </td>
                                         <td class="text-center"><?php echo $no++; ?></td>
                                         <td><?php echo htmlspecialchars($row['nama_perusahaan']); ?> </td>
                                         <?php if ($_SESSION['role'] == 'superadmin') { ?>
@@ -329,18 +372,21 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                                         </td>
                                         <td><?php echo htmlspecialchars($row['keterangan']); ?></td>
                                         <td class="text-center">
-                                            <?php if (($role == 'adminbulanan' || $role == 'superadmin') && $row['status'] == 'diajukan'): ?>
-                                                <form method="POST" style="display: inline;">
-                                                    <input type="hidden" name="terima_id" value="<?php echo $row['id']; ?>">
-                                                    <button type="submit" class="btn btn-success btn-sm">Terima</button>
-                                                </form>
-                                                <a href="" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modalTolak<?php echo $row['id']; ?>">Dikembalikan</a>
-                                            <?php endif; ?>
+                                            <?php if (in_array($role,['adminbulanan','superadmin']) && $row['status']=='diajukan'): ?>
+                                            <!-- FORM KECIL UNTUK TERIMA SATU -->
+                                            <form method="POST" action="" style="display:inline;">
+                                                <input type="hidden" name="terima_id" value="<?= $row['id'] ?>">
+                                                <button type="submit" class="btn btn-success btn-sm">Terima</button>
+                                            </form>
+
+                                            <!-- TOMBOL MODAL TOLAK -->
+                                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modalTolak<?= $row['id'] ?>">Dikembalikan</button>
+                                        <?php endif; ?>
                                             <?php if (($role == 'superadmin' && in_array($row['status'], ['dikembalikan', 'diterima'])) || ($role == 'umum' && in_array($row['status'], ['dikembalikan']))): ?>
                                                 <a href="?page=edit_laporan_perbulan&id=<?php echo $row['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
                                                 <a href="?page=hapus_laporan_perbulan&id=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus?');">Hapus</a>
                                                 <?php if (($role == 'superadmin') && $row['status'] == 'diterima'): ?>
-                                                    <a href="" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalTolak<?php echo $row['id']; ?>">Dikembalikan</a>
+                                                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalTolak<?php echo $row['id']; ?>">Dikembalikan</button>
                                                 <?php endif; ?>
                                             <?php endif; ?>
                                         </td>
@@ -378,6 +424,14 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                         <?php endif; ?>
                     </tbody>
                 </table>
+                <?php if ($_SESSION['role'] == 'superadmin' || $_SESSION['role'] == 'adminbulanan') { ?>
+                <div class="mt-2">
+                    <button type="submit" name="terima_banyak" class="btn btn-success">
+                        <i class="fas fa-check"></i> Terima Terpilih
+                    </button>
+                </div>
+                <?php } ?>
+                </form>
             </div>
         </div>
     </div>
@@ -404,9 +458,13 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                     </div>
                 <?php endif; ?>
                 <div class="table-responsive" style="max-height: 500px; overflow-x: auto; overflow-y: auto;">
+                    <form method="POST" action="">
                     <table class="table table-bordered" style="table-layout: fixed; min-width: 3000px;">
                         <thead class="table-dark text-center align-middle">
                             <tr>
+                                <?php if ($_SESSION['role'] == 'superadmin' || $_SESSION['role'] == 'adminbulanan') { ?>
+                            <th rowspan="3"><input type="checkbox" id="checkAll2"></th>
+                            <?php } ?>
                                 <th rowspan="3" style="width: 3%;">No.</th>
                                 <th rowspan="3">Nama Perusahaan</th>
                                 <th colspan="4" style="min-width: 250px;">Data Pembangkit</th>
@@ -457,6 +515,11 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                                     foreach ($rows as $row):
                                 ?>
                                         <tr>
+                                            <td class="text-center">
+                                            <?php if (($role == 'adminbulanan' || $role == 'superadmin') && $row['status'] == 'diajukan'): ?>
+                                                <input type="checkbox" name="selected_ids2[]" value="<?php echo $row['id']; ?>">
+                                            <?php endif; ?>
+                                        </td>
                                             <td class="text-center"><?php echo $no++; ?></td>
                                             <td><?= htmlspecialchars($row['nama_perusahaan']) ?></td>
                                             <td><?= htmlspecialchars($row['alamat']) ?></td>
@@ -491,17 +554,19 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                                             <td><?php echo htmlspecialchars($row['keterangan']); ?></td>
                                             <td class="text-center">
                                                 <?php if (($role == 'adminbulanan' || $role == 'superadmin') && $row['status'] == 'diajukan'): ?>
-                                                    <form method="POST" style="display: inline;">
-                                                        <input type="hidden" name="terima_id2" value="<?php echo $row['id']; ?>">
-                                                        <button type="submit" class="btn btn-success btn-sm">Terima</button>
-                                                    </form>
-                                                    <a href="" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modalTolak2<?php echo $row['id']; ?>">Kembalikan</a>
-                                                <?php endif; ?>
+                    <!-- TOMBOL TERIMA SATUAN -->
+                    <button type="submit" name="terima_id2" value="<?= $row['id'] ?>" class="btn btn-success btn-sm">
+                        Terima
+                    </button>
+
+                    <!-- Tombol modal tolak tetap -->
+                    <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modalTolak2<?= $row['id'] ?>">Dikembalikan</button>
+                <?php endif; ?>
                                                 <?php if (($role == 'superadmin' && in_array($row['status'], ['dikembalikan', 'diterima'])) || ($role == 'umum' && in_array($row['status'], ['dikembalikan']))): ?>
                                                     <a href='?page=pembangkit_edit&id=<?= $row['id'] ?>' class='btn btn-sm btn-warning mb-2 me-2'>Edit</a>
                                                     <a href='?page=pembangkit_hapus&id=<?= $row['id'] ?>' class='btn btn-sm btn-danger mb-2' onclick='return confirm("Hapus data ini?")'>Hapus</a>
                                                     <?php if (($role == 'superadmin') && $row['status'] == 'diterima'): ?>
-                                                        <a href="" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalTolak2<?php echo $row['id']; ?>">Kembalikan</a>
+                                                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalTolak2<?= $row['id'] ?>">Dikembalikan</button>
                                                     <?php endif; ?>
                                                 <?php endif; ?>
                                             </td>
@@ -538,6 +603,14 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                             <?php endif; ?>
                         </tbody>
                     </table>
+                    <?php if ($_SESSION['role'] == 'superadmin' || $_SESSION['role'] == 'adminbulanan') { ?>
+                    <div class="mt-2">
+                    <button type="submit" name="terima_banyak2" class="btn btn-success">
+                        <i class="fas fa-check"></i> Terima Terpilih
+                    </button>
+                </div>
+                <?php } ?>
+                </form>
                 </div>
             </div>
         </div>
@@ -571,4 +644,20 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
             selectedHeader.className = isAscending ? "fa fa-sort-up" : "fa fa-sort-down";
         }
     }
+
+
+document.getElementById('checkAll').onclick = function() {
+    var checkboxes = document.querySelectorAll('input[name="selected_ids[]"]');
+    for (var checkbox of checkboxes) {
+        checkbox.checked = this.checked;
+    }
+}
+
+document.getElementById('checkAll2').onclick = function() {
+    var checkboxes = document.querySelectorAll('input[name="selected_ids2[]"]');
+    for (var checkbox of checkboxes) {
+        checkbox.checked = this.checked;
+    }
+}
+
 </script>
