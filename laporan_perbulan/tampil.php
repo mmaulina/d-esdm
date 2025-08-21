@@ -78,77 +78,85 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Proses Persetujuan/Tolak
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-   // Proses terima banyak
-    if (isset($_POST['terima_banyak']) && !empty($_POST['selected_ids'])) {
-        $ids = $_POST['selected_ids']; // ini array
-        $placeholders = implode(',', array_fill(0, count($ids), '?'));
+$notif = ''; // Variabel untuk menampung notifikasi
 
-        $updatebanyak = "UPDATE laporan_bulanan SET status = 'diterima' WHERE id IN ($placeholders)";
-        $updatestmtbanyak = $conn->prepare($updatebanyak);
-        foreach ($ids as $k => $id) {
-            $updatestmtbanyak->bindValue(($k+1), $id, PDO::PARAM_INT);
-        }
-        $updatestmtbanyak->execute();
+// Terima banyak laporan bulanan
+if (isset($_POST['terima_banyak']) && !empty($_POST['selected_ids'])) {
+    $ids = $_POST['selected_ids'];
+    $placeholders = implode(',', array_fill(0, count($ids), '?'));
 
-        echo "<script>alert('Laporan terpilih berhasil diterima!'); window.location.href='?page=laporan_perbulan';</script>";
-        exit;
+    $updatebanyak = "UPDATE laporan_bulanan SET status = 'diterima' WHERE id IN ($placeholders)";
+    $stmt = $conn->prepare($updatebanyak);
+    foreach ($ids as $k => $id) {
+        $stmt->bindValue($k + 1, $id, PDO::PARAM_INT);
     }
+    $stmt->execute();
 
-    if (isset($_POST['terima_banyak2']) && !empty($_POST['selected_ids2'])) {
-        $ids2 = $_POST['selected_ids2']; // ini array
-        $placeholders2 = implode(',', array_fill(0, count($ids2), '?'));
+    $notif = "<div class='alert alert-success'>Laporan terpilih berhasil diterima!</div>";
+}
 
-        $updatepembangkitbanyak = "UPDATE pembangkit SET status = 'diterima' WHERE id IN ($placeholders2)";
-        $updatestmtpembangkitbanyak = $conn->prepare($updatepembangkitbanyak);
-        foreach ($ids2 as $k => $id) {
-            $updatestmtpembangkitbanyak->bindValue(($k+1), $id, PDO::PARAM_INT);
-        }
-        $updatestmtpembangkitbanyak->execute();
+// Terima banyak pembangkit
+if (isset($_POST['terima_banyak2']) && !empty($_POST['selected_ids2'])) {
+    $ids2 = $_POST['selected_ids2'];
+    $placeholders2 = implode(',', array_fill(0, count($ids2), '?'));
 
-        echo "<script>alert('Laporan terpilih berhasil diterima!'); window.location.href='?page=laporan_perbulan';</script>";
-        exit;
+    $stmt2 = $conn->prepare("UPDATE pembangkit SET status = 'diterima' WHERE id IN ($placeholders2)");
+    foreach ($ids2 as $k => $id) {
+        $stmt2->bindValue($k + 1, $id, PDO::PARAM_INT);
     }
+    $stmt2->execute();
 
-    if (isset($_POST['terima_id'])) {
-        $id = $_POST['terima_id'];
-        $updateQuery = "UPDATE laporan_bulanan SET status = 'diterima' WHERE id = :id";
-    } elseif (isset($_POST['tolak_laporan'])) {
-        $id = $_POST['id'];
-        $keterangan = $_POST['keterangan'];
-        $updateQuery = "UPDATE laporan_bulanan SET status = 'dikembalikan', keterangan = :keterangan WHERE id = :id";
-    }
+    $notif = "<div class='alert alert-success'>Pembangkit terpilih berhasil diterima!</div>";
+}
 
-    if (isset($updateQuery)) {
-        $updateStmt = $conn->prepare($updateQuery);
-        $updateStmt->bindParam(':id', $id, PDO::PARAM_INT);
-        if (isset($keterangan)) {
-            $updateStmt->bindParam(':keterangan', $keterangan, PDO::PARAM_STR);
-        }
-        $updateStmt->execute();
-        echo "<meta http-equiv='refresh' content='0; url=?page=laporan_perbulan'>";
-        exit;
-    }
+// Terima laporan per baris
+if (isset($_POST['terima_id'])) {
+    $id = $_POST['terima_id'];
+    $stmt = $conn->prepare("UPDATE laporan_bulanan SET status = 'diterima' WHERE id = :id");
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
 
-    if (isset($_POST['terima_id2'])) {
-        $id = $_POST['terima_id2'];
-        $updatequerypembangkit = "UPDATE pembangkit SET status = 'diterima' WHERE id = :id";
-    } elseif (isset($_POST['tolak_laporan2'])) {
-        $id = $_POST['id'];
-        $keterangan = $_POST['keterangan'];
-        $updatequerypembangkit = "UPDATE pembangkit SET status = 'dikembalikan', keterangan = :keterangan WHERE id = :id";
-    }
+    $notif = "<div class='alert alert-success'>Laporan berhasil diterima!</div>";
+}
 
-    if (isset($updatequerypembangkit)) {
-        $updatestmt2 = $conn->prepare($updatequerypembangkit);
-        $updatestmt2->bindParam(':id', $id, PDO::PARAM_INT);
-        if (isset($keterangan)) {
-            $updatestmt2->bindParam(':keterangan', $keterangan, PDO::PARAM_STR);
-        }
-        $updatestmt2->execute();
-        echo "<meta http-equiv='refresh' content='0; url=?page=laporan_perbulan'>";
-        exit;
-    }
+// Tolak laporan per baris
+if (isset($_POST['tolak_laporan'])) {
+    $id = $_POST['id'];
+    $keterangan = $_POST['keterangan'];
+    $stmt = $conn->prepare("UPDATE laporan_bulanan SET status = 'dikembalikan', keterangan = :keterangan WHERE id = :id");
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->bindParam(':keterangan', $keterangan, PDO::PARAM_STR);
+    $stmt->execute();
 
+    $notif = "<div class='alert alert-danger'>Laporan berhasil dikembalikan!</div>";
+}
+
+// Terima pembangkit per baris
+if (isset($_POST['terima_id2'])) {
+    $id = $_POST['terima_id2'];
+    $stmt = $conn->prepare("UPDATE pembangkit SET status = 'diterima' WHERE id = :id");
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+
+    $notif = "<div class='alert alert-success'>Pembangkit berhasil diterima!</div>";
+}
+
+// Tolak pembangkit per baris
+if (isset($_POST['tolak_laporan2'])) {
+    $id = $_POST['id'];
+    $keterangan = $_POST['keterangan'];
+    $stmt = $conn->prepare("UPDATE pembangkit SET status = 'dikembalikan', keterangan = :keterangan WHERE id = :id");
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->bindParam(':keterangan', $keterangan, PDO::PARAM_STR);
+    $stmt->execute();
+
+    $notif = "<div class='alert alert-danger'>Pembangkit berhasil dikembalikan!</div>";
+}
+
+// Tampilkan notifikasi di halaman
+if (!empty($notif)) {
+    echo "<div class='mt-2'>$notif</div>";
+}
 
 
 }
@@ -437,12 +445,13 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
     </div>
 </div>
 
-<!-- PEMBANGKIT -->
-<div class="container mt-4">
+<!-- PEMBANGKIT --><div class="container mt-4">
     <div class="card shadow">
         <div class="card-body">
             <h3 class="text-center mb-3">Data Pembangkit dan Data Teknis Pembangkit</h3>
             <hr>
+
+            <!-- Form pencarian -->
             <form method="GET" class="mb-2">
                 <input type="hidden" name="page" value="laporan_perbulan">
                 <div class="input-group mb-2">
@@ -451,20 +460,21 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                     <a href="?page=laporan_perbulan" class="btn btn-secondary">Reset</a>
                 </div>
             </form>
-            <div class="mb-3">
-                <?php if (!$hasprofil && $role == 'umum') : ?>
-                    <div class="alert alert-warning text-center" role="alert">
-                        Anda harus melengkapi <strong>Profil Perusahaan</strong> terlebih dahulu sebelum dapat menambahkan Data Pembangkit.
-                    </div>
-                <?php endif; ?>
-                <div class="table-responsive" style="max-height: 500px; overflow-x: auto; overflow-y: auto;">
-                    <form method="POST" action="">
+
+            <?php if (!$hasprofil && $role == 'umum') : ?>
+                <div class="alert alert-warning text-center" role="alert">
+                    Anda harus melengkapi <strong>Profil Perusahaan</strong> terlebih dahulu sebelum dapat menambahkan Data Pembangkit.
+                </div>
+            <?php endif; ?>
+
+            <div class="table-responsive" style="max-height: 500px; overflow-x: auto; overflow-y: auto;">
+                <form method="POST" action="">
                     <table class="table table-bordered" style="table-layout: fixed; min-width: 3000px;">
                         <thead class="table-dark text-center align-middle">
                             <tr>
                                 <?php if ($_SESSION['role'] == 'superadmin' || $_SESSION['role'] == 'adminbulanan') { ?>
-                            <th rowspan="3"><input type="checkbox" id="checkAll2"></th>
-                            <?php } ?>
+                                    <th rowspan="3"><input type="checkbox" id="checkAll2"></th>
+                                <?php } ?>
                                 <th rowspan="3" style="width: 3%;">No.</th>
                                 <th rowspan="3">Nama Perusahaan</th>
                                 <th colspan="4" style="min-width: 250px;">Data Pembangkit</th>
@@ -499,118 +509,110 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                         <tbody>
                             <?php if (count($resultpembangkit) > 0): ?>
                                 <?php
-                                // Group data by id_user
                                 $groupedData = [];
                                 foreach ($resultpembangkit as $row) {
                                     $groupedData[$row['id_user']][] = $row;
                                 }
+
                                 foreach ($groupedData as $id_user => $rows):
                                     $no = 1;
-                                    // Get nama_perusahaan from first row
                                     $nama_perusahaan = htmlspecialchars($rows[0]['nama_perusahaan']);
-                                    // Group header row with user_id and nama_perusahaan
-                                    echo "<tr><td colspan='16' class='fw-bold bg-light'>NAMA PERUSAHAAN = ($nama_perusahaan) </td></tr>";
+                                    echo "<tr><td colspan='21' class='fw-bold bg-light'>NAMA PERUSAHAAN = ($nama_perusahaan)</td></tr>";
+
                                     foreach ($rows as $row):
                                 ?>
-                                        <tr>
-                                            <td class="text-center">
-                                            <?php if (($role == 'adminbulanan' || $role == 'superadmin') && $row['status'] == 'diajukan'): ?>
-                                                <input type="checkbox" name="selected_ids2[]" value="<?php echo $row['id']; ?>">
-                                            <?php endif; ?>
-                                        </td>
-                                            <td class="text-center"><?php echo $no++; ?></td>
-                                            <td><?= htmlspecialchars($row['nama_perusahaan']) ?></td>
-                                            <td><?= htmlspecialchars($row['alamat']) ?></td>
-                                            <td><?= htmlspecialchars($row['latitude']) ?></td>
-                                            <td><?= htmlspecialchars($row['longitude']) ?></td>
-                                            <td><?= htmlspecialchars($row['jenis_pembangkit']) ?></td>
-                                            <td><?= htmlspecialchars($row['tahun']) ?></td>
-                                            <td><?= htmlspecialchars($row['bulan']) ?></td>
-                                            <td><?= htmlspecialchars($row['fungsi']) ?></td>
-                                            <td><?= htmlspecialchars($row['kapasitas_terpasang']) ?></td>
-                                            <td><?= htmlspecialchars($row['daya_mampu_netto']) ?></td>
-                                            <td><?= htmlspecialchars($row['jumlah_unit']) ?></td>
-                                            <td><?= htmlspecialchars($row['no_unit']) ?></td>
-                                            <td><?= htmlspecialchars($row['tahun_operasi']) ?></td>
-                                            <td><?= htmlspecialchars($row['status_operasi']) ?></td>
-                                            <td><?= htmlspecialchars($row['bahan_bakar_jenis']) ?></td>
-                                            <td><?= htmlspecialchars($row['bahan_bakar_satuan']) ?></td>
-                                            <td><?= htmlspecialchars($row['volume_bb']) ?></td>
-                                            <td class="text-center">
-                                                <?php
-                                                if ($row['status'] == 'diajukan') {
-                                                    echo '<i class="fas fa-clock" style="color: yellow;"></i> Diajukan';
-                                                } elseif ($row['status'] == 'diterima') {
-                                                    echo '<i class="fas fa-check" style="color: green;"></i> Diterima';
-                                                } elseif ($row['status'] == 'dikembalikan') {
-                                                    echo '<i class="fas fa-times" style="color: red;"></i> Dikembalikan';
-                                                } else {
-                                                    echo '<span class="text-muted">Status tidak diketahui</span>';
-                                                }
-                                                ?>
-                                            </td>
-                                            <td><?php echo htmlspecialchars($row['keterangan']); ?></td>
-                                            <td class="text-center">
-                                            <?php if (in_array($role,['adminbulanan','superadmin']) && $row['status']=='diajukan'): ?>
-                                            <!-- FORM KECIL UNTUK TERIMA SATU -->
+                                <tr>
+                                    <td class="text-center">
+                                        <?php if (($role == 'adminbulanan' || $role == 'superadmin') && $row['status'] == 'diajukan'): ?>
+                                            <input type="checkbox" name="selected_ids2[]" value="<?= $row['id'] ?>">
+                                        <?php endif; ?>
+                                    </td>
+                                    <td class="text-center"><?= $no++; ?></td>
+                                    <td><?= htmlspecialchars($row['nama_perusahaan']); ?></td>
+                                    <td><?= htmlspecialchars($row['alamat']); ?></td>
+                                    <td><?= htmlspecialchars($row['latitude']); ?></td>
+                                    <td><?= htmlspecialchars($row['longitude']); ?></td>
+                                    <td><?= htmlspecialchars($row['jenis_pembangkit']); ?></td>
+                                    <td><?= htmlspecialchars($row['tahun']); ?></td>
+                                    <td><?= htmlspecialchars($row['bulan']); ?></td>
+                                    <td><?= htmlspecialchars($row['fungsi']); ?></td>
+                                    <td><?= htmlspecialchars($row['kapasitas_terpasang']); ?></td>
+                                    <td><?= htmlspecialchars($row['daya_mampu_netto']); ?></td>
+                                    <td><?= htmlspecialchars($row['jumlah_unit']); ?></td>
+                                    <td><?= htmlspecialchars($row['no_unit']); ?></td>
+                                    <td><?= htmlspecialchars($row['tahun_operasi']); ?></td>
+                                    <td><?= htmlspecialchars($row['status_operasi']); ?></td>
+                                    <td><?= htmlspecialchars($row['bahan_bakar_jenis']); ?></td>
+                                    <td><?= htmlspecialchars($row['bahan_bakar_satuan']); ?></td>
+                                    <td><?= htmlspecialchars($row['volume_bb']); ?></td>
+                                    <td class="text-center">
+                                        <?php
+                                        if ($row['status'] == 'diajukan') {
+                                            echo '<i class="fas fa-clock text-warning"></i> Diajukan';
+                                        } elseif ($row['status'] == 'diterima') {
+                                            echo '<i class="fas fa-check text-success"></i> Diterima';
+                                        } elseif ($row['status'] == 'dikembalikan') {
+                                            echo '<i class="fas fa-times text-danger"></i> Dikembalikan';
+                                        }
+                                        ?>
+                                    </td>
+                                    <td><?= htmlspecialchars($row['keterangan']); ?></td>
+                                    <td class="text-center">
+                                        <?php if (($role == 'adminbulanan' || $role == 'superadmin') && $row['status']=='diajukan'): ?>
+                                            <!-- FORM PER BARIS -->
                                             <form method="POST" action="" style="display:inline;">
                                                 <input type="hidden" name="terima_id2" value="<?= $row['id'] ?>">
                                                 <button type="submit" class="btn btn-success btn-sm">Terima</button>
                                             </form>
 
-                                            <!-- TOMBOL MODAL TOLAK -->
+                                            <!-- Tombol Dikembalikan -->
                                             <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modalTolak2<?= $row['id'] ?>">Dikembalikan</button>
-                                        <?php endif; ?>
-                                            <?php if (($role == 'superadmin' && in_array($row['status'], ['dikembalikan', 'diterima'])) || ($role == 'umum' && in_array($row['status'], ['dikembalikan']))): ?>
-                                                <a href="?page=pembangkit_edit&id=<?php echo $row['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
-                                                <a href="?page=pembangkit_hapus&id=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus?');">Hapus</a>
-                                                <?php if (($role == 'superadmin') && $row['status'] == 'diterima'): ?>
-                                                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalTolak<?php echo $row['id']; ?>">Dikembalikan</button>
-                                                <?php endif; ?>
-                                            <?php endif; ?>
-                                        </td>
-                                        </tr>
-                                        <!-- Modal untuk Tolak -->
-                                        <div class="modal fade" id="modalTolak2<?php echo $row['id']; ?>" tabindex="-1" role="dialog" aria-labelledby="modalTolakLabel2" aria-hidden="true">
-                                            <div class="modal-dialog" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="modalTolakLabel2">Kembalikan Pembangkit</h5>
-                                                    </div>
-                                                    <form action="" method="POST">
-                                                        <div class="modal-body">
-                                                            <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
-                                                            <div class="form-group">
-                                                                <label for="keterangan<?php echo $row['id']; ?>">Keterangan di Kembalikan</label>
-                                                                <textarea class="form-control" id="keterangan" name="keterangan" rows="3" required></textarea>
+
+                                            <!-- Modal per baris -->
+                                            <div class="modal fade" id="modalTolak2<?= $row['id']; ?>" tabindex="-1" role="dialog" aria-labelledby="modalTolakLabel2" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <form method="POST" action="">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title">Kembalikan Pembangkit</h5>
                                                             </div>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                                                            <button type="submit" name="tolak_laporan2" class="btn btn-danger">Kembalikan</button>
-                                                        </div>
-                                                    </form>
+                                                            <div class="modal-body">
+                                                                <input type="hidden" name="id" value="<?= $row['id'] ?>">
+                                                                <div class="form-group">
+                                                                    <label>Keterangan di Kembalikan</label>
+                                                                    <textarea class="form-control" name="keterangan" rows="3" required></textarea>
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                                                                <button type="submit" name="tolak_laporan2" class="btn btn-danger">Kembalikan</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                <?php endforeach;
-                                endforeach; ?>
+
+                                        <?php endif; ?>
+                                    </td>
+                                </tr>
+                                <?php endforeach; ?>
+                                <?php endforeach; ?>
                             <?php else: ?>
                                 <tr>
-                                    <td colspan='16' class='text-center'>Data tidak ditemukan</td>
+                                    <td colspan="21" class="text-center">Data tidak ditemukan</td>
                                 </tr>
                             <?php endif; ?>
                         </tbody>
                     </table>
-                    <?php if ($_SESSION['role'] == 'superadmin' || $_SESSION['role'] == 'adminbulanan') { ?>
-                <div class="mt-2">
-                    <button type="submit" name="terima_banyak2" class="btn btn-success">
-                        <i class="fas fa-check"></i> Terima Terpilih
-                    </button>
-                </div>
-                <?php } ?>
+
+                    <?php if ($_SESSION['role'] == 'superadmin' || $_SESSION['role'] == 'adminbulanan'): ?>
+                        <div class="mt-2">
+                            <button type="submit" name="terima_banyak2" class="btn btn-success">
+                                <i class="fas fa-check"></i> Terima Terpilih
+                            </button>
+                        </div>
+                    <?php endif; ?>
                 </form>
-                </div>
             </div>
         </div>
     </div>
@@ -645,18 +647,22 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
     }
 
 
-document.getElementById('checkAll').onclick = function() {
-    var checkboxes = document.querySelectorAll('input[name="selected_ids[]"]');
-    for (var checkbox of checkboxes) {
-        checkbox.checked = this.checked;
+document.addEventListener('DOMContentLoaded', function() {
+    // Tabel pertama
+    const checkAll = document.getElementById('checkAll');
+    if(checkAll){
+        checkAll.addEventListener('click', function() {
+            document.querySelectorAll('input[name="selected_ids[]"]').forEach(cb => cb.checked = this.checked);
+        });
     }
-}
 
-document.getElementById('checkAll2').onclick = function() {
-    var checkboxes = document.querySelectorAll('input[name="selected_ids2[]"]');
-    for (var checkbox of checkboxes) {
-        checkbox.checked = this.checked;
+    // Tabel kedua
+    const checkAll2 = document.getElementById('checkAll2');
+    if(checkAll2){
+        checkAll2.addEventListener('click', function() {
+            document.querySelectorAll('input[name="selected_ids2[]"]').forEach(cb => cb.checked = this.checked);
+        });
     }
-}
+});
 
 </script>
