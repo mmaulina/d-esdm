@@ -504,8 +504,6 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                                 foreach ($resultpembangkit as $row) {
                                     $groupedData[$row['id_user']][] = $row;
                                 }
-
-
                                 foreach ($groupedData as $id_user => $rows):
                                     $no = 1;
                                     // Get nama_perusahaan from first row
@@ -553,23 +551,24 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                                             </td>
                                             <td><?php echo htmlspecialchars($row['keterangan']); ?></td>
                                             <td class="text-center">
-                                                <?php if (($role == 'adminbulanan' || $role == 'superadmin') && $row['status'] == 'diajukan'): ?>
-                    <!-- TOMBOL TERIMA SATUAN -->
-                    <button type="submit" name="terima_id2" value="<?= $row['id'] ?>" class="btn btn-success btn-sm">
-                        Terima
-                    </button>
+                                            <?php if (in_array($role,['adminbulanan','superadmin']) && $row['status']=='diajukan'): ?>
+                                            <!-- FORM KECIL UNTUK TERIMA SATU -->
+                                            <form method="POST" action="" style="display:inline;">
+                                                <input type="hidden" name="terima_id2" value="<?= $row['id'] ?>">
+                                                <button type="submit" class="btn btn-success btn-sm">Terima</button>
+                                            </form>
 
-                    <!-- Tombol modal tolak tetap -->
-                    <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modalTolak2<?= $row['id'] ?>">Dikembalikan</button>
-                <?php endif; ?>
-                                                <?php if (($role == 'superadmin' && in_array($row['status'], ['dikembalikan', 'diterima'])) || ($role == 'umum' && in_array($row['status'], ['dikembalikan']))): ?>
-                                                    <a href='?page=pembangkit_edit&id=<?= $row['id'] ?>' class='btn btn-sm btn-warning mb-2 me-2'>Edit</a>
-                                                    <a href='?page=pembangkit_hapus&id=<?= $row['id'] ?>' class='btn btn-sm btn-danger mb-2' onclick='return confirm("Hapus data ini?")'>Hapus</a>
-                                                    <?php if (($role == 'superadmin') && $row['status'] == 'diterima'): ?>
-                                                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalTolak2<?= $row['id'] ?>">Dikembalikan</button>
-                                                    <?php endif; ?>
+                                            <!-- TOMBOL MODAL TOLAK -->
+                                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modalTolak2<?= $row['id'] ?>">Dikembalikan</button>
+                                        <?php endif; ?>
+                                            <?php if (($role == 'superadmin' && in_array($row['status'], ['dikembalikan', 'diterima'])) || ($role == 'umum' && in_array($row['status'], ['dikembalikan']))): ?>
+                                                <a href="?page=pembangkit_edit&id=<?php echo $row['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
+                                                <a href="?page=pembangkit_hapus&id=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus?');">Hapus</a>
+                                                <?php if (($role == 'superadmin') && $row['status'] == 'diterima'): ?>
+                                                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalTolak<?php echo $row['id']; ?>">Dikembalikan</button>
                                                 <?php endif; ?>
-                                            </td>
+                                            <?php endif; ?>
+                                        </td>
                                         </tr>
                                         <!-- Modal untuk Tolak -->
                                         <div class="modal fade" id="modalTolak2<?php echo $row['id']; ?>" tabindex="-1" role="dialog" aria-labelledby="modalTolakLabel2" aria-hidden="true">
@@ -604,7 +603,7 @@ $hasprofil = $stmtCheck->fetchColumn() > 0;
                         </tbody>
                     </table>
                     <?php if ($_SESSION['role'] == 'superadmin' || $_SESSION['role'] == 'adminbulanan') { ?>
-                    <div class="mt-2">
+                <div class="mt-2">
                     <button type="submit" name="terima_banyak2" class="btn btn-success">
                         <i class="fas fa-check"></i> Terima Terpilih
                     </button>
